@@ -165,6 +165,25 @@ describe('socket commons utils', () => {
         dispatcher('testing', dummyChannel, dummyHook, data2);
       });
 
+      it('dispatches dispatch arrays properly', done => {
+        const data1 = { message: 'First message' };
+        const data2 = { message: 'Second message' };
+
+        dummyHook.result = []
+        dummyHook.dispatch = [ data1, data2 ];
+
+        dummySocket.once('testing', data => {
+          assert.deepStrictEqual(data, data1);
+          dummySocket.once('testing', result => {
+            assert.deepStrictEqual(result, data2);
+            done();
+          });
+        });
+
+        dispatcher('testing', dummyChannel, dummyHook, data1);
+        dispatcher('testing', dummyChannel, dummyHook, data2);
+      });
+
       it('dispatches arrays properly for custom events', done => {
         const result = [
           { message: 'First' },
