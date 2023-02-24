@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.16](https://github.com/feathersjs/feathers/compare/v4.5.15...v4.5.16) (2023-02-24)
+
+
+### Bug Fixes
+
+* **transport-commons:** Crow - fix array dispatching ([#3073](https://github.com/feathersjs/feathers/issues/3073)) ([1936c64](https://github.com/feathersjs/feathers/commit/1936c64d89e549712ec302e56c2aebd52ca36e3f))
+
+
+
+
+
 ## [4.5.15](https://github.com/feathersjs/feathers/compare/v4.5.14...v4.5.15) (2022-05-17)
 
 **Note:** Version bump only for package @feathersjs/transport-commons
