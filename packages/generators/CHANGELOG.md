@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+### Bug Fixes
+
+- **generators:** Fix typo in service client generator ([#3068](https://github.com/feathersjs/feathers/issues/3068)) ([612032e](https://github.com/feathersjs/feathers/commit/612032eced24ecbcf255d51ff0d537d74227cfd7))
+
 # [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
 
 ### Features
