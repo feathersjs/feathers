@@ -55,9 +55,9 @@
     "@feathersjs/errors": "^4.5.15",
     "@feathersjs/feathers": "^4.5.15",
     "@feathersjs/transport-commons": "^4.5.15",
-    "@types/jsonwebtoken": "^8.5.6",
+    "@types/jsonwebtoken": "^9.0.0",
     "debug": "^4.3.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
     "uuid": "^8.3.2"
