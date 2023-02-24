@@ -1,56 +1,53 @@
-import assert from "assert";
-import { EventEmitter } from "events";
-import feathers, { Application, Params } from "@feathersjs/feathers";
-import errors from "@feathersjs/errors";
+import assert from 'assert';
+import { EventEmitter } from 'events';
+import feathers, { Application, Params } from '@feathersjs/feathers';
+import errors from '@feathersjs/errors';
 
-import { routing } from "../../src/routing";
+import { routing } from '../../src/routing';
 import {
   normalizeError,
   getDispatcher,
-  runMethod,
-} from "../../src/socket/utils";
-import { RealTimeConnection } from "../../src/channels/channel/base";
+  runMethod
+} from '../../src/socket/utils';
+import { RealTimeConnection } from '../../src/channels/channel/base';
 
-describe("socket commons utils", () => {
-  describe(".normalizeError", () => {
-    it("simple error normalization", () => {
-      const message = "Something went wrong";
+describe('socket commons utils', () => {
+  describe('.normalizeError', () => {
+    it('simple error normalization', () => {
+      const message = 'Something went wrong';
       const e = new Error(message);
 
       assert.deepStrictEqual(normalizeError(e), {
         message,
-        stack: e.stack.toString(),
+        stack: e.stack.toString()
       });
     });
 
-    it("calls .toJSON", () => {
-      const json = { message: "toJSON called" };
+    it('calls .toJSON', () => {
+      const json = { message: 'toJSON called' };
 
-      assert.deepStrictEqual(
-        normalizeError({
-          toJSON() {
-            return json;
-          },
-        }),
-        json
-      );
+      assert.deepStrictEqual(normalizeError({
+        toJSON () {
+          return json;
+        }
+      }), json);
     });
 
-    it("removes `hook` property", () => {
+    it('removes `hook` property', () => {
       const e = {
-        hook: true,
+        hook: true
       };
 
       assert.deepStrictEqual(normalizeError(e), {});
-      assert.ok(e.hook, "Does not mutate the original object");
+      assert.ok(e.hook, 'Does not mutate the original object');
     });
 
-    it("hides stack in production", () => {
+    it('hides stack in production', () => {
       const oldEnv = process.env.NODE_ENV;
 
-      process.env.NODE_ENV = "production";
+      process.env.NODE_ENV = 'production';
 
-      const message = "Something went wrong";
+      const message = 'Something went wrong';
       const e = new Error(message);
       const normalized = normalizeError(e);
 
@@ -61,36 +58,34 @@ describe("socket commons utils", () => {
     });
   });
 
-  describe(".getDispatcher", () => {
-    it("returns a dispatcher function", () =>
-      assert.strictEqual(
-        typeof getDispatcher("test", new WeakMap()),
-        "function"
-      ));
+  describe('.getDispatcher', () => {
+    it('returns a dispatcher function', () =>
+      assert.strictEqual(typeof getDispatcher('test', new WeakMap()), 'function')
+    );
 
-    it("works with backwards compatible socketKey", (done) => {
-      const socketKey = Symbol("@feathersjs/test");
-      const dispatcher = getDispatcher("emit", undefined, socketKey);
+    it('works with backwards compatible socketKey', done => {
+      const socketKey = Symbol('@feathersjs/test');
+      const dispatcher = getDispatcher('emit', undefined, socketKey);
       const socket = new EventEmitter();
       const connection = {
-        [socketKey]: socket,
+        [socketKey]: socket
       };
       const channel: any = {
-        connections: [connection],
-        dataFor(): null {
+        connections: [ connection ],
+        dataFor (): null {
           return null;
-        },
+        }
       };
 
-      socket.once("testing", (data) => {
-        assert.strictEqual(data, "hi");
+      socket.once('testing', data => {
+        assert.strictEqual(data, 'hi');
         done();
       });
 
-      dispatcher("testing", channel, { result: "hi" } as any);
+      dispatcher('testing', channel, { result: 'hi' } as any);
     });
 
-    describe("dispatcher logic", () => {
+    describe('dispatcher logic', () => {
       let dispatcher: any;
       let dummySocket: EventEmitter;
       let dummyHook: any;
@@ -100,129 +95,130 @@ describe("socket commons utils", () => {
 
       beforeEach(() => {
         dummyConnection = {};
-        dummyMap = new WeakMap();
-        dispatcher = getDispatcher("emit", dummyMap);
+        dummyMap =  new WeakMap();
+        dispatcher = getDispatcher('emit', dummyMap);
         dummySocket = new EventEmitter();
-        dummyHook = { result: "hi" };
+        dummyHook = { result: 'hi' };
         dummyChannel = {
-          connections: [dummyConnection],
-          dataFor(): null {
+          connections: [ dummyConnection ],
+          dataFor (): null {
             return null;
-          },
+          }
         };
         dummyMap.set(dummyConnection, dummySocket);
       });
 
-      it("dispatches a basic event", (done) => {
-        dummySocket.once("testing", (data) => {
-          assert.strictEqual(data, "hi");
+      it('dispatches a basic event', done => {
+        dummySocket.once('testing', data => {
+          assert.strictEqual(data, 'hi');
           done();
         });
 
-        dispatcher("testing", dummyChannel, dummyHook);
+        dispatcher('testing', dummyChannel, dummyHook);
       });
 
-      it("dispatches event on a hooks path event", (done) => {
-        dummyHook.path = "myservice";
+      it('dispatches event on a hooks path event', done => {
+        dummyHook.path = 'myservice';
 
-        dummySocket.once("myservice testing", (data) => {
-          assert.strictEqual(data, "hi");
+        dummySocket.once('myservice testing', data => {
+          assert.strictEqual(data, 'hi');
           done();
         });
 
-        dispatcher("testing", dummyChannel, dummyHook);
+        dispatcher('testing', dummyChannel, dummyHook);
       });
 
-      it("dispatches `hook.dispatch` instead", (done) => {
-        const message = "hi from dispatch";
+      it('dispatches `hook.dispatch` instead', done => {
+        const message = 'hi from dispatch';
 
         dummyHook.dispatch = message;
 
-        dummySocket.once("testing", (data) => {
+        dummySocket.once('testing', data => {
           assert.strictEqual(data, message);
           done();
         });
 
-        dispatcher("testing", dummyChannel, dummyHook);
+        dispatcher('testing', dummyChannel, dummyHook);
       });
 
-      it("does nothing if there is no socket", () => {
+      it('does nothing if there is no socket', () => {
         dummyChannel.connections[0].test = null;
 
-        dispatcher("testing", dummyChannel, dummyHook);
+        dispatcher('testing', dummyChannel, dummyHook);
       });
 
-      it("dispatches arrays properly hook events", (done) => {
-        const data1 = { message: "First message" };
-        const data2 = { message: "Second message" };
+      it('dispatches arrays properly hook events', done => {
+        const data1 = { message: 'First message' };
+        const data2 = { message: 'Second message' };
 
-        dummyHook.result = [data1, data2];
+        dummyHook.result = [ data1, data2 ];
 
-        dummySocket.once("testing", (data) => {
+        dummySocket.once('testing', data => {
           assert.deepStrictEqual(data, data1);
-          dummySocket.once("testing", (result) => {
+          dummySocket.once('testing', result => {
             assert.deepStrictEqual(result, data2);
             done();
           });
         });
 
-        dispatcher("testing", dummyChannel, dummyHook, data1);
-        dispatcher("testing", dummyChannel, dummyHook, data2);
+        dispatcher('testing', dummyChannel, dummyHook, data1);
+        dispatcher('testing', dummyChannel, dummyHook, data2);
       });
 
-      it("dispatches dispatch arrays properly", (done) => {
-        const data1 = { message: "First message" };
-        const data2 = { message: "Second message" };
+      it('dispatches dispatch arrays properly', done => {
+        const data1 = { message: 'First message' };
+        const data2 = { message: 'Second message' };
 
-        dummyHook.result = [];
-        dummyHook.dispatch = [data1, data2];
+        dummyHook.result = []
+        dummyHook.dispatch = [ data1, data2 ];
 
-        dummySocket.once("testing", (data) => {
+        dummySocket.once('testing', data => {
           assert.deepStrictEqual(data, data1);
-          dummySocket.once("testing", (result) => {
+          dummySocket.once('testing', result => {
             assert.deepStrictEqual(result, data2);
             done();
           });
         });
 
-        dispatcher("testing", dummyChannel, dummyHook, data1);
-        dispatcher("testing", dummyChannel, dummyHook, data2);
+        dispatcher('testing', dummyChannel, dummyHook, data1);
+        dispatcher('testing', dummyChannel, dummyHook, data2);
       });
 
-      it("dispatches arrays properly for custom events", (done) => {
-        const result = [{ message: "First" }, { message: "Second" }];
+      it('dispatches arrays properly for custom events', done => {
+        const result = [
+          { message: 'First' },
+          { message: 'Second' }
+        ];
 
         dummyHook.result = result;
 
-        dummySocket.once("otherEvent", (data) => {
+        dummySocket.once('otherEvent', data => {
           assert.deepStrictEqual(data, result);
           done();
         });
 
-        dispatcher("otherEvent", dummyChannel, dummyHook, result);
+        dispatcher('otherEvent', dummyChannel, dummyHook, result);
       });
     });
   });
 
-  describe(".runMethod", () => {
+  describe('.runMethod', () => {
     let app: Application;
 
     beforeEach(() => {
       app = feathers().configure(routing());
-      app.use("/myservice", {
-        get(id: number | string, params: Params) {
+      app.use('/myservice', {
+        get (id: number|string, params: Params) {
           if (params.query.error) {
-            return Promise.reject(
-              new errors.NotAuthenticated("None shall pass")
-            );
+            return Promise.reject(new errors.NotAuthenticated('None shall pass'));
           }
           return Promise.resolve({ id });
-        },
+        }
       });
     });
 
-    describe("running methods", () => {
-      it("basic", (done) => {
+    describe('running methods', () => {
+      it('basic', done => {
         const callback = (error: any, result: any) => {
           if (error) {
             return done(error);
@@ -232,12 +228,12 @@ describe("socket commons utils", () => {
           done();
         };
 
-        runMethod(app, {}, "myservice", "get", [10, {}, callback]);
+        runMethod(app, {}, 'myservice', 'get', [ 10, {}, callback ]);
       });
 
-      it("merges params with connection and passes connection", (done) => {
+      it('merges params with connection and passes connection', done => {
         const connection = {
-          testing: true,
+          testing: true
         };
         const callback = (error: any, result: any) => {
           if (error) {
@@ -250,22 +246,22 @@ describe("socket commons utils", () => {
               connection,
               query: {},
               route: {},
-              testing: true,
-            },
+              testing: true
+            }
           });
           done();
         };
 
-        app.use("/otherservice", {
-          get(id, params) {
+        app.use('/otherservice', {
+          get (id, params) {
             return Promise.resolve({ id, params });
-          },
+          }
         });
 
-        runMethod(app, connection, "otherservice", "get", [10, {}, callback]);
+        runMethod(app, connection, 'otherservice', 'get', [ 10, {}, callback ]);
       });
 
-      it("with params missing", (done) => {
+      it('with params missing', done => {
         const callback = (error: any, result: any) => {
           if (error) {
             return done(error);
@@ -275,50 +271,49 @@ describe("socket commons utils", () => {
           done();
         };
 
-        runMethod(app, {}, "myservice", "get", [10, callback]);
+        runMethod(app, {}, 'myservice', 'get', [ 10, callback ]);
       });
 
-      it("with params but missing callback", (done) => {
-        app.use("/otherservice", {
-          get(id: number | string) {
-            assert.strictEqual(id, "dishes");
+      it('with params but missing callback', done => {
+        app.use('/otherservice', {
+          get (id: number|string) {
+            assert.strictEqual(id, 'dishes');
 
-            return Promise.resolve({ id }).then((res) => {
+            return Promise.resolve({ id }).then(res => {
               done();
               return res;
             });
-          },
+          }
         });
 
-        runMethod(app, {}, "otherservice", "get", ["dishes", {}]);
+        runMethod(app, {}, 'otherservice', 'get', [ 'dishes', {} ]);
       });
 
-      it("with params and callback missing", (done) => {
-        app.use("/otherservice", {
-          get(id: number | string) {
-            assert.strictEqual(id, "laundry");
+      it('with params and callback missing', done => {
+        app.use('/otherservice', {
+          get (id: number|string) {
+            assert.strictEqual(id, 'laundry');
 
-            return Promise.resolve({ id }).then((res) => {
+            return Promise.resolve({ id }).then(res => {
               done();
               return res;
             });
-          },
+          }
         });
 
-        runMethod(app, {}, "otherservice", "get", ["laundry"]);
+        runMethod(app, {}, 'otherservice', 'get', [ 'laundry' ]);
       });
     });
 
-    it("throws NotFound for invalid service", (done) => {
+    it('throws NotFound for invalid service', done => {
       const callback = (error: any) => {
         try {
-          assert.deepStrictEqual(error, {
-            name: "NotFound",
-            message: "Service 'ohmyservice' not found",
+          assert.deepStrictEqual(error, { name: 'NotFound',
+            message: 'Service \'ohmyservice\' not found',
             code: 404,
-            className: "not-found",
+            className: 'not-found',
             data: undefined,
-            errors: {},
+            errors: {}
           });
           done();
         } catch (e: any) {
@@ -326,19 +321,19 @@ describe("socket commons utils", () => {
         }
       };
 
-      runMethod(app, {}, "ohmyservice", "get", [10, callback]);
+      runMethod(app, {}, 'ohmyservice', 'get', [ 10, callback ]);
     });
 
-    it("throws MethodNotAllowed undefined method", (done) => {
+    it('throws MethodNotAllowed undefined method', done => {
       const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
-            name: "MethodNotAllowed",
-            message: "Method 'create' not allowed on service 'myservice'",
+            name: 'MethodNotAllowed',
+            message: 'Method \'create\' not allowed on service \'myservice\'',
             code: 405,
-            className: "method-not-allowed",
+            className: 'method-not-allowed',
             data: undefined,
-            errors: {},
+            errors: {}
           });
           done();
         } catch (e: any) {
@@ -346,19 +341,19 @@ describe("socket commons utils", () => {
         }
       };
 
-      runMethod(app, {}, "myservice", "create", [{}, callback]);
+      runMethod(app, {}, 'myservice', 'create', [ {}, callback ]);
     });
 
-    it("throws MethodNotAllowed for invalid service method", (done) => {
+    it('throws MethodNotAllowed for invalid service method', done => {
       const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
-            name: "MethodNotAllowed",
-            message: "Method 'blabla' not allowed on service 'myservice'",
+            name: 'MethodNotAllowed',
+            message: 'Method \'blabla\' not allowed on service \'myservice\'',
             code: 405,
-            className: "method-not-allowed",
+            className: 'method-not-allowed',
             data: undefined,
-            errors: {},
+            errors: {}
           });
           done();
         } catch (e: any) {
@@ -366,19 +361,19 @@ describe("socket commons utils", () => {
         }
       };
 
-      runMethod(app, {}, "myservice", "blabla", [{}, callback]);
+      runMethod(app, {}, 'myservice', 'blabla', [ {}, callback ]);
     });
 
-    it("method error calls back with normalized error", (done) => {
+    it('method error calls back with normalized error', done => {
       const callback = (error: any) => {
         try {
           assert.deepStrictEqual(error, {
-            name: "NotAuthenticated",
-            message: "None shall pass",
+            name: 'NotAuthenticated',
+            message: 'None shall pass',
             data: undefined,
             code: 401,
-            className: "not-authenticated",
-            errors: {},
+            className: 'not-authenticated',
+            errors: {}
           });
           done();
         } catch (e: any) {
@@ -386,7 +381,9 @@ describe("socket commons utils", () => {
         }
       };
 
-      runMethod(app, {}, "myservice", "get", [42, { error: true }, callback]);
+      runMethod(app, {}, 'myservice', 'get', [
+        42, { error: true }, callback
+      ]);
     });
   });
 });
