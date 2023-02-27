@@ -217,6 +217,25 @@ describe('Feathers Memory Service', () => {
     }
   })
 
+  it('use $select as only query property', async () => {
+    const people = app.service('people')
+    const person = await people.create({
+      name: 'Tester',
+      age: 42
+    })
+
+    const results = await people.find({
+      paginate: false,
+      query: {
+        $select: ['name']
+      }
+    })
+
+    assert.deepStrictEqual(results[0], { id: person.id, name: 'Tester' })
+
+    await people.remove(person.id)
+  })
+
   testSuite(app, errors, 'people')
   testSuite(app, errors, 'people-customid', 'customid')
 })
