@@ -103,7 +103,7 @@ export class MemoryAdapter<
           continue
         }
 
-        matched.push(_select(value, params))
+        matched.push(_select(value, params, this.id))
 
         if (hasLimit && filters.$limit === matched.length) {
           break
@@ -112,7 +112,7 @@ export class MemoryAdapter<
 
       values = matched
     } else {
-      values = values.map((value) => _select(value, params))
+      values = values.map((value) => _select(value, params, this.id))
     }
 
     const result: Paginated<Result> = {

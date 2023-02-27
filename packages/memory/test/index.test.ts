@@ -190,24 +190,6 @@ describe('Feathers Memory Service', () => {
     await people.remove(person.id)
   })
 
-  it('does not $select the id', async () => {
-    const people = app.service('people')
-    const person = await people.create({
-      name: 'Tester'
-    })
-    const results = await people.find({
-      paginate: false,
-      query: {
-        name: 'Tester',
-        $select: ['name']
-      }
-    })
-
-    assert.deepStrictEqual(results[0], { name: 'Tester' }, 'deepEquals the same')
-
-    await people.remove(person.id)
-  })
-
   it('update with null throws error', async () => {
     try {
       await app.service('people').update(null, {})
@@ -231,7 +213,7 @@ describe('Feathers Memory Service', () => {
       }
     })
 
-    assert.deepStrictEqual(results[0], { name: 'Tester' })
+    assert.deepStrictEqual(results[0], { id: person.id, name: 'Tester' })
 
     await people.remove(person.id)
   })
