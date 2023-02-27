@@ -127,6 +127,7 @@ export default (test: AdapterSyntaxTest, app: any, _errors: any, serviceName: st
         })
 
         assert.strictEqual(data.length, 1)
+        assert.ok(idProp in data[0], 'data has id')
         assert.strictEqual(data[0].name, 'Alice')
         assert.strictEqual(data[0].age, undefined)
       })

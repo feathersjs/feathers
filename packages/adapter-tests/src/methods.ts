@@ -99,6 +99,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           query: { $select: ['name'] }
         })
 
+        assert.strictEqual(data[idProp].toString(), doug[idProp].toString(), `${idProp} id property matches`)
         assert.strictEqual(data.name, 'Doug', 'data.name matches')
         assert.ok(!data.age, 'data.age is falsy')
       })
@@ -244,6 +245,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           query: { $select: ['name'] }
         })
 
+        assert.strictEqual(data[idProp].toString(), doug[idProp].toString(), `${idProp} id property matches`)
         assert.strictEqual(data.name, 'Dougler', 'data.name matches')
         assert.ok(!data.age, 'data.age is falsy')
       })
@@ -333,6 +335,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           query: { $select: ['name'] }
         })
 
+        assert.strictEqual(data[idProp].toString(), doug[idProp].toString(), `${idProp} id property matches`)
         assert.strictEqual(data.name, 'PatchDoug', 'data.name matches')
         assert.ok(!data.age, 'data.age is falsy')
       })
@@ -617,6 +620,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
           query: { $select: ['name'] }
         })
 
+        assert.ok(idProp in data, 'data has id')
         assert.strictEqual(data.name, 'William', 'data.name matches')
         assert.ok(!data.age, 'data.age is falsy')
 
