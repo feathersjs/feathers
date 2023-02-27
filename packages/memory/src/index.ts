@@ -22,7 +22,7 @@ export interface MemoryServiceOptions<T = any> extends AdapterServiceOptions {
   sorter?: (sort: any) => any
 }
 
-const _select = (data: any, params: any, ...args: any[]) => {
+const _select = (data: any, params: any, ...args: string[]) => {
   const base = select(params, ...args)
 
   return base(JSON.parse(JSON.stringify(data)))
@@ -111,6 +111,8 @@ export class MemoryAdapter<
       }
 
       values = matched
+    } else {
+      values = values.map((value) => _select(value, params))
     }
 
     const result: Paginated<Result> = {

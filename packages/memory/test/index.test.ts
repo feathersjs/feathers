@@ -231,7 +231,7 @@ describe('Feathers Memory Service', () => {
       }
     })
 
-    assert.deepStrictEqual(results[0], { id: person.id, name: 'Tester' })
+    assert.deepStrictEqual(results[0], { name: 'Tester' })
 
     await people.remove(person.id)
   })
