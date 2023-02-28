@@ -1452,11 +1452,11 @@ Omitting this keyword has the same behavior as an empty object.
 
 ### Extended
 
-In addition to JSON schema types, TypeBox provides several extended types that allow for the composition of `function` and `constructor` types. These additional types are not valid JSON Schema and will not validate using typical JSON Schema validation. However, these types can be used to frame JSON schema and describe callable interfaces that may receive JSON validated data. These types are as follows.
+In addition to JSON schema types, TypeBox provides several extended types that allow for the composition of `function` and `constructor` types. These additional types are not valid JSON Schema and will not validate using typical JSON Schema validation. However, these types can be used to frame JSON schema and describe callable interfaces that may receive JSON validated data. Since these are nonstandard types, most applications will not need them. Consider using the [Standard Types](#standard), instead, as using these types may make it difficult to upgrade your application in the future.
 
 #### Extended Configuration
 
-Utilities in this section require updating `src/schemas/validators.ts` to the [Extended Ajv Configuration](https://github.com/sinclairzx81/typebox#ajv) shown in the Typebox documentation.
+Utilities in this section require updating `src/schemas/validators.ts` to the [Extended Ajv Configuration](https://github.com/sinclairzx81/typebox/tree/0.25.23#ajv) shown in the Typebox documentation. Check the detail/expand section under the AJV heading.
 
 #### Constructor
 
