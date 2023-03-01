@@ -380,7 +380,7 @@ In the same folder, add the following `index.html` page:
       <h2 class="pt-1 pb-2 text-lg">Messages</h2>
     </main>
 
-    <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.34/dist/feathers.js"></script>
+    <script src="//unpkg.com/@feathersjs/client@^5.0.0/dist/feathers.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       // Set up socket.io
