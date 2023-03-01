@@ -1,6 +1,6 @@
 import { errors } from '@feathersjs/errors'
 
-export const ERROR = Symbol('@feathersjs/knex/error')
+export const ERROR = Symbol.for('@feathersjs/knex/error')
 
 export function errorHandler(error: any) {
   const { message } = error
