@@ -1526,6 +1526,8 @@ const R = ajv.validate(Type.Object({                 // const R = true
 })
 ```
 
+If you see an error stating `Error: strict mode: unknown keyword: "instanceOf"`, it's likely because you need to extend your configuration, as shown above.
+
 #### Constructor
 
 Verifies that the value is a constructor with typed arguments and return value. Requires [Extended Ajv Configuration](#extended-configuration).
