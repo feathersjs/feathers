@@ -159,6 +159,9 @@ export class MongoDbAdapter<
 
   getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
+      if (!select.includes(this.id)) {
+        select = [this.id, ...select]
+      }
       return select.reduce<{ [key: string]: number }>(
         (value, name) => ({
           ...value,
@@ -166,6 +169,13 @@ export class MongoDbAdapter<
         }),
         {}
       )
+    }
+
+    if (!select[this.id]) {
+      return {
+        ...select,
+        [this.id]: 1
+      }
     }
 
     return select

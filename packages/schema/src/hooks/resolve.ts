@@ -76,12 +76,13 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
       throw new Error('The resolveResult hook must be used as an around hook')
     }
 
-    const { $resolve, $select: select, ...query } = context.params?.query || {}
-    const $select = Array.isArray(select) ? select.filter((name) => !virtualProperties.has(name)) : select
+    const { $resolve, $select, ...query } = context.params?.query || {}
+    const hasVirtualSelects = Array.isArray($select) && $select.some((name) => virtualProperties.has(name))
+
     const resolve = {
       originalContext: context,
       ...context.params.resolve,
-      properties: $resolve || select
+      properties: $resolve || $select
     }
 
     context.params = {
@@ -89,7 +90,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
       resolve,
       query: {
         ...query,
-        ...($select ? { $select } : {})
+        ...(!hasVirtualSelects ? { $select } : {})
       }
     }
 
