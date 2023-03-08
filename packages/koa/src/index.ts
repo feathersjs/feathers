@@ -3,7 +3,7 @@ import koaQs from 'koa-qs'
 import { Application as FeathersApplication } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
-import bodyParser from 'koa-bodyparser'
+import { koaBody as bodyParser } from 'koa-body'
 import cors from '@koa/cors'
 import serveStatic from 'koa-static'
 
