@@ -110,7 +110,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
   }
 }
 
-export const DISPATCH = Symbol('@feathersjs/schema/dispatch')
+export const DISPATCH = Symbol.for('@feathersjs/schema/dispatch')
 
 export const getDispatchValue = (value: any): any => {
   if (typeof value === 'object' && value !== null) {

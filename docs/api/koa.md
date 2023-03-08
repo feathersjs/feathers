@@ -253,7 +253,7 @@ app.use(
 
 ### bodyParser
 
-A reference to the [koa-bodyparser](https://github.com/koajs/bodyparser) module.
+A reference to the [koa-body](https://github.com/koajs/koa-body) module.
 
 ### cors
 

@@ -5,9 +5,9 @@ import { Channel } from './channel/base'
 import { CombinedChannel } from './channel/combined'
 
 const debug = createDebug('@feathersjs/transport-commons/channels/mixins')
-const PUBLISHERS = Symbol('@feathersjs/transport-commons/publishers')
-const CHANNELS = Symbol('@feathersjs/transport-commons/channels')
-const ALL_EVENTS = Symbol('@feathersjs/transport-commons/all-events')
+const PUBLISHERS = Symbol.for('@feathersjs/transport-commons/publishers')
+const CHANNELS = Symbol.for('@feathersjs/transport-commons/channels')
+const ALL_EVENTS = Symbol.for('@feathersjs/transport-commons/all-events')
 
 export const keys = {
   PUBLISHERS: PUBLISHERS as typeof PUBLISHERS,
