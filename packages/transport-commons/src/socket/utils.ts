@@ -55,7 +55,7 @@ export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnectio
         // If we are getting events from an array but try to dispatch individual data
         // try to get the individual item to dispatch from the correct index.
         if (!Array.isArray(data) && Array.isArray(context.result) && Array.isArray(result)) {
-          result = context.result.find((resultData) => isEqual(resultData, data))
+          result = result.find((resultData) => isEqual(resultData, data))
         }
 
         debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, result)
