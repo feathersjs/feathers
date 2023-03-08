@@ -7,7 +7,7 @@ import {
 } from './declarations'
 import { filterQuery } from './query'
 
-export const VALIDATED = Symbol('@feathersjs/adapter/sanitized')
+export const VALIDATED = Symbol.for('@feathersjs/adapter/sanitized')
 
 const alwaysMulti: { [key: string]: boolean } = {
   find: true,

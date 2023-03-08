@@ -14,7 +14,7 @@ export type VirtualResolver<T, V, C> = (
   status: ResolverStatus<T, C>
 ) => Promise<V | undefined>
 
-export const IS_VIRTUAL = Symbol('@feathersjs/schema/virtual')
+export const IS_VIRTUAL = Symbol.for('@feathersjs/schema/virtual')
 
 /**
  * Create a resolver for a virtual property. A virtual property is a property that
