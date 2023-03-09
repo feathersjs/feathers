@@ -227,11 +227,11 @@ app.service('users').hooks({
 
 ### resolveResult
 
-Result resolvers use the `schemaHooks.resolveResult(...resolvers)` hook and resolve the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or add other computed properties etc. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveResult` can be used as an `around` and `after` hook.
+Result resolvers use the `schemaHooks.resolveResult(...resolvers)` hook and resolve the data that is returned by a service call ([context.result](../hooks.md#context-result) in a hook). This can be used to populate associations or add other computed properties etc. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data.
 
 <BlockQuote type="warning" label="Important">
 
-Use as an `around` hook is recommended since this will ensure that database adapters will be able to handle [$select queries](../databases/querying.md#select) properly when using [virtual properties](#virtual-property-resolvers).
+`schemaHooks.resolveResult` must be used as an `around` hook. This is to ensure that the database adapters will be able to handle [$select queries](../databases/querying.md#select) properly when using [virtual properties](#virtual-property-resolvers).
 
 </BlockQuote>
 
