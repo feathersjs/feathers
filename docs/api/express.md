@@ -30,7 +30,7 @@ const app = express(feathers())
 
 <BlockQuote type="warning" label="Important">
 
-As of Feathers v5, [Koa](./koa.md) is the recommended framework integration since it is more modern, faster and easier to use. When chosen explicitly, you should be already familiar [Express](http://expressjs.com/en/guide/routing.html).
+As of Feathers v5, [Koa](./koa.md) is the recommended framework integration since it is more modern, faster and easier to use. When chosen explicitly, you should already be familiar with [Express](http://expressjs.com/en/guide/routing.html).
 
 </BlockQuote>
 
