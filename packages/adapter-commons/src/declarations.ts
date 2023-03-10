@@ -1,4 +1,4 @@
-import { Query, Params, Paginated, Id } from '@feathersjs/feathers'
+import { Query, Params, Paginated, Id, PaginationParams, PaginationOptions } from '@feathersjs/feathers'
 
 export type FilterQueryOptions = {
   filters?: FilterSettings
@@ -12,12 +12,8 @@ export type FilterSettings = {
   [key: string]: QueryFilter | true
 }
 
-export interface PaginationOptions {
-  default?: number
-  max?: number
-}
-
-export type PaginationParams = false | PaginationOptions
+// re-export from @feathersjs/feathers to prevent breaking changes
+export { PaginationOptions, PaginationParams }
 
 export interface AdapterServiceOptions {
   /**
