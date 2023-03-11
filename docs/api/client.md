@@ -11,7 +11,7 @@ In order to connect to a Feathers server, a client creates [Services](./services
 Modules most relevant on the client are:
 
 - `@feathersjs/feathers` to initialize a new Feathers [application](./application.md)
-- [@feathersjs/rest-client](./client/rest.md) to connect to services through REST HTTP provided by [Koa](./koa.md) or [Epress](./express.md).
+- [@feathersjs/rest-client](./client/rest.md) to connect to services through REST HTTP provided by [Koa](./koa.md) or [Express](./express.md).
 - [@feathersjs/socketio-client](./client/socketio.md) to connect to services through [Socket.io](./socketio.md).
 - [@feathersjs/authentication-client](./authentication/client.md) to authenticate a client
 
