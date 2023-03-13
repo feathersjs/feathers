@@ -122,7 +122,7 @@ No additional setup should be necessary to use the Feathers client modules in a 
 
 ### create-react-app
 
-[create-react-app](https://github.com/facebookincubator/create-react-app) uses [Webpack](#webpack) and also no longer requires additional setup to load the individual Feathers clietn modules.
+[create-react-app](https://github.com/facebookincubator/create-react-app) uses [Webpack](#webpack) and also no longer requires additional setup to load the individual Feathers client modules.
 
 ### Others
 
