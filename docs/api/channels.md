@@ -33,7 +33,7 @@ Here are some example logic conditions where channels are useful:
 
 ## Concepts
 
-A **_channel_** is basically an array of **_connection_** objects. Each array is explicitly given a name. When using a real-time server transport and a new client connects, the you can tell the server to explicitly add that client's connection object to any relevant channels. Any connection in a channel will receive all events that are sent to that channel. This allows clients to receive only their intended messages.
+A **_channel_** is basically an array of **_connection_** objects. Each array is explicitly given a name. When using a real-time server transport and a new client connects, you can tell the server to explicitly add that client's connection object to any relevant channels. Any connection in a channel will receive all events that are sent to that channel. This allows clients to receive only their intended messages.
 
 When using a real-time transport, the server pushes events (such as "created", "removed" etc. for a particular service) down to its clients. Using channels allows customizing which clients should receive each event. The client doesn’t subscribe to individual channels, directly, but rather subscribes to specific events like `created`, `patched`, custom events, etc, in which they are interested. Those events will only fire for a client if the server pushes data to one a channel to which the client has been added.
 
