@@ -17,7 +17,7 @@
     "vue": "^3.2.47"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.0-pre.36",
+    "@feathersjs/generators": "^5.0.0",
     "@iconify-json/carbon": "^1.1.14",
     "@types/node": "^18.13.0",
     "@unocss/preset-typography": "^0.49.4",

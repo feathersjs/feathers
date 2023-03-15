@@ -1686,3 +1686,5 @@ Use `Type.Ref(...)` to create referenced types. The target type must specify an 
 const T = Type.String({ $id: 'T' })
 const R = Type.Ref(T)
 ```
+
+For a more detailed example see the [result and data schema](#result-and-data-schemas) section.

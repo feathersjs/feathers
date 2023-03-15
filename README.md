@@ -26,10 +26,6 @@ $ npm run dev
 
 To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](https://feathersjs.com/guides/).
 
-# Documentation
-
-The [Feathers website](http://feathersjs.com) are loaded with awesome stuff and tell you every thing you need to know about using and configuring Feathers.
-
 # License
 
 Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)

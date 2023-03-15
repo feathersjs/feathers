@@ -435,6 +435,12 @@ The `ObjectIdSchema` helper will only work when the [`objectid` AJV keyword](#aj
 
 While the AJV format checks if an object id is valid, it still needs to be converted to the right type. An alternative the the [AJV converter](#ajv-converter) is to use [Feathers resolvers](../schema/resolvers.md). The following [property resolver](../schema/resolvers.md) helpers can be used.
 
+<BlockQuote type="warning" label="Important">
+
+ObjectId resolvers do not need to be used when using the [AJV keyword](#ajv-keyword). They are useful however when using another JSON schema validation library.
+
+</BlockQuote>
+
 #### resolveObjectId
 
 `resolveObjectId` resolves a property as an object id. It can be used as a direct property resolver or called with the original value.
