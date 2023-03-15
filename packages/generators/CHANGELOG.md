@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **generators:** Conditionally import channels in Express app ([#3106](https://github.com/feathersjs/feathers/issues/3106)) ([c2dbaaa](https://github.com/feathersjs/feathers/commit/c2dbaaa4d1d5a5675b5812a7ed2317076ac414fe))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 ### Bug Fixes

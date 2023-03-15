@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **koa:** Replace koa-bodyparser with koa-body ([#3093](https://github.com/feathersjs/feathers/issues/3093)) ([2456bf8](https://github.com/feathersjs/feathers/commit/2456bf882c99ae2cddd1a39bffba7e61217fc055))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 ### Bug Fixes

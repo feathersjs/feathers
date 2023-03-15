@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **core:** Add PaginationParams to general find method ([#3095](https://github.com/feathersjs/feathers/issues/3095)) ([8ebdcf5](https://github.com/feathersjs/feathers/commit/8ebdcf5107fae5fa23920390052b871033de3a0a))
+- **core:** Use Symbol.for to instantiate shared symbols ([#3087](https://github.com/feathersjs/feathers/issues/3087)) ([7f3fc21](https://github.com/feathersjs/feathers/commit/7f3fc2167576f228f8183568eb52b077160e8d65))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 **Note:** Version bump only for package @feathersjs/adapter-commons

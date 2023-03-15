@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **core:** Add PaginationParams to general find method ([#3095](https://github.com/feathersjs/feathers/issues/3095)) ([8ebdcf5](https://github.com/feathersjs/feathers/commit/8ebdcf5107fae5fa23920390052b871033de3a0a))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 **Note:** Version bump only for package @feathersjs/feathers

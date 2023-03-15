@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **core:** Use Symbol.for to instantiate shared symbols ([#3087](https://github.com/feathersjs/feathers/issues/3087)) ([7f3fc21](https://github.com/feathersjs/feathers/commit/7f3fc2167576f228f8183568eb52b077160e8d65))
+- **transport-commons:** Fix dispatching of arrays ([#3075](https://github.com/feathersjs/feathers/issues/3075)) ([98fdda5](https://github.com/feathersjs/feathers/commit/98fdda53187acee88137b39662c766cc62cd7b55))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 **Note:** Version bump only for package @feathersjs/transport-commons

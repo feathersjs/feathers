@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **memory/mongodb:** $select as only property & force 'id' in '$select' ([#3081](https://github.com/feathersjs/feathers/issues/3081)) ([fbe3cf5](https://github.com/feathersjs/feathers/commit/fbe3cf5199e102b5aeda2ae33828d5034df3d105))
+
 # [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
 
 **Note:** Version bump only for package @feathersjs/memory

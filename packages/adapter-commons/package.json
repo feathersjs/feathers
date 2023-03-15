@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-commons",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Shared database adapter utility functions",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -50,9 +50,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0",
-    "@feathersjs/errors": "^5.0.0",
-    "@feathersjs/feathers": "^5.0.0"
+    "@feathersjs/commons": "^5.0.1",
+    "@feathersjs/errors": "^5.0.1",
+    "@feathersjs/feathers": "^5.0.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
