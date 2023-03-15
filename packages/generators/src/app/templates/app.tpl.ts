@@ -81,7 +81,7 @@ ${schema !== false ? `import { configurationValidator } from './configuration'` 
 import { logger } from './logger'
 import { logError } from './hooks/log-error'
 import { services } from './services/index'
-import { channels } from './channels'
+${transports.includes('websockets') ? `import { channels } from './channels'` : ''}
 
 const app: Application = express(feathers())
 
