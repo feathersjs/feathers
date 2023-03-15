@@ -1687,4 +1687,4 @@ const T = Type.String({ $id: 'T' })
 const R = Type.Ref(T)
 ```
 
-For a more example see the [result and data schema](#result-and-data-schemas) section.
+For a more detailed example see the [result and data schema](#result-and-data-schemas) section.
