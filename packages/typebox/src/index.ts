@@ -1,4 +1,4 @@
-import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
+import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -147,7 +147,7 @@ export const queryProperties = <
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
 export const querySyntax = <
-  T extends TObject | TIntersect,
+  T extends TObject,
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   type: T,
