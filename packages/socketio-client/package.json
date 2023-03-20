@@ -54,11 +54,11 @@
     "access": "public"
   },
   "dependencies": {
+    "@feathersjs/feathers": "^5.0.1",
     "@feathersjs/transport-commons": "^5.0.1"
   },
   "devDependencies": {
     "@feathersjs/commons": "^5.0.1",
-    "@feathersjs/feathers": "^5.0.1",
     "@feathersjs/memory": "^5.0.1",
     "@feathersjs/socketio": "^5.0.1",
     "@feathersjs/tests": "^5.0.1",
