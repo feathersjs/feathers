@@ -75,14 +75,14 @@
     "@feathersjs/transport-commons": "^5.0.1",
     "@feathersjs/typebox": "^5.0.1",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.14.6",
+    "@types/node": "^18.15.5",
     "@types/prettier": "^2.7.2",
     "axios": "^1.3.4",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
     "type-fest": "^3.6.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
