@@ -27,7 +27,7 @@ The Knex adapter implements the [common database adapter API](./common) and [que
 
 ### KnexService(options)
 
-`new KnexService(options)` returns a new service instance initialized with the given options. The following example extends the `KnexService` and then uses the `mongodbClient` from the app configuration and provides it to the `Model` option, which is passed to the new `MessagesService`.
+`new KnexService(options)` returns a new service instance initialized with the given options. The following example extends the `KnexService` and then uses the `sqliteClient` from the app configuration and provides it to the `Model` option, which is passed to the new `MessagesService`.
 
 ```ts
 import type { Params } from '@feathersjs/feathers'
