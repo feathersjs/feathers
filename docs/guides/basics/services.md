@@ -124,6 +124,7 @@ If you went with the default selection, we will use **SQLite** which writes the 
 In our new `feathers-chat` application, we can create database backed services with the following command:
 
 ```sh
+# Provided by `@feathersjs/cli`
 npx feathers generate service
 ```
 
