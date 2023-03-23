@@ -243,7 +243,7 @@ export const userQueryResolver = resolve<UserQuery, HookContext>({
 
 What happened here?
 
-- We are adding adding an optional `avatar` field to our user object. This is where we store a user image to show in the chat.
+- We are adding an optional `avatar` field to our user object. This is where we store a user image to show in the chat.
 - The `userDataSchema` is updated to include the `avatar` so that a new user can be created with a custom avatar
 - In the `userDataResolver`, if an `avatar` is not set, we set a default image using the [Gravatar avatar](https://en.gravatar.com/) for the email address
 - The `userQueryResolver` for the user id property allows for a user to `find` all other users but only change (`patch`, `remove`) their own data
