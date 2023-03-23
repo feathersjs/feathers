@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/generators",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Feathers CLI core generators, powered by Pinion",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -61,7 +61,7 @@
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.1",
     "@feathersjs/authentication": "^5.0.1",
-    "@feathersjs/authentication-client": "^5.0.1",
+    "@feathersjs/authentication-client": "^5.0.2",
     "@feathersjs/authentication-local": "^5.0.1",
     "@feathersjs/authentication-oauth": "^5.0.1",
     "@feathersjs/configuration": "^5.0.1",

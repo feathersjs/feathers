@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/feathersjs/feathers/compare/v5.0.1...v5.0.2) (2023-03-23)
+
+### Bug Fixes
+
+- **generators:** Make sure TypeScript version in generated app matches ([#3122](https://github.com/feathersjs/feathers/issues/3122)) ([f0acfdf](https://github.com/feathersjs/feathers/commit/f0acfdf9d33337bf40ca12126c2550f56e31fa3b))
+
 ## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
 
 ### Bug Fixes

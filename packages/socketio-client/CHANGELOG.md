@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/feathersjs/feathers/compare/v5.0.1...v5.0.2) (2023-03-23)
+
+### Bug Fixes
+
+- **socketio-client:** Move core dependency to the right spot ([#3117](https://github.com/feathersjs/feathers/issues/3117)) ([6cd66f1](https://github.com/feathersjs/feathers/commit/6cd66f13e4e668defb57074413846550b147a51d))
+
 ## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
 
 **Note:** Version bump only for package @feathersjs/socketio-client

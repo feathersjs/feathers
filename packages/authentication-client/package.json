@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-client",
   "description": "The authentication plugin for feathers-client",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -64,7 +64,7 @@
     "@feathersjs/memory": "^5.0.1",
     "@feathersjs/rest-client": "^5.0.1",
     "@feathersjs/socketio": "^5.0.1",
-    "@feathersjs/socketio-client": "^5.0.1",
+    "@feathersjs/socketio-client": "^5.0.2",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.6",
     "axios": "^1.3.4",
