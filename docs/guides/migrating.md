@@ -254,7 +254,7 @@ Setting the debugger will apply to all `@feathersjs` modules.
 ### Client
 
 - The `request` library has been deprecated and request support has been removed from the REST client.
-- Since all modern browsers now support built-in [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), the Angular and jQuery REST clients have been removed as well.
+- Since all modern browsers now support built-in [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), the jQuery REST clients has been removed as well.
 - The `@feathersjs/client` package now only comes with a full (`dist/feathers.js`) and core (`dist/core.js`) browser build. Using Feathers [with a module loader](../api/client.md#module-loaders) is recommended for all other use cases.
 
 ### Removed Primus Transport
