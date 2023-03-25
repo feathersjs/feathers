@@ -26,6 +26,10 @@ $ npm run dev
 
 To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](https://feathersjs.com/guides/).
 
+# Contributing
+
+Run lerna bootstrap in the root.  Then open a "JavaScript Debug Terminal", run cd packages/mongodb or into whichever package you're working on and run npm test.
+
 # License
 
 Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
