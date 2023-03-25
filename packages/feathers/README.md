@@ -1,4 +1,6 @@
-<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
+<a href="https://feathersjs.com" title="FeathersJS">
+  <img src="https://feathersjs.com/og.png" alt="Feathers - The API and real-time application framework">
+</a>
 
 ## The API and real-time application framework
 
