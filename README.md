@@ -28,7 +28,7 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 # Contributing
 
-Run lerna bootstrap in the root.  Then open a "JavaScript Debug Terminal", run cd packages/mongodb or into whichever package you're working on and run npm test.
+Run `lerna bootstrap` in the root.  Then open a "JavaScript Debug Terminal", run `cd packages/mongodb` or into whichever package you're working on and then run `npm test`.
 
 # License
 
