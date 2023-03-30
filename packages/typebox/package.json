@@ -55,11 +55,11 @@
   },
   "dependencies": {
     "@feathersjs/schema": "^5.0.1",
-    "@sinclair/typebox": "^0.25.24"
+    "@sinclair/typebox": "^0.26.8"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.15.5",
+    "@types/node": "^18.15.11",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "typescript": "^5.0.2"
