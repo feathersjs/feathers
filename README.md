@@ -26,6 +26,28 @@ $ npm run dev
 
 To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](https://feathersjs.com/guides/).
 
+# Contributing
+
+To start developing, clone this repository, then run:
+
+```
+cd feathers
+npm install
+```
+
+To run all tests run
+
+```
+npm test
+```
+
+Individual tests can be run in the module you are working on:
+
+```
+cd packages/feathers
+npm test
+```
+
 # License
 
 Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
