@@ -2,7 +2,12 @@ import { Type, Static } from '@sinclair/typebox'
 
 export const authenticationSettingsSchema = Type.Object({
   secret: Type.String({ description: 'The JWT signing secret' }),
-  entity: Type.Optional(Type.String({ description: 'The name of the authentication entity (e.g. user)' })),
+  entity: Type.Optional(
+    Type.Union([
+      Type.String({ description: 'The name of the authentication entity (e.g. user)' }),
+      Type.Null()
+   ])
+  ),
   entityId: Type.Optional(Type.String({ description: 'The name of the authentication entity id property' })),
   service: Type.Optional(Type.String({ description: 'The path of the entity service' })),
   authStrategies: Type.Array(Type.String(), {
