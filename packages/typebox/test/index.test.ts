@@ -123,5 +123,9 @@ describe('@feathersjs/schema/typebox', () => {
   it('validators', () => {
     assert.strictEqual(typeof getDataValidator(Type.Object({}), new Ajv()), 'object')
     assert.strictEqual(typeof getValidator(Type.Object({}), new Ajv()), 'function')
+    assert.strictEqual(
+      typeof getValidator(Type.Intersect([Type.Object({}), Type.Object({})]), new Ajv()),
+      'function'
+    )
   })
 })
