@@ -4,11 +4,11 @@ import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema
 export * from '@sinclair/typebox'
 export * from './default-schemas'
 
-// This is necessary to maintain backwards compatibility between 0.25 and 0.26
-;(Type as any).Intersect = Type.Composite
-
 // Export new intersect
-export const { Intersect } = Type
+export const Intersect = Type.Intersect
+
+// This is necessary to maintain backwards compatibility between 0.25 and 0.26
+Type.Intersect = Type.Composite as any
 
 export type TDataSchemaMap = {
   create: TObject
