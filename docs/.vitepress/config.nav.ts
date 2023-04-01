@@ -5,6 +5,7 @@ const version = 5
 
 export default [
   { text: 'Guides', link: '/guides/' },
+  { text: 'Cookbook', link: '/cookbook/' },
   { text: 'API', link: '/api/' },
   { text: 'Help', link: '/help/' },
   {
