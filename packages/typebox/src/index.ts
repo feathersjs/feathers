@@ -4,6 +4,12 @@ import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema
 export * from '@sinclair/typebox'
 export * from './default-schemas'
 
+// Export new intersect
+export const Intersect = Type.Intersect
+
+// This is necessary to maintain backwards compatibility between 0.25 and 0.26
+Type.Intersect = Type.Composite as any
+
 export type TDataSchemaMap = {
   create: TObject
   update?: TObject
@@ -17,7 +23,7 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject, validator: Ajv): Validator<T, R> =>
+export const getValidator = <T = any, R = T>(schema: TObject | TIntersect, validator: Ajv): Validator<T, R> =>
   jsonSchema.getValidator(schema as any, validator)
 
 /**
@@ -42,7 +48,7 @@ export function StringEnum<T extends string[]>(allowedValues: [...T]) {
   return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
 }
 
-const arrayOfKeys = <T extends TObject>(type: T) => {
+const arrayOfKeys = <T extends TObject | TIntersect>(type: T) => {
   const keys = Object.keys(type.properties)
   return Type.Unsafe<(keyof T['properties'])[]>({
     type: 'array',
@@ -60,7 +66,7 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
  * @param schema The TypeBox object schema
  * @returns The `$sort` syntax schema
  */
-export function sortDefinition<T extends TObject>(schema: T) {
+export function sortDefinition<T extends TObject | TIntersect>(schema: T) {
   const properties = Object.keys(schema.properties).reduce((res, key) => {
     const result = res as any
 
@@ -119,7 +125,7 @@ type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = Re
  * @returns The Feathers query syntax schema
  */
 export const queryProperties = <
-  T extends TObject,
+  T extends TObject | TIntersect,
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   definition: T,
