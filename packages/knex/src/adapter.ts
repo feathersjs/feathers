@@ -125,8 +125,9 @@ export class KnexAdapter<
 
     // $select uses a specific find syntax, so it has to come first.
     if (filters.$select) {
+      const select = filters.$select.map((column) => (column.includes('.') ? column : `${name}.${column}`))
       // always select the id field, but make sure we only select it once
-      builder.select(...new Set([...filters.$select, `${name}.${id}`]))
+      builder.select(...new Set([...select, `${name}.${id}`]))
     } else {
       builder.select(`${name}.*`)
     }
