@@ -56,13 +56,15 @@
     "@feathersjs/errors": "^5.0.1",
     "@feathersjs/feathers": "^5.0.1"
   },
+  "peerDependencies": {
+    "mongodb": "^5.2.0"
+  },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.1",
     "@feathersjs/schema": "^5.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
     "mocha": "^10.2.0",
-    "mongodb": "^5.2.0",
     "mongodb-memory-server": "^8.12.2",
     "shx": "^0.3.4",
     "typescript": "^5.0.3"
