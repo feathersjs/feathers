@@ -530,7 +530,7 @@ The following options can be passed when creating a new error handler:
 import { authenticate } from '@feathersjs/express'
 
 app.use('/hello', authenticate('jwt'), (req, res) => {
-  const { user } = req
+  const { user } = req.feathers
 
   res.render(`Hello ${user.email}`)
 })
@@ -543,7 +543,7 @@ app.use(
     strategies: ['jwt', 'api-key']
   }),
   (req, res) => {
-    const { user } = req
+    const { user } = req.feathers
 
     res.render(`Hello ${user.email}`)
   }
@@ -570,7 +570,7 @@ const setQueryAuthentication = (req, res, next) => {
 
 // Request this with `hello?access_token=<your jwt>`
 app.use('/hello', setQueryAuthentication, authenticate('jwt'), (req, res) => {
-  const { user } = req
+  const { user } = req.feathers
 
   res.render(`Hello ${user.email}`)
 })
