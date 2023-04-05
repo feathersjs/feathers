@@ -118,7 +118,7 @@ export class KnexAdapter<
     }, knexQuery)
   }
 
-  createQuery(params: ServiceParams) {
+  createQuery(params: ServiceParams = {} as ServiceParams) {
     const { name, id } = this.getOptions(params)
     const { filters, query } = this.filterQuery(params)
     const builder = this.db(params)
@@ -201,17 +201,18 @@ export class KnexAdapter<
   }
 
   async _findOrGet(id: NullableId, params?: ServiceParams) {
-    const { name, id: idField } = this.getOptions(params)
-    const findParams = {
-      ...params,
-      paginate: false,
-      query: {
-        ...params?.query,
-        ...(id !== null ? { [`${name}.${idField}`]: id } : {})
-      }
+    if (id !== null) {
+      const { name, id: idField } = this.getOptions(params)
+      const builder = params.knex ? params.knex.clone() : this.createQuery(params)
+      const idQuery = builder.andWhere(`${name}.${idField}`, '=', id)
+
+      return idQuery as Promise<Result[]>
     }
 
-    return this._find(findParams as any) as any as Promise<Result[]>
+    return this._find({
+      ...params,
+      paginate: false
+    })
   }
 
   async _get(id: Id, params: ServiceParams = {} as ServiceParams): Promise<Result> {
