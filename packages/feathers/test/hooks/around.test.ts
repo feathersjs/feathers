@@ -87,7 +87,7 @@ describe('`around` hooks', () => {
 
   it('gets mixed into a service and modifies data', async () => {
     const dummyService = {
-      async create(data: any, params: any) {
+      async create(data: any, params?: any) {
         assert.deepStrictEqual(
           data,
           {
@@ -108,7 +108,7 @@ describe('`around` hooks', () => {
         return data
       }
     }
-    const app = feathers().use('/dummy', dummyService)
+    const app = feathers<{ dummy: typeof dummyService }>().use('dummy', dummyService)
     const service = app.service('dummy')
 
     service.hooks({
@@ -145,7 +145,10 @@ describe('`around` hooks', () => {
         return data
       }
     }
-    const app = feathers().use('/some-service', someServiceConfig)
+    const app = feathers<{ 'some-service': typeof someServiceConfig }>().use(
+      'some-service',
+      someServiceConfig
+    )
     const someService = app.service('some-service')
 
     someService.hooks({
@@ -272,7 +275,7 @@ describe('`around` hooks', () => {
 
     class DummyService implements ServiceInterface<any, any, DummyParams> {
       async get(id: any, params?: DummyParams) {
-        assert.deepStrictEqual(params.items, ['first', 'second', 'third'])
+        assert.deepStrictEqual(params!.items, ['first', 'second', 'third'])
 
         return {
           id,
@@ -367,7 +370,7 @@ describe('`around` hooks', () => {
         return {
           id,
           number: (this as any).number,
-          test: params.test
+          test: params!.test
         }
       }
     }
