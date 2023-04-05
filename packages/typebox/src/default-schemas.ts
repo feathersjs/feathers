@@ -6,7 +6,7 @@ export const authenticationSettingsSchema = Type.Object({
     Type.Union([
       Type.String({ description: 'The name of the authentication entity (e.g. user)' }),
       Type.Null()
-   ])
+    ])
   ),
   entityId: Type.Optional(Type.String({ description: 'The name of the authentication entity id property' })),
   service: Type.Optional(Type.String({ description: 'The path of the entity service' })),
