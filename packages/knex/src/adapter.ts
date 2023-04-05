@@ -180,7 +180,7 @@ export class KnexAdapter<
     }
 
     // provide default sorting if its not set
-    if (!filters.$sort) {
+    if (!filters.$sort && builder.client.driverName === 'mssql') {
       builder.orderBy(`${name}.${id}`, 'asc')
     }
 
@@ -237,7 +237,7 @@ export class KnexAdapter<
       return Promise.all(data.map((current) => this._create(current, params)))
     }
 
-    const client = this.db(params).client.config.client
+    const { client } = this.db(params).client.config
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
     const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
