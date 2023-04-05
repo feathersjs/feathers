@@ -204,7 +204,7 @@ export class KnexAdapter<
     if (id !== null) {
       const { name, id: idField } = this.getOptions(params)
       const builder = params.knex ? params.knex.clone() : this.createQuery(params)
-      const idQuery = builder.andWhere(`${name}.${idField}`, '=', id)
+      const idQuery = builder.andWhere(`${name}.${idField}`, '=', id).catch(errorHandler)
 
       return idQuery as Promise<Result[]>
     }
