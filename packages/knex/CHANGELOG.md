@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+- **knex:** Ensure that columns are selected unambigiously and avoid duplicate id selection ([#3144](https://github.com/feathersjs/feathers/issues/3144)) ([3eb7428](https://github.com/feathersjs/feathers/commit/3eb7428f888f0e8a0fbc09f5261bff3e68a0ed63))
+- **knex:** Get by id and transactions should work with params.knex ([#3146](https://github.com/feathersjs/feathers/issues/3146)) ([b172b5e](https://github.com/feathersjs/feathers/commit/b172b5ea9b461642874eb7d2ba01dc4cfc275155))
+- **knex:** Only apply default order for MSSQL ([#3145](https://github.com/feathersjs/feathers/issues/3145)) ([28c2627](https://github.com/feathersjs/feathers/commit/28c26279befea6cf43cedd3af628234b170b8c91))
+
 ## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
 
 ### Bug Fixes

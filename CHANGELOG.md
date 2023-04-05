@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **authentication:** Ensure authentication.entity configuration can be null ([#3136](https://github.com/feathersjs/feathers/issues/3136)) ([c47349b](https://github.com/feathersjs/feathers/commit/c47349b9dcf2067b7b572c5463b15b2a8fbda972))
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+- **generators:** Properly log unhandled rejection ([#3149](https://github.com/feathersjs/feathers/issues/3149)) ([eda8f78](https://github.com/feathersjs/feathers/commit/eda8f78fa5084c3247ad10b051610b3c51a13d24))
+- **knex:** Ensure that columns are selected unambigiously and avoid duplicate id selection ([#3144](https://github.com/feathersjs/feathers/issues/3144)) ([3eb7428](https://github.com/feathersjs/feathers/commit/3eb7428f888f0e8a0fbc09f5261bff3e68a0ed63))
+- **knex:** Get by id and transactions should work with params.knex ([#3146](https://github.com/feathersjs/feathers/issues/3146)) ([b172b5e](https://github.com/feathersjs/feathers/commit/b172b5ea9b461642874eb7d2ba01dc4cfc275155))
+- **knex:** Only apply default order for MSSQL ([#3145](https://github.com/feathersjs/feathers/issues/3145)) ([28c2627](https://github.com/feathersjs/feathers/commit/28c26279befea6cf43cedd3af628234b170b8c91))
+- **mongodb:** Add MongoDB as peerDependency ([#3148](https://github.com/feathersjs/feathers/issues/3148)) ([0137b40](https://github.com/feathersjs/feathers/commit/0137b40fb694fa95e3b7b7ad41504831b894d977))
+- **typebox:** Upgrade to TypeBox 0.26.0 ([#3113](https://github.com/feathersjs/feathers/issues/3113)) ([d1d9598](https://github.com/feathersjs/feathers/commit/d1d95984dd94d2b9305e7338421f84f9c4f733fd))
+
 ## [5.0.2](https://github.com/feathersjs/feathers/compare/v5.0.1...v5.0.2) (2023-03-23)
 
 ### Bug Fixes
