@@ -62,8 +62,8 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
     "mocha": "^10.2.0",
-    "mongodb": "^5.1.0",
-    "mongodb-memory-server": "^8.12.1",
+    "mongodb": "^5.2.0",
+    "mongodb-memory-server": "^8.12.2",
     "shx": "^0.3.4",
     "typescript": "^5.0.3"
   },

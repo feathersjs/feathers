@@ -120,7 +120,7 @@ describe('`before` hooks', () => {
 
   it('gets mixed into a service and modifies data', async () => {
     const dummyService = {
-      async create(data: any, params: any) {
+      async create(data: any, params?: any) {
         assert.deepStrictEqual(
           data,
           {
@@ -141,7 +141,7 @@ describe('`before` hooks', () => {
         return data
       }
     }
-    const app = feathers().use('/dummy', dummyService)
+    const app = feathers<{ dummy: typeof dummyService }>().use('dummy', dummyService)
     const service = app.service('dummy')
 
     service.hooks({
@@ -178,7 +178,10 @@ describe('`before` hooks', () => {
         return data
       }
     }
-    const app = feathers().use('/some-service', someServiceConfig)
+    const app = feathers<{ 'some-service': typeof someServiceConfig }>().use(
+      'some-service',
+      someServiceConfig
+    )
     const someService = app.service('some-service')
 
     someService.hooks({

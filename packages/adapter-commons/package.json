@@ -59,7 +59,7 @@
     "@types/mongodb": "^4.0.6",
     "@types/node": "^18.15.11",
     "mocha": "^10.2.0",
-    "mongodb": "^5.1.0",
+    "mongodb": "^5.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
