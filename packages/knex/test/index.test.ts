@@ -678,7 +678,7 @@ describe('Feathers Knex Service', () => {
   describe('associations', () => {
     const todoService = app.service('todos')
 
-    it('create, query and get with associations', async () => {
+    it('create, query and get with associations, can unambigiously $select', async () => {
       const dave = await peopleService.create({
         name: 'Dave',
         age: 133
@@ -696,6 +696,16 @@ describe('Feathers Knex Service', () => {
       })
       const got = await todoService.get(todo.id)
 
+      assert.deepStrictEqual(
+        await todoService.get(todo.id, {
+          query: { $select: ['id', 'text'] }
+        }),
+        {
+          id: todo.id,
+          text: todo.text,
+          personName: 'Dave'
+        }
+      )
       assert.strictEqual(got.personName, dave.name)
       assert.deepStrictEqual(got, todo)
       assert.deepStrictEqual(found, todo)
