@@ -94,7 +94,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Intersect(
+        Type.Composite(
           [
             Type.Object({
               $gt: def,
@@ -164,7 +164,7 @@ export const querySyntax = <
   const $or = Type.Array(propertySchema)
   const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
-  return Type.Intersect(
+  return Type.Composite(
     [
       Type.Partial(
         Type.Object(
