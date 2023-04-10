@@ -14,7 +14,7 @@ npm install @feathersjs/client --save
 
 ## Documentation
 
-Refer to the [Feathers Express API documentation](https://docs.feathersjs.com/api/express.html) for more details.
+Refer to the [Feathers Express API documentation](https://feathersjs.com/api/express.html) for more details.
 
 ## License
 

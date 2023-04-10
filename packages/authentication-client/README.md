@@ -14,7 +14,7 @@ npm install @feathersjs/authentication-client --save
 
 ## Documentation
 
-Refer to the [Feathers authentication client API documentation](https://docs.feathersjs.com/api/authentication/client.html) for more details.
+Refer to the [Feathers authentication client API documentation](https://feathersjs.com/api/authentication/client.html) for more details.
 
 ## License
 

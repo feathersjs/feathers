@@ -14,7 +14,7 @@ npm install @feathersjs/configuration --save
 
 ## Documentation
 
-Refer to the [Feathers configuration API documentation](https://docs.feathersjs.com/api/configuration.html) for more details.
+Refer to the [Feathers configuration API documentation](https://feathersjs.com/api/configuration.html) for more details.
 
 ## License
 

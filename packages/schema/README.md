@@ -14,7 +14,7 @@ npm install @feathersjs/schema --save
 
 ## Documentation
 
-Refer to the [Feathers documentation](https://docs.feathersjs.com) for more details.
+Refer to the [Feathers schema API documentation](https://feathersjs.com/api/schema/) for more details.
 
 ## License
 

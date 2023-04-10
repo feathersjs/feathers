@@ -14,7 +14,7 @@ npm install @feathersjs/authentication-local --save
 
 ## Documentation
 
-Refer to the [Feathers local authentication API documentation](https://docs.feathersjs.com/api/authentication/local.html) for more details.
+Refer to the [Feathers local authentication API documentation](https://feathersjs.com/api/authentication/local.html) for more details.
 
 ## License
 

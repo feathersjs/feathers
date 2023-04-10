@@ -1,20 +1,20 @@
-# @feathersjs/rest-client
+# create-feathers
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
-[![Download Status](https://img.shields.io/npm/dm/@feathersjs/rest-client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/rest-client)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/configuration.svg?style=flat-square)](https://www.npmjs.com/package/create-feathers)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-> REST client services for different HTTP libraries
+> Generate a Feathers application through the CLI
 
-## Installation
+## Usage
 
 ```
-npm install @feathersjs/rest-client --save
+npm create feathers my-app
 ```
 
 ## Documentation
 
-Refer to the [Feathers REST client API documentation](https://feathersjs.com/api/client/rest.html) for more details.
+Refer to the [Feathers guides](https://feathersjs.com/guides/) for more details.
 
 ## License
 

@@ -14,7 +14,7 @@ npm install @feathersjs/authentication --save
 
 ## Documentation
 
-Refer to the [Feathers authentication API documentation](https://docs.feathersjs.com/api/authentication/) for more details.
+Refer to the [Feathers authentication API documentation](https://feathersjs.com/api/authentication/) for more details.
 
 ## License
 
