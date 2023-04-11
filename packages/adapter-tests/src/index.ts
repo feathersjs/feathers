@@ -4,7 +4,7 @@ import { AdapterTestName } from './declarations'
 import methodTests from './methods'
 import syntaxTests from './syntax'
 
-const adapterTests = (testNames: AdapterTestName[]) => {
+export const adapterTests = (testNames: AdapterTestName[]) => {
   return (app: any, errors: any, serviceName: any, idProp = 'id') => {
     if (!serviceName) {
       throw new Error('You must pass a service name')
@@ -30,7 +30,9 @@ const adapterTests = (testNames: AdapterTestName[]) => {
       after(() => {
         testNames.forEach((name) => {
           if (!allTests.includes(name)) {
-            console.error(`WARNING: '${name}' test is not part of the test suite`)
+            console.error(
+              `WARNING: '${name}' test is not part of the test suite`
+            )
           }
         })
         if (skippedTests.length) {
