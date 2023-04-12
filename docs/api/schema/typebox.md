@@ -1670,6 +1670,45 @@ const T = {
 }
 ```
 
+
+#### Symbol
+
+Verifies that the value is of type `Symbol`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.Symbol()
+```
+
+```js
+type T = symbol
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'Symbol'
+}
+```
+
+#### BigInt
+
+Verifies that the value is of type `BigInt`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.BigInt()
+```
+
+```js
+type T = bigint
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'BigInt'
+}
+```
+
 #### Void
 
 Verifies that the value is `null`. Requires [Extended Ajv Configuration](#extended-configuration).
