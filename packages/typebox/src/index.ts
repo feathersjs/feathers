@@ -1,14 +1,66 @@
-import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
+import {
+  TObject,
+  TInteger,
+  TOptional,
+  TSchema,
+  TIntersect,
+  ObjectOptions,
+  ExtendedTypeBuilder,
+  SchemaOptions,
+  TNever,
+  IntersectOptions,
+  TypeGuard,
+  Kind
+} from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
 export * from './default-schemas'
 
-// Export new intersect
-export const Intersect = Type.Intersect
+/**
+ * Feathers TypeBox customisations. Implements the 0.25.0 fallback for Intersect types.
+ * @see https://github.com/sinclairzx81/typebox/issues/373
+ */
+export class FeathersTypeBuilder extends ExtendedTypeBuilder {
+  /** `[Standard]` Creates a Intersect type */
+  public Intersect(allOf: [], options?: SchemaOptions): TNever
+  /** `[Standard]` Creates a Intersect type */
+  public Intersect<T extends [TObject]>(allOf: [...T], options?: SchemaOptions): T[0]
+  // /** `[Standard]` Creates a Intersect type */
+  public Intersect<T extends TObject[]>(allOf: [...T], options?: IntersectOptions): TIntersect<T>
+  public Intersect(allOf: TObject[], options: IntersectOptions = {}) {
+    const [required, optional] = [new Set<string>(), new Set<string>()]
+    for (const object of allOf) {
+      for (const [key, property] of Object.entries(object.properties)) {
+        if (TypeGuard.TOptional(property) || TypeGuard.TReadonlyOptional(property)) optional.add(key)
+      }
+    }
+    for (const object of allOf) {
+      for (const key of Object.keys(object.properties)) {
+        if (!optional.has(key)) required.add(key)
+      }
+    }
+    const properties = {} as Record<string, any>
+    for (const object of allOf) {
+      for (const [key, schema] of Object.entries(object.properties)) {
+        properties[key] =
+          properties[key] === undefined
+            ? schema
+            : { [Kind]: 'Union', anyOf: [properties[key], { ...schema }] }
+      }
+    }
+    if (required.size > 0) {
+      return { ...options, [Kind]: 'Object', type: 'object', properties, required: [...required] } as any
+    } else {
+      return { ...options, [Kind]: 'Object', type: 'object', properties } as any
+    }
+  }
+}
 
-// This is necessary to maintain backwards compatibility between 0.25 and 0.26
-Type.Intersect = Type.Composite as any
+/**
+ * Exports our own type builder
+ */
+export const Type = new FeathersTypeBuilder()
 
 export type TDataSchemaMap = {
   create: TObject
@@ -94,7 +146,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Intersect(
+        Type.Composite(
           [
             Type.Object({
               $gt: def,
@@ -164,7 +216,7 @@ export const querySyntax = <
   const $or = Type.Array(propertySchema)
   const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
-  return Type.Intersect(
+  return Type.Composite(
     [
       Type.Partial(
         Type.Object(

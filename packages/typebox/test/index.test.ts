@@ -10,6 +10,7 @@ import {
   getValidator,
   ObjectIdSchema
 } from '../src'
+import { FeathersTypeBuilder } from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
   describe('querySyntax', () => {
@@ -98,6 +99,10 @@ describe('@feathersjs/schema/typebox', () => {
     })
 
     assert.ok(validated)
+  })
+
+  it('exports custom type builder', () => {
+    assert.ok(Type instanceof FeathersTypeBuilder)
   })
 
   // Test ObjectId validation
