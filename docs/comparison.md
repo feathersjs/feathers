@@ -6,3 +6,4 @@ The following sections compare Feathers to other software choices that seem simi
 - [Feathers vs Meteor](/feathers-vs-meteor)
 - [Feathers vs Sails](/feathers-vs-sails)
 - [Feathers vs Loopback](/feathers-vs-loopback)
+- [Feathers vs Nest](/feathers-vs-nest)
