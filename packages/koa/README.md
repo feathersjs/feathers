@@ -14,7 +14,7 @@ npm install @feathersjs/koa --save
 
 ## Documentation
 
-Refer to the [Feathers Koa API documentation](https://docs.feathersjs.com/api/koa.html) for more details.
+Refer to the [Feathers Koa API documentation](https://feathersjs.com/api/koa.html) for more details.
 
 ## License
 

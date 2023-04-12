@@ -14,7 +14,7 @@ npm install @feathersjs/typebox --save
 
 ## Documentation
 
-Refer to the [Feathers documentation](https://docs.feathersjs.com) for more details.
+Refer to the [Feathers TypeBox documentation](https://feathersjs.com/api/schema/typebox.html) for more details.
 
 ## License
 

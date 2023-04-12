@@ -17,16 +17,14 @@ Feathers can interact with any backend technology, supports many databases out o
 You can build your first real-time and REST API in just 4 commands:
 
 ```bash
-$ npm init feathers my-new-app
+$ npm create feathers my-new-app
 $ cd my-new-app
 $ npm start
 ```
 
-To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](http://docs.feathersjs.com/guides).
-
 ## Documentation
 
-The [Feathers docs](http://docs.feathersjs.com) are loaded with awesome stuff and tell you every thing you need to know about using and configuring Feathers.
+To learn more about Feathers visit the website at [feathersjs.com](http://feathersjs.com) or jump right into [the Feathers guides](http://feathersjs.com/guides).
 
 ## License
 

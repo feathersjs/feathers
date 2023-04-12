@@ -6,9 +6,15 @@
 
 > Shared utility functions for Feathers adatabase adapters
 
-## About
+## Installation
 
-This is a repository for handling Feathers common database syntax. See the [API documentation](https://docs.feathersjs.com/api/databases/common.html) for more information.
+```
+npm install @feathersjs/adapter-commons --save
+```
+
+## Documentation
+
+Refer to the [Feathers database adapter documentation](https://feathersjs.com/api/databases/common.html) for more details.
 
 ## Authors
 

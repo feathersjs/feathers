@@ -19,7 +19,7 @@ $ npx feathers help
 
 ## Documentation
 
-Refer to the [Feathers documentation](https://docs.feathersjs.com) for more details.
+Refer to the [Feathers CLI guide](https://feathersjs.com/guides/cli/) for more details.
 
 ## License
 

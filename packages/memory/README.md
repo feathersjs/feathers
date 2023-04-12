@@ -4,17 +4,17 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/memory.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/memory)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-A [Feathers](https://feathersjs.com) service adapter for in-memory data storage that works on all platforms.
+> A Feathers service adapter for in-memory data storage that works on all platforms.
+
+## Installation
 
 ```bash
 $ npm install --save @feathersjs/memory
 ```
 
-> **Important:** `@feathersjs/memory` implements the [Feathers Common database adapter API](https://docs.feathersjs.com/api/databases/common.html) and [querying syntax](https://docs.feathersjs.com/api/databases/querying.html).
-
 ## Documentation
 
-See [FeathersJS Docs - Memory Adapter](https://feathersjs.com/api/databases/memory.html).
+See [FeathersJS Memory Adapter API documentation](https://feathersjs.com/api/databases/memory.html) for more details.
 
 ## License
 
