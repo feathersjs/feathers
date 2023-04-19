@@ -54,7 +54,7 @@
   "dependencies": {
     "@feathersjs/generators": "^5.0.4",
     "chalk": "^4.0.1",
-    "commander": "^10.0.0"
+    "commander": "^10.0.1"
   },
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.4",
@@ -77,12 +77,12 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
     "@types/prettier": "^2.7.2",
-    "axios": "^1.3.4",
+    "axios": "^1.3.6",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
     "type-fest": "^3.8.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

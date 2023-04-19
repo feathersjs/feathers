@@ -69,7 +69,7 @@
     "pg": "^8.10.0",
     "shx": "^0.3.4",
     "sqlite3": "^5.1.6",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
