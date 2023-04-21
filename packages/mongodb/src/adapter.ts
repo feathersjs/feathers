@@ -292,9 +292,7 @@ export class MongoDbAdapter<
       ? model
           .insertMany(data.map(setId), writeOptions)
           .then(async (result) =>
-            Promise.all(
-              Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id }, params.mongodb))
-            )
+            model.find({ _id: { $in: Object.values(result.insertedIds) } }, params.mongodb).toArray()
           )
       : model
           .insertOne(setId(data), writeOptions)
