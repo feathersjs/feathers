@@ -85,7 +85,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     return this
   }
 
-  find(params?: P) {
+  _find(params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
@@ -96,7 +96,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  get(id: Id, params?: P) {
+  find(params?: P) {
+    return this._find(params)
+  }
+
+  _get(id: Id, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error("id for 'get' can not be undefined"))
     }
@@ -111,7 +115,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  create(body: D, params?: P) {
+  get(id: Id, params?: P) {
+    return this._get(id, params)
+  }
+
+  _create(body: D, params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
@@ -123,11 +131,13 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  update(id: NullableId, body: D, params?: P) {
+  create(body: D, params?: P) {
+    return this._create(body, params)
+  }
+
+  _update(id: NullableId, body: D, params?: P) {
     if (typeof id === 'undefined') {
-      return Promise.reject(
-        new Error("id for 'update' can not be undefined, only 'null' when updating multiple entries")
-      )
+      return Promise.reject(new Error("id for 'update' can not be undefined"))
     }
 
     return this.request(
@@ -141,7 +151,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  patch(id: NullableId, body: D, params?: P) {
+  update(id: NullableId, body: D, params?: P) {
+    return this._update(id, body, params)
+  }
+
+  _patch(id: NullableId, body: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'patch' can not be undefined, only 'null' when updating multiple entries")
@@ -159,7 +173,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  remove(id: NullableId, params?: P) {
+  patch(id: NullableId, body: D, params?: P) {
+    return this._patch(id, body, params)
+  }
+
+  _remove(id: NullableId, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'remove' can not be undefined, only 'null' when removing multiple entries")
@@ -174,5 +192,9 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
       },
       params
     ).catch(toError)
+  }
+
+  remove(id: NullableId, params?: P) {
+    return this._remove(id, params)
   }
 }

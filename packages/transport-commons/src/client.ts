@@ -98,28 +98,52 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
     return this
   }
 
-  find(params: Params = {}) {
+  _find(params: Params = {}) {
     return this.send<T | T[]>('find', params.query || {})
   }
 
-  get(id: Id, params: Params = {}) {
+  find(params: Params = {}) {
+    return this._find(params)
+  }
+
+  _get(id: Id, params: Params = {}) {
     return this.send<T>('get', id, params.query || {})
   }
 
-  create(data: any, params: Params = {}) {
+  get(id: Id, params: Params = {}) {
+    return this._get(id, params)
+  }
+
+  _create(data: any, params: Params = {}) {
     return this.send<T>('create', data, params.query || {})
   }
 
-  update(id: Id, data: any, params: Params = {}) {
+  create(data: any, params: Params = {}) {
+    return this._create(data, params)
+  }
+
+  _update(id: Id, data: any, params: Params = {}) {
     return this.send<T>('update', id, data, params.query || {})
   }
 
-  patch(id: NullableId, data: any, params: Params = {}) {
+  update(id: Id, data: any, params: Params = {}) {
+    return this._update(id, data, params)
+  }
+
+  _patch(id: NullableId, data: any, params: Params = {}) {
     return this.send<T | T[]>('patch', id, data, params.query || {})
   }
 
-  remove(id: NullableId, params: Params = {}) {
+  patch(id: Id, data: any, params: Params = {}) {
+    return this._patch(id, data, params)
+  }
+
+  _remove(id: NullableId, params: Params = {}) {
     return this.send<T | T[]>('remove', id, params.query || {})
+  }
+
+  remove(id: NullableId, params: Params = {}) {
+    return this._remove(id, params)
   }
 
   // `off` is actually not part of the Node event emitter spec
