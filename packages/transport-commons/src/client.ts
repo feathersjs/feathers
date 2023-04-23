@@ -118,27 +118,27 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
     return this._get(id, params)
   }
 
-  _create(data: any, params: Params = {}) {
+  _create(data: D, params: Params = {}) {
     return this.send<T>('create', data, params.query || {})
   }
 
-  create(data: any, params: Params = {}) {
+  create(data: D, params: Params = {}) {
     return this._create(data, params)
   }
 
-  _update(id: Id, data: any, params: Params = {}) {
+  _update(id: Id, data: D, params: Params = {}) {
     return this.send<T>('update', id, data, params.query || {})
   }
 
-  update(id: Id, data: any, params: Params = {}) {
+  update(id: Id, data: D, params: Params = {}) {
     return this._update(id, data, params)
   }
 
-  _patch(id: NullableId, data: any, params: Params = {}) {
+  _patch(id: NullableId, data: D, params: Params = {}) {
     return this.send<T | T[]>('patch', id, data, params.query || {})
   }
 
-  patch(id: Id, data: any, params: Params = {}) {
+  patch(id: NullableId, data: D, params: Params = {}) {
     return this._patch(id, data, params)
   }
 

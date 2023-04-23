@@ -141,9 +141,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
   _update(id: NullableId, data: D, params?: P) {
     if (typeof id === 'undefined') {
-      return Promise.reject(
-        new Error("id for 'update' can not be undefined, only 'null' when updating multiple entries")
-      )
+      return Promise.reject(new Error("id for 'update' can not be undefined"))
     }
 
     return this.request(
