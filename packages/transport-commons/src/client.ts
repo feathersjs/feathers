@@ -90,9 +90,13 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   methods(this: any, ...names: string[]) {
-    names.forEach((name) => {
-      this[name] = function (data: any, params: Params = {}) {
-        return this.send(name, data, params.query || {})
+    names.forEach((method) => {
+      const _method = `_${method}`
+      this[_method] = function (data: any, params: Params = {}) {
+        return this.send(method, data, params.query || {})
+      }
+      this[method] = function (data: any, params: Params = {}) {
+        return this[_method](data, params)
       }
     })
     return this
