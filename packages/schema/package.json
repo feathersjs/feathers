@@ -62,7 +62,7 @@
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
-    "json-schema-to-ts": "2.7.2"
+    "json-schema-to-ts": "^2.7.2 <2.8.0 || ^2.8.2"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.4",
