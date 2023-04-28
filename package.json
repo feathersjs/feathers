@@ -24,7 +24,7 @@
   },
   "scripts": {
     "install": "lerna bootstrap",
-    "publish": "lerna publish && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish": "lerna publish --force-publish && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:major": "lerna publish major && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:minor": "lerna publish minor && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:patch": "lerna publish patch && git commit -am \"chore: Update changelog\" && git push origin",
