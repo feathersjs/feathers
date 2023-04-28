@@ -30,9 +30,7 @@ export const adapterTests = (testNames: AdapterTestName[]) => {
       after(() => {
         testNames.forEach((name) => {
           if (!allTests.includes(name)) {
-            console.error(
-              `WARNING: '${name}' test is not part of the test suite`
-            )
+            console.error(`WARNING: '${name}' test is not part of the test suite`)
           }
         })
         if (skippedTests.length) {

@@ -1,66 +1,8 @@
-import {
-  TObject,
-  TInteger,
-  TOptional,
-  TSchema,
-  TIntersect,
-  ObjectOptions,
-  ExtendedTypeBuilder,
-  SchemaOptions,
-  TNever,
-  IntersectOptions,
-  TypeGuard,
-  Kind
-} from '@sinclair/typebox'
+import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
 export * from './default-schemas'
-
-/**
- * Feathers TypeBox customisations. Implements the 0.25.0 fallback for Intersect types.
- * @see https://github.com/sinclairzx81/typebox/issues/373
- */
-export class FeathersTypeBuilder extends ExtendedTypeBuilder {
-  /** `[Standard]` Creates a Intersect type */
-  public Intersect(allOf: [], options?: SchemaOptions): TNever
-  /** `[Standard]` Creates a Intersect type */
-  public Intersect<T extends [TObject]>(allOf: [...T], options?: SchemaOptions): T[0]
-  // /** `[Standard]` Creates a Intersect type */
-  public Intersect<T extends TObject[]>(allOf: [...T], options?: IntersectOptions): TIntersect<T>
-  public Intersect(allOf: TObject[], options: IntersectOptions = {}) {
-    const [required, optional] = [new Set<string>(), new Set<string>()]
-    for (const object of allOf) {
-      for (const [key, property] of Object.entries(object.properties)) {
-        if (TypeGuard.TOptional(property) || TypeGuard.TReadonlyOptional(property)) optional.add(key)
-      }
-    }
-    for (const object of allOf) {
-      for (const key of Object.keys(object.properties)) {
-        if (!optional.has(key)) required.add(key)
-      }
-    }
-    const properties = {} as Record<string, any>
-    for (const object of allOf) {
-      for (const [key, schema] of Object.entries(object.properties)) {
-        properties[key] =
-          properties[key] === undefined
-            ? schema
-            : { [Kind]: 'Union', anyOf: [properties[key], { ...schema }] }
-      }
-    }
-    if (required.size > 0) {
-      return { ...options, [Kind]: 'Object', type: 'object', properties, required: [...required] } as any
-    } else {
-      return { ...options, [Kind]: 'Object', type: 'object', properties } as any
-    }
-  }
-}
-
-/**
- * Exports our own type builder
- */
-export const Type = new FeathersTypeBuilder()
 
 export type TDataSchemaMap = {
   create: TObject
@@ -75,7 +17,7 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject | TIntersect, validator: Ajv): Validator<T, R> =>
+export const getValidator = <T = any, R = T>(schema: TObject, validator: Ajv): Validator<T, R> =>
   jsonSchema.getValidator(schema as any, validator)
 
 /**
@@ -100,7 +42,7 @@ export function StringEnum<T extends string[]>(allowedValues: [...T]) {
   return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
 }
 
-const arrayOfKeys = <T extends TObject | TIntersect>(type: T) => {
+const arrayOfKeys = <T extends TObject>(type: T) => {
   const keys = Object.keys(type.properties)
   return Type.Unsafe<(keyof T['properties'])[]>({
     type: 'array',
@@ -118,7 +60,7 @@ const arrayOfKeys = <T extends TObject | TIntersect>(type: T) => {
  * @param schema The TypeBox object schema
  * @returns The `$sort` syntax schema
  */
-export function sortDefinition<T extends TObject | TIntersect>(schema: T) {
+export function sortDefinition<T extends TObject>(schema: T) {
   const properties = Object.keys(schema.properties).reduce((res, key) => {
     const result = res as any
 
@@ -146,7 +88,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Composite(
+        Type.Intersect(
           [
             Type.Object({
               $gt: def,
@@ -177,7 +119,7 @@ type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = Re
  * @returns The Feathers query syntax schema
  */
 export const queryProperties = <
-  T extends TObject | TIntersect,
+  T extends TObject,
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   definition: T,
@@ -205,7 +147,7 @@ export const queryProperties = <
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
 export const querySyntax = <
-  T extends TObject | TIntersect,
+  T extends TObject,
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   type: T,
@@ -216,7 +158,7 @@ export const querySyntax = <
   const $or = Type.Array(propertySchema)
   const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
-  return Type.Composite(
+  return Type.Intersect(
     [
       Type.Partial(
         Type.Object(
