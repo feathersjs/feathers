@@ -1004,16 +1004,6 @@ const T = {
 }
 ```
 
-<BlockQuote type="warning" label="note">
-
-TypeBox 0.26.0 introduced a breaking change in `Type.Intersect`. `@feathersjs/typebox` maintains the original behaviour which is now available in TypeBox as `Type.Composite`. It you want to use the new `Type.Intersect` use
-
-```ts
-import { Intersect } from '@feathersjs/typebox'
-```
-
-</BlockQuote>
-
 ##### Never
 
 Creates a type that will never validate if the attribute is present. This is useful if you are allowing [additionalProperties](#additionalproperties) but need to prevent using specific keys.
