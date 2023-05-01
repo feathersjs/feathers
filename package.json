@@ -40,15 +40,15 @@
     "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
     "c8": "^7.13.0",
-    "eslint": "^8.37.0",
+    "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "lerna": "^6.6.1",
-    "npm-check-updates": "^16.10.2",
-    "prettier": "^2.8.7",
-    "typescript": "^5.0.3"
+    "npm-check-updates": "^16.10.9",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4"
   }
 }
