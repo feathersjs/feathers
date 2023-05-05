@@ -28,7 +28,7 @@ const serviceMiddleware = (): Middleware => {
     }
 
     const createArguments = http.argumentsFor[method as 'get'] || http.argumentsFor.default
-    const params = { query, headers, route, ...ctx.feathers }
+    const params = { query, headers, route, files: ctx.request.files, ...ctx.feathers }
     const args = createArguments({ id, data, params })
     const contextBase = createContext(service, method, { http: {} })
     ctx.hook = contextBase
