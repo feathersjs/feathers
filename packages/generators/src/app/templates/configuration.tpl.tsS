@@ -15,10 +15,10 @@ const defaultConfig = ({}: AppGeneratorContext) => ({
 
 const customEnvironment = {
   port: {
-    __name: 'PORT',
+    __name: 'FEATHERS_PORT',
     __format: 'number'
   },
-  host: 'HOSTNAME',
+  host: 'FEATHERS_HOSTNAME',
   authentication: {
     secret: 'FEATHERS_SECRET'
   }
