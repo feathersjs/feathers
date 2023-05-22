@@ -152,9 +152,7 @@ export class AuthenticationClient {
     // For NotAuthenticated, PaymentError, Forbidden, NotFound, MethodNotAllowed, NotAcceptable
     // errors, remove the access token
     if (error.code > 400 && error.code < 408) {
-      const promise = (this.storage as StorageWrapper).storage
-        ? this.removeAccessToken().then(() => this.reset())
-        : Promise.resolve();
+      const promise = this.removeAccessToken().then(() => this.reset())
 
       return type === 'logout' ? promise : promise.then(() => Promise.reject(error))
     }
