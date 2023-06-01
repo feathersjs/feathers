@@ -57,12 +57,12 @@
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "@types/mongodb": "^4.0.6",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.2.5",
     "mocha": "^10.2.0",
-    "mongodb": "^5.2.0",
+    "mongodb": "^5.5.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
