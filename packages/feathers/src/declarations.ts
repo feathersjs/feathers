@@ -265,7 +265,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
    */
   use<L extends keyof Services & string>(
     path: L,
-    service: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
+    service?: keyof any extends keyof Services ? ServiceInterface | Application : Services[L],
     options?: ServiceOptions<keyof any extends keyof Services ? string : keyof Services[L]>
   ): this
 
