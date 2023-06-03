@@ -174,7 +174,7 @@ export class AuthenticationService
     // connection and event (login, logout) hooks
     const { secret, service, entity, entityId } = this.configuration
 
-    if (typeof secret !== 'string') {
+    if (typeof secret !== 'string' && globalThis.process?.versions?.webcontainer === undefined) {
       throw new Error("A 'secret' must be provided in your authentication configuration")
     }
 
