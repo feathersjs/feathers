@@ -19,6 +19,10 @@ const customEnvironment = {
     __format: 'number'
   },
   host: 'FEATHERS_HOSTNAME',
+  origins: {
+    __name: 'FEATHERS_ORIGINS',
+    __format: 'json'
+  },
   authentication: {
     secret: 'FEATHERS_SECRET'
   }
@@ -43,7 +47,8 @@ export const configurationSchema = {
     ...defaultAppSettings,
     host: { type: 'string' },
     port: { type: 'number' },
-    public: { type: 'string' }
+    public: { type: 'string' },
+    origins: Type.Array(Type.String())
   }
 } as const
 
