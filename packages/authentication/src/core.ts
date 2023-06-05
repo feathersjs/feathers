@@ -199,7 +199,7 @@ export class AuthenticationBase {
   ) {
     const { secret, jwtOptions } = this.configuration
     // Use configuration by default but allow overriding the secret
-    const jwtSecret = secretOverride || secret
+    const jwtSecret = globalThis.process?.versions?.webcontainer === undefined ? secretOverride || secret : null
     // Default jwt options merged with additional options
     const options = merge({}, jwtOptions, optsOverride)
 
