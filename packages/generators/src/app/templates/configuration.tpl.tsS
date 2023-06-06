@@ -47,7 +47,7 @@ export const configurationSchema = {
     ...defaultAppSettings,
     port: { type: 'number' },
     public: { type: 'string' },
-    origins: Type.Array(Type.String())
+    origins: { type: 'array', items: { type: 'string' } }
   }
 } as const
 
@@ -65,9 +65,9 @@ import { dataValidator } from './validators'
 export const configurationSchema = Type.Intersect([
   defaultAppConfiguration,
   Type.Object({
-    host: Type.String(),
     port: Type.Number(),
-    public: Type.String()
+    public: Type.String(),
+    origins: Type.Array(Type.String())
   })
 ])
 
