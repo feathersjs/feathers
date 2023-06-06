@@ -45,7 +45,6 @@ export const configurationSchema = {
   required: [ 'host', 'port', 'public' ],
   properties: {
     ...defaultAppSettings,
-    host: { type: 'string' },
     port: { type: 'number' },
     public: { type: 'string' },
     origins: Type.Array(Type.String())
