@@ -11,7 +11,7 @@ In order to connect to a Feathers server, a client creates [Services](./services
 Modules most relevant on the client are:
 
 - `@feathersjs/feathers` to initialize a new Feathers [application](./application.md)
-- [@feathersjs/rest-client](./client/rest.md) to connect to services through REST HTTP provided by [Koa](./koa.md) or [Epress](./express.md).
+- [@feathersjs/rest-client](./client/rest.md) to connect to services through REST HTTP provided by [Koa](./koa.md) or [Express](./express.md).
 - [@feathersjs/socketio-client](./client/socketio.md) to connect to services through [Socket.io](./socketio.md).
 - [@feathersjs/authentication-client](./authentication/client.md) to authenticate a client
 
@@ -32,7 +32,7 @@ A Feathers application generated with Feathers v5 or later now exports a client 
 To connect to a Feathers server in NodeJS, install the desired client connection library (here, `socket.io-client`), alongside the Feathers core library, and the connection-specific library:
 
 ```
-npm install @feathersjs/feathers@pre @feathersjs/socketio-client@pre socket.io-client --save
+npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client --save
 ```
 
 Then initialize like this:
@@ -62,7 +62,7 @@ messageService.create({
 React Native usage is the same as for the [Node client](#node). Install the required packages into your [React Native](https://facebook.github.io/react-native/) project.
 
 ```bash
-npm install @feathersjs/feathers@pre @feathersjs/socketio-client@pre socket.io-client
+npm install @feathersjs/feathers @feathersjs/socketio-client socket.io-client
 ```
 
 Then in the main application file:
@@ -122,7 +122,7 @@ No additional setup should be necessary to use the Feathers client modules in a 
 
 ### create-react-app
 
-[create-react-app](https://github.com/facebookincubator/create-react-app) uses [Webpack](#webpack) and also no longer requires additional setup to load the individual Feathers clietn modules.
+[create-react-app](https://github.com/facebookincubator/create-react-app) uses [Webpack](#webpack) and also no longer requires additional setup to load the individual Feathers client modules.
 
 ### Others
 
@@ -138,7 +138,7 @@ For non-CommonJS formats (like AMD) version of Feathers and its client modules t
 </Badges>
 
 ```
-npm install @feathersjs/client@pre --save
+npm install @feathersjs/client --save
 ```
 
 `@feathersjs/client` is a module that bundles the separate Feathers client-side modules into one file which can be loaded directly in the browser through a `<script>` tag and in most other JavaScript runtimes.

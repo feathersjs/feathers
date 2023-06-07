@@ -11,10 +11,38 @@ outline: deep
 
 <DatabaseBlock global-id="sql">
 
-Depending on the SQL database you selected, a `src/<database>.ts` file will be created that sets up a connection using [KnexJS](../../api/databases/knex.md). It uses the connection settings from the `<database>` [configuration value](./default.json.md.md) and exports a [configure function](./app.md#configure-functions) that initializes the database connection. The Knex connection object is then acessible wherever you have access to the [app object](./app.md) via
+Depending on the SQL database you selected, a `src/<database>.ts` file will be created that sets up a connection using [KnexJS](../../api/databases/knex.md). It uses the connection settings from the `<database>` [configuration value](./default.json.md) and exports a [configure function](./app.md#configure-functions) that initializes the database connection. The Knex connection object is then accessible wherever you have access to the [app object](./app.md) via
 
 ```ts
 const knex = app.get('<database>Client')
+```
+
+The database pool size can be set in the [configuration](./default.json.md) like this:
+
+```json
+"postgresql": {
+  "client": "pg",
+  "connection": "<pg connection string>",
+  "pool": {
+    "min": 0,
+    "max": 7
+  }
+},
+```
+
+`connection` can also be an object instead of a connection string:
+
+```json
+"postgresql": {
+  "client": "pg",
+  "connection": {
+    "host": "localhost",
+    "port": 5432,
+    "user": "postgres",
+    "password": "postgres",
+    "database": "pgtest"
+  }
+}
 ```
 
 </DatabaseBlock>
@@ -48,7 +76,7 @@ KnexJS does not have a concept of models. Instead a new service is initialized w
 The collection for a MongoDB service can be accessed via
 
 ```ts
-const userCollection = await app.service('users').Model
+const userCollection = await app.service('users').getModel()
 ```
 
 See the [MongoDB service API documentation](../../api/databases/mongodb.md) for more information.

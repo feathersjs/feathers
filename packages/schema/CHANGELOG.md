@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **schema:** Exclude json-schema-to-ts@2.8.0 ([#3180](https://github.com/feathersjs/feathers/issues/3180)) ([aee8531](https://github.com/feathersjs/feathers/commit/aee8531b5f0578f11e43b19a469b96e6f4b170ce))
+
+## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
+
+### Bug Fixes
+
+- Make sure all Readme files are up to date ([#3154](https://github.com/feathersjs/feathers/issues/3154)) ([a5f0b38](https://github.com/feathersjs/feathers/commit/a5f0b38bbf2a11486415a39533bcc6c67fb51e3e))
+
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **core:** Use Symbol.for to instantiate shared symbols ([#3087](https://github.com/feathersjs/feathers/issues/3087)) ([7f3fc21](https://github.com/feathersjs/feathers/commit/7f3fc2167576f228f8183568eb52b077160e8d65))
+- **memory/mongodb:** $select as only property & force 'id' in '$select' ([#3081](https://github.com/feathersjs/feathers/issues/3081)) ([fbe3cf5](https://github.com/feathersjs/feathers/commit/fbe3cf5199e102b5aeda2ae33828d5034df3d105))
+
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Bug Fixes
+
+- **schema:** validateQuery - move next function outside of try-catch ([#3053](https://github.com/feathersjs/feathers/issues/3053)) ([37fe5c4](https://github.com/feathersjs/feathers/commit/37fe5c4a4d813867f6d02098b7c77d08786248c7))
+
+### Features
+
+- **schema:** Add schema helper for handling Object ids ([#3058](https://github.com/feathersjs/feathers/issues/3058)) ([1393bed](https://github.com/feathersjs/feathers/commit/1393bed81a9ee814de6aab0e537af83e667591a2))
+
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **schema:** Do not change the hook context in resolvers ([#3048](https://github.com/feathersjs/feathers/issues/3048)) ([bfd8c04](https://github.com/feathersjs/feathers/commit/bfd8c04c15279063a0d4b70771715c656dda5f7c))
+- **schema:** Ensure that resolveResult and resolveExternal are run as around hooks ([#3032](https://github.com/feathersjs/feathers/issues/3032)) ([71942f4](https://github.com/feathersjs/feathers/commit/71942f418e3afe167aef4f98b1a97356dae7625c))
+
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+### Bug Fixes
+
+- **configuration:** Add pool and connection object to SQL database default configuration ([#3023](https://github.com/feathersjs/feathers/issues/3023)) ([092c749](https://github.com/feathersjs/feathers/commit/092c749d43f7da4d019576d1210fe7d3719a44a2))
+- **databases:** Ensure that query sanitization is not necessary when using query schemas ([#3022](https://github.com/feathersjs/feathers/issues/3022)) ([dbf514e](https://github.com/feathersjs/feathers/commit/dbf514e85d1508b95c007462a39b3cadd4ff391d))
+- **schema:** Allow any type in resolver hooks ([#3006](https://github.com/feathersjs/feathers/issues/3006)) ([f01281f](https://github.com/feathersjs/feathers/commit/f01281f7d83262738459585fc3f53f56c0a0deb8))
+- **schema:** Ensure all types of nested data are securely dispatched ([#3005](https://github.com/feathersjs/feathers/issues/3005)) ([e4a9da5](https://github.com/feathersjs/feathers/commit/e4a9da5f3288e8e9f02087754473c7a9dfda6cb1))
+- Update all dependencies ([#3024](https://github.com/feathersjs/feathers/issues/3024)) ([283dc47](https://github.com/feathersjs/feathers/commit/283dc4798d85584bc031e6e54b83b4ea77d1edd0))
+
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+- **schema:** Allow to add additional operators to the query syntax ([#2941](https://github.com/feathersjs/feathers/issues/2941)) ([f324940](https://github.com/feathersjs/feathers/commit/f324940d5795b41e8c6fc113defb0beb7ab03a0a))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Bug Fixes

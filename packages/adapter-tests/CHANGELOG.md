@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **typebox:** Revert to TypeBox 0.25 ([#3183](https://github.com/feathersjs/feathers/issues/3183)) ([cacedf5](https://github.com/feathersjs/feathers/commit/cacedf59e3d2df836777f0cd06ab1b2484ed87c5))
+
+## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
+
+### Bug Fixes
+
+- **adapter-commons:** Support non-default import to ease use with ESM projects ([d06f2cf](https://github.com/feathersjs/feathers/commit/d06f2cfcadda7dc23f0e2bec44f64e6be8500d02))
+
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **memory/mongodb:** $select as only property & force 'id' in '$select' ([#3081](https://github.com/feathersjs/feathers/issues/3081)) ([fbe3cf5](https://github.com/feathersjs/feathers/commit/fbe3cf5199e102b5aeda2ae33828d5034df3d105))
+
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+**Note:** Version bump only for package @feathersjs/adapter-tests
+
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+### Bug Fixes
+
+- **databases:** Improve documentation for adapters and allow dynamic Knex adapter options ([#3019](https://github.com/feathersjs/feathers/issues/3019)) ([66c4b5e](https://github.com/feathersjs/feathers/commit/66c4b5e72000dd03acb57fca1cad4737c85c9c9e))
+
+### Features
+
+- **database:** Add and to the query syntax ([#3021](https://github.com/feathersjs/feathers/issues/3021)) ([00cb0d9](https://github.com/feathersjs/feathers/commit/00cb0d9c302ae951ae007d3d6ceba33e254edd9c))
+
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Features

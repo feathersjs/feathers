@@ -169,7 +169,7 @@ const userQuery: UserQuery = {
 }
 ```
 
-Additional properties like `$ilike` can be added to the query syntax like this:
+Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
 
 ```ts
 import { querySyntax } from '@feathersjs/schema'
@@ -283,7 +283,7 @@ const dataValidator = getDataValidator(userDataSchema, dataValidator)
 
 ### getValidator
 
-`getValidator(definition, validator)` returns a single validator function for a TypeBox schema.
+`getValidator(definition, validator)` returns a single validator function for a JSON schema.
 
 ```ts
 import { querySyntax, Ajv, getValidator } from '@feathersjs/schema'

@@ -6,19 +6,12 @@ outline: deep
 
 This guide explains the new features and changes necessary to migrate to the Feathers v5 (Dove) release. It expects applications to be using the previous Feathers v4 (Crow). See the [v4 (Crow) migration guide](https://crow.docs.feathersjs.com/guides/migrating.html) for upgrading to the previous version.
 
-## Status
-
-The final v5 release is expected on November 30th, 2022. Aside from the breaking changes and new features documented here. For more information
-
-- Follow [the v5 milestone](https://github.com/feathersjs/feathers/milestone/11) - open issues are in development, closed issues are already published as a prerelease
-- See the current [v5 Changelog](https://github.com/feathersjs/feathers/blob/dove/CHANGELOG.md)
-
 ## Testing the prerelease
 
-You can run the following to test the latest Dove pre-release in your application:
+You can run the following to upgrade all Feathers core packages:
 
 ```
-npx npm-check-updates --upgrade --target newest --filter /@feathersjs/
+npx npm-check-updates --upgrade --filter /@feathersjs/
 npm install
 ```
 
@@ -338,3 +331,4 @@ app.service('myservice').hooks([
 - The undocumented `service._setup` method introduced in v1 will no longer be called. It was used to circumvent middleware inconsistencies from Express 3 and is no longer necessary.
 - The undocumented `app.providers` has been removed since it provided the same functionality as [`app.mixins`](../api/application.md#mixins)
 - `app.disable`, `app.disabled`, `app.enable` and `app.enabled` have been removed from basic Feathers applications. It will still be available in an Express-compatible Feathers application. `app.get()` and `app.set()` should be used instead.
+- The `req.authentication` property is no longer set on the express requests, use `req.feathers.authentication` instead.

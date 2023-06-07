@@ -4,14 +4,14 @@ outline: deep
 
 # Client
 
-A generated application can used as an npm module that provides a [Feathers client](../../api/client.md). It gives you a fully typed client that can be installed in any TypeScript (e.g. React, VueJS, React Native etc.) application.
+A generated application can be used as an npm module that provides a [Feathers client](../../api/client.md). It gives you a fully typed client that can be installed in any TypeScript (e.g. React, VueJS, React Native etc.) application.
 
 ## Local installation
 
 The application can be linked into a client application by running
 
 ```
-npm run compile
+npm run bundle:client
 npm link
 ```
 
@@ -57,7 +57,7 @@ And like this with a REST client:
 import rest from '@feathersjs/rest-client'
 import { createClient } from 'my-app'
 
-const connection = rest('https://myapp.com').fetch(fetch)
+const connection = rest('https://myapp.com').fetch(window.fetch.bind(window))
 
 const client = createClient(connection)
 ```

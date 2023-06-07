@@ -4,7 +4,7 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/socketio-client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio-client)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-> The client for Socket.io Feathers connections
+> Client for Socket.io Feathers connections
 
 ## Installation
 
@@ -14,10 +14,10 @@ npm install @feathersjs/socketio-client --save
 
 ## Documentation
 
-Refer to the [Feathers SocketIO API documentation](https://docs.feathersjs.com/api/client/socketio.html) for more details.
+Refer to the [Feathers SocketIO API documentation](https://feathersjs.com/api/client/socketio.html) for more details.
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

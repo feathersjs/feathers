@@ -72,7 +72,7 @@ export interface ServiceMethods<
   ServiceParams = Params,
   PatchData = Partial<Data>
 > {
-  find(params?: ServiceParams): Promise<Result | Result[]>
+  find(params?: ServiceParams & { paginate?: PaginationParams }): Promise<Result | Result[]>
 
   get(id: Id, params?: ServiceParams): Promise<Result>
 
@@ -137,7 +137,7 @@ export interface ServiceAddons<A = Application, S = Service> extends EventEmitte
 }
 
 export interface ServiceHookOverloads<S, P = Params> {
-  find(params: P, context: HookContext): Promise<HookContext>
+  find(params: P & { paginate?: PaginationParams }, context: HookContext): Promise<HookContext>
 
   get(id: Id, params: P, context: HookContext): Promise<HookContext>
 
@@ -330,6 +330,13 @@ export interface Params<Q = Query> {
   route?: { [key: string]: any }
   headers?: { [key: string]: any }
 }
+
+export interface PaginationOptions {
+  default?: number
+  max?: number
+}
+
+export type PaginationParams = false | PaginationOptions
 
 export interface Http {
   /**

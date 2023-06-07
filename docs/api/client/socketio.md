@@ -14,7 +14,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/socketio-client@pre --save
+npm install @feathersjs/socketio-client --save
 ```
 
 The `@feathersjs/socketio-client` module allows to connect to services exposed through the [Socket.io transport](../socketio.md) via a Socket.io socket. We recommend using Feathers and the `@feathersjs/socketio-client` module on the client if possible since it can also handle reconnection and reauthentication. If however, you want to use a direct Socket.io connection without using Feathers on the client, see the [Direct connection](#direct-connection) section.

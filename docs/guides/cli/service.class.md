@@ -313,12 +313,6 @@ class MyService {
 
 </LanguageBlock>
 
-<BlockQuote type="info" label="note">
-
-When removing methods, the `methods` list in the [service](./service.md) and [client](./client.md) files also needs to be updated accordingly.
-
-</BlockQuote>
-
 ## getOptions
 
 The `getOptions` function is a function that returns the options based on the [application](./app.md) that will be passed to the service class constructor. This is where you can pass [common adapter options](../../api/databases/common.md#options) as well as [MongoDB](../../api/databases/mongodb.md#serviceoptions) or [SQL](../../api/databases/knex.md#serviceoptions) specific or custom service options.

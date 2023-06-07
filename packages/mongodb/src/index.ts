@@ -5,7 +5,7 @@ import { AdapterId, MongoDbAdapter, MongoDBAdapterParams, NullableAdapterId } fr
 
 export * from './adapter'
 export * from './error-handler'
-export * from './resolvers'
+export * from './converters'
 
 export class MongoDBService<
   Result = any,

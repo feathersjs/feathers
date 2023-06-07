@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "5.0.0-pre.34",
+  "version": "5.0.5",
   "homepage": "https://feathersjs.com",
   "module": "./esm/index.js",
   "main": "./lib/index.js",
@@ -51,7 +51,7 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test/build",
+    "pack": "npm pack --pack-destination ../generators/test/build",
     "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
     "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
     "compile": "npm run compile:lib && npm run compile:esm && npm run pack",
@@ -64,28 +64,28 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
-    "@feathersjs/hooks": "^0.7.6",
-    "@feathersjs/schema": "^5.0.0-pre.34",
-    "@feathersjs/transport-commons": "^5.0.0-pre.34",
-    "@types/jsonwebtoken": "^8.5.9",
-    "jsonwebtoken": "^8.5.1",
+    "@feathersjs/commons": "^5.0.5",
+    "@feathersjs/errors": "^5.0.5",
+    "@feathersjs/feathers": "^5.0.5",
+    "@feathersjs/hooks": "^0.8.1",
+    "@feathersjs/schema": "^5.0.5",
+    "@feathersjs/transport-commons": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.0-pre.34",
-    "@types/lodash": "^4.14.191",
+    "@feathersjs/memory": "^5.0.5",
+    "@types/lodash": "^4.14.192",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.17",
-    "@types/uuid": "^9.0.0",
+    "@types/node": "^18.15.11",
+    "@types/uuid": "^9.0.1",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "typescript": "^5.0.3"
   },
-  "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

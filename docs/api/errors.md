@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/errors@pre --save
+npm install @feathersjs/errors --save
 ```
 
 The `@feathersjs/errors` module contains a set of standard error classes used by all other Feathers modules.

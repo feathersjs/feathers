@@ -92,10 +92,11 @@ export class OAuthService {
   async authenticate(params: OAuthParams, result: GrantResponse) {
     const name = params.route.provider
     const { linkStrategy, authService } = this.settings
-    const { accessToken, grant, query = {}, redirect } = params.session
+    const { accessToken, grant, headers, query = {}, redirect } = params.session
     const strategy = this.service.getStrategy(name) as OAuthStrategy
     const authParams = {
       ...params,
+      headers,
       authStrategies: [name],
       authentication: accessToken
         ? {
@@ -143,7 +144,7 @@ export class OAuthService {
   }
 
   async find(params: OAuthParams) {
-    const { session, query } = params
+    const { session, query, headers } = params
     const { feathers_token, redirect, ...restQuery } = query
     const handlerParams = {
       ...params,
@@ -157,6 +158,7 @@ export class OAuthService {
 
     session.redirect = redirect
     session.query = restQuery
+    session.headers = headers
 
     return this.handler('GET', handlerParams, {})
   }

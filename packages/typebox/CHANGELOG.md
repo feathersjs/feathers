@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **typebox:** Revert to TypeBox 0.25 ([#3183](https://github.com/feathersjs/feathers/issues/3183)) ([cacedf5](https://github.com/feathersjs/feathers/commit/cacedf59e3d2df836777f0cd06ab1b2484ed87c5))
+
+## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
+
+### Bug Fixes
+
+- Make sure all Readme files are up to date ([#3154](https://github.com/feathersjs/feathers/issues/3154)) ([a5f0b38](https://github.com/feathersjs/feathers/commit/a5f0b38bbf2a11486415a39533bcc6c67fb51e3e))
+- **typebox:** Implement custom TypeBuilder for backwards compatibility ([#3150](https://github.com/feathersjs/feathers/issues/3150)) ([962bd87](https://github.com/feathersjs/feathers/commit/962bd87217212320b1a68f6556a16b8a6b8f757c))
+
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **authentication:** Ensure authentication.entity configuration can be null ([#3136](https://github.com/feathersjs/feathers/issues/3136)) ([c47349b](https://github.com/feathersjs/feathers/commit/c47349b9dcf2067b7b572c5463b15b2a8fbda972))
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+- **knex:** Get by id and transactions should work with params.knex ([#3146](https://github.com/feathersjs/feathers/issues/3146)) ([b172b5e](https://github.com/feathersjs/feathers/commit/b172b5ea9b461642874eb7d2ba01dc4cfc275155))
+- **typebox:** Upgrade to TypeBox 0.26.0 ([#3113](https://github.com/feathersjs/feathers/issues/3113)) ([d1d9598](https://github.com/feathersjs/feathers/commit/d1d95984dd94d2b9305e7338421f84f9c4f733fd))
+
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+**Note:** Version bump only for package @feathersjs/typebox
+
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+**Note:** Version bump only for package @feathersjs/typebox
+
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+### Features
+
+- **schema:** Add schema helper for handling Object ids ([#3058](https://github.com/feathersjs/feathers/issues/3058)) ([1393bed](https://github.com/feathersjs/feathers/commit/1393bed81a9ee814de6aab0e537af83e667591a2))
+
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+### Bug Fixes
+
+- **typebox:** Allow nested or in and queries ([#3029](https://github.com/feathersjs/feathers/issues/3029)) ([39e0b78](https://github.com/feathersjs/feathers/commit/39e0b785238b809aa9b4dea9b95efc3c188c9baa))
+
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+### Bug Fixes
+
+- **configuration:** Add pool and connection object to SQL database default configuration ([#3023](https://github.com/feathersjs/feathers/issues/3023)) ([092c749](https://github.com/feathersjs/feathers/commit/092c749d43f7da4d019576d1210fe7d3719a44a2))
+- **schema:** Fix TypeBox extension value query syntax inference ([#3010](https://github.com/feathersjs/feathers/issues/3010)) ([f1c7a76](https://github.com/feathersjs/feathers/commit/f1c7a76586bbb8aed66ef866c3dcd666d79f3a24))
+- Update all dependencies ([#3024](https://github.com/feathersjs/feathers/issues/3024)) ([283dc47](https://github.com/feathersjs/feathers/commit/283dc4798d85584bc031e6e54b83b4ea77d1edd0))
+
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+- **schema:** Allow to add additional operators to the query syntax ([#2941](https://github.com/feathersjs/feathers/issues/2941)) ([f324940](https://github.com/feathersjs/feathers/commit/f324940d5795b41e8c6fc113defb0beb7ab03a0a))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Bug Fixes

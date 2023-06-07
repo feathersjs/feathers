@@ -6,12 +6,18 @@
 
 > Shared Feathers utility functions
 
-## About
+## Installation
 
-This is a repository for utility functionality that is shared between different Feathers plugin and used by the main repository.
+```
+npm install @feathersjs/commons --save
+```
+
+## Documentation
+
+Refer to the [Feathers API](https://feathersjs.com/api) for more details.
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

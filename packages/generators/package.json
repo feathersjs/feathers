@@ -1,0 +1,95 @@
+{
+  "name": "@feathersjs/generators",
+  "version": "5.0.5",
+  "description": "Feathers CLI core generators, powered by Pinion",
+  "homepage": "https://feathersjs.com",
+  "keywords": [
+    "feathers",
+    "pinion"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/commons"
+  },
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 16"
+  },
+  "main": "lib/",
+  "types": "lib/",
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "lib/**",
+    "lib/app/static/.gitignore",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
+    "test": "npm run compile && mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@feathershq/pinion": "^0.3.5",
+    "chalk": "^4.0.1",
+    "lodash": "^4.17.21",
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.3"
+  },
+  "devDependencies": {
+    "@feathersjs/adapter-commons": "^5.0.5",
+    "@feathersjs/authentication": "^5.0.5",
+    "@feathersjs/authentication-client": "^5.0.5",
+    "@feathersjs/authentication-local": "^5.0.5",
+    "@feathersjs/authentication-oauth": "^5.0.5",
+    "@feathersjs/configuration": "^5.0.5",
+    "@feathersjs/errors": "^5.0.5",
+    "@feathersjs/express": "^5.0.5",
+    "@feathersjs/feathers": "^5.0.5",
+    "@feathersjs/knex": "^5.0.5",
+    "@feathersjs/koa": "^5.0.5",
+    "@feathersjs/mongodb": "^5.0.5",
+    "@feathersjs/rest-client": "^5.0.5",
+    "@feathersjs/schema": "^5.0.5",
+    "@feathersjs/socketio": "^5.0.5",
+    "@feathersjs/transport-commons": "^5.0.5",
+    "@feathersjs/typebox": "^5.0.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@types/prettier": "^2.7.2",
+    "axios": "^1.3.4",
+    "mocha": "^10.2.0",
+    "mongodb": "^5.2.0",
+    "mssql": "^9.1.1",
+    "mysql": "^2.18.1",
+    "pg": "^8.10.0",
+    "shx": "^0.3.4",
+    "sqlite3": "^5.1.6",
+    "ts-node": "^10.9.1",
+    "type-fest": "^3.8.0",
+    "typescript": "^5.0.3"
+  },
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
+}

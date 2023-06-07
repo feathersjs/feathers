@@ -260,8 +260,8 @@ describe('app.hooks', () => {
       app.service('todos').hooks({
         after(context) {
           assert.strictEqual(context.app, app)
-          context.result.order = []
-          context.result.order.push('service.after')
+          context.result!.order = []
+          context.result!.order.push('service.after')
         }
       })
 

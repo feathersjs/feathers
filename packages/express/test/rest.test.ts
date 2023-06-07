@@ -128,7 +128,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     describe('res.hook', () => {
       const convertHook = (hook: HookContext) => {
-        const result: any = Object.assign({}, hook)
+        const result: any = Object.assign({}, hook.toJSON())
 
         delete result.self
         delete result.service

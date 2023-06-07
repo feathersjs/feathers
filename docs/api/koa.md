@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/koa@pre --save
+npm install @feathersjs/koa --save
 ```
 
 The `@feathersjs/koa` module contains the [KoaJS](https://koajs.com/) framework integrations for Feathers. It will turn the Feathers app into a fully compatible KoaJS application.
@@ -59,6 +59,31 @@ const server = await app.listen(3030)
 ## app.setup(server)
 
 `app.setup(server) -> app` is usually called internally by `app.listen` but in the cases described below needs to be called explicitly.
+
+### HTTPS
+
+HTTPS requires creating a separate server in which case `app.setup(server)` also has to be called explicitly. In a generated application `src/index.js` should look like this:
+
+```ts
+import https from 'https'
+import { app } from './app'
+
+const port = app.get('port')
+const server = https
+  .createServer(
+    {
+      key: fs.readFileSync('privatekey.pem'),
+      cert: fs.readFileSync('certificate.pem')
+    },
+    app.callback()
+  )
+  .listen(443)
+
+// Call app.setup to initialize all services and SocketIO
+app.setup(server)
+
+server.on('listening', () => logger.info('Feathers application started'))
+```
 
 ## params
 
@@ -228,7 +253,7 @@ app.use(
 
 ### bodyParser
 
-A reference to the [koa-bodyparser](https://github.com/koajs/bodyparser) module.
+A reference to the [koa-body](https://github.com/koajs/koa-body) module.
 
 ### cors
 
