@@ -10,10 +10,13 @@ export type ServiceTypes = {
   users: MemoryService
 }
 
-export function createApplication(app = feathers<ServiceTypes>()) {
+export function createApplication(
+  app = feathers<ServiceTypes>(),
+  authOptionOverrides: Record<string, unknown> = {}
+) {
   const authentication = new AuthenticationService(app)
 
-  app.set('authentication', {
+  const authConfig = {
     entity: 'user',
     service: 'users',
     secret: 'supersecret',
@@ -22,8 +25,10 @@ export function createApplication(app = feathers<ServiceTypes>()) {
     local: {
       usernameField: 'email',
       passwordField: 'password'
-    }
-  })
+    },
+    ...authOptionOverrides
+  }
+  app.set('authentication', authConfig)
 
   authentication.register('jwt', new JWTStrategy())
   authentication.register('local', new LocalStrategy())
@@ -40,9 +45,9 @@ export function createApplication(app = feathers<ServiceTypes>()) {
     })
   )
 
-  app.service('users').hooks([protect('password')])
+  app.service('users').hooks([protect(authConfig.local.passwordField)])
   app.service('users').hooks({
-    create: [hashPassword('password')],
+    create: [hashPassword(authConfig.local.passwordField)],
     get: [
       async (context, next) => {
         await next()

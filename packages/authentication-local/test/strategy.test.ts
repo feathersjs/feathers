@@ -195,4 +195,30 @@ describe('@feathersjs/authentication-local/strategy', () => {
 
     assert.notStrictEqual(resolvedData.password, 'supersecret')
   })
+  it('should allow for nested values in the usernameField', async () => {
+    const appWithNestedFieldOverride = createApplication(undefined, {
+      local: {
+        usernameField: 'auth.email',
+        passwordField: 'auth.password'
+      }
+    })
+    const nestedUser = await appWithNestedFieldOverride.service('users').create({ auth: { email, password } })
+    const authService = appWithNestedFieldOverride.service('authentication')
+    const authResult = await authService.create({
+      strategy: 'local',
+      auth: {
+        email,
+        password
+      }
+    })
+    const { accessToken } = authResult
+
+    assert.ok(accessToken)
+    assert.strictEqual(authResult.user.auth.email, email)
+
+    const decoded = await authService.verifyAccessToken(accessToken)
+
+    assert.strictEqual(decoded.sub, `${nestedUser.id}`)
+    //
+  })
 })

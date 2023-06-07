@@ -122,8 +122,8 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
 
   async authenticate(data: AuthenticationRequest, params: Params) {
     const { passwordField, usernameField, entity, errorMessage } = this.configuration
-    const username = data[usernameField]
-    const password = data[passwordField]
+    const username = get(data, usernameField)
+    const password = get(data, passwordField)
 
     if (!password) {
       // exit early if there is no password
@@ -131,7 +131,6 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
     }
 
     const result = await this.findEntity(username, omit(params, 'provider'))
-
     await this.comparePassword(result, password)
 
     return {
