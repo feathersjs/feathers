@@ -48,9 +48,9 @@
   "scripts": {
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
-    "compile:esm": "shx rm -rf esm/ && tsc --target es2020 --module es2020 --outDir esm/ --moduleResolution node",
-    "compile:lib": "shx rm -rf lib/ && tsc --outDir lib/",
-    "compile": "npm run compile:lib && npm run compile:esm && npm run pack",
+    "compile:esm": "shx rm -rf esm/ && tsc --project tsconfig.esm.json",
+    "compile:cjs": "shx rm -rf lib/ && tsc",
+    "compile": "npm run compile:cjs && npm run compile:esm && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {

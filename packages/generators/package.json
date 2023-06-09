@@ -29,8 +29,16 @@
   "engines": {
     "node": ">= 16"
   },
-  "main": "lib/",
-  "types": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "files": [
     "CHANGELOG.md",
     "LICENSE",
