@@ -115,4 +115,4 @@ export function channels() {
   }
 }
 
-export { Channel, CombinedChannel, RealTimeConnection }
+export { Channel, RealTimeConnection, CombinedChannel }

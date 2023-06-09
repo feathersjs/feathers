@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.esm",
+  "include": [
+    "src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "esm"    
+  }
+}

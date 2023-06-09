@@ -1,5 +1,5 @@
 import { PaginationOptions } from '@feathersjs/adapter-commons'
-import { MethodNotAllowed } from '@feathersjs/errors/lib'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import { Paginated, ServiceMethods, Id, NullableId, Params } from '@feathersjs/feathers'
 import { KnexAdapter } from './adapter'
 import { KnexAdapterParams } from './declarations'

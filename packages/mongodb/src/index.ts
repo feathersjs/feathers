@@ -1,5 +1,5 @@
 import { PaginationOptions } from '@feathersjs/adapter-commons'
-import { MethodNotAllowed } from '@feathersjs/errors/lib'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import { Paginated, Params } from '@feathersjs/feathers'
 import { AdapterId, MongoDbAdapter, MongoDBAdapterParams, NullableAdapterId } from './adapter'
 

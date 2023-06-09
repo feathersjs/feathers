@@ -41,6 +41,7 @@ dist/
 
 # TypeScript compiled files
 packages/**/lib
+packages/**/esm
 **/build/*.tgz
 *.sqlite
 docs/.vitepress/cache

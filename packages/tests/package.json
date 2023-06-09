@@ -4,8 +4,16 @@
   "description": "Feathers core module common tests",
   "version": "5.0.5",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "keywords": [
     "feathers"
   ],
@@ -29,13 +37,15 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 14"
   },
   "scripts": {
     "prepublish": "npm run compile",
     "pack": "echo \"not necessary\"",
     "test": "echo \"not necessary\"",
-    "compile": "shx rm -rf lib/ && tsc"
+    "compile:esm": "shx rm -rf esm/ && tsc --project tsconfig.esm.json",
+    "compile:cjs": "shx rm -rf lib/ && tsc",
+    "compile": "npm run compile:cjs && npm run compile:esm && npm run pack"
   },
   "directories": {
     "lib": "lib"

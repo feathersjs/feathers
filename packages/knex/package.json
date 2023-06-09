@@ -3,7 +3,16 @@
   "description": "Feathers SQL service adapter using KnexJS",
   "version": "5.0.5",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
+  "module": "./esm/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -34,6 +43,7 @@
     "LICENSE",
     "README.md",
     "src/**",
+    "esm/**",
     "lib/**",
     "*.d.ts",
     "*.js"
@@ -41,7 +51,9 @@
   "scripts": {
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
-    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "compile:esm": "shx rm -rf esm/ && tsc --project tsconfig.esm.json",
+    "compile:cjs": "shx rm -rf lib/ && tsc",
+    "compile": "npm run compile:cjs && npm run compile:esm && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
