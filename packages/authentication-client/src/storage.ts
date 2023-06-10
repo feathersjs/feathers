@@ -36,11 +36,11 @@ export class StorageWrapper implements Storage {
   }
 
   getItem(key: string) {
-    return Promise.resolve(this.storage.getItem(key))
+    return Promise.resolve(this.storage?.getItem(key))
   }
 
   setItem(key: string, value: any) {
-    return Promise.resolve(this.storage.setItem(key, value))
+    return Promise.resolve(this.storage?.setItem(key, value))
   }
 
   removeItem(key: string) {
