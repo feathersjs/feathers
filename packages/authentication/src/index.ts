@@ -6,7 +6,8 @@ export {
   AuthenticationResult,
   AuthenticationStrategy,
   AuthenticationParams,
-  ConnectionEvent
+  ConnectionEvent,
+  JwtVerifyOptions
 } from './core'
 export { AuthenticationBaseStrategy } from './strategy'
 export { AuthenticationService } from './service'
