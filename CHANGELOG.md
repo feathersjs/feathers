@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+### Bug Fixes
+
+- **authentication-client:** Do not trigger storage methods if storage not defined ([#3210](https://github.com/feathersjs/feathers/issues/3210)) ([261acbc](https://github.com/feathersjs/feathers/commit/261acbcde387db731e434cb106a27b49dcb64a9a))
+- **authentication-client:** removeAccessToken throws error if storage not defined ([#3195](https://github.com/feathersjs/feathers/issues/3195)) ([b8e2769](https://github.com/feathersjs/feathers/commit/b8e27698f7958a91fe9a4ee64ec5591d23194c44))
+- **authentication-local:** Local Auth - Nested username & Password fields ([#3091](https://github.com/feathersjs/feathers/issues/3091)) ([d135526](https://github.com/feathersjs/feathers/commit/d135526da18ecf2dc620b82820e1d09d8af5c0b5))
+- **authentication-oauth:** Update OAuth redirect to handle user requested redirect paths ([#3186](https://github.com/feathersjs/feathers/issues/3186)) ([3742028](https://github.com/feathersjs/feathers/commit/37420283c17bb8129c6ffdde841ce2034109cc6b))
+- **authentication:** Export JwtVerifyOptions ([#3214](https://github.com/feathersjs/feathers/issues/3214)) ([d59896e](https://github.com/feathersjs/feathers/commit/d59896eb0229f1490c712f19cf84eb2bcf123698))
+
 ## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
 
 ### Bug Fixes

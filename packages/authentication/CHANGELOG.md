@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+### Bug Fixes
+
+- **authentication:** Export JwtVerifyOptions ([#3214](https://github.com/feathersjs/feathers/issues/3214)) ([d59896e](https://github.com/feathersjs/feathers/commit/d59896eb0229f1490c712f19cf84eb2bcf123698))
+
 ## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
 
 **Note:** Version bump only for package @feathersjs/authentication
