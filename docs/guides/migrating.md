@@ -27,6 +27,14 @@ The new [schemas and resolvers](../api/schema/index.md) cover most use cases pre
 
 ## TypeScript
 
+<LanguageBlock global-id="js">
+
+You have selected JavaScript as the language which does not have type information.
+
+</LanguageBlock>
+
+<LanguageBlock global-id="ts">
+
 The new version comes with major improvements in TypeScript support from improved service typings, fully typed hook context and typed configuration. You can see the changes necessary in the Feathers chat [here](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
 ### Application and hook context
@@ -52,6 +60,8 @@ export type HookContext = FeathersHookContext<Application>
 Now `import { HookContext } from './declarations'` can be used as the context in hooks.
 
 ### Service types
+
+
 
 Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
 
@@ -93,6 +103,8 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 ```
+
+</LanguageBlock>
 
 ## Deprecations and breaking changes
 
