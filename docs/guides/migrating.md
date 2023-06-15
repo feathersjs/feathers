@@ -53,6 +53,8 @@ Now `import { HookContext } from './declarations'` can be used as the context in
 
 ### Service types
 
+<LanguageBlock global-id="ts">
+
 Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
 
 ```ts
@@ -63,6 +65,14 @@ declare module '../../declarations' {
   }
 }
 ```
+
+</LanguageBlock>
+
+<LanguageBlock global-id="js">
+
+You have selected JavaScript as the language which does not have type information.
+
+</LanguageBlock>
 
 ### Configuration types
 
