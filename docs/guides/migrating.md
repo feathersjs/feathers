@@ -220,8 +220,7 @@ The Socket.io and Grant (oAuth) dependencies have been updated to their latest v
 
 ### Configuration
 
-The automatic environment variable substitution in `@feathersjs/configuration` was causing subtle and hard to 
-  issues. It has been removed to instead rely on the functionality already provided and battle tested by the underlying [node-config](https://github.com/lorenwest/node-config). To update your configuration:
+The automatic environment variable substitution in `@feathersjs/configuration` was causing subtle and hard to issues. It has been removed to instead rely on the functionality already provided and battle tested by the underlying [node-config](https://github.com/lorenwest/node-config). To update your configuration:
 
 - Relative paths are no longer relative to the configuration file, but instead to where the application runs. This normally (when running from the application folder) means that paths starting with `../` and `./` have to be replaced with `./` and `./config/`.
 - Configuration through environment variables should be included via the `NODE_CONFIG` JSON string or as [Custom Environment Variable support](https://github.com/lorenwest/node-config/wiki/Environment-Variables#custom-environment-variables). To use existing environment variables add the following configuration file in `config/custom-environment-variables.json` like this:
@@ -241,16 +240,16 @@ The automatic environment variable substitution in `@feathersjs/configuration` w
 
 The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
 
-```js
+```ts
 import { feathers } from '@feathersjs/feathers'
-const debug = require('debug')
+import debug from 'debug'
 
 feathers.setDebug(debug)
 ```
 
 It is also possible to set a custom logger like this:
 
-```js
+```ts
 import { feathers } from '@feathersjs/feathers'
 
 const customDebug =
