@@ -240,17 +240,17 @@ The automatic environment variable substitution in `@feathersjs/configuration` w
 
 The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
 
-```js
-const feathers = require('@feathersjs/feathers')
-const debug = require('debug')
+```ts
+import { feathers } from '@feathersjs/feathers'
+import debug from 'debug'
 
 feathers.setDebug(debug)
 ```
 
 It is also possible to set a custom logger like this:
 
-```js
-const feathers = require('@feathersjs/feathers')
+```ts
+import { feathers } from '@feathersjs/feathers'
 
 const customDebug =
   (name) =>
