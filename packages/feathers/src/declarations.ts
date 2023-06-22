@@ -72,7 +72,7 @@ export interface ServiceMethods<
   ServiceParams = Params,
   PatchData = Partial<Data>
 > {
-  find(params?: ServiceParams & { paginate?: PaginationParams }): Promise<Result | Result[]>
+  find(params?: ServiceParams & { paginate?: PaginationParams }): Promise<Paginated<Result> | Result[]>
 
   get(id: Id, params?: ServiceParams): Promise<Result>
 
@@ -95,6 +95,18 @@ export interface ServiceOverloads<
   ServiceParams = Params,
   PatchData = Partial<Data>
 > {
+  find?(
+    params?: ServiceParams & {
+      paginate: false
+    }
+  ): Promise<Result[]>
+
+  find?(
+    params?: ServiceParams & {
+      paginate?: PaginationOptions
+    }
+  ): Promise<Paginated<Result>>
+
   create?(data: Data[], params?: ServiceParams): Promise<Result[]>
 
   update?(id: Id, data: Data, params?: ServiceParams): Promise<Result>
