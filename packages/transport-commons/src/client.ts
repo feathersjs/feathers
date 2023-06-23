@@ -19,7 +19,7 @@ const namespacedEmitterMethods = [
   'removeEventListener',
   'removeListener'
 ]
-const otherEmitterMethods = ['eventNames', 'getMaxListeners', 'setMaxListeners']
+const otherEmitterMethods = ['getEntityId', 'setEntityId', 'eventNames', 'getMaxListeners', 'setMaxListeners']
 
 const addEmitterMethods = (service: any) => {
   otherEmitterMethods.forEach((method) => {
