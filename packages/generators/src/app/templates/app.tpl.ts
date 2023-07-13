@@ -39,11 +39,11 @@ ${
   cors: {
     origin: app.get('origins')
   }
-}))
-app.configure(channels)`
+}))`
     : ''
 }
 app.configure(services)
+app.configure(channels)
 
 
 // Register hooks that run on all service methods
