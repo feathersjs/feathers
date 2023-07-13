@@ -59,3 +59,8 @@ const app = feathers()
     })
   ));
 ```
+## Multiple instances
+When running multiple instances of your Feathers application (e.g. on several Heroku Dynos), service events (created, updated, patched, removed and any custom defined events) do not get propagated to other instances for such cases you may want to use: https://github.com/feathersjs-ecosystem/feathers-sync
+
+Which will use a messaging mechanism to propagate all events to all application instances like redis or RabbitMQ
+
