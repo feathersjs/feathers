@@ -62,7 +62,7 @@ export class Feathers<Services, Settings>
     location: L
   ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]> {
     const path = (stripSlashes(location) || '/') as L
-    const current = this.services[path]
+    const current = this.services.hasOwnProperty(path) ? this.services[path] : undefined
 
     if (typeof current === 'undefined') {
       this.use(path, this.defaultService(path) as any)
