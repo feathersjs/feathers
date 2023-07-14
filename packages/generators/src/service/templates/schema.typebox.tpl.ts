@@ -83,10 +83,10 @@ export const ${camelName}PatchResolver = resolve<${upperName}, HookContext>({
 // Schema for allowed query properties
 export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
   '${type === 'mongodb' ? '_id' : 'id'}', ${
-  isEntityService
-    ? authStrategies.map((name) => (name === 'local' ? `'email'` : `'${name}Id'`)).join(', ')
-    : `'text'`
-}
+    isEntityService
+      ? authStrategies.map((name) => (name === 'local' ? `'email'` : `'${name}Id'`)).join(', ')
+      : `'text'`
+  }
 ])
 export const ${camelName}QuerySchema = Type.Intersect([
   querySyntax(${camelName}QueryProperties),

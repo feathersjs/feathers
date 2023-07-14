@@ -148,7 +148,10 @@ export function createContext(service: Service, method: string, data: HookContex
 }
 
 export class FeathersHookManager<A> extends HookManager {
-  constructor(public app: A, public method: string) {
+  constructor(
+    public app: A,
+    public method: string
+  ) {
     super()
     this._middleware = []
   }

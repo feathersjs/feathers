@@ -2,13 +2,14 @@ import merge from 'lodash/merge'
 import { NotAuthenticated } from '@feathersjs/errors'
 import '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
-import { ServiceMethods, ServiceAddons } from '@feathersjs/feathers'
+import { ServiceMethods } from '@feathersjs/feathers'
 import { resolveDispatch } from '@feathersjs/schema'
 import jsonwebtoken from 'jsonwebtoken'
 import { hooks } from '@feathersjs/hooks'
 
 import { AuthenticationBase, AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core'
 import { connection, event } from './hooks'
+import { RealTimeConnection } from '@feathersjs/feathers'
 
 const debug = createDebug('@feathersjs/authentication/service')
 
@@ -31,9 +32,6 @@ declare module '@feathersjs/feathers/lib/declarations' {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AuthenticationService extends ServiceAddons<AuthenticationResult, AuthenticationResult> {}
-
 export class AuthenticationService
   extends AuthenticationBase
   implements Partial<ServiceMethods<AuthenticationResult, AuthenticationRequest, AuthenticationParams>>
@@ -46,7 +44,7 @@ export class AuthenticationService
       remove: [resolveDispatch(), event('logout'), connection('logout')]
     })
 
-    this.app.on('disconnect', async (connection) => {
+    this.app.on('disconnect', async (connection: RealTimeConnection) => {
       await this.handleConnection('disconnect', connection)
     })
 
@@ -196,8 +194,10 @@ export class AuthenticationService
       }
     }
 
-    if (typeof this.publish === 'function') {
-      this.publish(() => null)
+    const publishable = this as any
+
+    if (typeof publishable.publish === 'function') {
+      publishable.publish((): any => null)
     }
   }
 }

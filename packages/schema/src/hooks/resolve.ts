@@ -158,11 +158,14 @@ export const resolveExternal =
       const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
         const resolved = await runResolvers(resolvers, current, context, status)
-        const currentDispatch = Object.keys(resolved).reduce((res, key) => {
-          res[key] = getDispatchValue(resolved[key])
+        const currentDispatch = Object.keys(resolved).reduce(
+          (res, key) => {
+            res[key] = getDispatchValue(resolved[key])
 
-          return res
-        }, {} as Record<string, any>)
+            return res
+          },
+          {} as Record<string, any>
+        )
 
         return setDispatch(current, currentDispatch)
       }
