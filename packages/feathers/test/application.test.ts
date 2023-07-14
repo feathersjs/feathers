@@ -306,6 +306,20 @@ describe('Feathers application', () => {
 
       assert.ok((wrappedService.create as any)[TEST])
     })
+
+    it('.service does does not access object properties', async () => {
+      const app = feathers()
+
+      assert.throws(() => app.service('something'), {
+        message: "Can not find service 'something'"
+      })
+      assert.throws(() => app.service('__proto__'), {
+        message: "Can not find service '__proto__'"
+      })
+      assert.throws(() => app.service('toString'), {
+        message: "Can not find service 'toString'"
+      })
+    })
   })
 
   describe('Express app options compatibility', function () {
