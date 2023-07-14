@@ -1,13 +1,18 @@
 {
   "ci": false,
-  "packages": ["packages/*"],
-  "version": "5.0.6",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "5.0.7",
   "command": {
     "bootstrap": {
       "hoist": true
     },
     "publish": {
-      "allowBranch": ["crow", "dove"],
+      "allowBranch": [
+        "crow",
+        "dove"
+      ],
       "message": "chore(release): publish %s",
       "conventionalCommits": true,
       "createRelease": "github"
