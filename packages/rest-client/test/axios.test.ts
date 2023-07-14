@@ -116,7 +116,7 @@ describe('Axios REST connector', function () {
       const err = JSON.parse(JSON.stringify(e))
 
       assert.strictEqual(err.name, 'Unavailable')
-      assert.ok(err.message.startsWith('connect ECONNREFUSED'))
+      assert.ok(err.message.startsWith('connect ECONNREFUSED'), e.message)
       assert.ok(e.data.config)
     }
   })
