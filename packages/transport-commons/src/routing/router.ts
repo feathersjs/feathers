@@ -13,7 +13,10 @@ export class RouteNode<T = any> {
   children: { [key: string]: RouteNode } = {}
   placeholders: RouteNode[] = []
 
-  constructor(public name: string, public depth: number) {}
+  constructor(
+    public name: string,
+    public depth: number
+  ) {}
 
   get hasChildren() {
     return Object.keys(this.children).length !== 0 || this.placeholders.length !== 0

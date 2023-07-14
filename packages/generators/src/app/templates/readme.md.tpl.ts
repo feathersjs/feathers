@@ -27,11 +27,11 @@ This project uses [Feathers](http://feathersjs.com). An open source framework fo
     npm run compile # Compile TypeScript source`
         : ''
     }${
-  database !== 'mongodb'
-    ? `
+      database !== 'mongodb'
+        ? `
     npm run migrate # Run migrations to set up the database`
-    : ''
-}
+        : ''
+    }
     npm start
     \`\`\`
 

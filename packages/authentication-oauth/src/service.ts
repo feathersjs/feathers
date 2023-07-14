@@ -25,7 +25,11 @@ export type OAuthParams = Omit<Params, 'route'> & {
 }
 
 export class OAuthError extends FeathersError {
-  constructor(message: string, data: any, public location: string) {
+  constructor(
+    message: string,
+    data: any,
+    public location: string
+  ) {
     super(message, 'NotAuthenticated', 401, 'not-authenticated', data)
   }
 }
@@ -60,7 +64,10 @@ export const redirectHook = () => async (context: HookContext, next: NextFunctio
 export class OAuthService {
   grant: any
 
-  constructor(public service: AuthenticationService, public settings: OauthSetupSettings) {
+  constructor(
+    public service: AuthenticationService,
+    public settings: OauthSetupSettings
+  ) {
     const config = getGrantConfig(service)
 
     this.grant = Grant({ config })

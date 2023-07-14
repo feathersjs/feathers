@@ -61,13 +61,16 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
  * @returns The `$sort` syntax schema
  */
 export function sortDefinition<T extends TObject>(schema: T) {
-  const properties = Object.keys(schema.properties).reduce((res, key) => {
-    const result = res as any
+  const properties = Object.keys(schema.properties).reduce(
+    (res, key) => {
+      const result = res as any
 
-    result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
+      result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
 
-    return result
-  }, {} as { [K in keyof T['properties']]: TOptional<TInteger> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: TOptional<TInteger> }
+  )
 
   return Type.Object(properties, { additionalProperties: false })
 }
@@ -125,14 +128,17 @@ export const queryProperties = <
   definition: T,
   extensions: X = {} as X
 ) => {
-  const properties = Object.keys(definition.properties).reduce((res, key) => {
-    const result = res as any
-    const value = definition.properties[key]
+  const properties = Object.keys(definition.properties).reduce(
+    (res, key) => {
+      const result = res as any
+      const value = definition.properties[key]
 
-    result[key] = queryProperty(value, extensions[key])
+      result[key] = queryProperty(value, extensions[key])
 
-    return result
-  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> }
+  )
 
   return Type.Optional(Type.Object(properties, { additionalProperties: false }))
 }

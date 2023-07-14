@@ -69,7 +69,7 @@
     "@feathersjs/tests": "^5.0.6",
     "@types/lodash": "^4.14.195",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.3.3",
+    "@types/node": "^20.4.2",
     "axios": "^1.4.0",
     "lodash": "^4.17.21",
     "mocha": "^10.2.0",

@@ -60,7 +60,7 @@
     "@feathersjs/schema": "^5.0.6",
     "@feathersjs/transport-commons": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.2",
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
     "uuid": "^9.0.0"
@@ -69,7 +69,7 @@
     "@feathersjs/memory": "^5.0.6",
     "@types/lodash": "^4.14.195",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.3.3",
+    "@types/node": "^20.4.2",
     "@types/uuid": "^9.0.2",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
