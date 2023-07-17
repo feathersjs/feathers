@@ -67,7 +67,7 @@ const application = {
     }
 
     const location = stripSlashes(path) || '/';
-    const current = this.services[location];
+    const current = this.services.hasOwnProperty(location) ? this.services[location] : undefined
 
     if (typeof current === 'undefined' && typeof this.defaultService === 'function') {
       return this.use(location, this.defaultService(location))

@@ -209,6 +209,14 @@ describe('Feathers application', () => {
     });
   });
 
+  it('.service does does not access object properties', async () => {
+    const app = feathers();
+
+    assert.strictEqual(app.service('something'), undefined);
+    assert.strictEqual(app.service('__proto__'), undefined);
+    assert.strictEqual(app.service('toString'), undefined);
+  })
+
   // Copied from the Express tests (without special cases)
   describe('Express app options compatibility', function () {
     describe('.set()', () => {
