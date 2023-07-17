@@ -116,7 +116,7 @@ The Express `rest` adapter now needs to be configured in the correct order, usua
 
 The import of `feathers` has changed from
 
-```js
+```ts
 const feathers = require('@feathersjs/feathers')
 
 import feathers from '@feathersjs/feathers'
@@ -124,10 +124,32 @@ import feathers from '@feathersjs/feathers'
 
 To
 
-```js
+```ts
 const { feathers } = require('@feathersjs/feathers')
 
 import { feathers } from '@feathersjs/feathers'
+```
+
+The Express exports for TypeScript have changed from
+
+```ts
+import express from '@feathersjs/express'
+
+app.use(express.json())
+app.use(express.urlencoded())
+app.use(express.notFound())
+app.use(express.errorHandler())
+```
+
+To
+
+```ts
+import express, { json, urlencoded, notFound, errorHandler } from '@feathersjs/express'
+
+app.use(json())
+app.use(urlencoded())
+app.use(notFound())
+app.use(errorHandler())
 ```
 
 ### Custom Filters & Operators
