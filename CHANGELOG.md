@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.17](https://github.com/feathersjs/feathers/compare/v4.5.16...v4.5.17) (2023-07-17)
+
+
+### Bug Fixes
+
+* **core:** Ensure .service does not access Object properties ([#3240](https://github.com/feathersjs/feathers/issues/3240)) ([7969334](https://github.com/feathersjs/feathers/commit/7969334ae9d3cfb4ae0e63564a99a18454482cb0))
+
+
+
+
+
 ## [4.5.16](https://github.com/feathersjs/feathers/compare/v4.5.15...v4.5.16) (2023-02-24)
 
 
