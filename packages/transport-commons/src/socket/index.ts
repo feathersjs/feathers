@@ -50,9 +50,7 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
               result[method] = (...args: any[]) => {
                 const [path, ...rest] = args
 
-                runMethod(app, getParams(connection), path, method, rest).catch((error) =>
-                  console.error(error)
-                )
+                runMethod(app, getParams(connection), path, method, rest)
               }
             }
           })
