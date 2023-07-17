@@ -1,11 +1,11 @@
-import { Application, Params } from "@feathersjs/feathers";
-import Debug from "debug";
-import { channels } from "../channels";
-import { routing } from "../routing";
-import { getDispatcher, runMethod } from "./utils";
-import { RealTimeConnection } from "../channels/channel/base";
+import { Application, Params } from '@feathersjs/feathers';
+import Debug from 'debug';
+import { channels } from '../channels';
+import { routing } from '../routing';
+import { getDispatcher, runMethod } from './utils';
+import { RealTimeConnection } from '../channels/channel/base';
 
-const debug = Debug("@feathersjs/transport-commons");
+const debug = Debug('@feathersjs/transport-commons');
 
 export interface SocketOptions {
   done: Promise<any>;
@@ -15,12 +15,12 @@ export interface SocketOptions {
   getParams: (socket: any) => RealTimeConnection;
 }
 
-export function socket({
+export function socket ({
   done,
   emit,
   socketMap,
   socketKey,
-  getParams,
+  getParams
 }: SocketOptions) {
   return (app: Application) => {
     const leaveChannels = (connection: RealTimeConnection) => {
@@ -34,9 +34,9 @@ export function socket({
     app.configure(channels());
     app.configure(routing());
 
-    app.on("publish", getDispatcher(emit, socketMap, socketKey));
-    app.on("disconnect", leaveChannels);
-    app.on("logout", (_authResult: any, params: Params) => {
+    app.on('publish', getDispatcher(emit, socketMap, socketKey));
+    app.on('disconnect', leaveChannels);
+    app.on('logout', (_authResult: any, params: Params) => {
       const { connection } = params;
 
       if (connection) {
@@ -46,14 +46,14 @@ export function socket({
 
     // `connection` event
     done.then((provider) =>
-      provider.on("connection", (connection: any) =>
-        app.emit("connection", getParams(connection))
+      provider.on('connection', (connection: any) =>
+        app.emit('connection', getParams(connection))
       )
     );
 
     // `socket.emit('methodName', 'serviceName', ...args)` handlers
     done.then((provider) =>
-      provider.on("connection", (connection: any) => {
+      provider.on('connection', (connection: any) => {
         for (const method of app.methods) {
           connection.on(method, (...args: any[]) => {
             const [path, ...rest] = args;
@@ -62,27 +62,27 @@ export function socket({
           });
         }
 
-        connection.on("authenticate", (...args: any[]) => {
-          if (app.get("defaultAuthentication")) {
-            debug("Got legacy authenticate event");
+        connection.on('authenticate', (...args: any[]) => {
+          if (app.get('defaultAuthentication')) {
+            debug('Got legacy authenticate event');
             runMethod(
               app,
               getParams(connection),
-              app.get("defaultAuthentication"),
-              "create",
+              app.get('defaultAuthentication'),
+              'create',
               args
             );
           }
         });
 
-        connection.on("logout", (callback: any) => {
-          if (app.get("defaultAuthentication")) {
-            debug("Got legacy authenticate event");
+        connection.on('logout', (callback: any) => {
+          if (app.get('defaultAuthentication')) {
+            debug('Got legacy authenticate event');
             runMethod(
               app,
               getParams(connection),
-              app.get("defaultAuthentication"),
-              "remove",
+              app.get('defaultAuthentication'),
+              'remove',
               [null, {}, callback]
             );
           }
@@ -93,11 +93,11 @@ export function socket({
     // Legacy `socket.emit('serviceName::methodName', ...args)` handlers
     app.mixins.push((service, path) =>
       done.then((provider) => {
-        provider.on("connection", (socket: any) => {
+        provider.on('connection', (socket: any) => {
           const methods = app.methods.filter(
             (current) =>
               // @ts-ignore
-              typeof service[current] === "function"
+              typeof service[current] === 'function'
           );
 
           for (const method of methods) {
