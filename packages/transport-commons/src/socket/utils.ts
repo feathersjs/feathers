@@ -62,7 +62,9 @@ export function getDispatcher (emit: string, socketMap: WeakMap<RealTimeConnecti
   };
 }
 
-export function runMethod (app: Application, connection: RealTimeConnection, path: string, method: string, args: any[]) {
+export function runMethod (app: Application, connection: RealTimeConnection, _path: string, _method: string, args: any[]) {
+  const path = typeof _path === 'string' ? _path : null
+  const method = typeof _method === 'string' ? _method : null
   const trace = `method '${method}' on service '${path}'`;
   const methodArgs = args.slice(0);
   const callback = typeof methodArgs[methodArgs.length - 1] === 'function'
@@ -81,7 +83,7 @@ export function runMethod (app: Application, connection: RealTimeConnection, pat
     // No valid service was found, return a 404
     // just like a REST route would
     if (lookup === null) {
-      return Promise.reject(new errors.NotFound(`Service '${path}' not found`));
+      return Promise.reject(new errors.NotFound(path === null ? 'Invalid service path' : `Service '${path}' not found`));
     }
 
     const { service, params: route = {} } = lookup;
