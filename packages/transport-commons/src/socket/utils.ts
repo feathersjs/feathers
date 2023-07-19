@@ -69,10 +69,12 @@ export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnectio
 export async function runMethod(
   app: Application,
   connection: RealTimeConnection,
-  path: string,
-  method: string,
+  _path: string,
+  _method: string,
   args: any[]
 ) {
+  const path = typeof _path === 'string' ? _path : null
+  const method = typeof _method === 'string' ? _method : null
   const trace = `method '${method}' on service '${path}'`
   const methodArgs = args.slice(0)
   const callback =
@@ -91,7 +93,7 @@ export async function runMethod(
 
     // No valid service was found throw a NotFound error
     if (lookup === null) {
-      throw new NotFound(`Service '${path}' not found`)
+      throw new NotFound(path === null ? `Invalid service path` : `Service '${path}' not found`)
     }
 
     const { service, params: route = {} } = lookup
