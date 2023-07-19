@@ -127,6 +127,9 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _update(id: Id, data: D, params: Params = {}) {
+    if (typeof id === 'undefined') {
+      return Promise.reject(new Error("id for 'update' can not be undefined"))
+    }
     return this.send<T>('update', id, data, params.query || {})
   }
 
