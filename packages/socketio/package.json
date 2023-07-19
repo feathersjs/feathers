@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio",
   "description": "The Feathers Socket.io real-time API provider",
-  "version": "4.5.17",
+  "version": "4.5.18",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "index.d.ts",
@@ -49,7 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/transport-commons": "^4.5.17",
+    "@feathersjs/transport-commons": "^4.5.18",
     "@types/socket.io": "^2.1.11",
     "debug": "^4.3.3",
     "socket.io": "^2.3.0",
@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@feathersjs/commons": "^4.5.16",
-    "@feathersjs/express": "^4.5.17",
+    "@feathersjs/express": "^4.5.18",
     "@feathersjs/feathers": "^4.5.17",
     "@feathersjs/tests": "^4.5.17",
     "@types/mocha": "^9.0.0",
