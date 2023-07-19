@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+### Bug Fixes
+
+- **authentication-local:** Local Auth - Nested username & Password fields ([#3091](https://github.com/feathersjs/feathers/issues/3091)) ([d135526](https://github.com/feathersjs/feathers/commit/d135526da18ecf2dc620b82820e1d09d8af5c0b5))
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+**Note:** Version bump only for package @feathersjs/authentication-local
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 ### Bug Fixes

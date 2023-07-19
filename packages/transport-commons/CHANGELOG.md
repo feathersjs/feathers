@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+
+### Bug Fixes
+
+* **transport-commons:** Handle invalid service paths on socket lookups ([#3241](https://github.com/feathersjs/feathers/issues/3241)) ([c397ab3](https://github.com/feathersjs/feathers/commit/c397ab3a0cd184044ae4f73540549b30a396821c))
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 **Note:** Version bump only for package @feathersjs/transport-commons

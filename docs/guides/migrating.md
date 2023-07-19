@@ -27,6 +27,14 @@ The new [schemas and resolvers](../api/schema/index.md) cover most use cases pre
 
 ## TypeScript
 
+<LanguageBlock global-id="js">
+
+You have selected JavaScript as the language which does not have type information.
+
+</LanguageBlock>
+
+<LanguageBlock global-id="ts">
+
 The new version comes with major improvements in TypeScript support from improved service typings, fully typed hook context and typed configuration. You can see the changes necessary in the Feathers chat [here](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
 ### Application and hook context
@@ -52,6 +60,8 @@ export type HookContext = FeathersHookContext<Application>
 Now `import { HookContext } from './declarations'` can be used as the context in hooks.
 
 ### Service types
+
+
 
 Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
 
@@ -94,6 +104,8 @@ declare module '@feathersjs/feathers/lib/declarations' {
 }
 ```
 
+</LanguageBlock>
+
 ## Deprecations and breaking changes
 
 ### Express middleware order
@@ -104,7 +116,7 @@ The Express `rest` adapter now needs to be configured in the correct order, usua
 
 The import of `feathers` has changed from
 
-```js
+```ts
 const feathers = require('@feathersjs/feathers')
 
 import feathers from '@feathersjs/feathers'
@@ -112,10 +124,32 @@ import feathers from '@feathersjs/feathers'
 
 To
 
-```js
+```ts
 const { feathers } = require('@feathersjs/feathers')
 
 import { feathers } from '@feathersjs/feathers'
+```
+
+The Express exports for TypeScript have changed from
+
+```ts
+import express from '@feathersjs/express'
+
+app.use(express.json())
+app.use(express.urlencoded())
+app.use(express.notFound())
+app.use(express.errorHandler())
+```
+
+To
+
+```ts
+import express, { json, urlencoded, notFound, errorHandler } from '@feathersjs/express'
+
+app.use(json())
+app.use(urlencoded())
+app.use(notFound())
+app.use(errorHandler())
 ```
 
 ### Custom Filters & Operators
@@ -228,17 +262,17 @@ The automatic environment variable substitution in `@feathersjs/configuration` w
 
 The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
 
-```js
-const feathers = require('@feathersjs/feathers')
-const debug = require('debug')
+```ts
+import { feathers } from '@feathersjs/feathers'
+import debug from 'debug'
 
 feathers.setDebug(debug)
 ```
 
 It is also possible to set a custom logger like this:
 
-```js
-const feathers = require('@feathersjs/feathers')
+```ts
+import { feathers } from '@feathersjs/feathers'
 
 const customDebug =
   (name) =>

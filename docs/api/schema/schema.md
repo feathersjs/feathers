@@ -80,9 +80,9 @@ export const userSchema = {
   $id: 'UserResult',
   type: 'object',
   additionalProperties: false,
-  required: [...userSchema.required, 'id'],
+  required: [...userDataSchema.required, 'id'],
   properties: {
-    ...userSchema.properties,
+    ...userDataSchema.properties,
     id: { type: 'number' }
   }
 } as const

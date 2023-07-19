@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+### Bug Fixes
+
+- **authentication-client:** Do not trigger storage methods if storage not defined ([#3210](https://github.com/feathersjs/feathers/issues/3210)) ([261acbc](https://github.com/feathersjs/feathers/commit/261acbcde387db731e434cb106a27b49dcb64a9a))
+- **authentication-client:** removeAccessToken throws error if storage not defined ([#3195](https://github.com/feathersjs/feathers/issues/3195)) ([b8e2769](https://github.com/feathersjs/feathers/commit/b8e27698f7958a91fe9a4ee64ec5591d23194c44))
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+**Note:** Version bump only for package @feathersjs/authentication-client
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 ### Bug Fixes

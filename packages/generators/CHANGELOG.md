@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+
+### Bug Fixes
+
+* **generators:** Fix channel/service configuration order for Koa based apps ([580344e](https://github.com/feathersjs/feathers/commit/580344e96fe8a2f17fd53476af5a0c7ddefac0b6))
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **generators:** Add sourceMap to tsconfig.json template ([#3166](https://github.com/feathersjs/feathers/issues/3166)) ([3049b7a](https://github.com/feathersjs/feathers/commit/3049b7a425d01cdd3058442c7183307a06cfc87a))
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 ### Bug Fixes

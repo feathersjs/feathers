@@ -1004,16 +1004,6 @@ const T = {
 }
 ```
 
-<BlockQuote type="warning" label="note">
-
-TypeBox 0.26.0 introduced a breaking change in `Type.Intersect`. `@feathersjs/typebox` maintains the original behaviour which is now available in TypeBox as `Type.Composite`. It you want to use the new `Type.Intersect` use
-
-```ts
-import { Intersect } from '@feathersjs/typebox'
-```
-
-</BlockQuote>
-
 ##### Never
 
 Creates a type that will never validate if the attribute is present. This is useful if you are allowing [additionalProperties](#additionalproperties) but need to prevent using specific keys.
@@ -1667,6 +1657,45 @@ type T = undefined
 const T = {
   type: 'object',
   specialized: 'Undefined'
+}
+```
+
+
+#### Symbol
+
+Verifies that the value is of type `Symbol`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.Symbol()
+```
+
+```js
+type T = symbol
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'Symbol'
+}
+```
+
+#### BigInt
+
+Verifies that the value is of type `BigInt`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.BigInt()
+```
+
+```js
+type T = bigint
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'BigInt'
 }
 ```
 

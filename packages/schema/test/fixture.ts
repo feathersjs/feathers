@@ -1,6 +1,7 @@
 import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
+import { AdapterParams } from '@feathersjs/adapter-commons'
 
 import {
   resolve,
@@ -18,7 +19,6 @@ import {
   getDataValidator,
   virtual
 } from '../src'
-import { AdapterParams } from '../../memory/node_modules/@feathersjs/adapter-commons/lib'
 
 const fixtureAjv = new Ajv({
   coerceTypes: true,
@@ -187,6 +187,11 @@ export const messageQueryResolver = resolve<MessageQuery, HookContext<Applicatio
   }
 })
 
+interface ServiceParams extends AdapterParams {
+  user?: User
+  error?: boolean
+}
+
 class MessageService extends MemoryService<Message, MessageData, ServiceParams> {
   async customMethod(data: any) {
     return data
@@ -199,11 +204,6 @@ const customMethodDataResolver = resolve<any, HookContext<Application>>({
     additionalData: async () => 'additional data'
   }
 })
-
-interface ServiceParams extends AdapterParams {
-  user?: User
-  error?: boolean
-}
 
 type ServiceTypes = {
   users: MemoryService<User, UserData, ServiceParams>

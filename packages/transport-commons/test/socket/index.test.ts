@@ -90,14 +90,26 @@ describe('@feathersjs/transport-commons', () => {
       })
     })
 
-    it('.get with invalid service name and arguments', (done) => {
+    it('method with invalid service name and arguments', (done) => {
       const socket = new EventEmitter()
 
       provider.emit('connection', socket)
 
       socket.emit('get', null, (error: any) => {
         assert.strictEqual(error.name, 'NotFound')
-        assert.strictEqual(error.message, "Service 'null' not found")
+        assert.strictEqual(error.message, 'Invalid service path')
+        done()
+      })
+    })
+
+    it('method with implicit toString errors properly', (done) => {
+      const socket = new EventEmitter()
+
+      provider.emit('connection', socket)
+
+      socket.emit('get', { toString: '' }, (error: any) => {
+        assert.strictEqual(error.name, 'NotFound')
+        assert.strictEqual(error.message, 'Invalid service path')
         done()
       })
     })

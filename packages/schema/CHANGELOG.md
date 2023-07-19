@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **schema:** Exclude json-schema-to-ts@2.8.0 ([#3180](https://github.com/feathersjs/feathers/issues/3180)) ([aee8531](https://github.com/feathersjs/feathers/commit/aee8531b5f0578f11e43b19a469b96e6f4b170ce))
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 ### Bug Fixes

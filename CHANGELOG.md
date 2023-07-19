@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+
+### Bug Fixes
+
+* add missing word ([#3237](https://github.com/feathersjs/feathers/issues/3237)) ([9a32184](https://github.com/feathersjs/feathers/commit/9a321848767e31176660d6937f8fa6d83ba215bd))
+* **transport-commons:** Handle invalid service paths on socket lookups ([#3241](https://github.com/feathersjs/feathers/issues/3241)) ([c397ab3](https://github.com/feathersjs/feathers/commit/c397ab3a0cd184044ae4f73540549b30a396821c))
+
+
+
+
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+
+### Bug Fixes
+
+* **core:** Ensure .service does not access Object properties ([#3235](https://github.com/feathersjs/feathers/issues/3235)) ([c0b670a](https://github.com/feathersjs/feathers/commit/c0b670ac4c7bf145e36b59ea89d1387b5514c237))
+* **generators:** Fix channel/service configuration order for Koa based apps ([580344e](https://github.com/feathersjs/feathers/commit/580344e96fe8a2f17fd53476af5a0c7ddefac0b6))
+* **koa:** Ensure .teardown works without a server ([#3234](https://github.com/feathersjs/feathers/issues/3234)) ([818572d](https://github.com/feathersjs/feathers/commit/818572df98456bc3e1a300e879329aa8f849be64))
+
+
+
+
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+### Bug Fixes
+
+- **authentication-client:** Do not trigger storage methods if storage not defined ([#3210](https://github.com/feathersjs/feathers/issues/3210)) ([261acbc](https://github.com/feathersjs/feathers/commit/261acbcde387db731e434cb106a27b49dcb64a9a))
+- **authentication-client:** removeAccessToken throws error if storage not defined ([#3195](https://github.com/feathersjs/feathers/issues/3195)) ([b8e2769](https://github.com/feathersjs/feathers/commit/b8e27698f7958a91fe9a4ee64ec5591d23194c44))
+- **authentication-local:** Local Auth - Nested username & Password fields ([#3091](https://github.com/feathersjs/feathers/issues/3091)) ([d135526](https://github.com/feathersjs/feathers/commit/d135526da18ecf2dc620b82820e1d09d8af5c0b5))
+- **authentication-oauth:** Update OAuth redirect to handle user requested redirect paths ([#3186](https://github.com/feathersjs/feathers/issues/3186)) ([3742028](https://github.com/feathersjs/feathers/commit/37420283c17bb8129c6ffdde841ce2034109cc6b))
+- **authentication:** Export JwtVerifyOptions ([#3214](https://github.com/feathersjs/feathers/issues/3214)) ([d59896e](https://github.com/feathersjs/feathers/commit/d59896eb0229f1490c712f19cf84eb2bcf123698))
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+### Bug Fixes
+
+- **generators:** Add sourceMap to tsconfig.json template ([#3166](https://github.com/feathersjs/feathers/issues/3166)) ([3049b7a](https://github.com/feathersjs/feathers/commit/3049b7a425d01cdd3058442c7183307a06cfc87a))
+- **mongodb:** Speed up multi create ([#3171](https://github.com/feathersjs/feathers/issues/3171)) ([e34f728](https://github.com/feathersjs/feathers/commit/e34f728139a1008503aa440f1b7cf6395719417b))
+- **schema:** Exclude json-schema-to-ts@2.8.0 ([#3180](https://github.com/feathersjs/feathers/issues/3180)) ([aee8531](https://github.com/feathersjs/feathers/commit/aee8531b5f0578f11e43b19a469b96e6f4b170ce))
+- **typebox:** Revert to TypeBox 0.25 ([#3183](https://github.com/feathersjs/feathers/issues/3183)) ([cacedf5](https://github.com/feathersjs/feathers/commit/cacedf59e3d2df836777f0cd06ab1b2484ed87c5))
+
 ## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
 
 ### Bug Fixes

@@ -208,6 +208,12 @@ describe('@feathersjs/koa', () => {
     assert.ok(called)
   })
 
+  it('.teardown works without server (#3224)', async () => {
+    const app = koa(feathers())
+
+    await app.teardown()
+  })
+
   restTests('Services', 'todo', 8465)
   restTests('Root service', '/', 8465)
 })
