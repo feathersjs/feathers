@@ -108,7 +108,7 @@ const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdA
 })
 const messageQuerySchema = Type.Intersect(
   [
-    // This will additioanlly allow querying for `{ name: { $ilike: 'Dav%' } }`
+    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
     querySyntax(messageQueryProperties, {
       name: {
         $ilike: Type.String()
