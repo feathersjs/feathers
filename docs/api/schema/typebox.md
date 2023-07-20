@@ -542,7 +542,7 @@ The sections of this format are described as follows:
 ###### `iso-date-time`
 
 ```ts
-Type.String({ format: 'date-time' })
+Type.String({ format: 'iso-date-time' })
 ```
 
 Validates against the [date-time](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) described in RFC3339/ISO8601, which is the following format:
