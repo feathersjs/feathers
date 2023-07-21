@@ -29,15 +29,15 @@ app.use('/messages', new NameService({ id, events, paginate }))
 
 The following options are available for all database adapters:
 
-- `id` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
-- `paginate` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
-- `multi` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+- `id {string}` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
+- `paginate {Object}` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
+- `multi {string[]|boolean}` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
 
 The following legacy options are still available but should be avoided:
 
-- `events` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
-- `operators` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema](../schema/validators.md#validatequery)
-- `filters` (_optional_, **deprecated**) - A list of top level `$` query parameters to allow (e.g. `[ '$populate' ]`). Not necessary when using a [query schema](../schema/validators.md#validatequery)
+- `events {string[]}` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
+- `operators {string[]}` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema](../schema/validators.md#validatequery)
+- `filters {Object}` (_optional_, **deprecated**) - An object of additional top level query filters, e.g. `{ $populate: true }`. Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`. Not necessary when using a [query schema](../schema/validators.md#validatequery)
 
 For database specific options see the adapter documentation.
 
