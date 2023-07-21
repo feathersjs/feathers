@@ -28,7 +28,11 @@ export const generate = (ctx: AuthenticationGeneratorContext) =>
     .then(
       when(
         (ctx) => ctx.language === 'ts',
-        inject(importTemplate, before('export { NextFunction }'), toDeclarationFile)
+        inject(
+          importTemplate,
+          before(/export \{ NextFunction \}|export type \{ NextFunction \}/),
+          toDeclarationFile
+        )
       )
     )
     .then(when((ctx) => ctx.language === 'ts', inject(paramsTemplate, append(), toDeclarationFile)))
