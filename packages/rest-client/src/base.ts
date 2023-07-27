@@ -139,7 +139,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     return this._create(data, params)
   }
 
-  _update(id: Id, data: D, params?: P) {
+  _update(id: NullableId, data: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error("id for 'update' can not be undefined"))
     }
@@ -155,7 +155,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  update(id: Id, data: D, params?: P) {
+  update(id: NullableId, data: D, params?: P) {
     return this._update(id, data, params)
   }
 
