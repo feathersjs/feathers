@@ -60,7 +60,7 @@ describe('REST client tests', function () {
     })
 
     await assert.rejects(() => service.update(undefined, {}), {
-      message: "id for 'update' can not be undefined"
+      message: "id for 'update' can not be undefined, only 'null' when updating multiple entries"
     })
 
     await assert.rejects(() => service.patch(undefined, {}), {
