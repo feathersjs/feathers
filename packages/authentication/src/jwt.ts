@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
-import omit from 'lodash/omit'
 import { IncomingMessage } from 'http'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { Params } from '@feathersjs/feathers'
-import { createDebug } from '@feathersjs/commons'
+import { createDebug, _ } from '@feathersjs/commons'
 // @ts-ignore
 import lt from 'long-timeout'
 
@@ -115,7 +114,7 @@ export class JWTStrategy extends AuthenticationBaseStrategy {
     }
 
     const query = await this.getEntityQuery(params)
-    const getParams = Object.assign({}, omit(params, 'provider'), { query })
+    const getParams = Object.assign({}, _.omit(params, 'provider'), { query })
     const result = await entityService.get(id, getParams)
 
     if (!params.provider) {

@@ -1,8 +1,6 @@
-import flatten from 'lodash/flatten'
-import omit from 'lodash/omit'
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { createDebug } from '@feathersjs/commons'
+import { createDebug, _ } from '@feathersjs/commons'
 
 const debug = createDebug('@feathersjs/authentication/hooks/authenticate')
 
@@ -14,7 +12,7 @@ export interface AuthenticateHookSettings {
 export default (originalSettings: string | AuthenticateHookSettings, ...originalStrategies: string[]) => {
   const settings =
     typeof originalSettings === 'string'
-      ? { strategies: flatten([originalSettings, ...originalStrategies]) }
+      ? { strategies: [originalSettings, ...originalStrategies].flat() }
       : originalSettings
 
   if (!originalSettings || settings.strategies.length === 0) {
@@ -49,13 +47,13 @@ export default (originalSettings: string | AuthenticateHookSettings, ...original
     }
 
     if (authentication) {
-      const authParams = omit(params, 'provider', 'authentication')
+      const authParams = _.omit(params, 'provider', 'authentication')
 
       debug('Authenticating with', authentication, strategies)
 
       const authResult = await authService.authenticate(authentication, authParams, ...strategies)
 
-      context.params = Object.assign({}, params, omit(authResult, 'accessToken'), {
+      context.params = Object.assign({}, params, _.omit(authResult, 'accessToken'), {
         authenticated: true
       })
     } else if (provider) {

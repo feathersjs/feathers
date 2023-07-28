@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import bcrypt from 'bcryptjs'
 import get from 'lodash/get'
-import omit from 'lodash/omit'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { Query, Params } from '@feathersjs/feathers'
 import { AuthenticationRequest, AuthenticationBaseStrategy } from '@feathersjs/authentication'
-import { createDebug } from '@feathersjs/commons'
+import { createDebug, _ } from '@feathersjs/commons'
 
 const debug = createDebug('@feathersjs/authentication-local/strategy')
 
@@ -130,7 +129,7 @@ export class LocalStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated(errorMessage)
     }
 
-    const result = await this.findEntity(username, omit(params, 'provider'))
+    const result = await this.findEntity(username, _.omit(params, 'provider'))
     await this.comparePassword(result, password)
 
     return {

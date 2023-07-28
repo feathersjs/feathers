@@ -1,5 +1,5 @@
-import omit from 'lodash/omit'
 import { HookContext, NextFunction } from '@feathersjs/feathers'
+import { _ } from '@feathersjs/commons'
 
 /**
  * @deprecated For reliable safe data representations use Feathers schema dispatch resolvers.
@@ -10,7 +10,7 @@ export default (...fields: string[]) => {
     if (typeof current === 'object' && !Array.isArray(current)) {
       const data = typeof current.toJSON === 'function' ? current.toJSON() : current
 
-      return omit(data, fields)
+      return _.omit(data, ...fields)
     }
 
     return current
