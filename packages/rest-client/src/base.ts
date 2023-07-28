@@ -63,10 +63,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
   methods(this: any, ...names: string[]) {
     names.forEach((method) => {
-      this[method] = function (body: any, params: Params = {}) {
+      const _method = `_${method}`
+      this[_method] = function (data: any, params: Params = {}) {
         return this.request(
           {
-            body,
+            body: data,
             url: this.makeUrl(params.query),
             method: 'POST',
             headers: Object.assign(
@@ -80,12 +81,15 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
           params
         ).catch(toError)
       }
+      this[method] = function (data: any, params: Params = {}) {
+        return this[_method](data, params)
+      }
     })
 
     return this
   }
 
-  find(params?: P) {
+  _find(params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
@@ -96,7 +100,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  get(id: Id, params?: P) {
+  find(params?: P) {
+    return this._find(params)
+  }
+
+  _get(id: Id, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(new Error("id for 'get' can not be undefined"))
     }
@@ -111,11 +119,15 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  create(body: D, params?: P) {
+  get(id: Id, params?: P) {
+    return this._get(id, params)
+  }
+
+  _create(data: D, params?: P) {
     return this.request(
       {
         url: this.makeUrl(params.query),
-        body,
+        body: data,
         method: 'POST',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
       },
@@ -123,7 +135,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  update(id: NullableId, body: D, params?: P) {
+  create(data: D, params?: P) {
+    return this._create(data, params)
+  }
+
+  _update(id: NullableId, data: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'update' can not be undefined, only 'null' when updating multiple entries")
@@ -133,7 +149,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     return this.request(
       {
         url: this.makeUrl(params.query, id),
-        body,
+        body: data,
         method: 'PUT',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
       },
@@ -141,7 +157,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  patch(id: NullableId, body: D, params?: P) {
+  update(id: NullableId, data: D, params?: P) {
+    return this._update(id, data, params)
+  }
+
+  _patch(id: NullableId, data: D, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'patch' can not be undefined, only 'null' when updating multiple entries")
@@ -151,7 +171,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     return this.request(
       {
         url: this.makeUrl(params.query, id),
-        body,
+        body: data,
         method: 'PATCH',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
       },
@@ -159,7 +179,11 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     ).catch(toError)
   }
 
-  remove(id: NullableId, params?: P) {
+  patch(id: NullableId, data: D, params?: P) {
+    return this._patch(id, data, params)
+  }
+
+  _remove(id: NullableId, params?: P) {
     if (typeof id === 'undefined') {
       return Promise.reject(
         new Error("id for 'remove' can not be undefined, only 'null' when removing multiple entries")
@@ -174,5 +198,9 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
       },
       params
     ).catch(toError)
+  }
+
+  remove(id: NullableId, params?: P) {
+    return this._remove(id, params)
   }
 }
