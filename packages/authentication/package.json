@@ -67,9 +67,9 @@
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.8",
-    "@types/lodash": "^4.14.195",
+    "@types/lodash": "^4.14.196",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.4.5",
     "@types/uuid": "^9.0.2",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
