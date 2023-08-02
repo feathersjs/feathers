@@ -1,4 +1,4 @@
-import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions, TIntersect } from '@sinclair/typebox'
+import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions, TIntersect, TUnion } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -17,7 +17,7 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject | TIntersect, validator: Ajv): Validator<T, R> =>
+export const getValidator = <T = any, R = T>(schema: TObject | TIntersect | TUnion<TObject[]>, validator: Ajv): Validator<T, R> =>
   jsonSchema.getValidator(schema as any, validator)
 
 /**
