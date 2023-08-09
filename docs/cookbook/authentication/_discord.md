@@ -13,7 +13,7 @@ Discord login can be initialized like any other [OAuth provider](../../api/authe
       "discord": {
         "key": "<App ID>",
         "secret": "<App Secret>",
-        "scopes": ["identify email"]
+        "scope": ["identify email"]
       }
     }
   }
