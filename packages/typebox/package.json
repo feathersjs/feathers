@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.4.9",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "typescript": "^5.1.6"
