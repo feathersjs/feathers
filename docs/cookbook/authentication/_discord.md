@@ -36,7 +36,7 @@ import axios, {AxiosRequestConfig} from 'axios'
 import {ServiceAddons} from '@feathersjs/feathers';
 import {AuthenticationService, JWTStrategy} from '@feathersjs/authentication';
 import {LocalStrategy} from '@feathersjs/authentication-local';
-import {expressOauth} from '@feathersjs/authentication-oauth';
+import {oauth} from '@feathersjs/authentication-oauth';
 import {Application} from './declarations';
 
 
@@ -48,7 +48,7 @@ export default function (app: Application) {
   authentication.register('discord', new DiscordStrategy());
 
   app.use('/authentication', authentication);
-  app.configure(expressOauth());
+  app.configure(oauth());
 }
 
 export class DiscordStrategy extends OAuthStrategy {
