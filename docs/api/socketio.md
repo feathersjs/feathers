@@ -82,6 +82,34 @@ Try to avoid listening and sending events on the `socket` directly since it circ
 
 </BlockQuote>
 
+#### Using uWebSockets.js
+
+uWS can be used as a drop in replacement for socket handling.  
+As a result you'll see lower latencies, a better memory footprint and even slightly less overall resource usage.  
+You will on the other hand need to install the following extra package to get things working.
+
+```
+npm install uNetworking/uWebSockets.js#20.31.0 --save
+```
+
+Now you can use the `io.attachApp` function to attach uWS as a replacement.
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
+import { App } from 'uWebSockets.js'
+
+const app = feathers()
+
+app.configure(
+  socketio((io) => {
+    io.attachApp(App())
+  })
+)
+
+app.listen(3030)
+```
+
 ### socketio(options [, callback])
 
 `app.configure(socketio(options [, callback]))` sets up the Socket.io transport with the given [Socket.io options object](https://github.com/socketio/engine.io#methods-1) and optionally calls the callback described above.

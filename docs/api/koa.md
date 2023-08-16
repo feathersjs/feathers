@@ -49,7 +49,7 @@ If no Feathers application is passed, `koa() -> app` returns a plain Koa applica
 
 ## app.listen(port)
 
-`app.listen(port) -> HttpServer` will first call Koa [app.listen](http://expressjs.com/en/4x/api.html#app.listen) and then internally also call the [Feathers app.setup(server)](./application.md#setupserver).
+`app.listen(port) -> HttpServer` will first call Koa [app.listen](https://github.com/koajs/koa/blob/master/docs/api/index.md#applisten) and then internally also call the [Feathers app.setup(server)](./application.md#setupserver).
 
 ```js
 // Listen on port 3030
@@ -241,7 +241,7 @@ app.use(
 The `parseAuthentication` middleware is registered automatically and will use the strategies of the default [authentication service](./authentication/service.md) to parse headers for authentication information. If you want to additionally parse authentication with a different authentication service this middleware can be registered again with that service configured.
 
 ```ts
-import { parseAuthentication } from '@feathersjs/express'
+import { parseAuthentication } from '@feathersjs/koa'
 
 app.use(
   parseAuthentication({
