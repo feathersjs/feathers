@@ -37,13 +37,13 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
   async getEntityQuery(profile: OAuthProfile, _params: Params) {
     return {
-      [`${this.name}Id`]: profile.sub || profile.id
+      [`${this.name}Id`]: profile?.sub ?? String(profile.id)
     }
   }
 
   async getEntityData(profile: OAuthProfile, _existingEntity: any, _params: Params) {
     return {
-      [`${this.name}Id`]: profile.sub || profile.id
+      [`${this.name}Id`]: profile?.sub ?? String(profile.id)
     }
   }
 
