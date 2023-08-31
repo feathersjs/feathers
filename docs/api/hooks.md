@@ -27,7 +27,7 @@ app.service('messages').hooks({
 
         await next()
 
-        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
+        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - startTime}ms`)
       }
     ]
   },
