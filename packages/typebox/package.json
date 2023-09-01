@@ -55,14 +55,14 @@
   },
   "dependencies": {
     "@feathersjs/schema": "^5.0.8",
-    "@sinclair/typebox": "^0.25.0"
+    "@sinclair/typebox": "^0.31.8"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.5.7",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
