@@ -103,6 +103,69 @@ Just like on the server _all_ methods you want to use have to be listed in the `
 
 </BlockQuote>
 
+
+### Route placeholders
+
+Service URLs can have placeholders, e.g. `users/:userId/messages`. (see in [express](../express.md#params.route) or [koa](../koa.md#params.route))
+
+You can call the client with route placeholders in the `params.route` property:
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio-client'
+import io from 'socket.io-client'
+
+const socket = io('http://api.feathersjs.com')
+const app = feathers()
+
+// Set up Socket.io client with the socket
+app.configure(socketio(socket))
+
+// Call `users/2/messages` 
+app.service('users/:userId/messages').find({
+  route: {
+    userId: 2
+  }
+})
+```
+
+This can also be achieved by using the client bundled,
+sharing several `servicePath` variable exported in the [service shared file](`../../guides/cli/service.shared.md#Variables`) file.
+
+```ts
+import rest from '@feathersjs/rest-client'
+
+const connection = rest('https://myapp.com').fetch(window.fetch.bind(window))
+
+const client = createClient(connection)
+
+// Call the `https://myapp.com/users/2/messages` URL
+client.service(usersMyMessagesPath).find({
+  route: {
+    userId: 2
+  }
+})
+
+import io from 'socket.io-client'
+import socketio from '@feathersjs/socketio-client'
+import { createClient, usersMessagesPath } from 'my-app'
+
+const socket = io('http://api.my-feathers-server.com')
+const connection = socketio(socket)
+
+const client = createClient(connection)
+
+const messageService = client.service('users/:userId/messages')
+
+// Call `users/2/messages` 
+app.service('users/:userId/messages').find({
+  route: {
+    userId: 2
+  }
+})
+```
+
+
 ## Direct connection
 
 Feathers sets up a normal Socket.io server that you can connect to with any Socket.io compatible client, usually the [Socket.io client](http://socket.io/docs/client-api/) either by loading the `socket.io-client` module or `/socket.io/socket.io.js` from the server. Query parameter types do not have to be converted from strings as they do for REST requests.

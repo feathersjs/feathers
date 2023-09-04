@@ -78,7 +78,14 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
 
   send<X = any>(method: string, ...args: any[]) {
     return new Promise<X>((resolve, reject) => {
-      args.unshift(method, this.path)
+      const route: Record<string, any> = args.pop()
+      let path = this.path
+      if (route) {
+        Object.keys(route).forEach((key) => {
+          path = path.replace(`:${key}`, route[key])
+        })
+      }
+      args.unshift(method, path)
       args.push(function (error: any, data: any) {
         return error ? reject(convert(error)) : resolve(data)
       })
@@ -93,17 +100,17 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
     names.forEach((method) => {
       const _method = `_${method}`
       this[_method] = function (data: any, params: Params = {}) {
-        return this.send(method, data, params.query || {})
+        return this.send(method, data, params.query || {}, params.route || {})
       }
       this[method] = function (data: any, params: Params = {}) {
-        return this[_method](data, params)
+        return this[_method](data, params, params.route || {})
       }
     })
     return this
   }
 
   _find(params: Params = {}) {
-    return this.send<T | T[]>('find', params.query || {})
+    return this.send<T | T[]>('find', params.query || {}, params.route || {})
   }
 
   find(params: Params = {}) {
@@ -111,7 +118,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _get(id: Id, params: Params = {}) {
-    return this.send<T>('get', id, params.query || {})
+    return this.send<T>('get', id, params.query || {}, params.route || {})
   }
 
   get(id: Id, params: Params = {}) {
@@ -119,7 +126,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _create(data: D, params: Params = {}) {
-    return this.send<T>('create', data, params.query || {})
+    return this.send<T>('create', data, params.query || {}, params.route || {})
   }
 
   create(data: D, params: Params = {}) {
@@ -130,7 +137,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
     if (typeof id === 'undefined') {
       return Promise.reject(new Error("id for 'update' can not be undefined"))
     }
-    return this.send<T>('update', id, data, params.query || {})
+    return this.send<T>('update', id, data, params.query || {}, params.route || {})
   }
 
   update(id: NullableId, data: D, params: Params = {}) {
@@ -138,7 +145,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _patch(id: NullableId, data: D, params: Params = {}) {
-    return this.send<T | T[]>('patch', id, data, params.query || {})
+    return this.send<T | T[]>('patch', id, data, params.query || {}, params.route || {})
   }
 
   patch(id: NullableId, data: D, params: Params = {}) {
@@ -146,7 +153,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _remove(id: NullableId, params: Params = {}) {
-    return this.send<T | T[]>('remove', id, params.query || {})
+    return this.send<T | T[]>('remove', id, params.query || {}, params.route || {})
   }
 
   remove(id: NullableId, params: Params = {}) {
