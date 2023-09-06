@@ -43,7 +43,7 @@ ${
     : ''
 }
 app.configure(services)
-${transports.includes('websockets') ? `app.configure(channels)` : ''}
+${transports.includes('websockets') ? 'app.configure(channels)' : ''}
 
 
 // Register hooks that run on all service methods
@@ -105,7 +105,7 @@ ${
     : ''
 }
 app.configure(services)
-${transports.includes('websockets') ? `app.configure(channels)` : ''}
+${transports.includes('websockets') ? 'app.configure(channels)' : ''}
 
 // Configure a middleware for 404s and the error handler
 app.use(notFound())
