@@ -55,10 +55,10 @@
     "@feathersjs/feathers": "^5.0.8",
     "@feathersjs/transport-commons": "^5.0.8",
     "@koa/cors": "^4.0.0",
-    "@types/koa": "^2.13.8",
-    "@types/koa-qs": "^2.0.0",
+    "@types/koa": "^2.13.9",
+    "@types/koa-qs": "^2.0.1",
     "@types/koa-static": "^4.0.2",
-    "@types/koa__cors": "^4.0.0",
+    "@types/koa__cors": "^4.0.1",
     "koa": "^2.14.2",
     "koa-body": "^6.0.1",
     "koa-compose": "^4.1.0",
@@ -69,14 +69,14 @@
     "@feathersjs/authentication-local": "^5.0.8",
     "@feathersjs/memory": "^5.0.8",
     "@feathersjs/tests": "^5.0.8",
-    "@types/koa-compose": "^3.2.5",
+    "@types/koa-compose": "^3.2.6",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.9",
-    "axios": "^1.4.0",
+    "@types/node": "^20.7.0",
+    "axios": "^1.5.0",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
