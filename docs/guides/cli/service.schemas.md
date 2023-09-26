@@ -87,7 +87,7 @@ export const messagePatchResolver = resolve<Message, HookContext>({})
 
 ## Query Schema and Resolvers
 
-The query schema defines what can be sent in queries in [parmas.query](../../api/services.md#params) and also converts strings to the correct type.
+The query schema defines what can be sent in queries in [params.query](../../api/services.md#params) and also converts strings to the correct type.
 
 ```ts
 // Schema for allowed query properties
