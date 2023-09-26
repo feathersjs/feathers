@@ -110,35 +110,34 @@ describe('@feathersjs/schema/schema', () => {
   })
 
   it('custom AJV can convert dates', async () => {
-    const formatsSchema = schema(
-      {
-        $id: 'converts-formats-test',
-        type: 'object',
-        required: [],
-        additionalProperties: false,
-        properties: {
-          dobString: queryProperty({
-            type: 'string',
-            format: 'date',
-            convert: true
-          }),
-          createdAt: {
-            type: 'string',
-            format: 'date-time',
-            convert: true
-          }
+    const definition = {
+      $id: 'converts-formats-test',
+      type: 'object',
+      required: [],
+      additionalProperties: false,
+      properties: {
+        dobString: queryProperty({
+          type: 'string',
+          format: 'date',
+          convert: true
+        }),
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          convert: true
         }
-      } as const,
-      customAjv
-    )
+      }
+    } as const
 
-    const validated = await formatsSchema.validate({
+    const formatsSchema = schema(definition, customAjv)
+
+    const validated: any = await formatsSchema.validate({
       dobString: { $gt: '2025-04-25' },
       createdAt: '2021-12-22T23:59:59.999Z'
     })
 
-    assert.ok((validated.dobString as any).$gt instanceof Date)
-    assert.ok((validated.createdAt as any) instanceof Date)
+    assert.ok(validated.dobString.$gt instanceof Date)
+    assert.ok(validated.createdAt instanceof Date)
   })
 
   it('schema extension and type inference', async () => {

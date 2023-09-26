@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@feathersjs/schema": "^5.0.8",
-    "@sinclair/typebox": "^0.31.17"
+    "@sinclair/typebox": "^0.25.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
