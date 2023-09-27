@@ -28,7 +28,7 @@ export class OAuthError extends FeathersError {
   constructor(
     message: string,
     data: any,
-    public location: string
+    public location?: string
   ) {
     super(message, 'NotAuthenticated', 401, 'not-authenticated', data)
   }
@@ -114,10 +114,15 @@ export class OAuthService {
       query,
       redirect
     }
+
     const payload = grant?.response || result?.session?.response || result?.state?.response || params.query
     const authentication = {
       strategy: name,
       ...payload
+    }
+
+    if (payload.error) {
+      throw new OAuthError(payload.error_description || payload.error, payload)
     }
 
     try {
