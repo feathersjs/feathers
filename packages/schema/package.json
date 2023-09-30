@@ -73,5 +73,8 @@
     "shx": "^0.3.4",
     "typescript": "^5.2.2"
   },
+  "peerDependencies": {
+    "typescript": ">=4.7"
+  },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
