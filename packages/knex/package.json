@@ -62,8 +62,8 @@
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.9",
     "@feathersjs/schema": "^5.0.9",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^20.7.0",
+    "@types/mocha": "^10.0.2",
+    "@types/node": "^20.8.0",
     "knex": "^2.5.1",
     "mocha": "^10.2.0",
     "pg": "^8.11.3",

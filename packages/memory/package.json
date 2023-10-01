@@ -57,8 +57,8 @@
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.9",
     "@feathersjs/feathers": "^5.0.9",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^20.7.0",
+    "@types/mocha": "^10.0.2",
+    "@types/node": "^20.8.0",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
