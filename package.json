@@ -36,7 +36,7 @@
     "eslint": "eslint \"packages/**/*.ts\" --fix",
     "lint": "npm run prettier && npm run eslint",
     "compile": "lerna run compile",
-    "update-dependencies": "ncu -u && lerna exec -- ncu -u --dep prod,dev,optional,peer -x node-fetch,chalk",
+    "update-dependencies": "ncu -u && lerna exec -- ncu -u --dep prod,dev,optional,peer -x node-fetch,chalk,\"@sinclair/typebox\"",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests"
