@@ -874,6 +874,10 @@ const T = {
 import { StringEnum } from '@feathersjs/typebox'
 
 const T = StringEnum(['crow', 'dove', 'eagle'])
+// Add additional options
+const T = StringEnum(['crow', 'dove', 'eagle'], {
+    default: 'crow'
+})
 ```
 
 To obtain the TypeScript type, use the `Static` utility:
