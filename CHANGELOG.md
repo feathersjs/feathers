@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+### Bug Fixes
+
+- **authentication-oauth:** Move Grant error handling to the correct spot ([#3297](https://github.com/feathersjs/feathers/issues/3297)) ([e9c0828](https://github.com/feathersjs/feathers/commit/e9c0828937453c3f0a1bd16010089b825185eab6))
+- **schema:** Add typescript as peerDependency ([#3287](https://github.com/feathersjs/feathers/issues/3287)) ([cb562ee](https://github.com/feathersjs/feathers/commit/cb562eeddfa88e34fe5727d4000fa037746b0249))
+- **typebox:** Allow default value in StringEnum ([#3281](https://github.com/feathersjs/feathers/issues/3281)) ([25af09a](https://github.com/feathersjs/feathers/commit/25af09ad065e72768bf88bc8b529b68f2ca4da17))
+
 ## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
 
 ### Bug Fixes
