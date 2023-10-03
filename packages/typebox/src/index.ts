@@ -49,8 +49,8 @@ export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv):
  * @param allowedValues array of strings for the enum
  * @returns TypeBox.Type
  */
-export function StringEnum<T extends string[]>(allowedValues: [...T]) {
-  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
+export function StringEnum<T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) {
+  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
 }
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
