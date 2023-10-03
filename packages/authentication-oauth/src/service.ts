@@ -1,6 +1,6 @@
 import { createDebug } from '@feathersjs/commons'
 import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
-import { FeathersError } from '@feathersjs/errors'
+import { FeathersError, GeneralError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
@@ -28,7 +28,7 @@ export class OAuthError extends FeathersError {
   constructor(
     message: string,
     data: any,
-    public location?: string
+    public location: string
   ) {
     super(message, 'NotAuthenticated', 401, 'not-authenticated', data)
   }
@@ -121,11 +121,11 @@ export class OAuthService {
       ...payload
     }
 
-    if (payload.error) {
-      throw new OAuthError(payload.error_description || payload.error, payload)
-    }
-
     try {
+      if (payload.error) {
+        throw new GeneralError(payload.error_description || payload.error, payload)
+      }
+
       debug(`Calling ${authService}.create authentication with strategy ${name}`)
 
       const authResult = await this.service.create(authentication, authParams)
