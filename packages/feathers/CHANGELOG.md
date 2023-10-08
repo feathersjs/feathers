@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/feathers
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+### Bug Fixes
+
+- **core:** Ensure .service does not access Object properties ([#3235](https://github.com/feathersjs/feathers/issues/3235)) ([c0b670a](https://github.com/feathersjs/feathers/commit/c0b670ac4c7bf145e36b59ea89d1387b5514c237))
+
 ## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
 
 **Note:** Version bump only for package @feathersjs/feathers

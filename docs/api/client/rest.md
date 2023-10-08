@@ -22,7 +22,7 @@ The following chapter describes the use of
 npm install @feathersjs/rest-client --save
 ```
 
-`@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](http://visionmedia.github.io/superagent/) or [Axios](https://github.com/mzabriskie/axios).
+`@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](https://github.com/ladjs/superagent) or [Axios](https://github.com/mzabriskie/axios).
 
 <BlockQuote type="info">
 

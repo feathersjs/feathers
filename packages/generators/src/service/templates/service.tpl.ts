@@ -65,12 +65,12 @@ export const ${camelName} = (app: Application) => {
         authenticate('jwt'),`
           : ''
       } ${
-  schema
-    ? `
+        schema
+          ? `
         schemaHooks.resolveExternal(${camelName}ExternalResolver),
         schemaHooks.resolveResult(${camelName}Resolver),`
-    : ''
-}
+          : ''
+      }
       ],${
         isEntityService
           ? `

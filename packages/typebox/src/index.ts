@@ -1,4 +1,13 @@
-import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions, TIntersect } from '@sinclair/typebox'
+import {
+  Type,
+  TObject,
+  TInteger,
+  TOptional,
+  TSchema,
+  ObjectOptions,
+  TIntersect,
+  TUnion
+} from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -17,8 +26,10 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject | TIntersect, validator: Ajv): Validator<T, R> =>
-  jsonSchema.getValidator(schema as any, validator)
+export const getValidator = <T = any, R = T>(
+  schema: TObject | TIntersect | TUnion<TObject[]>,
+  validator: Ajv
+): Validator<T, R> => jsonSchema.getValidator(schema as any, validator)
 
 /**
  * Returns compiled validation functions to validate data for the `create`, `update` and `patch`
@@ -38,8 +49,8 @@ export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv):
  * @param allowedValues array of strings for the enum
  * @returns TypeBox.Type
  */
-export function StringEnum<T extends string[]>(allowedValues: [...T]) {
-  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
+export function StringEnum<T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) {
+  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
 }
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
@@ -61,13 +72,16 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
  * @returns The `$sort` syntax schema
  */
 export function sortDefinition<T extends TObject>(schema: T) {
-  const properties = Object.keys(schema.properties).reduce((res, key) => {
-    const result = res as any
+  const properties = Object.keys(schema.properties).reduce(
+    (res, key) => {
+      const result = res as any
 
-    result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
+      result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
 
-    return result
-  }, {} as { [K in keyof T['properties']]: TOptional<TInteger> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: TOptional<TInteger> }
+  )
 
   return Type.Object(properties, { additionalProperties: false })
 }
@@ -125,14 +139,17 @@ export const queryProperties = <
   definition: T,
   extensions: X = {} as X
 ) => {
-  const properties = Object.keys(definition.properties).reduce((res, key) => {
-    const result = res as any
-    const value = definition.properties[key]
+  const properties = Object.keys(definition.properties).reduce(
+    (res, key) => {
+      const result = res as any
+      const value = definition.properties[key]
 
-    result[key] = queryProperty(value, extensions[key])
+      result[key] = queryProperty(value, extensions[key])
 
-    return result
-  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> }
+  )
 
   return Type.Optional(Type.Object(properties, { additionalProperties: false }))
 }

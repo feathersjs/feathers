@@ -141,14 +141,17 @@ export const queryProperties = <
   definitions: T,
   extensions: X = {} as X
 ) =>
-  Object.keys(definitions).reduce((res, key) => {
-    const result = res as any
-    const definition = definitions[key]
+  Object.keys(definitions).reduce(
+    (res, key) => {
+      const result = res as any
+      const definition = definitions[key]
 
-    result[key] = queryProperty(definition as JSONSchemaDefinition, extensions[key as keyof T])
+      result[key] = queryProperty(definition as JSONSchemaDefinition, extensions[key as keyof T])
 
-    return result
-  }, {} as { [K in keyof T]: PropertyQuery<T[K], X[K]> })
+      return result
+    },
+    {} as { [K in keyof T]: PropertyQuery<T[K], X[K]> }
+  )
 
 /**
  * Creates a JSON schema for the complete Feathers query syntax including `$limit`, $skip`
@@ -198,16 +201,19 @@ export const querySyntax = <
     },
     $sort: {
       type: 'object',
-      properties: keys.reduce((res, key) => {
-        const result = res as any
+      properties: keys.reduce(
+        (res, key) => {
+          const result = res as any
 
-        result[key] = {
-          type: 'number',
-          enum: [1, -1]
-        }
+          result[key] = {
+            type: 'number',
+            enum: [1, -1]
+          }
 
-        return result
-      }, {} as { [K in keyof T]: { readonly type: 'number'; readonly enum: [1, -1] } })
+          return result
+        },
+        {} as { [K in keyof T]: { readonly type: 'number'; readonly enum: [1, -1] } }
+      )
     },
     $select: {
       type: 'array',
@@ -229,4 +235,4 @@ export const ObjectIdSchema = () =>
       { type: 'string', objectid: true },
       { type: 'object', properties: {}, additionalProperties: false }
     ]
-  } as const)
+  }) as const

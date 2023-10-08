@@ -65,10 +65,11 @@ The Knex specific adapter options are:
 
 The [common API options](./common.md#options) are:
 
-- `id {string}` (_optional_, default: `'_id'`) - The name of the id field property. By design, MongoDB will always add an `_id` property.
-- `events {string[]}` (_optional_) - A list of [custom service events](/api/events.html#custom-events) sent by this service
-- `paginate {Object}` (_optional_) - A [pagination object](/api/databases/common.html#pagination) containing a `default` and `max` page size
-- `multi {string[]|true}` (_optional_) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+- `id {string}` (_optional_, default: `'id'`) - The name of the id field property. By design, Knex will always add an `id` property.
+- `paginate {Object}` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
+- `multi {string[]|boolean}` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+
+There are additionally several legacy options in the [common API options](./common.md#options)
 
 ### getModel([params])
 

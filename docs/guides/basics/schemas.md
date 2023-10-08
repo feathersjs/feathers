@@ -49,7 +49,7 @@ First we need to update the `src/services/users/users.schema.js` file with the s
 
 <DatabaseBlock global-id="sql">
 
-```ts{2,17-18,34,44-54,82-86}
+```ts{2,17-18,34,44-54,68,82-86}
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import crypto from 'crypto'
 import { resolve } from '@feathersjs/schema'

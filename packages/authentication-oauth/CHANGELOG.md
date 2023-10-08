@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+### Bug Fixes
+
+- **authentication-oauth:** Move Grant error handling to the correct spot ([#3297](https://github.com/feathersjs/feathers/issues/3297)) ([e9c0828](https://github.com/feathersjs/feathers/commit/e9c0828937453c3f0a1bd16010089b825185eab6))
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+### Bug Fixes
+
+- **authentication-oauth:** Properly handle all oAuth errors ([#3284](https://github.com/feathersjs/feathers/issues/3284)) ([148a9a3](https://github.com/feathersjs/feathers/commit/148a9a319b8e29138fda82d6c03bb489a7b4a6e1))
+
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/authentication-oauth
+
 ## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
 
 ### Bug Fixes

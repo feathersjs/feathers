@@ -92,7 +92,7 @@ The `HookContext` type exports a [hook context](../../api/hooks.md) type with th
 export type HookContext<S = any> = FeathersHookContext<Application, S>
 ```
 
-Use `HookContext<FeathersService<UserService>>` to get the full hook context for a service.
+Use `HookContext<UserService>` to get the full hook context for a service.
 
 ## Services and Params
 

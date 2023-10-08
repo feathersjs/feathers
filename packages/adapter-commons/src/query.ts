@@ -32,20 +32,23 @@ const validateQueryProperty = (query: any, operators: string[] = []): Query => {
 const getFilters = (query: Query, settings: FilterQueryOptions) => {
   const filterNames = Object.keys(settings.filters)
 
-  return filterNames.reduce((current, key) => {
-    const queryValue = query[key]
-    const filter = settings.filters[key]
+  return filterNames.reduce(
+    (current, key) => {
+      const queryValue = query[key]
+      const filter = settings.filters[key]
 
-    if (filter) {
-      const value = typeof filter === 'function' ? filter(queryValue, settings) : queryValue
+      if (filter) {
+        const value = typeof filter === 'function' ? filter(queryValue, settings) : queryValue
 
-      if (value !== undefined) {
-        current[key] = value
+        if (value !== undefined) {
+          current[key] = value
+        }
       }
-    }
 
-    return current
-  }, {} as { [key: string]: any })
+      return current
+    },
+    {} as { [key: string]: any }
+  )
 }
 
 const getQuery = (query: Query, settings: FilterQueryOptions) => {
@@ -93,11 +96,14 @@ export const FILTERS: FilterSettings = {
       return sort
     }
 
-    return Object.keys(sort).reduce((result, key) => {
-      result[key] = typeof sort[key] === 'object' ? sort[key] : parse(sort[key])
+    return Object.keys(sort).reduce(
+      (result, key) => {
+        result[key] = typeof sort[key] === 'object' ? sort[key] : parse(sort[key])
 
-      return result
-    }, {} as { [key: string]: number })
+        return result
+      },
+      {} as { [key: string]: number }
+    )
   },
   $limit: (_limit: any, { paginate }: FilterQueryOptions) => getLimit(_limit, paginate),
   $select: (select: any) => {

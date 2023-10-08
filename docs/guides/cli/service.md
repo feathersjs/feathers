@@ -60,7 +60,7 @@ app.service(messagePath).hooks({
 
 Note that you can add hooks to a specific method as documented in the [hook registration API](../../api/hooks.md#registering-hooks). For example, to use the [profiling hook](./hook.md#profiling-example) only for `find` and `get` the registration can be updated like this:
 
-```ts{8-9}
+```ts{12-13}
 import { profiler } from '../../hooks/profiler'
 // ...
 

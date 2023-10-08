@@ -25,7 +25,7 @@ This chapter describes how to set up Feathers as the client in Node, React Nativ
 
 ## Typed client
 
-A Feathers application generated with Feathers v5 or later now exports a client file, including the types you defined in [schemas](./schema/index.md) on the server. For more information see the CLI guide (tbd)
+A Feathers application generated with Feathers v5 or later now exports a client file, including the types you defined in [schemas](./schema/index.md) on the server. For more information see the [CLI guide](../guides/cli/client.md)
 
 ## Node
 
