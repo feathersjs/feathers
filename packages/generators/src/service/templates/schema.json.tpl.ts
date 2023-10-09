@@ -15,6 +15,7 @@ const authFieldsTemplate = (authStrategies: string[]) =>
 const template = ({
   camelName,
   upperName,
+  fileName,
   relative,
   authStrategies,
   isEntityService,
@@ -35,6 +36,7 @@ import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/${
   fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
 }validators'
+import {${upperName}Service} from './${fileName}.class'
 
 // Main data model schema
 export const ${camelName}Schema = {
@@ -54,9 +56,9 @@ export const ${camelName}Schema = {
 } as const
 export type ${upperName} = FromSchema<typeof ${camelName}Schema>
 export const ${camelName}Validator = getValidator(${camelName}Schema, dataValidator)
-export const ${camelName}Resolver = resolve<${upperName}, HookContext>({})
+export const ${camelName}Resolver = resolve<${upperName}, HookContext<${upperName}Service>>({})
 
-export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext>({
+export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext<${upperName}Service>>({
   ${localTemplate(
     authStrategies,
     `// The password should never be visible externally
@@ -76,7 +78,7 @@ export const ${camelName}DataSchema = {
 } as const
 export type ${upperName}Data = FromSchema<typeof ${camelName}DataSchema>
 export const ${camelName}DataValidator = getValidator(${camelName}DataSchema, dataValidator)
-export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext>({
+export const ${camelName}DataResolver = resolve<${upperName}Data, HookContext<${upperName}Service>>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
@@ -92,7 +94,7 @@ export const ${camelName}PatchSchema = {
 } as const
 export type ${upperName}Patch = FromSchema<typeof ${camelName}PatchSchema>
 export const ${camelName}PatchValidator = getValidator(${camelName}PatchSchema, dataValidator)
-export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext>({
+export const ${camelName}PatchResolver = resolve<${upperName}Patch, HookContext<${upperName}Service>>({
   ${localTemplate(authStrategies, `password: passwordHash({ strategy: 'local' })`)}
 })
 
@@ -107,7 +109,7 @@ export const ${camelName}QuerySchema = {
 } as const
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
-export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext>({
+export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext<${upperName}Service>>({
   ${
     isEntityService
       ? `
