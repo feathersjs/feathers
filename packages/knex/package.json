@@ -57,7 +57,7 @@
     "@feathersjs/feathers": "^5.0.10"
   },
   "peerDependencies": {
-    "knex": "^3.0.1"
+    "knex": ">= 2.1.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.10",
