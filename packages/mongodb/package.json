@@ -63,9 +63,9 @@
     "@feathersjs/adapter-tests": "^5.0.10",
     "@feathersjs/schema": "^5.0.10",
     "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.8.4",
     "mocha": "^10.2.0",
-    "mongodb-memory-server": "^8.15.1",
+    "mongodb-memory-server": "^9.0.0",
     "shx": "^0.3.4",
     "typescript": "^5.2.2"
   },

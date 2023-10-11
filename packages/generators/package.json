@@ -77,9 +77,10 @@
     "@feathersjs/transport-commons": "^5.0.10",
     "@feathersjs/typebox": "^5.0.10",
     "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.8.4",
     "@types/prettier": "^2.7.3",
     "axios": "^1.5.1",
+    "knex": "^3.0.1",
     "mocha": "^10.2.0",
     "mongodb": "^6.1.0",
     "mssql": "^10.0.1",
@@ -88,7 +89,7 @@
     "shx": "^0.3.4",
     "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",
-    "type-fest": "^4.3.3",
+    "type-fest": "^4.4.0",
     "typescript": "^5.2.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
