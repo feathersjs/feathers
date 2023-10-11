@@ -3,6 +3,10 @@ import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
+type Entries<T> = {
+  [K in keyof T]: [K, T[K]]
+}[keyof T][]
+type GetKeyByValue<Obj, Value> = Extract<Entries<Obj>[number], [PropertyKey, Value]>[0]
 
 export type { NextFunction }
 
@@ -355,6 +359,8 @@ export interface Http {
 
 export type HookType = 'before' | 'after' | 'error' | 'around'
 
+type Serv<FA> = FA extends Application<infer S> ? S : never
+
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
@@ -370,7 +376,7 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    * A read only property and contains the service name (or path) without leading or
    * trailing slashes.
    */
-  readonly path: string
+  path: 0 extends 1 & S ? keyof Serv<A> & string : GetKeyByValue<Serv<A>, S> & string
   /**
    * A read only property and contains the service this hook currently runs on.
    */
