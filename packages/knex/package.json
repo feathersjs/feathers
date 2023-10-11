@@ -57,14 +57,14 @@
     "@feathersjs/feathers": "^5.0.10"
   },
   "peerDependencies": {
-    "knex": "^2.5.1"
+    "knex": ">= 2.1.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.10",
     "@feathersjs/schema": "^5.0.10",
     "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.2",
-    "knex": "^2.5.1",
+    "@types/node": "^20.8.4",
+    "knex": "^3.0.1",
     "mocha": "^10.2.0",
     "pg": "^8.11.3",
     "shx": "^0.3.4",

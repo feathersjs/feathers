@@ -64,7 +64,7 @@
     "@types/encodeurl": "^1.0.0",
     "@types/lodash": "^4.14.199",
     "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.8.4",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
