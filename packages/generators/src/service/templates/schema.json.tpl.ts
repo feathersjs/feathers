@@ -36,7 +36,7 @@ import type { HookContext } from '${relative}/declarations'
 import { dataValidator, queryValidator } from '${relative}/${
   fileExists(cwd, lib, 'schemas') ? 'schemas/' : '' // This is for legacy backwards compatibility
 }validators'
-import {${upperName}Service} from './${fileName}.class'
+import type { ${upperName}Service } from './${fileName}.class'
 
 // Main data model schema
 export const ${camelName}Schema = {
