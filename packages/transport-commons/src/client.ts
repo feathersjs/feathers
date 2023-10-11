@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { convert } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
+import { Id, NullableId, Paginated, Params, ServiceInterface } from '@feathersjs/feathers'
 
 const debug = createDebug('@feathersjs/transport-commons/client')
 
@@ -103,7 +103,7 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   }
 
   _find(params: Params = {}) {
-    return this.send<T | T[]>('find', params.query || {})
+    return this.send<Paginated<T> | T[]>('find', params.query || {})
   }
 
   find(params: Params = {}) {
