@@ -17,18 +17,12 @@ declare module './declarations' {
 
 export const ${database} = (app: Application) => {
   const connection = app.get('${database}') as string
-  let database
-  const positionOfSlash = connection.lastIndexOf('/') + 1;
   
-  if (connection.includes('?')) {
-    const indexOfQuestionMark = connection.indexOf('?');
-    database = connection.substring(positionOfSlash, indexOfQuestionMark);
-  } else {
-    database = connection.substring(positionOfSlash);
-  }
+  const databaseRegex = /\\/([a-zA-Z0-9_\\-]+)(?:\\?|$)/;
+  const databaseName = databaseRegex.exec(connection)?.[1];
   
   const mongoClient = MongoClient.connect(connection)
-    .then(client => client.db(database));
+    .then(client => client.db(databaseName));
     
   app.set('${database}Client', mongoClient)
 }
