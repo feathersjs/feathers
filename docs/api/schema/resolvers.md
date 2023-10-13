@@ -1,7 +1,6 @@
 ---
 outline: deep
 ---
-
 # Resolvers
 
 Resolvers dynamically resolve individual properties based on a context, in a Feathers application usually the [hook context](../hooks.md#hook-context).
@@ -155,11 +154,11 @@ const userResolver = resolve<User, MyContext>(
 
 ## Hooks
 
-In a Feathers application, resolvers are used through [hooks](../hooks.md) to convert service method query, data and responses. The context for these resolvers is always the [hook context](../hooks.md#hook-context).
+In a Feathers application, resolvers are used through [hooks](../hooks.md) to convert service `query`, `data` and `response`. The context for these resolvers is always the [hook context](../hooks.md#hook-context).
 
 ### resolveData
 
-Data resolvers use the `hooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
+Data resolvers use the `hooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple objects containing resolvers which will run in the order they are passed. Subsequent resolver objects will receive the output from previous resolvers. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
 
 ```ts
 import { hooks as schemaHooks, resolve } from '@feathersjs/schema'
