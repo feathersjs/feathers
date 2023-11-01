@@ -63,8 +63,8 @@
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.4",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "^20.8.10",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
