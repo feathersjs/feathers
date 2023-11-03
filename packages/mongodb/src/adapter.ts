@@ -301,12 +301,12 @@ export class MongoDbAdapter<
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
 
-  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
-  async _patch(id: AdapterId, data: PatchData, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableAdapterId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: AdapterId, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
+  async _patch(id: NullableAdapterId, data: PatchData | Partial<Result>, _params?: ServiceParams): Promise<Result | Result[]>
   async _patch(
     id: NullableAdapterId,
-    _data: PatchData,
+    _data: PatchData | Partial<Result>,
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('patch', params)) {

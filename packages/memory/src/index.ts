@@ -194,12 +194,12 @@ export class MemoryAdapter<
     return this._get(id, params)
   }
 
-  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
-  async _patch(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: Id, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
+  async _patch(id: NullableId, data: PatchData | Partial<Result>, _params?: ServiceParams): Promise<Result | Result[]>
   async _patch(
     id: NullableId,
-    data: PatchData,
+    data: PatchData | Partial<Result>,
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('patch', params)) {
