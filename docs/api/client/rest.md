@@ -65,7 +65,7 @@ app.configure(restClient.fetch(window.fetch.bind(window)))
 const messages = app.service('messages')
 ```
 
-The base URL is relative from where services are registered. That means that means that
+The base URL is relative from where services are registered. That means that
 
 - A service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`
 - A base URL of `http://api.feathersjs.com/api/v1` would be `app.service('messages')`.
