@@ -71,7 +71,7 @@ export const messageDataValidator = getValidator(messageDataSchema, dataValidato
 export const messageDataResolver = resolve<Message, HookContext>({})
 ```
 
-### Patch schema and resolvers
+## Patch schema and Resolvers
 
 The patch schema is used for updating existing entries calling [service.patch](../../api/services.md#patchid-data-params). This is often different then the data schema for new entries and by default is a partial of the [main schema](#main-schemas-and-resolvers).
 
@@ -87,7 +87,7 @@ export const messagePatchResolver = resolve<Message, HookContext>({})
 
 ## Query Schema and Resolvers
 
-The query schema defines what can be sent in queries in [parmas.query](../../api/services.md#params) and also converts strings to the correct type.
+The query schema defines what can be sent in queries in [params.query](../../api/services.md#params) and also converts strings to the correct type.
 
 ```ts
 // Schema for allowed query properties

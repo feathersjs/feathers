@@ -1,6 +1,6 @@
 import { createDebug } from '@feathersjs/commons'
 import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
-import { FeathersError } from '@feathersjs/errors'
+import { FeathersError, GeneralError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
@@ -114,6 +114,7 @@ export class OAuthService {
       query,
       redirect
     }
+
     const payload = grant?.response || result?.session?.response || result?.state?.response || params.query
     const authentication = {
       strategy: name,
@@ -121,6 +122,10 @@ export class OAuthService {
     }
 
     try {
+      if (payload.error) {
+        throw new GeneralError(payload.error_description || payload.error, payload)
+      }
+
       debug(`Calling ${authService}.create authentication with strategy ${name}`)
 
       const authResult = await this.service.create(authentication, authParams)

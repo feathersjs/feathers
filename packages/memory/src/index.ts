@@ -76,7 +76,6 @@ export class MemoryAdapter<
     const { query, filters } = this.getQuery(params)
 
     let values = _.values(this.store)
-    const total = values.length
     const hasSkip = filters.$skip !== undefined
     const hasSort = filters.$sort !== undefined
     const hasLimit = filters.$limit !== undefined
@@ -86,10 +85,40 @@ export class MemoryAdapter<
       values.sort(this.options.sorter(filters.$sort))
     }
 
+    if (paginate) {
+      if (hasQuery) {
+        values = values.filter(this.options.matcher(query))
+      }
+
+      const total = values.length
+
+      if (hasSkip) {
+        values = values.slice(filters.$skip)
+      }
+
+      if (hasLimit) {
+        values = values.slice(0, filters.$limit)
+      }
+
+      const result: Paginated<Result> = {
+        total,
+        limit: filters.$limit,
+        skip: filters.$skip || 0,
+        data: values.map((value) => _select(value, params, this.id))
+      }
+
+      return result
+    }
+
+    /*  Without pagination, we don't have to match every result and gain considerable performance improvements with a breaking for loop. */
     if (hasQuery || hasLimit || hasSkip) {
       let skipped = 0
       const matcher = this.options.matcher(query)
       const matched = []
+
+      if (hasLimit && filters.$limit === 0) {
+        return []
+      }
 
       for (let index = 0, length = values.length; index < length; index++) {
         const value = values[index]
@@ -110,23 +139,10 @@ export class MemoryAdapter<
         }
       }
 
-      values = matched
-    } else {
-      values = values.map((value) => _select(value, params, this.id))
+      return matched
     }
 
-    const result: Paginated<Result> = {
-      total: hasQuery ? values.length : total,
-      limit: filters.$limit,
-      skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : values
-    }
-
-    if (!paginate) {
-      return result.data
-    }
-
-    return result
+    return values.map((value) => _select(value, params, this.id))
   }
 
   async _get(id: Id, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -178,12 +194,12 @@ export class MemoryAdapter<
     return this._get(id, params)
   }
 
-  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
-  async _patch(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: Id, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
+  async _patch(id: NullableId, data: PatchData | Partial<Result>, _params?: ServiceParams): Promise<Result | Result[]>
   async _patch(
     id: NullableId,
-    data: PatchData,
+    data: PatchData | Partial<Result>,
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('patch', params)) {

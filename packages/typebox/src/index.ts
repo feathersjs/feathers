@@ -1,4 +1,13 @@
-import { Type, TObject, TInteger, TOptional, TSchema, ObjectOptions, TIntersect } from '@sinclair/typebox'
+import {
+  Type,
+  TObject,
+  TInteger,
+  TOptional,
+  TSchema,
+  ObjectOptions,
+  TIntersect,
+  TUnion
+} from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -17,8 +26,10 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject | TIntersect, validator: Ajv): Validator<T, R> =>
-  jsonSchema.getValidator(schema as any, validator)
+export const getValidator = <T = any, R = T>(
+  schema: TObject | TIntersect | TUnion<TObject[]>,
+  validator: Ajv
+): Validator<T, R> => jsonSchema.getValidator(schema as any, validator)
 
 /**
  * Returns compiled validation functions to validate data for the `create`, `update` and `patch`
@@ -38,8 +49,8 @@ export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv):
  * @param allowedValues array of strings for the enum
  * @returns TypeBox.Type
  */
-export function StringEnum<T extends string[]>(allowedValues: [...T]) {
-  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
+export function StringEnum<T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) {
+  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
 }
 
 const arrayOfKeys = <T extends TObject>(type: T) => {

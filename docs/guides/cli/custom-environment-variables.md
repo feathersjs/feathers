@@ -38,6 +38,10 @@ And update `src/app.ts` as follows:
 import * as dotenv from 'dotenv'
 dotenv.config()
 
+// or for ES6
+
+import 'dotenv/config';
+
 import configuration from '@feathersjs/configuration'
 ```
 

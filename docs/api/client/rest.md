@@ -65,7 +65,7 @@ app.configure(restClient.fetch(window.fetch.bind(window)))
 const messages = app.service('messages')
 ```
 
-The base URL is relative from where services are registered. That means that means that
+The base URL is relative from where services are registered. That means that
 
 - A service at `http://api.feathersjs.com/api/v1/messages` with a base URL of `http://api.feathersjs.com` would be available as `app.service('api/v1/messages')`
 - A base URL of `http://api.feathersjs.com/api/v1` would be `app.service('messages')`.
@@ -493,3 +493,55 @@ curl -H "Content-Type: application/json" -H "X-Service-Method: myCustomMethod" -
 ```
 
 This will call `messages.myCustomMethod({ message: 'Hello world' }, {})`.
+
+### Route placeholders
+
+Service URLs can have placeholders, e.g. `users/:userId/messages`. (see in [express](../express.md#params.route) or [koa](../koa.md#params.route))
+
+You can call the client with route placeholders in the `params.route` property:
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import rest from '@feathersjs/rest-client'
+
+const app = feathers()
+
+// Connect to the same as the browser URL (only in the browser)
+const restClient = rest()
+
+// Connect to a different URL
+const restClient = rest('http://feathers-api.com')
+
+// Configure an AJAX library (see below) with that client
+app.configure(restClient.fetch(window.fetch.bind(window)))
+
+// Connect to the `http://feathers-api.com/messages` service
+const messages = app.service('users/:userId/messages')
+
+// Call the `http://feathers-api.com/users/2/messages` URL
+messages.find({
+  route: {
+    userId: 2,
+  },
+})
+```
+
+This can also be achieved by using the client bundled,
+sharing several `servicePath` variable exported in the [service shared file](`../../guides/cli/service.shared.md#Variables`) file.
+
+```ts
+import rest from '@feathersjs/rest-client'
+// usersMessagesPath contains 'users/:userId/messages'
+import { createClient, usersMessagesPath } from 'my-app'
+
+const connection = rest('https://myapp.com').fetch(window.fetch.bind(window))
+
+const client = createClient(connection)
+
+// Call the `https://myapp.com/users/2/messages` URL
+client.service(usersMessagesPath).find({
+  route: {
+    userId: 2
+  }
+})
+```

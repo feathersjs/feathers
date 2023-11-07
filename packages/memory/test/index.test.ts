@@ -93,12 +93,31 @@ describe('Feathers Memory Service', () => {
   const events = ['testing']
   const app = feathers<{
     people: MemoryService<Person>
+    'people-paginate': MemoryService<Person>
     'people-customid': MemoryService<Person>
     animals: MemoryService<Animal>
     matcher: MemoryService
   }>()
 
-  app.use('people', new MemoryService<Person>({ events }))
+  app.use(
+    'people',
+    new MemoryService<Person>({
+      events
+    })
+  )
+
+  app.use(
+    'people-paginate',
+    new MemoryService<Person>({
+      events,
+      multi: true,
+      paginate: {
+        default: 10,
+        max: 100
+      }
+    })
+  )
+
   app.use(
     'people-customid',
     new MemoryService<Person>({
@@ -216,6 +235,44 @@ describe('Feathers Memory Service', () => {
     assert.deepStrictEqual(results[0], { id: person.id, name: 'Tester' })
 
     await people.remove(person.id)
+  })
+
+  it('using $limit still returns correct total', async () => {
+    const service = app.service('people-paginate')
+
+    for (let i = 0; i < 10; i++) {
+      await service.create({
+        name: `Tester ${i}`,
+        age: 19
+      })
+
+      await service.create({
+        name: `Tester ${i}`,
+        age: 20
+      })
+    }
+
+    try {
+      const results = await service.find({
+        query: {
+          $skip: 3,
+          $limit: 5,
+          age: 19
+        }
+      })
+
+      assert.strictEqual(results.total, 10)
+      assert.strictEqual(results.skip, 3)
+      assert.strictEqual(results.limit, 5)
+    } finally {
+      await service.remove(null, {
+        query: {
+          age: {
+            $in: [19, 20]
+          }
+        }
+      })
+    }
   })
 
   testSuite(app, errors, 'people')
