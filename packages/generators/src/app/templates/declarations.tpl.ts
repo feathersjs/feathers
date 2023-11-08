@@ -13,7 +13,7 @@ ${
     : `import { ApplicationConfiguration } from './configuration'`
 }
 
-export { NextFunction }
+export type { NextFunction }
 
 // The types for app.get(name) and app.set(name)
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
