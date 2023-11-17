@@ -99,11 +99,12 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
   methods(this: any, ...names: string[]) {
     names.forEach((method) => {
       const _method = `_${method}`
-      this[_method] = function (data: any, params: Params = {}) {
-        return this.send(method, data, params.query || {}, params.route || {})
+      this[_method] = function (...args: [Id | any | Params, (any | Params)?, Params?]) {
+        const params = (args.pop() || {}) as Params
+        return this.send(method, ...args, params.query || {}, params.route || {})
       }
-      this[method] = function (data: any, params: Params = {}) {
-        return this[_method](data, params, params.route || {})
+      this[method] = function (...args: [Id | any | Params, (any | Params)?, Params?]) {
+        return this[_method](...args)
       }
     })
     return this

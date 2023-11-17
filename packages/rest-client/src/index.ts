@@ -1,4 +1,9 @@
-import { Application, TransportConnection, defaultServiceMethods } from '@feathersjs/feathers'
+import {
+  Application,
+  TransportConnection,
+  MethodDefinition,
+  defaultServiceMethods
+} from '@feathersjs/feathers'
 
 import { Base } from './base'
 import { AxiosClient } from './axios'
@@ -54,7 +59,10 @@ export default function restClient<ServiceTypes = any>(base = '') {
         app.defaultService = defaultService
         app.mixins.unshift((service, _location, options) => {
           if (options && options.methods && service instanceof Base) {
-            const customMethods = options.methods.filter((name) => !defaultServiceMethods.includes(name))
+            const methods = (options.methods as (string | MethodDefinition)[]).map((method) =>
+              typeof method === 'string' ? method : method.key
+            )
+            const customMethods = methods.filter((name) => !defaultServiceMethods.includes(name))
 
             service.methods(...customMethods)
           }

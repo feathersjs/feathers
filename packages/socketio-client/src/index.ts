@@ -3,6 +3,7 @@ import { Socket } from 'socket.io-client'
 import {
   Application,
   TransportConnection,
+  MethodDefinition,
   defaultEventMap,
   defaultServiceMethods
 } from '@feathersjs/feathers'
@@ -46,7 +47,10 @@ export default function socketioClient<Services = any>(connection: Socket, optio
     app.defaultService = defaultService
     app.mixins.unshift((service, _location, options) => {
       if (options && options.methods && service instanceof Service) {
-        const customMethods = options.methods.filter((name) => !defaultServiceMethods.includes(name))
+        const methods = (options.methods as (string | MethodDefinition)[]).map((method) =>
+          typeof method === 'string' ? method : method.key
+        )
+        const customMethods = methods.filter((name) => !defaultServiceMethods.includes(name))
 
         service.methods(...customMethods)
       }
