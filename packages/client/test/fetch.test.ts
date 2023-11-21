@@ -6,19 +6,24 @@ import { clientTests } from '@feathersjs/tests'
 
 import * as feathers from '../dist/feathers'
 import app from './fixture'
+import getPort from 'get-port'
 
-describe('fetch REST connector', function () {
+describe('fetch REST connector', async function () {
   let server: Server
-  const rest = feathers.rest('http://localhost:8889')
+  const port = await getPort()
+  const rest = feathers.rest(`http://localhost:${port}`)
   const client = feathers.default().configure(rest.fetch(fetch))
 
-  before(async () => {
-    server = await app().listen(8889)
+  beforeAll(async () => {
+    server = await app().listen(port)
   })
 
-  after(function (done) {
-    server.close(done)
-  })
+  afterAll(
+    () =>
+      new Promise<void>((done) => {
+        server.close(() => done())
+      })
+  )
 
   clientTests(client, 'todos')
 })

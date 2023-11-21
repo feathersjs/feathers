@@ -19,7 +19,7 @@ describe('@feathersjs/schema/hooks', () => {
     }
   })
 
-  before(async () => {
+  beforeAll(async () => {
     user = (
       await app.service('users').create([
         {

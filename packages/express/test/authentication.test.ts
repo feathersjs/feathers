@@ -20,7 +20,7 @@ describe('@feathersjs/express/authentication', () => {
   let user: any
   let authResult: AuthenticationResult
 
-  before(async () => {
+  beforeAll(async () => {
     const expressApp = expressify(feathers()).use(express.json()).configure(express.rest())
 
     app = createApplication(expressApp as any) as unknown as express.Application
@@ -61,7 +61,7 @@ describe('@feathersjs/express/authentication', () => {
     authResult = res.data
   })
 
-  after(() => app.teardown())
+  afterAll(() => app.teardown())
 
   describe('service authentication', () => {
     it('successful local authentication', () => {

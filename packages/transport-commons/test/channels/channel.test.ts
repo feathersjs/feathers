@@ -115,17 +115,18 @@ describe('app.channel', () => {
         })
       })
 
-      it('empty', (done) => {
-        const channel = app.channel('test')
-        const c1 = { id: 1 }
-        const c2 = { id: 2 }
+      it('empty', () =>
+        new Promise<void>((done) => {
+          const channel = app.channel('test')
+          const c1 = { id: 1 }
+          const c2 = { id: 2 }
 
-        channel.once('empty', done)
+          channel.once('empty', done)
 
-        channel.join(c1, c2)
-        channel.leave(c1)
-        channel.leave(c2)
-      })
+          channel.join(c1, c2)
+          channel.leave(c1)
+          channel.leave(c2)
+        }))
 
       it('removes an empty channel', () => {
         const channel = app.channel('test')

@@ -52,142 +52,148 @@ describe('@feathersjs/transport-commons', () => {
     return options.done
   })
 
-  it('`connection` event', (done) => {
-    const socket = new EventEmitter()
+  it('`connection` event', () =>
+    new Promise<void>((done) => {
+      const socket = new EventEmitter()
 
-    app.once('connection', (data) => {
-      assert.strictEqual(connection, data)
-      done()
-    })
+      app.once('connection', (data) => {
+        assert.strictEqual(connection, data)
+        done()
+      })
 
-    provider.emit('connection', socket)
-  })
+      provider.emit('connection', socket)
+    }))
 
   describe('method name based socket events', () => {
-    it('.get without params', (done) => {
-      const socket = new EventEmitter()
+    it('.get without params', () =>
+      new Promise<void>((done) => {
+        const socket = new EventEmitter()
 
-      provider.emit('connection', socket)
+        provider.emit('connection', socket)
 
-      socket.emit('get', 'myservice', 10, (error: any, result: any) => {
-        try {
-          assert.ok(!error)
-          assert.deepStrictEqual(result, {
-            id: 10,
-            params: Object.assign(
-              {
-                query: {},
-                route: {},
-                connection
-              },
-              connection
-            )
-          })
-          done()
-        } catch (e: any) {
-          done(e)
-        }
-      })
-    })
-
-    it('method with invalid service name and arguments', (done) => {
-      const socket = new EventEmitter()
-
-      provider.emit('connection', socket)
-
-      socket.emit('get', null, (error: any) => {
-        assert.strictEqual(error.name, 'NotFound')
-        assert.strictEqual(error.message, 'Invalid service path')
-        done()
-      })
-    })
-
-    it('method with implicit toString errors properly', (done) => {
-      const socket = new EventEmitter()
-
-      provider.emit('connection', socket)
-
-      socket.emit('get', { toString: '' }, (error: any) => {
-        assert.strictEqual(error.name, 'NotFound')
-        assert.strictEqual(error.message, 'Invalid service path')
-        done()
-      })
-    })
-
-    it('.create with params', (done) => {
-      const socket = new EventEmitter()
-      const data = {
-        test: 'data'
-      }
-
-      provider.emit('connection', socket)
-
-      socket.emit(
-        'create',
-        'myservice',
-        data,
-        {
-          fromQuery: true
-        },
-        (error: any, result: any) => {
+        socket.emit('get', 'myservice', 10, (error: any, result: any) => {
           try {
-            const params = Object.assign(
-              {
-                query: { fromQuery: true },
-                route: {},
-                connection
-              },
-              connection
-            )
-
-            assert.ok(!error)
-            assert.deepStrictEqual(result, Object.assign({ params }, data))
-            done()
-          } catch (e: any) {
-            done(e)
-          }
-        }
-      )
-    })
-
-    it('custom method with params', (done) => {
-      const socket = new EventEmitter()
-      const data = {
-        test: 'data'
-      }
-
-      provider.emit('connection', socket)
-
-      socket.emit(
-        'custom',
-        'myservice',
-        data,
-        {
-          fromQuery: true
-        },
-        (error: any, result: any) => {
-          try {
-            const params = Object.assign(
-              {
-                query: { fromQuery: true },
-                route: {},
-                connection
-              },
-              connection
-            )
-
             assert.ok(!error)
             assert.deepStrictEqual(result, {
-              ...data,
-              params,
-              message: 'From custom method'
+              id: 10,
+              params: Object.assign(
+                {
+                  query: {},
+                  route: {},
+                  connection
+                },
+                connection
+              )
             })
             done()
           } catch (e: any) {
             done(e)
           }
+        })
+      }))
+
+    it('method with invalid service name and arguments', () =>
+      new Promise<void>((done) => {
+        const socket = new EventEmitter()
+
+        provider.emit('connection', socket)
+
+        socket.emit('get', null, (error: any) => {
+          assert.strictEqual(error.name, 'NotFound')
+          assert.strictEqual(error.message, 'Invalid service path')
+          done()
+        })
+      }))
+
+    it('method with implicit toString errors properly', () =>
+      new Promise<void>((done) => {
+        const socket = new EventEmitter()
+
+        provider.emit('connection', socket)
+
+        socket.emit('get', { toString: '' }, (error: any) => {
+          assert.strictEqual(error.name, 'NotFound')
+          assert.strictEqual(error.message, 'Invalid service path')
+          done()
+        })
+      }))
+
+    it('.create with params', () =>
+      new Promise<void>((done) => {
+        const socket = new EventEmitter()
+        const data = {
+          test: 'data'
         }
-      )
-    })
+
+        provider.emit('connection', socket)
+
+        socket.emit(
+          'create',
+          'myservice',
+          data,
+          {
+            fromQuery: true
+          },
+          (error: any, result: any) => {
+            try {
+              const params = Object.assign(
+                {
+                  query: { fromQuery: true },
+                  route: {},
+                  connection
+                },
+                connection
+              )
+
+              assert.ok(!error)
+              assert.deepStrictEqual(result, Object.assign({ params }, data))
+              done()
+            } catch (e: any) {
+              done(e)
+            }
+          }
+        )
+      }))
+
+    it('custom method with params', () =>
+      new Promise<void>((done) => {
+        const socket = new EventEmitter()
+        const data = {
+          test: 'data'
+        }
+
+        provider.emit('connection', socket)
+
+        socket.emit(
+          'custom',
+          'myservice',
+          data,
+          {
+            fromQuery: true
+          },
+          (error: any, result: any) => {
+            try {
+              const params = Object.assign(
+                {
+                  query: { fromQuery: true },
+                  route: {},
+                  connection
+                },
+                connection
+              )
+
+              assert.ok(!error)
+              assert.deepStrictEqual(result, {
+                ...data,
+                params,
+                message: 'From custom method'
+              })
+              done()
+            } catch (e: any) {
+              done(e)
+            }
+          }
+        )
+      }))
   })
 })

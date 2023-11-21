@@ -41,7 +41,7 @@ describe('@feathersjs/generators', () => {
       let context: FeathersBaseContext
       let cwd: string
 
-      before(async () => {
+      beforeAll(async () => {
         cwd = await mkdtemp(path.join(os.tmpdir(), name + '-'))
         console.log(`\nGenerating test application to\n${cwd}\n\n`)
 

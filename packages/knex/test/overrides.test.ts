@@ -77,11 +77,11 @@ describe('Feathers Knex Overridden Method With Self-Join', () => {
     .use('animals', animals)
   const animalService = app.service('animals')
 
-  before(() => {
+  beforeAll(() => {
     return db.schema.raw(`attach database '${schemaName}.sqlite' as ${schemaName}`)
   })
-  before(clean)
-  after(clean)
+  beforeAll(clean)
+  afterAll(clean)
 
   beforeEach(async () => {
     ancestor = await animalService.create({

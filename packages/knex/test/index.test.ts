@@ -235,14 +235,14 @@ describe('Feathers Knex Service', () => {
       find: [hooks.validateQuery(personQueryValidator)]
     }
   })
-  before(() => {
+  beforeAll(() => {
     if (TYPE === 'sqlite') {
       // Attach the public database to mimic a "schema"
       db.schema.raw(`attach database '${schemaName}.sqlite' as ${schemaName}`)
     }
   })
-  before(clean)
-  after(clean)
+  beforeAll(clean)
+  afterAll(clean)
 
   describe('$like method', () => {
     let charlie: Person

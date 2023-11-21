@@ -21,11 +21,11 @@ describe('@feathersjs/authentication-oauth service', () => {
     assert.fail('Should never get here')
   }
 
-  before(async () => {
+  beforeAll(async () => {
     app = await expressFixture(port, 5115)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await app.teardown()
   })
 

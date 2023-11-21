@@ -7,12 +7,14 @@ import rest from '@feathersjs/rest-client'
 import authClient from '../../src'
 import getApp from './fixture'
 import commonTests from './commons'
+import getPort from 'get-port'
 
-describe('@feathersjs/authentication-client Express integration', () => {
+describe('@feathersjs/authentication-client Express integration', async () => {
   let app: express.Application
   let server: Server
+  const port = await getPort()
 
-  before(async () => {
+  beforeAll(async () => {
     const restApp = express
       .default(feathers())
       .use(express.json())
@@ -21,15 +23,17 @@ describe('@feathersjs/authentication-client Express integration', () => {
     app = getApp(restApp as unknown as FeathersApplication) as express.Application
     app.use(express.errorHandler())
 
-    server = await app.listen(9776)
+    server = await app.listen(port)
   })
 
-  after((done) => server.close(() => done()))
+  afterAll(() => new Promise<void>((done) => server.close(() => done())))
 
   commonTests(
     () => app,
     () => {
-      return feathers().configure(rest('http://localhost:9776').axios(axios)).configure(authClient())
+      return feathers()
+        .configure(rest(`http://localhost:${port}`).axios(axios))
+        .configure(authClient())
     },
     {
       email: 'expressauth@feathersjs.com',

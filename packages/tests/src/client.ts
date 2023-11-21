@@ -55,57 +55,61 @@ export function clientTests(app: any, name: string) {
       })
     })
 
-    it('.create and created event', (done) => {
-      getService().once('created', (data: Todo) => {
-        assert.strictEqual(data.text, 'created todo')
-        assert.ok(data.complete)
-        done()
-      })
-
-      getService().create({ text: 'created todo', complete: true })
-    })
-
-    it('.update and updated event', (done) => {
-      getService().once('updated', (data: Todo) => {
-        assert.strictEqual(data.text, 'updated todo')
-        assert.ok(data.complete)
-        done()
-      })
-
-      getService()
-        .create({ text: 'todo to update', complete: false })
-        .then((todo: Todo) => {
-          getService().update(todo.id, {
-            text: 'updated todo',
-            complete: true
-          })
+    it('.create and created event', () =>
+      new Promise<void>((done) => {
+        getService().once('created', (data: Todo) => {
+          assert.strictEqual(data.text, 'created todo')
+          assert.ok(data.complete)
+          done()
         })
-    })
 
-    it('.patch and patched event', (done) => {
-      getService().once('patched', (data: Todo) => {
-        assert.strictEqual(data.text, 'todo to patch')
-        assert.ok(data.complete)
-        done()
-      })
+        getService().create({ text: 'created todo', complete: true })
+      }))
 
-      getService()
-        .create({ text: 'todo to patch', complete: false })
-        .then((todo: Todo) => getService().patch(todo.id, { complete: true }))
-    })
+    it('.update and updated event', () =>
+      new Promise<void>((done) => {
+        getService().once('updated', (data: Todo) => {
+          assert.strictEqual(data.text, 'updated todo')
+          assert.ok(data.complete)
+          done()
+        })
 
-    it('.remove and removed event', (done) => {
-      getService().once('removed', (data: Todo) => {
-        assert.strictEqual(data.text, 'todo to remove')
-        assert.strictEqual(data.complete, false)
-        done()
-      })
+        getService()
+          .create({ text: 'todo to update', complete: false })
+          .then((todo: Todo) => {
+            getService().update(todo.id, {
+              text: 'updated todo',
+              complete: true
+            })
+          })
+      }))
 
-      getService()
-        .create({ text: 'todo to remove', complete: false })
-        .then((todo: Todo) => getService().remove(todo.id))
-        .catch(done)
-    })
+    it('.patch and patched event', () =>
+      new Promise<void>((done) => {
+        getService().once('patched', (data: Todo) => {
+          assert.strictEqual(data.text, 'todo to patch')
+          assert.ok(data.complete)
+          done()
+        })
+
+        getService()
+          .create({ text: 'todo to patch', complete: false })
+          .then((todo: Todo) => getService().patch(todo.id, { complete: true }))
+      }))
+
+    it('.remove and removed event', () =>
+      new Promise<void>((done) => {
+        getService().once('removed', (data: Todo) => {
+          assert.strictEqual(data.text, 'todo to remove')
+          assert.strictEqual(data.complete, false)
+          done()
+        })
+
+        getService()
+          .create({ text: 'todo to remove', complete: false })
+          .then((todo: Todo) => getService().remove(todo.id))
+          .catch(done)
+      }))
 
     it('.get with error', async () => {
       const query = { error: true }

@@ -11,7 +11,7 @@ export default (
     let client: Application
     let user: any
 
-    before(
+    beforeAll(
       async () =>
         (user = await getApp().service('users').create({
           email,
@@ -23,7 +23,7 @@ export default (
       client = getClient()
     })
 
-    after(async () => {
+    afterAll(async () => {
       await getApp().service('users').remove(user.id)
     })
 

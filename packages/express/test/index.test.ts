@@ -243,49 +243,50 @@ describe('@feathersjs/express', () => {
     })
   })
 
-  it('Works with HTTPS', (done) => {
-    const todoService = {
-      async get(name: Id) {
-        return {
-          id: name,
-          description: `You have to do ${name}!`
+  it('Works with HTTPS', () =>
+    new Promise<void>((done) => {
+      const todoService = {
+        async get(name: Id) {
+          return {
+            id: name,
+            description: `You have to do ${name}!`
+          }
         }
       }
-    }
 
-    const app = feathersExpress(feathers()).configure(rest())
+      const app = feathersExpress(feathers()).configure(rest())
 
-    app.use('/secureTodos', todoService)
+      app.use('/secureTodos', todoService)
 
-    const httpsServer = https
-      .createServer(
-        {
-          key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
-          cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
-          rejectUnauthorized: false,
-          requestCert: false
-        },
-        app as unknown as RequestListener
-      )
-      .listen(7889)
+      const httpsServer = https
+        .createServer(
+          {
+            key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
+            cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
+            rejectUnauthorized: false,
+            requestCert: false
+          },
+          app as unknown as RequestListener
+        )
+        .listen(7889)
 
-    app.setup(httpsServer)
+      app.setup(httpsServer)
 
-    httpsServer.on('listening', function () {
-      const instance = axios.create({
-        httpsAgent: new https.Agent({
-          rejectUnauthorized: false
+      httpsServer.on('listening', function () {
+        const instance = axios.create({
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false
+          })
         })
+
+        instance
+          .get<any>('https://localhost:7889/secureTodos/dishes')
+          .then((response) => {
+            assert.ok(response.status === 200, 'Got OK status code')
+            assert.strictEqual(response.data.description, 'You have to do dishes!')
+            httpsServer.close(() => done())
+          })
+          .catch(done)
       })
-
-      instance
-        .get<any>('https://localhost:7889/secureTodos/dishes')
-        .then((response) => {
-          assert.ok(response.status === 200, 'Got OK status code')
-          assert.strictEqual(response.data.description, 'You have to do dishes!')
-          httpsServer.close(() => done())
-        })
-        .catch(done)
-    })
-  })
+    }))
 })

@@ -39,7 +39,8 @@
     "update-dependencies": "ncu -u && lerna exec -- ncu -u --dep prod,dev,optional,peer -x node-fetch,chalk,\"@sinclair/typebox\"",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests"
+    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",
+    "vitest": "vitest run"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.5",
@@ -51,6 +52,7 @@
     "lerna": "^7.3.1",
     "npm-check-updates": "^16.14.5",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   }
 }

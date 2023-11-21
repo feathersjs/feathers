@@ -44,8 +44,8 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
-    "test": "npm run compile && npm run mocha"
+    "vitest": "vitest run",
+    "test": "npm run compile && npm run vitest"
   },
   "directories": {
     "lib": "lib"
@@ -66,12 +66,11 @@
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.11",
-    "@types/mocha": "^10.0.2",
     "@types/node": "^20.8.4",
     "ajv-formats": "^2.1.1",
-    "mocha": "^10.2.0",
     "shx": "^0.3.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "typescript": ">=5.2"

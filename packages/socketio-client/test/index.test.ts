@@ -22,7 +22,7 @@ describe('@feathersjs/socketio-client', () => {
   let socket: Socket
   let server: Server
 
-  before(async () => {
+  beforeAll(async () => {
     server = await createServer().listen(9988)
     socket = io('http://localhost:9988')
 
@@ -34,10 +34,13 @@ describe('@feathersjs/socketio-client', () => {
     })
   })
 
-  after((done) => {
-    socket.disconnect()
-    server.close(done)
-  })
+  afterAll(
+    () =>
+      new Promise<void>((done) => {
+        socket.disconnect()
+        server.close(() => done())
+      })
+  )
 
   it('throws an error with no connection', () => {
     try {

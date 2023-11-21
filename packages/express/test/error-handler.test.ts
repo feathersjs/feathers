@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function */
 import { strict as assert } from 'assert'
-import express, { Request, Response, NextFunction } from 'express'
+import express, { Request, Response, NextFunction, Application } from 'express'
 import axios from 'axios'
 import fs from 'fs'
 import { join } from 'path'
 import { BadRequest, NotAcceptable, NotAuthenticated, NotFound, PaymentError } from '@feathersjs/errors'
 
 import { errorHandler } from '../src'
+import { Server } from 'http'
 
 const content = '<html><head></head><body>Error</body></html>'
 
@@ -19,9 +20,12 @@ const jsonHandler = function (error: Error, _req: Request, res: Response, _next:
 }
 
 describe('error-handler', () => {
-  describe('supports catch-all custom handlers', function () {
-    before(function () {
-      this.app = express()
+  describe('supports catch-all custom handlers', () => {
+    let app: Application
+    let server: Server
+
+    beforeAll(() => {
+      app = express()
         .get('/error', function (_req: Request, _res: Response, next: NextFunction) {
           next(new Error('Something went wrong'))
         })
@@ -32,12 +36,15 @@ describe('error-handler', () => {
           })
         )
 
-      this.server = this.app.listen(5050)
+      server = app.listen(5050)
     })
 
-    after(function (done) {
-      this.server.close(done)
-    })
+    afterAll(
+      () =>
+        new Promise<void>((done) => {
+          server.close(() => done())
+        })
+    )
 
     describe('JSON handler', () => {
       const options = {
@@ -81,54 +88,57 @@ describe('error-handler', () => {
         )
       }
 
-      it('if the value is a string, calls res.sendFile', (done) => {
-        const err = new NotAuthenticated()
-        const middleware = errorHandler({
-          logger: null,
-          html: { 401: 'path/to/401.html' }
-        })
-        const res = makeRes(401, {
-          sendFile(f: any) {
-            assert.equal(f, 'path/to/401.html')
-            done()
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
-
-      it('if the value is a function, calls as middleware ', (done) => {
-        const err = new PaymentError()
-        const res = makeRes(402)
-        const middleware = errorHandler({
-          logger: null,
-          html: {
-            402: (_err: any, _req: any, _res: any) => {
-              assert.equal(_err, err)
-              assert.equal(_req, req)
-              assert.equal(_res, res)
+      it('if the value is a string, calls res.sendFile', () =>
+        new Promise<void>((done) => {
+          const err = new NotAuthenticated()
+          const middleware = errorHandler({
+            logger: null,
+            html: { 401: 'path/to/401.html' }
+          })
+          const res = makeRes(401, {
+            sendFile(f: any) {
+              assert.equal(f, 'path/to/401.html')
               done()
             }
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
+          })
+          ;(middleware as any)(err, req, res)
+        }))
 
-      it('falls back to default if error code config is available', (done) => {
-        const err = new NotAcceptable()
-        const res = makeRes(406)
-        const middleware = errorHandler({
-          logger: null,
-          html: {
-            default: (_err: any, _req: any, _res: any) => {
-              assert.equal(_err, err)
-              assert.equal(_req, req)
-              assert.equal(_res, res)
-              done()
+      it('if the value is a function, calls as middleware ', () =>
+        new Promise<void>((done) => {
+          const err = new PaymentError()
+          const res = makeRes(402)
+          const middleware = errorHandler({
+            logger: null,
+            html: {
+              402: (_err: any, _req: any, _res: any) => {
+                assert.equal(_err, err)
+                assert.equal(_req, req)
+                assert.equal(_res, res)
+                done()
+              }
             }
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
+          })
+          ;(middleware as any)(err, req, res)
+        }))
+
+      it('falls back to default if error code config is available', () =>
+        new Promise<void>((done) => {
+          const err = new NotAcceptable()
+          const res = makeRes(406)
+          const middleware = errorHandler({
+            logger: null,
+            html: {
+              default: (_err: any, _req: any, _res: any) => {
+                assert.equal(_err, err)
+                assert.equal(_req, req)
+                assert.equal(_res, res)
+                done()
+              }
+            }
+          })
+          ;(middleware as any)(err, req, res)
+        }))
     })
 
     describe('JSON handler', () => {
@@ -147,60 +157,66 @@ describe('error-handler', () => {
         )
       }
 
-      it('calls res.json by default', (done) => {
-        const err = new NotAuthenticated()
-        const middleware = errorHandler({
-          logger: null,
-          json: {}
-        })
-        const res = makeRes(401, {
-          json(obj: any) {
-            assert.deepEqual(obj, err.toJSON())
-            done()
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
-
-      it('if the value is a function, calls as middleware ', (done) => {
-        const err = new PaymentError()
-        const res = makeRes(402)
-        const middleware = errorHandler({
-          logger: null,
-          json: {
-            402: (_err: any, _req: any, _res: any) => {
-              assert.equal(_err, err)
-              assert.equal(_req, req)
-              assert.equal(_res, res)
+      it('calls res.json by default', () =>
+        new Promise<void>((done) => {
+          const err = new NotAuthenticated()
+          const middleware = errorHandler({
+            logger: null,
+            json: {}
+          })
+          const res = makeRes(401, {
+            json(obj: any) {
+              assert.deepEqual(obj, err.toJSON())
               done()
             }
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
+          })
+          ;(middleware as any)(err, req, res)
+        }))
 
-      it('falls back to default if error code config is available', (done) => {
-        const err = new NotAcceptable()
-        const res = makeRes(406)
-        const middleware = errorHandler({
-          logger: null,
-          json: {
-            default: (_err: any, _req: any, _res: any) => {
-              assert.equal(_err, err)
-              assert.equal(_req, req)
-              assert.equal(_res, res)
-              done()
+      it('if the value is a function, calls as middleware ', () =>
+        new Promise<void>((done) => {
+          const err = new PaymentError()
+          const res = makeRes(402)
+          const middleware = errorHandler({
+            logger: null,
+            json: {
+              402: (_err: any, _req: any, _res: any) => {
+                assert.equal(_err, err)
+                assert.equal(_req, req)
+                assert.equal(_res, res)
+                done()
+              }
             }
-          }
-        })
-        ;(middleware as any)(err, req, res)
-      })
+          })
+          ;(middleware as any)(err, req, res)
+        }))
+
+      it('falls back to default if error code config is available', () =>
+        new Promise<void>((done) => {
+          const err = new NotAcceptable()
+          const res = makeRes(406)
+          const middleware = errorHandler({
+            logger: null,
+            json: {
+              default: (_err: any, _req: any, _res: any) => {
+                assert.equal(_err, err)
+                assert.equal(_req, req)
+                assert.equal(_res, res)
+                done()
+              }
+            }
+          })
+          ;(middleware as any)(err, req, res)
+        }))
     })
   })
 
-  describe('use as app error handler', function () {
-    before(function () {
-      this.app = express()
+  describe('use as app error handler', () => {
+    let app: Application
+    let server: Server
+
+    before(() => {
+      app = express()
         .get('/error', function (_req: Request, _res: Response, next: NextFunction) {
           next(new Error('Something went wrong'))
         })
@@ -233,12 +249,15 @@ describe('error-handler', () => {
           })
         )
 
-      this.server = this.app.listen(5050)
+      server = app.listen(5050)
     })
 
-    after(function (done) {
-      this.server.close(done)
-    })
+    afterAll(
+      () =>
+        new Promise<void>((done) => {
+          server.close(() => done())
+        })
+    )
 
     describe('converts an non-feathers error', () => {
       it('is an instance of GeneralError', async () => {
@@ -261,43 +280,45 @@ describe('error-handler', () => {
     })
 
     describe('text/html format', () => {
-      it('serves a 404.html', (done) => {
-        fs.readFile(join(__dirname, '..', 'public', '404.html'), async function (_err, html) {
-          try {
-            await axios({
-              url: 'http://localhost:5050/path/to/nowhere',
-              headers: {
-                'Content-Type': 'text/html',
-                Accept: 'text/html'
-              }
-            })
-            assert.fail('Should never get here')
-          } catch (error: any) {
-            assert.equal(error.response.status, 404)
-            assert.equal(error.response.data, html.toString())
-            done()
-          }
-        })
-      })
+      it('serves a 404.html', () =>
+        new Promise<void>((done) => {
+          fs.readFile(join(__dirname, '..', 'public', '404.html'), async function (_err, html) {
+            try {
+              await axios({
+                url: 'http://localhost:5050/path/to/nowhere',
+                headers: {
+                  'Content-Type': 'text/html',
+                  Accept: 'text/html'
+                }
+              })
+              assert.fail('Should never get here')
+            } catch (error: any) {
+              assert.equal(error.response.status, 404)
+              assert.equal(error.response.data, html.toString())
+              done()
+            }
+          })
+        }))
 
-      it('serves a 500.html', (done) => {
-        fs.readFile(join(__dirname, '..', 'public', 'default.html'), async function (_err, html) {
-          try {
-            await axios({
-              url: 'http://localhost:5050/error',
-              headers: {
-                'Content-Type': 'text/html',
-                Accept: 'text/html'
-              }
-            })
-            assert.fail('Should never get here')
-          } catch (error: any) {
-            assert.equal(error.response.status, 500)
-            assert.equal(error.response.data, html.toString())
-            done()
-          }
-        })
-      })
+      it('serves a 500.html', () =>
+        new Promise<void>((done) => {
+          fs.readFile(join(__dirname, '..', 'public', 'default.html'), async function (_err, html) {
+            try {
+              await axios({
+                url: 'http://localhost:5050/error',
+                headers: {
+                  'Content-Type': 'text/html',
+                  Accept: 'text/html'
+                }
+              })
+              assert.fail('Should never get here')
+            } catch (error: any) {
+              assert.equal(error.response.status, 500)
+              assert.equal(error.response.data, html.toString())
+              done()
+            }
+          })
+        }))
     })
 
     describe('application/json format', () => {

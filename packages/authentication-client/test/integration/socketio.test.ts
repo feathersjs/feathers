@@ -12,13 +12,13 @@ import { AuthenticationResult } from '@feathersjs/authentication/lib'
 describe('@feathersjs/authentication-client Socket.io integration', () => {
   let app: Application
 
-  before(async () => {
+  beforeAll(async () => {
     app = getApp(feathers().configure(socketio()))
 
     await app.listen(9777)
   })
 
-  after((done) => app.io.close(() => done()))
+  afterAll(() => new Promise<void>((done) => app.io.close(() => done())))
 
   it('allows to authenticate with handshake headers and sends login event', async () => {
     const user = { email: 'authtest@example.com', password: 'alsosecret' }

@@ -256,7 +256,11 @@ export class KnexAdapter<
 
   async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
   async _patch(id: Id, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableId, data: PatchData | Partial<Result>, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(
+    id: NullableId,
+    data: PatchData | Partial<Result>,
+    _params?: ServiceParams
+  ): Promise<Result | Result[]>
   async _patch(
     id: NullableId,
     raw: PatchData | Partial<Result>,

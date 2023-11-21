@@ -8,9 +8,11 @@ import { Server } from 'http'
 import rest from '../src'
 import createServer from './server'
 import { ServiceTypes } from './declarations'
+import getPort from 'get-port'
 
-describe('fetch REST connector', function () {
-  const url = 'http://localhost:8889'
+describe('fetch REST connector', async function () {
+  const port = await getPort()
+  const url = `http://localhost:${port}`
   const connection = rest<ServiceTypes>(url).fetch(fetch)
   const app = feathers<ServiceTypes>()
     .configure(connection)
@@ -31,11 +33,11 @@ describe('fetch REST connector', function () {
     }
   })
 
-  before(async () => {
-    server = await createServer().listen(8889)
+  beforeAll(async () => {
+    server = await createServer().listen(port)
   })
 
-  after((done) => server.close(done))
+  afterAll(() => new Promise<void>((done) => server.close(done)))
 
   it('supports custom headers', async () => {
     const headers = {
