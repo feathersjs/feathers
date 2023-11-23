@@ -1,0 +1,62 @@
+{
+  "name": "@feathersjs/adapter-tests-vitest",
+  "version": "5.0.11",
+  "description": "Feathers shared database adapter test suite with vitest",
+  "homepage": "https://feathersjs.com",
+  "keywords": [
+    "feathers"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/feathers"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/adapter-tests-vitest"
+  },
+  "author": {
+    "name": "Feathers contributor",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "main": "lib/",
+  "types": "lib/",
+  "scripts": {
+    "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../generators/test/build",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "test": "vitest run"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.4",
+    "shx": "^0.3.4",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  },
+  "peerDependencies": {
+    "vitest": "^0.34.0"
+  },
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
+}

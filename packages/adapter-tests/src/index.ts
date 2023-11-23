@@ -27,7 +27,8 @@ export const adapterTests = (testNames: AdapterTestName[]) => {
     }
 
     describe(`Adapter tests for '${serviceName}' service with '${idProp}' id property`, () => {
-      afterAll(() => {
+      // @ts-expect-error TODO: fix this
+      after(() => {
         testNames.forEach((name) => {
           if (!allTests.includes(name)) {
             console.error(`WARNING: '${name}' test is not part of the test suite`)

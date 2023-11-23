@@ -9,6 +9,7 @@ import { feathers, HookContext, Id } from '@feathersjs/feathers'
 
 import { default as feathersExpress, rest, notFound, errorHandler, original, serveStatic } from '../src'
 import { RequestListener } from 'http'
+import getPort from 'get-port'
 
 describe('@feathersjs/express', () => {
   const service = {
@@ -244,7 +245,7 @@ describe('@feathersjs/express', () => {
   })
 
   it('Works with HTTPS', () =>
-    new Promise<void>((done) => {
+    new Promise<void>(async (resolve, reject) => {
       const todoService = {
         async get(name: Id) {
           return {
@@ -258,6 +259,8 @@ describe('@feathersjs/express', () => {
 
       app.use('/secureTodos', todoService)
 
+      const port = await getPort()
+
       const httpsServer = https
         .createServer(
           {
@@ -268,7 +271,7 @@ describe('@feathersjs/express', () => {
           },
           app as unknown as RequestListener
         )
-        .listen(7889)
+        .listen(port)
 
       app.setup(httpsServer)
 
@@ -280,13 +283,13 @@ describe('@feathersjs/express', () => {
         })
 
         instance
-          .get<any>('https://localhost:7889/secureTodos/dishes')
+          .get<any>(`https://localhost:${port}/secureTodos/dishes`)
           .then((response) => {
             assert.ok(response.status === 200, 'Got OK status code')
             assert.strictEqual(response.data.description, 'You have to do dishes!')
-            httpsServer.close(() => done())
+            httpsServer.close(() => resolve())
           })
-          .catch(done)
+          .catch(reject)
       })
     }))
 })

@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 import axios from 'axios'
 import { Server } from 'http'
 import { feathers } from '@feathersjs/feathers'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 import { NotAcceptable } from '@feathersjs/errors'
 import getPort from 'get-port'
 
@@ -27,7 +27,7 @@ describe('Axios REST connector', async function () {
     server = await createServer().listen(port)
   })
 
-  afterAfll(() => new Promise<void>((done) => server.close(done)))
+  afterAfll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
   it('supports custom headers', async () => {
     const headers = {

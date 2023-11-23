@@ -26,7 +26,7 @@ describe('@feathersjs/authentication-client Express integration', async () => {
     server = await app.listen(port)
   })
 
-  afterAll(() => new Promise<void>((done) => server.close(() => done())))
+  afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
   commonTests(
     () => app,

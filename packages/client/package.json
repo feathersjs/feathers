@@ -61,7 +61,7 @@
     "@feathersjs/express": "^5.0.11",
     "@feathersjs/memory": "^5.0.11",
     "@feathersjs/socketio": "^5.0.11",
-    "@feathersjs/tests": "^5.0.11",
+    "@feathersjs/tests-vitest": "^5.0.11",
     "babel-loader": "^9.1.3",
     "get-port": "^7.0.0",
     "node-fetch": "^2.6.1",

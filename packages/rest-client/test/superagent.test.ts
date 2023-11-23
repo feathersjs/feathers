@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 import superagent from 'superagent'
 import { Server } from 'http'
 import { feathers } from '@feathersjs/feathers'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 import { NotAcceptable } from '@feathersjs/errors'
 
 import rest from '../src'
@@ -26,7 +26,7 @@ describe('Superagent REST connector', async function () {
     server = await createServer().listen(port)
   })
 
-  afterAll(() => new Promise<void>((done) => server.close(done)))
+  afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
   it('supports custom headers', async () => {
     const headers = {

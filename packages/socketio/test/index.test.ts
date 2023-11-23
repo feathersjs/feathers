@@ -13,7 +13,7 @@ import { omit, extend } from 'lodash'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { Server } from 'http'
-import { Service } from '@feathersjs/tests'
+import { Service } from '@feathersjs/tests-vitest'
 import { Socket } from 'socket.io-client'
 import getPort from 'get-port'
 
@@ -57,7 +57,7 @@ describe('@feathersjs/socketio', () => {
 
   beforeAll(
     () =>
-      new Promise<void>(async (done) => {
+      new Promise<void>(async (resolve, reject) => {
         const errorHook = (hook: HookContext) => {
           if (hook.params.query.hookError) {
             throw new Error(`Error from ${hook.method}, ${hook.type} hook`)
@@ -114,23 +114,23 @@ describe('@feathersjs/socketio', () => {
               })
             })
           })
-          .catch(done)
+          .catch(reject)
 
         socket = io(`http://localhost:${port}`)
-        socket.on('connect', () => done())
+        socket.on('connect', () => resolve())
       })
   )
 
   afterAll(
     () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         socket.disconnect()
-        server.close(() => done())
+        server.close(() => resolve())
       })
   )
 
   it('runs io before setup (#131)', () =>
-    new Promise<void>(async (done) => {
+    new Promise<void>(async (resolve) => {
       let counter = 0
       const app = feathers().configure(
         socketio(() => {
@@ -140,18 +140,18 @@ describe('@feathersjs/socketio', () => {
       )
 
       app.listen(await getPort()).then((srv) => {
-        srv.on('listening', () => srv.close(() => done()))
+        srv.on('listening', () => srv.close(() => resolve()))
       })
     }))
 
   it('can set MaxListeners', () =>
-    new Promise<void>(async (done) => {
+    new Promise<void>(async (resolve) => {
       const app = feathers().configure(socketio((io) => io.sockets.setMaxListeners(100)))
 
       app.listen(await getPort()).then((srv) => {
         srv.on('listening', () => {
           assert.strictEqual(app.io.sockets.getMaxListeners(), 100)
-          srv.close(done)
+          srv.close(() => resolve())
         })
       })
     }))
@@ -180,7 +180,7 @@ describe('@feathersjs/socketio', () => {
   })
 
   it('can set options (#12)', () =>
-    new Promise<void>(async (done) => {
+    new Promise<void>(async (resolve) => {
       const application = feathers().configure(
         socketio(
           {
@@ -190,18 +190,20 @@ describe('@feathersjs/socketio', () => {
         )
       )
 
-      application.listen(await getPort()).then((srv) => {
+      const port = await getPort()
+
+      application.listen(port).then((srv) => {
         srv.on('listening', async () => {
-          const { status } = await axios('http://localhost:8987/test/socket.io.js')
+          const { status } = await axios(`http://localhost:${port}/test/socket.io.js`)
 
           assert.strictEqual(status, 200)
-          srv.close(() => done())
+          srv.close(() => resolve())
         })
       })
     }))
 
   it('passes handshake as service parameters', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       socket.emit('create', 'verify', {}, (error: any, data: any) => {
         assert.ok(!error)
         assert.deepStrictEqual(
@@ -234,21 +236,21 @@ describe('@feathersjs/socketio', () => {
               ),
               'Passed handshake parameters as query'
             )
-            done()
+            resolve()
           }
         )
       })
     }))
 
   it('connection and disconnect events (#1243, #1238)', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const mySocket = io('http://localhost:7886?channel=dctest')
 
       app.once('connection', (connection) => {
         assert.strictEqual(connection.channel, 'dctest')
         app.once('disconnect', (disconnection) => {
           assert.strictEqual(disconnection.channel, 'dctest')
-          done()
+          resolve()
         })
         setTimeout(() => mySocket.close(), 100)
       })
@@ -257,12 +259,12 @@ describe('@feathersjs/socketio', () => {
     }))
 
   it('app `disconnect` event disconnects socket (#2754)', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const mySocket = io('http://localhost:7886?channel=dctest')
 
       app.once('connection', (connection) => {
         assert.strictEqual(connection.channel, 'dctest')
-        mySocket.once('disconnect', () => done())
+        mySocket.once('disconnect', () => resolve())
         app.emit('disconnect', connection)
       })
 
@@ -270,7 +272,7 @@ describe('@feathersjs/socketio', () => {
     }))
 
   it('missing parameters in socket call works (#88)', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       socket.emit('find', 'verify', (error: any, data: any) => {
         assert.ok(!error)
         assert.deepStrictEqual(
@@ -278,7 +280,7 @@ describe('@feathersjs/socketio', () => {
           socketParams,
           'Handshake parameters passed on proper position'
         )
-        done()
+        resolve()
       })
     }))
 

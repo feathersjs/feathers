@@ -18,7 +18,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
     await app.listen(9777)
   })
 
-  afterAll(() => new Promise<void>((done) => app.io.close(() => done())))
+  afterAll(() => new Promise<void>((resolve) => app.io.close(() => resolve())))
 
   it('allows to authenticate with handshake headers and sends login event', async () => {
     const user = { email: 'authtest@example.com', password: 'alsosecret' }

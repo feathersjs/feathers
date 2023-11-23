@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 import { Server } from 'http'
 import { CustomMethod, feathers } from '@feathersjs/feathers'
 import { io, Socket } from 'socket.io-client'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 
 import { createServer } from './server'
 import socketio, { SocketService } from '../src'
@@ -36,9 +36,9 @@ describe('@feathersjs/socketio-client', () => {
 
   afterAll(
     () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         socket.disconnect()
-        server.close(() => done())
+        server.close(() => resolve())
       })
   )
 

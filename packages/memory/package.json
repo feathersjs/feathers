@@ -55,7 +55,7 @@
     "sift": "^17.0.1"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.11",
+    "@feathersjs/adapter-tests-vitest": "^5.0.11",
     "@feathersjs/feathers": "^5.0.11",
     "@types/node": "^20.8.4",
     "shx": "^0.3.4",

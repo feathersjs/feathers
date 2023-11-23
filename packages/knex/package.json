@@ -60,7 +60,7 @@
     "knex": ">= 2.1.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.11",
+    "@feathersjs/adapter-tests-vitest": "^5.0.11",
     "@feathersjs/schema": "^5.0.11",
     "@types/node": "^20.8.4",
     "knex": "^3.0.1",

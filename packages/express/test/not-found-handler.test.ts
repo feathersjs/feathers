@@ -7,7 +7,7 @@ const handler = notFound as any
 
 describe('not-found-handler', () => {
   it('returns NotFound error', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve, reject) => {
       handler()(
         {
           url: 'some/where',
@@ -20,13 +20,13 @@ describe('not-found-handler', () => {
           assert.deepEqual(error.data, {
             url: 'some/where'
           })
-          done()
+          resolve()
         }
       )
     }))
 
   it('returns NotFound error with URL when verbose', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve, reject) => {
       handler({ verbose: true })(
         {
           url: 'some/where',
@@ -39,7 +39,7 @@ describe('not-found-handler', () => {
           assert.deepEqual(error.data, {
             url: 'some/where'
           })
-          done()
+          resolve()
         }
       )
     }))

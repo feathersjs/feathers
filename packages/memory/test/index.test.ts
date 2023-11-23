@@ -1,5 +1,5 @@
 import assert from 'assert'
-import adapterTests from '@feathersjs/adapter-tests'
+import adapterTests from '@feathersjs/adapter-tests-vitest'
 import errors from '@feathersjs/errors'
 import { feathers } from '@feathersjs/feathers'
 

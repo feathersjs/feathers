@@ -41,8 +41,8 @@ describe('error-handler', () => {
 
     afterAll(
       () =>
-        new Promise<void>((done) => {
-          server.close(() => done())
+        new Promise<void>((resolve) => {
+          server.close(() => resolve())
         })
     )
 
@@ -89,7 +89,7 @@ describe('error-handler', () => {
       }
 
       it('if the value is a string, calls res.sendFile', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new NotAuthenticated()
           const middleware = errorHandler({
             logger: null,
@@ -98,14 +98,14 @@ describe('error-handler', () => {
           const res = makeRes(401, {
             sendFile(f: any) {
               assert.equal(f, 'path/to/401.html')
-              done()
+              resolve()
             }
           })
           ;(middleware as any)(err, req, res)
         }))
 
       it('if the value is a function, calls as middleware ', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new PaymentError()
           const res = makeRes(402)
           const middleware = errorHandler({
@@ -115,7 +115,7 @@ describe('error-handler', () => {
                 assert.equal(_err, err)
                 assert.equal(_req, req)
                 assert.equal(_res, res)
-                done()
+                resolve()
               }
             }
           })
@@ -123,7 +123,7 @@ describe('error-handler', () => {
         }))
 
       it('falls back to default if error code config is available', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new NotAcceptable()
           const res = makeRes(406)
           const middleware = errorHandler({
@@ -133,7 +133,7 @@ describe('error-handler', () => {
                 assert.equal(_err, err)
                 assert.equal(_req, req)
                 assert.equal(_res, res)
-                done()
+                resolve()
               }
             }
           })
@@ -158,7 +158,7 @@ describe('error-handler', () => {
       }
 
       it('calls res.json by default', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new NotAuthenticated()
           const middleware = errorHandler({
             logger: null,
@@ -167,14 +167,14 @@ describe('error-handler', () => {
           const res = makeRes(401, {
             json(obj: any) {
               assert.deepEqual(obj, err.toJSON())
-              done()
+              resolve()
             }
           })
           ;(middleware as any)(err, req, res)
         }))
 
       it('if the value is a function, calls as middleware ', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new PaymentError()
           const res = makeRes(402)
           const middleware = errorHandler({
@@ -184,7 +184,7 @@ describe('error-handler', () => {
                 assert.equal(_err, err)
                 assert.equal(_req, req)
                 assert.equal(_res, res)
-                done()
+                resolve()
               }
             }
           })
@@ -192,7 +192,7 @@ describe('error-handler', () => {
         }))
 
       it('falls back to default if error code config is available', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const err = new NotAcceptable()
           const res = makeRes(406)
           const middleware = errorHandler({
@@ -202,7 +202,7 @@ describe('error-handler', () => {
                 assert.equal(_err, err)
                 assert.equal(_req, req)
                 assert.equal(_res, res)
-                done()
+                resolve()
               }
             }
           })
@@ -254,8 +254,8 @@ describe('error-handler', () => {
 
     afterAll(
       () =>
-        new Promise<void>((done) => {
-          server.close(() => done())
+        new Promise<void>((resolve) => {
+          server.close(() => resolve())
         })
     )
 
@@ -281,7 +281,7 @@ describe('error-handler', () => {
 
     describe('text/html format', () => {
       it('serves a 404.html', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           fs.readFile(join(__dirname, '..', 'public', '404.html'), async function (_err, html) {
             try {
               await axios({
@@ -295,13 +295,13 @@ describe('error-handler', () => {
             } catch (error: any) {
               assert.equal(error.response.status, 404)
               assert.equal(error.response.data, html.toString())
-              done()
+              resolve()
             }
           })
         }))
 
       it('serves a 500.html', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           fs.readFile(join(__dirname, '..', 'public', 'default.html'), async function (_err, html) {
             try {
               await axios({
@@ -315,7 +315,7 @@ describe('error-handler', () => {
             } catch (error: any) {
               assert.equal(error.response.status, 500)
               assert.equal(error.response.data, html.toString())
-              done()
+              resolve()
             }
           })
         }))

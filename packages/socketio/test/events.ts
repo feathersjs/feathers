@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert'
 import { io, Socket } from 'socket.io-client'
-import { verify } from '@feathersjs/tests'
+import { verify } from '@feathersjs/tests-vitest'
 import { RealTimeConnection } from '@feathersjs/feathers'
 
 export default (name: string, options: any) => {
@@ -13,13 +13,13 @@ export default (name: string, options: any) => {
     })
   }
 
-  const verifyEvent = (done: (err?: any) => void, callback: (data: any) => void) => {
+  const verifyEvent = (callback: (data: any) => void, resolve: () => void, reject: (err: any) => void) => {
     return function (data: any) {
       try {
         callback(data)
-        done()
+        resolve()
       } catch (error: any) {
-        done(error)
+        reject?.(error)
       }
     }
   }
@@ -30,13 +30,13 @@ export default (name: string, options: any) => {
 
     beforeAll(
       () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           options.app.once('connection', (conn: RealTimeConnection) => {
             connection = conn
 
             options.app.channel('default').join(connection)
             options.app.publish(() => options.app.channel('default'))
-            done()
+            resolve()
           })
           socket = io('http://localhost:7886')
         })
@@ -44,66 +44,66 @@ export default (name: string, options: any) => {
 
     afterAll(
       () =>
-        new Promise<void>((done) => {
-          socket.once('disconnect', () => done())
+        new Promise<void>((resolve) => {
+          socket.once('disconnect', () => resolve())
           socket.disconnect()
         })
     )
 
     it(`${name} created`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const original = {
           name: 'created event'
         }
 
         socket.once(
           `${name} created`,
-          verifyEvent(done, (data) => verify.create(original, data))
+          verifyEvent((data) => verify.create(original, data), resolve, reject)
         )
 
         call('create', original)
       }))
 
     it(`${name} updated`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const original = {
           name: 'updated event'
         }
 
         socket.once(
           `${name} updated`,
-          verifyEvent(done, (data: any) => verify.update(10, original, data))
+          verifyEvent((data: any) => verify.update(10, original, data), resolve, reject)
         )
 
         call('update', 10, original)
       }))
 
     it(`${name} patched`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const original = {
           name: 'patched event'
         }
 
         socket.once(
           `${name} patched`,
-          verifyEvent(done, (data: any) => verify.patch(12, original, data))
+          verifyEvent((data: any) => verify.patch(12, original, data), resolve, reject)
         )
 
         call('patch', 12, original)
       }))
 
     it(`${name} removed`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         socket.once(
           `${name} removed`,
-          verifyEvent(done, (data: any) => verify.remove(333, data))
+          verifyEvent((data: any) => verify.remove(333, data), resolve, reject)
         )
 
         call('remove', 333)
       }))
 
     it(`${name} custom events`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const service = options.app.service(name)
         const original = {
           name: 'created event'
@@ -111,12 +111,16 @@ export default (name: string, options: any) => {
 
         socket.once(
           `${name} log`,
-          verifyEvent(done, (data: any) => {
-            assert.deepStrictEqual(data, {
-              message: 'Custom log event',
-              data: original
-            })
-          })
+          verifyEvent(
+            (data: any) => {
+              assert.deepStrictEqual(data, {
+                message: 'Custom log event',
+                data: original
+              })
+            },
+            resolve,
+            reject
+          )
         )
 
         service.emit('log', {
@@ -134,7 +138,7 @@ export default (name: string, options: any) => {
 
     beforeAll(
       () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           let counter = 0
           const handler = (connection: RealTimeConnection) => {
             counter++
@@ -144,7 +148,7 @@ export default (name: string, options: any) => {
             connections.push(connection)
 
             if (counter === 3) {
-              done()
+              resolve()
               options.app.removeListener('connection', handler)
             }
           }
@@ -175,11 +179,11 @@ export default (name: string, options: any) => {
     })
 
     it(`filters '${eventName}' event for a single channel`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const service = options.app.service(name)
         const [socket, otherSocket] = sockets
         const onError = () => {
-          done(new Error('Should not get this event'))
+          reject(new Error('Should not get this event'))
         }
 
         service.publish('created', (data: any) => options.app.channel(data.room))
@@ -187,7 +191,7 @@ export default (name: string, options: any) => {
         socket.once(eventName, (data: any) => {
           assert.strictEqual(data.room, 'first')
           otherSocket.removeEventListener(eventName, onError)
-          done()
+          resolve()
         })
 
         otherSocket.once(eventName, onError)
@@ -199,13 +203,13 @@ export default (name: string, options: any) => {
       }))
 
     it(`filters '${name} created' event for a channel with multiple connections`, () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         let counter = 0
 
         const service = options.app.service(name)
         const [otherSocket, socketOne, socketTwo] = sockets
         const onError = () => {
-          done(new Error('Should not get this event'))
+          resolve(new Error('Should not get this event'))
         }
         const onEvent = (data: any) => {
           counter++
@@ -213,7 +217,7 @@ export default (name: string, options: any) => {
 
           if (++counter === 2) {
             otherSocket.removeEventListener(eventName, onError)
-            done()
+            reject()
           }
         }
 

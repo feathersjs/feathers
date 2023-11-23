@@ -58,7 +58,7 @@ describe('app.publish', () => {
     })
 
     it('simple event registration and dispatching', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.channel('testing').join(c1)
 
         app.service('test').registerPublisher('created', () => app.channel('testing'))
@@ -69,17 +69,17 @@ describe('app.publish', () => {
             assert.strictEqual(hook.path, 'test')
             assert.deepStrictEqual(hook.result, data)
             assert.deepStrictEqual(channel.connections, [c1])
-            done()
+            resolve()
           } catch (error: any) {
-            done(error)
+            reject(error)
           }
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
 
     it('app and global level dispatching and precedence', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.channel('testing').join(c1)
         app.channel('other').join(c2)
 
@@ -88,14 +88,14 @@ describe('app.publish', () => {
 
         app.once('publish', (_event: string, channel: Channel) => {
           assert.ok(channel.connections.indexOf(c1) !== -1)
-          done()
+          resolve()
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
 
     it('promise event dispatching', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.channel('testing').join(c1)
         app.channel('othertest').join(c2)
 
@@ -116,14 +116,14 @@ describe('app.publish', () => {
         app.once('publish', (_event: string, channel: Channel, hook: HookContext) => {
           assert.deepStrictEqual(hook.result, data)
           assert.deepStrictEqual(channel.connections, [c1, c2])
-          done()
+          resolve()
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
 
     it('custom event dispatching', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         const eventData = { testing: true }
 
         app.channel('testing').join(c1)
@@ -140,39 +140,39 @@ describe('app.publish', () => {
             result: eventData
           })
           assert.deepStrictEqual(channel.connections, [c1])
-          done()
+          resolve()
         })
 
         app.service('test').emit('foo', eventData)
       }))
 
     it('does not sent `dispatch` event if there are no dispatchers', () =>
-      new Promise<void>((done) => {
-        app.once('publish', () => done(new Error('Should never get here')))
+      new Promise<void>((resolve, reject) => {
+        app.once('publish', () => reject(new Error('Should never get here')))
 
-        process.once('unhandledRejection', (error) => done(error))
+        process.once('unhandledRejection', (error) => reject(error))
 
         app
           .service('test')
           .create(data)
-          .then(() => done())
-          .catch(done)
+          .then(() => resolve())
+          .catch(reject)
       }))
 
     it('does not send `dispatch` event if there are no connections', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.service('test').registerPublisher('created', () => app.channel('dummy'))
-        app.once('publish', () => done(new Error('Should never get here')))
+        app.once('publish', () => reject(new Error('Should never get here')))
 
         app
           .service('test')
           .create(data)
-          .then(() => done())
-          .catch(done)
+          .then(() => resolve())
+          .catch(reject)
       }))
 
     it('dispatcher returning an array of channels', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.channel('testing').join(c1)
         app.channel('othertest').join(c2)
 
@@ -183,14 +183,14 @@ describe('app.publish', () => {
         app.once('publish', (_event: string, channel: Channel, hook: HookContext) => {
           assert.deepStrictEqual(hook.result, data)
           assert.deepStrictEqual(channel.connections, [c1, c2])
-          done()
+          resolve()
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
 
     it('dispatcher can send data', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const c1data = { channel: 'testing' }
 
         app.channel('testing').join(c1)
@@ -205,30 +205,30 @@ describe('app.publish', () => {
           assert.deepStrictEqual(channel.dataFor(c1), c1data)
           assert.ok(channel.dataFor(c2) === null)
           assert.deepStrictEqual(channel.connections, [c1, c2])
-          done()
+          resolve()
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
 
     it('publisher precedence and preventing publishing', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         app.channel('test').join(c1)
 
         app.registerPublisher(() => app.channel('test'))
         app.service('test').registerPublisher('created', (): null => null)
 
-        app.once('publish', () => done(new Error('Should never get here')))
+        app.once('publish', () => reject(new Error('Should never get here')))
 
         app
           .service('test')
           .create(data)
-          .then(() => done())
-          .catch(done)
+          .then(() => resolve())
+          .catch(reject)
       }))
 
     it('data of first channel has precedence', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const sendData = { test: true }
 
         app.channel('testing').join(c1)
@@ -241,10 +241,10 @@ describe('app.publish', () => {
         app.once('publish', (_event: string, channel: CombinedChannel) => {
           assert.strictEqual(channel.dataFor(c1), null)
           assert.deepStrictEqual(channel.connections, [c1])
-          done()
+          resolve()
         })
 
-        app.service('test').create(data).catch(done)
+        app.service('test').create(data).catch(reject)
       }))
   })
 })

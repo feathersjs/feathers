@@ -23,7 +23,7 @@ describe('authentication/hooks/events', () => {
   })
 
   it('login', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve, reject) => {
       const data = {
         message: 'test'
       }
@@ -35,9 +35,9 @@ describe('authentication/hooks/events', () => {
             assert.deepStrictEqual(result, data)
             assert.ok(params.testParam)
             assert.ok(context.method, 'create')
-            done()
+            resolve()
           } catch (error: any) {
-            done(error)
+            reject(error)
           }
         }
       )
@@ -49,7 +49,7 @@ describe('authentication/hooks/events', () => {
     }))
 
   it('logout', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve, reject) => {
       app.once(
         'logout',
         (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
@@ -59,9 +59,9 @@ describe('authentication/hooks/events', () => {
             })
             assert.ok(params.testParam)
             assert.ok(context.method, 'remove')
-            done()
+            resolve()
           } catch (error: any) {
-            done(error)
+            reject(error)
           }
         }
       )
@@ -73,9 +73,9 @@ describe('authentication/hooks/events', () => {
     }))
 
   it('does nothing when provider is not set', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve, reject) => {
       const handler = () => {
-        done(new Error('Should never get here'))
+        reject(new Error('Should never get here'))
       }
 
       app.on('logout', handler)
@@ -84,7 +84,7 @@ describe('authentication/hooks/events', () => {
         assert.deepStrictEqual(result, {
           id: 'test'
         })
-        done()
+        resolve()
       })
 
       service.remove('test')

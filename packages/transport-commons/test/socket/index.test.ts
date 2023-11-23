@@ -53,12 +53,12 @@ describe('@feathersjs/transport-commons', () => {
   })
 
   it('`connection` event', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const socket = new EventEmitter()
 
       app.once('connection', (data) => {
         assert.strictEqual(connection, data)
-        done()
+        resolve()
       })
 
       provider.emit('connection', socket)
@@ -66,7 +66,7 @@ describe('@feathersjs/transport-commons', () => {
 
   describe('method name based socket events', () => {
     it('.get without params', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const socket = new EventEmitter()
 
         provider.emit('connection', socket)
@@ -85,15 +85,15 @@ describe('@feathersjs/transport-commons', () => {
                 connection
               )
             })
-            done()
-          } catch (e: any) {
-            done(e)
+            resolve()
+          } catch (error: any) {
+            reject(error)
           }
         })
       }))
 
     it('method with invalid service name and arguments', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         const socket = new EventEmitter()
 
         provider.emit('connection', socket)
@@ -101,12 +101,12 @@ describe('@feathersjs/transport-commons', () => {
         socket.emit('get', null, (error: any) => {
           assert.strictEqual(error.name, 'NotFound')
           assert.strictEqual(error.message, 'Invalid service path')
-          done()
+          resolve()
         })
       }))
 
     it('method with implicit toString errors properly', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         const socket = new EventEmitter()
 
         provider.emit('connection', socket)
@@ -114,12 +114,12 @@ describe('@feathersjs/transport-commons', () => {
         socket.emit('get', { toString: '' }, (error: any) => {
           assert.strictEqual(error.name, 'NotFound')
           assert.strictEqual(error.message, 'Invalid service path')
-          done()
+          resolve()
         })
       }))
 
     it('.create with params', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const socket = new EventEmitter()
         const data = {
           test: 'data'
@@ -147,16 +147,16 @@ describe('@feathersjs/transport-commons', () => {
 
               assert.ok(!error)
               assert.deepStrictEqual(result, Object.assign({ params }, data))
-              done()
-            } catch (e: any) {
-              done(e)
+              resolve()
+            } catch (error: any) {
+              reject(error)
             }
           }
         )
       }))
 
     it('custom method with params', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const socket = new EventEmitter()
         const data = {
           test: 'data'
@@ -188,9 +188,9 @@ describe('@feathersjs/transport-commons', () => {
                 params,
                 message: 'From custom method'
               })
-              done()
-            } catch (e: any) {
-              done(e)
+              resolve()
+            } catch (error: any) {
+              reject(error)
             }
           }
         )

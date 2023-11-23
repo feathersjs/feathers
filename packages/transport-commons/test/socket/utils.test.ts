@@ -62,7 +62,7 @@ describe('socket commons utils', () => {
       assert.strictEqual(typeof getDispatcher('test', new WeakMap()), 'function'))
 
     it('works with backwards compatible socketKey', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         const socketKey = Symbol('@feathersjs/test')
         const dispatcher = getDispatcher('emit', undefined, socketKey)
         const socket = new EventEmitter()
@@ -78,7 +78,7 @@ describe('socket commons utils', () => {
 
         socket.once('testing', (data) => {
           assert.strictEqual(data, 'hi')
-          done()
+          resolve()
         })
 
         dispatcher('testing', channel, { result: 'hi' } as any)
@@ -108,36 +108,36 @@ describe('socket commons utils', () => {
       })
 
       it('dispatches a basic event', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           dummySocket.once('testing', (data) => {
             assert.strictEqual(data, 'hi')
-            done()
+            resolve()
           })
 
           dispatcher('testing', dummyChannel, dummyHook)
         }))
 
       it('dispatches event on a hooks path event', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           dummyHook.path = 'myservice'
 
           dummySocket.once('myservice testing', (data) => {
             assert.strictEqual(data, 'hi')
-            done()
+            resolve()
           })
 
           dispatcher('testing', dummyChannel, dummyHook)
         }))
 
       it('dispatches `hook.dispatch` instead', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const message = 'hi from dispatch'
 
           dummyHook.dispatch = message
 
           dummySocket.once('testing', (data) => {
             assert.strictEqual(data, message)
-            done()
+            resolve()
           })
 
           dispatcher('testing', dummyChannel, dummyHook)
@@ -150,7 +150,7 @@ describe('socket commons utils', () => {
       })
 
       it('dispatches arrays properly hook events', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const data1 = { message: 'First message' }
           const data2 = { message: 'Second message' }
 
@@ -160,7 +160,7 @@ describe('socket commons utils', () => {
             assert.deepStrictEqual(data, data1)
             dummySocket.once('testing', (result) => {
               assert.deepStrictEqual(result, data2)
-              done()
+              resolve()
             })
           })
 
@@ -169,7 +169,7 @@ describe('socket commons utils', () => {
         }))
 
       it('dispatches dispatch arrays properly', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const data1 = { message: 'First message' }
           const data2 = { message: 'Second message' }
 
@@ -180,7 +180,7 @@ describe('socket commons utils', () => {
             assert.deepStrictEqual(data, data1)
             dummySocket.once('testing', (result) => {
               assert.deepStrictEqual(result, data2)
-              done()
+              resolve()
             })
           })
 
@@ -189,14 +189,14 @@ describe('socket commons utils', () => {
         }))
 
       it('dispatches arrays properly for custom events', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const result = [{ message: 'First' }, { message: 'Second' }]
 
           dummyHook.result = result
 
           dummySocket.once('otherEvent', (data) => {
             assert.deepStrictEqual(data, result)
-            done()
+            resolve()
           })
 
           dispatcher('otherEvent', dummyChannel, dummyHook, result)
@@ -225,28 +225,28 @@ describe('socket commons utils', () => {
 
     describe('running methods', () => {
       it('basic', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve, reject) => {
           const callback = (error: any, result: any) => {
             if (error) {
-              return done(error)
+              return reject(error)
             }
 
             assert.deepStrictEqual(result, { id: 10 })
-            done()
+            resolve()
           }
 
           runMethod(app, {}, 'myservice', 'get', [10, {}, callback])
         }))
 
       it('queries are always plain objects', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve, reject) => {
           const callback = (error: any, result: any) => {
             if (error) {
-              return done(error)
+              return reject(error)
             }
 
             assert.deepStrictEqual(result, { id: 10 })
-            done()
+            resolve()
           }
 
           runMethod(app, {}, 'myservice', 'get', [
@@ -259,13 +259,13 @@ describe('socket commons utils', () => {
         }))
 
       it('merges params with connection and passes connection', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve, reject) => {
           const connection = {
             testing: true
           }
           const callback = (error: any, result: any) => {
             if (error) {
-              return done(error)
+              return reject(error)
             }
 
             assert.deepStrictEqual(result, {
@@ -277,7 +277,7 @@ describe('socket commons utils', () => {
                 testing: true
               }
             })
-            done()
+            resolve()
           }
 
           app.use('/otherservice', {
@@ -290,27 +290,27 @@ describe('socket commons utils', () => {
         }))
 
       it('with params missing', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve, reject) => {
           const callback = (error: any, result: any) => {
             if (error) {
-              return done(error)
+              return reject(error)
             }
 
             assert.deepStrictEqual(result, { id: 10 })
-            done()
+            resolve()
           }
 
           runMethod(app, {}, 'myservice', 'get', [10, callback])
         }))
 
       it('with params but missing callback', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           app.use('/otherservice', {
             get(id: number | string) {
               assert.strictEqual(id, 'dishes')
 
               return Promise.resolve({ id }).then((res) => {
-                done()
+                resolve()
                 return res
               })
             }
@@ -320,13 +320,13 @@ describe('socket commons utils', () => {
         }))
 
       it('with params and callback missing', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           app.use('/otherservice', {
             get(id: number | string) {
               assert.strictEqual(id, 'laundry')
 
               return Promise.resolve({ id }).then((res) => {
-                done()
+                resolve()
                 return res
               })
             }
@@ -337,7 +337,7 @@ describe('socket commons utils', () => {
     })
 
     it('throws NotFound for invalid service', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const callback = (error: any) => {
           try {
             assert.deepStrictEqual(error, {
@@ -346,9 +346,9 @@ describe('socket commons utils', () => {
               code: 404,
               className: 'not-found'
             })
-            done()
-          } catch (e: any) {
-            done(e)
+            resolve()
+          } catch (err: any) {
+            reject(err)
           }
         }
 
@@ -356,7 +356,7 @@ describe('socket commons utils', () => {
       }))
 
     it('throws MethodNotAllowed undefined method', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const callback = (error: any) => {
           try {
             assert.deepStrictEqual(error, {
@@ -365,9 +365,9 @@ describe('socket commons utils', () => {
               code: 405,
               className: 'method-not-allowed'
             })
-            done()
-          } catch (e: any) {
-            done(e)
+            resolve()
+          } catch (error: any) {
+            reject(error)
           }
         }
 
@@ -375,7 +375,7 @@ describe('socket commons utils', () => {
       }))
 
     it('throws MethodNotAllowed for invalid service method', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const callback = (error: any) => {
           try {
             assert.deepStrictEqual(error, {
@@ -384,9 +384,9 @@ describe('socket commons utils', () => {
               code: 405,
               className: 'method-not-allowed'
             })
-            done()
-          } catch (e: any) {
-            done(e)
+            resolve()
+          } catch (error: any) {
+            reject(error)
           }
         }
 
@@ -394,7 +394,7 @@ describe('socket commons utils', () => {
       }))
 
     it('method error calls back with normalized error', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const callback = (error: any) => {
           try {
             assert.deepStrictEqual(error, {
@@ -403,9 +403,9 @@ describe('socket commons utils', () => {
               code: 401,
               className: 'not-authenticated'
             })
-            done()
-          } catch (e: any) {
-            done(e)
+            resolve()
+          } catch (error: any) {
+            reject(error)
           }
         }
 

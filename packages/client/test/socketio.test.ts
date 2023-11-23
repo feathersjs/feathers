@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client'
 import socketio from '@feathersjs/socketio'
 import { Server } from 'http'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 
 import * as feathers from '../dist/feathers'
 import app from './fixture'
@@ -19,10 +19,10 @@ describe('Socket.io connector', async function () {
 
   afterAll(
     () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         socket.once('disconnect', () => {
           server.close()
-          done()
+          resolve()
         })
         socket.disconnect()
       })

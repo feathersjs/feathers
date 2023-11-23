@@ -61,10 +61,10 @@ describe('client', () => {
   })
 
   it('initializes and emits namespaced events', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       connection.once('todos test', (data: any) => {
         assert.deepStrictEqual(data, testData)
-        done()
+        resolve()
       })
       service.emit('test', testData)
     }))
@@ -74,10 +74,10 @@ describe('client', () => {
   })
 
   it('can receive pathed events', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       service.once('thing', (data) => {
         assert.deepStrictEqual(data, testData)
-        done()
+        resolve()
       })
 
       connection.emit('todos thing', testData)
@@ -234,14 +234,14 @@ describe('client', () => {
   })
 
   it('has all EventEmitter methods', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const testing = { hello: 'world' }
       const callback = (data: any) => {
         assert.deepStrictEqual(data, testing)
         assert.strictEqual(service.listenerCount('test'), 1)
         service.removeListener('test', callback)
         assert.strictEqual(service.listenerCount('test'), 0)
-        done()
+        resolve()
       }
 
       service.addListener('test', callback)
@@ -250,7 +250,7 @@ describe('client', () => {
     }))
 
   it('properly handles on/off methods', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const testing = { hello: 'world' }
 
       const callback1 = (data: any) => {
@@ -260,7 +260,7 @@ describe('client', () => {
         assert.strictEqual(service.listenerCount('test'), 2)
         service.removeAllListeners('test')
         assert.strictEqual(service.listenerCount('test'), 0)
-        done()
+        resolve()
       }
       const callback2 = () => {
         // noop

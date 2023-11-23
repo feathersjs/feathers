@@ -1,7 +1,7 @@
 import knex, { Knex } from 'knex'
 import assert from 'assert'
 import { feathers, HookContext, Service } from '@feathersjs/feathers'
-import adapterTests from '@feathersjs/adapter-tests'
+import adapterTests from '@feathersjs/adapter-tests-vitest'
 import { errors } from '@feathersjs/errors'
 import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
@@ -235,13 +235,15 @@ describe('Feathers Knex Service', () => {
       find: [hooks.validateQuery(personQueryValidator)]
     }
   })
-  beforeAll(() => {
+  beforeAll(async () => {
     if (TYPE === 'sqlite') {
       // Attach the public database to mimic a "schema"
       db.schema.raw(`attach database '${schemaName}.sqlite' as ${schemaName}`)
     }
+
+    await clean()
   })
-  beforeAll(clean)
+
   afterAll(clean)
 
   describe('$like method', () => {

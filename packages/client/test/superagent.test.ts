@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 import { Server } from 'http'
 import getPort from 'get-port'
 
@@ -18,8 +18,8 @@ describe('Superagent REST connector', async function () {
 
   afterAll(
     () =>
-      new Promise<void>((done) => {
-        server.close(() => done())
+      new Promise<void>((resolve) => {
+        server.close(() => resolve())
       })
   )
 

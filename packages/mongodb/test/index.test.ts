@@ -1,5 +1,5 @@
 import { Db, MongoClient, ObjectId } from 'mongodb'
-import adapterTests from '@feathersjs/adapter-tests'
+import adapterTests from '@feathersjs/adapter-tests-vitest'
 import assert from 'assert'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'

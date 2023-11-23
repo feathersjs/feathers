@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import { verify } from '@feathersjs/tests'
+import { verify } from '@feathersjs/tests-vitest'
 
 export default (name: string, options: any) => {
   const call = (method: string, ...args: any[]) =>

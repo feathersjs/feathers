@@ -2,7 +2,7 @@
 // @ts-ignore
 import fetch from 'node-fetch'
 import { Server } from 'http'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 
 import * as feathers from '../dist/feathers'
 import app from './fixture'
@@ -20,8 +20,8 @@ describe('fetch REST connector', async function () {
 
   afterAll(
     () =>
-      new Promise<void>((done) => {
-        server.close(() => done())
+      new Promise<void>((resolve) => {
+        server.close(() => resolve())
       })
   )
 

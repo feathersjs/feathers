@@ -116,12 +116,12 @@ describe('app.channel', () => {
       })
 
       it('empty', () =>
-        new Promise<void>((done) => {
+        new Promise<void>((resolve) => {
           const channel = app.channel('test')
           const c1 = { id: 1 }
           const c2 = { id: 2 }
 
-          channel.once('empty', done)
+          channel.once('empty', () => resolve())
 
           channel.join(c1, c2)
           channel.leave(c1)

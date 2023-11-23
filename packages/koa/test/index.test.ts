@@ -2,7 +2,7 @@ import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
 import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import { Service, restTests } from '@feathersjs/tests-vitest'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 import getPort from 'get-port'
 

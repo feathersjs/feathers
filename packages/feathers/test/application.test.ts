@@ -17,13 +17,13 @@ describe('Feathers application', () => {
   })
 
   it('is an event emitter', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       const app = feathers()
       const original = { hello: 'world' }
 
       app.on('test', (data: any) => {
         assert.deepStrictEqual(original, data)
-        done()
+        resolve()
       })
 
       app.emit('test', original)
@@ -57,10 +57,10 @@ describe('Feathers application', () => {
   })
 
   it('additionally passes `app` as .configure parameter (#558)', () =>
-    new Promise<void>((done) => {
+    new Promise<void>((resolve) => {
       feathers().configure(function (app) {
         assert.strictEqual(this, app)
-        done()
+        resolve()
       })
     }))
 
@@ -193,7 +193,7 @@ describe('Feathers application', () => {
     })
 
     it('services can be re-used (#566)', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const service = {
           async create(data: any) {
             return data
@@ -225,7 +225,7 @@ describe('Feathers application', () => {
             message: 'Hi',
             fromHook: true
           })
-          done()
+          resolve()
         })
 
         app1.use('testing', app2.service('dummy'))
@@ -410,7 +410,7 @@ describe('Feathers application', () => {
     })
 
     it('registering app.setup but while still pending will be set up', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve) => {
         const app = feathers()
 
         app.setup()
@@ -420,7 +420,7 @@ describe('Feathers application', () => {
             assert.ok((app as any)._isSetup)
             assert.strictEqual(appRef, app)
             assert.strictEqual(path, 'dummy')
-            done()
+            resolve()
           }
         })
       }))
@@ -512,7 +512,7 @@ describe('Feathers application', () => {
 
   describe('sub apps', () => {
     it('re-registers sub-app services with prefix', () =>
-      new Promise<void>((done) => {
+      new Promise<void>((resolve, reject) => {
         const app = feathers()
         const subApp = feathers()
 
@@ -550,7 +550,7 @@ describe('Feathers application', () => {
               message: 'This is another test'
             })
 
-            done()
+            resolve()
           })
 
           app.service('api/service2').create({

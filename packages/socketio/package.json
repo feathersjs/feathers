@@ -61,7 +61,7 @@
   "devDependencies": {
     "@feathersjs/express": "^5.0.11",
     "@feathersjs/memory": "^5.0.11",
-    "@feathersjs/tests": "^5.0.11",
+    "@feathersjs/tests-vitest": "^5.0.11",
     "@types/node": "^20.8.4",
     "get-port": "^7.0.0",
     "lodash": "^4.17.21",
