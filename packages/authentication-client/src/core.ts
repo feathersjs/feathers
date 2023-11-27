@@ -166,9 +166,10 @@ export class AuthenticationClient {
    *
    * @param force force reauthentication with the server
    * @param strategy The name of the strategy to use. Defaults to `options.jwtStrategy`
+   * @param authParams Additional authentication parameters
    * @returns The reauthentication result
    */
-  reAuthenticate(force = false, strategy?: string): Promise<AuthenticationResult> {
+  reAuthenticate(force = false, strategy?: string, authParams?: Params): Promise<AuthenticationResult> {
     // Either returns the authentication state or
     // tries to re-authenticate with the stored JWT and strategy
     let authPromise = this.app.get('authentication')
@@ -179,10 +180,13 @@ export class AuthenticationClient {
           return this.handleError(new NotAuthenticated('No accessToken found in storage'), 'authenticate')
         }
 
-        return this.authenticate({
-          strategy: strategy || this.options.jwtStrategy,
-          accessToken
-        })
+        return this.authenticate(
+          {
+            strategy: strategy || this.options.jwtStrategy,
+            accessToken
+          },
+          authParams
+        )
       })
       this.app.set('authentication', authPromise)
     }

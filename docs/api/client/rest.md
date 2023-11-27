@@ -132,13 +132,13 @@ const controller = new AbortController()
 
 app.configure(restClient.fetch(fetch))
 
-const promise = app.service('messages').get(1, {
+app.service('messages').get(1, {
   connection: {
     signal: controller.signal
   }
 })
 
-promise.abort()
+controller.abort()
 ```
 
 #### Superagent
