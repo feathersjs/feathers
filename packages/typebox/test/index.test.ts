@@ -80,6 +80,27 @@ describe('@feathersjs/schema/typebox', () => {
     })
   })
 
+  it('$in and $nin works with array type', async () => {
+    const schema = Type.Object({
+      things: Type.Array(Type.Number())
+    })
+    const querySchema = querySyntax(schema)
+    const validator = new Ajv().compile(querySchema)
+
+    type Query = Static<typeof querySchema>
+
+    const query: Query = {
+      things: {
+        $in: [10, 20],
+        $nin: [30]
+      }
+    }
+
+    const validated = (await validator(query)) as any as Query
+
+    assert.ok(validated)
+  })
+
   it('defaultAppConfiguration', async () => {
     const configSchema = Type.Intersect([
       defaultAppConfiguration,
