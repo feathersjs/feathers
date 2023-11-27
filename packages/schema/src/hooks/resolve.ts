@@ -90,7 +90,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
       resolve,
       query: {
         ...query,
-        ...(!hasVirtualSelects ? { $select } : {})
+        ...(!!$select && !hasVirtualSelects ? { $select } : {})
       }
     }
 
