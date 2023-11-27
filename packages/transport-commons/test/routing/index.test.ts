@@ -43,6 +43,14 @@ describe('app.routes', () => {
     assert.strictEqual(result.service, app.service('/my/service/'))
   })
 
+  it('can look up case insensitive', () => {
+    app.routes.caseSensitive = false
+
+    const result = app.lookup('/My/ServicE')
+
+    assert.strictEqual(result.service, app.service('my/service'))
+  })
+
   it('can look up with id', () => {
     const result = app.lookup('/my/service/1234')
 
