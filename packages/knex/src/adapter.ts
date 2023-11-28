@@ -241,7 +241,9 @@ export class KnexAdapter<
 
     const { client } = this.db(params).client.config
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
+    const rows: any = await this.db(params)
+      .insert(data, returning, { includeTriggerModifications: true })
+      .catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
@@ -256,7 +258,11 @@ export class KnexAdapter<
 
   async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
   async _patch(id: Id, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableId, data: PatchData | Partial<Result>, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(
+    id: NullableId,
+    data: PatchData | Partial<Result>,
+    _params?: ServiceParams
+  ): Promise<Result | Result[]>
   async _patch(
     id: NullableId,
     raw: PatchData | Partial<Result>,
@@ -285,7 +291,7 @@ export class KnexAdapter<
     }
     const builder = this.createQuery(updateParams)
 
-    await builder.update(data)
+    await builder.update(data, [], { includeTriggerModifications: true })
 
     const items = await this._findOrGet(null, updateParams)
 
@@ -316,7 +322,7 @@ export class KnexAdapter<
       return result
     }, {})
 
-    await this.db(params).update(newObject, '*').where(this.id, id)
+    await this.db(params).update(newObject, '*', { includeTriggerModifications: true }).where(this.id, id)
 
     return this._get(id, params)
   }
@@ -339,7 +345,7 @@ export class KnexAdapter<
     // build up the knex query out of the query params
     this.knexify(q, query)
 
-    await q.del().catch(errorHandler)
+    await q.delete([], { includeTriggerModifications: true }).catch(errorHandler)
 
     if (id !== null) {
       if (items.length === 1) {
