@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- allow \_patch to modify the entire base schema ([#3300](https://github.com/feathersjs/feathers/issues/3300)) ([0f41622](https://github.com/feathersjs/feathers/commit/0f41622307589b3a0b62ac411a73e6a601bda171))
+- **authentication-client:** Allow to abort fetch ([#3310](https://github.com/feathersjs/feathers/issues/3310)) ([ff3e104](https://github.com/feathersjs/feathers/commit/ff3e104b62d02d45261a293aff4e9491241f486f))
+- **express:** Re-export Router ([#3349](https://github.com/feathersjs/feathers/issues/3349)) ([0cbdb03](https://github.com/feathersjs/feathers/commit/0cbdb03a2d810f4855da9b21602c96e4fed7fce5))
+- **generators:** use `export type` vs `export` ([#3246](https://github.com/feathersjs/feathers/issues/3246)) ([82d30fd](https://github.com/feathersjs/feathers/commit/82d30fd37914e61935e068e89fc389f6bf47aaad))
+- **knex:** Add includeTriggerModifications for MSSQL support ([#3355](https://github.com/feathersjs/feathers/issues/3355)) ([cbe44b0](https://github.com/feathersjs/feathers/commit/cbe44b0e91506ab06c86355af67f83d5197bd896))
+- **schema:** Allow $in and $nin queries to work for arrays ([#3352](https://github.com/feathersjs/feathers/issues/3352)) ([677c214](https://github.com/feathersjs/feathers/commit/677c214a353a7f9a1f90649b9bbec4d0d6517a6f))
+- **schema:** Remove undefined $select when using resolveResult hook ([#3354](https://github.com/feathersjs/feathers/issues/3354)) ([c43e009](https://github.com/feathersjs/feathers/commit/c43e009188eb84f98e3f5f29ac4444e6967afc1f))
+- **transport-commons:** Allow case insensitive route lookups ([#3353](https://github.com/feathersjs/feathers/issues/3353)) ([a4a5ab6](https://github.com/feathersjs/feathers/commit/a4a5ab6cb59048176292cd71c04a32aa71ac4642))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **authentication-client:** Allow to abort fetch ([#3310](https://github.com/feathersjs/feathers/issues/3310)) ([ff3e104](https://github.com/feathersjs/feathers/commit/ff3e104b62d02d45261a293aff4e9491241f486f))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes
