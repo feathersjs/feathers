@@ -5,13 +5,11 @@ import { getDispatcher, runMethod } from './utils'
 
 export interface SocketOptions {
   done: Promise<any>
-  emit: string
   socketMap: WeakMap<RealTimeConnection, any>
-  socketKey?: any
   getParams: (socket: any) => RealTimeConnection
 }
 
-export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOptions) {
+export function socket({ done, socketMap, getParams }: SocketOptions) {
   return (app: Application) => {
     const leaveChannels = (connection: RealTimeConnection) => {
       const { channels } = app
@@ -24,7 +22,7 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
     app.configure(channels())
     app.configure(routing())
 
-    app.on('publish', getDispatcher(emit, socketMap, socketKey))
+    app.on('publish', getDispatcher(socketMap))
     app.on('disconnect', leaveChannels)
     app.on('logout', (_authResult: any, params: Params) => {
       const { connection } = params

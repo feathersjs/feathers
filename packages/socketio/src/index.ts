@@ -93,8 +93,7 @@ function configureSocketio(port?: any, options?: any, config?: any) {
       socket({
         done,
         socketMap,
-        getParams,
-        emit: 'emit'
+        getParams
       })
     )
   }

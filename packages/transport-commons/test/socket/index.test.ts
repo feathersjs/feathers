@@ -36,7 +36,6 @@ describe('@feathersjs/transport-commons', () => {
     provider = new EventEmitter()
 
     options = {
-      emit: 'emit',
       done: Promise.resolve(provider),
       socketMap: new WeakMap(),
       getParams() {

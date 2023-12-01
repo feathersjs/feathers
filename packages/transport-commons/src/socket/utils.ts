@@ -39,13 +39,13 @@ export function normalizeError(e: any) {
   return result
 }
 
-export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnection, any>, socketKey?: any) {
+export function getDispatcher(socketMap: WeakMap<RealTimeConnection, any>) {
   return function (event: string, channel: CombinedChannel, context: HookContext, data?: any) {
     debug(`Dispatching '${event}' to ${channel.length} connections`)
 
     channel.connections.forEach((connection) => {
       // The reference between connection and socket is set in `app.setup`
-      const socket = socketKey ? connection[socketKey] : socketMap.get(connection)
+      const socket = socketMap.get(connection)
 
       if (socket) {
         const eventName = `${context.path || ''} ${event}`.trim()
@@ -60,7 +60,7 @@ export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnectio
 
         debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, result)
 
-        socket[emit](eventName, result)
+        socket.emit(eventName, result)
       }
     })
   }
