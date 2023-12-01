@@ -68,10 +68,10 @@ const oauth1 = (port: number) =>
           provider === 'getpocket'
             ? res.end(qs.stringify({ code: 'code' }))
             : provider === 'sellsy'
-            ? res.end(
-                'authentification_url=https://apifeed.sellsy.com/0/login.php&oauth_token=token&oauth_token_secret=secret&oauth_callback_confirmed=true'
-              )
-            : res.end(qs.stringify({ oauth_token: 'token', oauth_token_secret: 'secret' }))
+              ? res.end(
+                  'authentification_url=https://apifeed.sellsy.com/0/login.php&oauth_token=token&oauth_token_secret=secret&oauth_callback_confirmed=true'
+                )
+              : res.end(qs.stringify({ oauth_token: 'token', oauth_token_secret: 'secret' }))
         })
       } else if (/authorize_url/.test(url)) {
         const location = callback + '?' + qs.stringify({ oauth_token: 'token', oauth_verifier: 'verifier' })
@@ -180,26 +180,26 @@ const oauth2 = (port: number) =>
           provider === 'concur'
             ? res.end(' <Token>token</Token> <Refresh_Token>refresh</Refresh_Token> ')
             : provider === 'withings'
-            ? res.end(
-                JSON.stringify({
-                  body: {
+              ? res.end(
+                  JSON.stringify({
+                    body: {
+                      access_token: 'token',
+                      refresh_token: 'refresh',
+                      expires_in: 3600
+                    }
+                  })
+                )
+              : res.end(
+                  JSON.stringify({
                     access_token: 'token',
                     refresh_token: 'refresh',
-                    expires_in: 3600
-                  }
-                })
-              )
-            : res.end(
-                JSON.stringify({
-                  access_token: 'token',
-                  refresh_token: 'refresh',
-                  expires_in: 3600,
-                  id_token: openid ? sign({ typ: 'JWT' }, { nonce: 'whatever' }, 'signature') : undefined,
-                  open_id: provider === 'tiktok' ? 'id' : undefined,
-                  uid: provider === 'weibo' ? 'id' : undefined,
-                  openid: provider === 'wechat' ? 'openid' : undefined
-                })
-              )
+                    expires_in: 3600,
+                    id_token: openid ? sign({ typ: 'JWT' }, { nonce: 'whatever' }, 'signature') : undefined,
+                    open_id: provider === 'tiktok' ? 'id' : undefined,
+                    uid: provider === 'weibo' ? 'id' : undefined,
+                    openid: provider === 'wechat' ? 'openid' : undefined
+                  })
+                )
         })
       } else if (/authorize_error_message/.test(url)) {
         on.authorize({ url, query, headers })
