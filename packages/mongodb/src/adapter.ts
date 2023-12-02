@@ -219,7 +219,7 @@ export class MongoDbAdapter<
       ...projection
     }
 
-    if (params.pipeline) {
+    if (!params.mongodb && params.pipeline) {
       const aggregateParams = {
         ...params,
         query: {
