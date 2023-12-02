@@ -224,6 +224,8 @@ export class MongoDbAdapter<
         ...params,
         query: {
           ...params.query,
+          // TODO: Do we need this $and like its needed in find?
+          // Or should it just be `[this.id]: this.getObjectId(id)`
           $and: (params.query.$and || []).concat({
             [this.id]: this.getObjectId(id)
           })
