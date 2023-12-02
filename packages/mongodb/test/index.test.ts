@@ -474,6 +474,21 @@ describe('Feathers MongoDB Service', () => {
       assert.deepEqual(result[0].person, bob)
       assert.equal(result.length, 1)
     })
+
+    it('can use aggregation in _get', async () => {
+      const dave = await app.service('people').create({ name: 'Dave', age: 25 })
+      const result1 = await app.service('people').get(dave._id, {
+        query: { $select: ['name'] }
+      })
+      const result2 = await app.service('people').get(dave._id, {
+        query: { $select: ['name'] },
+        pipeline: []
+      })
+
+      assert.deepStrictEqual(result1, result2)
+
+      app.service('people').remove(dave._id)
+    })
   })
 
   describe('query validation', () => {

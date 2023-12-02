@@ -219,6 +219,28 @@ export class MongoDbAdapter<
       ...projection
     }
 
+    if (params.pipeline) {
+      const aggregateParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $and: (params.query.$and || []).concat({
+            [this.id]: this.getObjectId(id)
+          })
+        }
+      }
+      return this.aggregateRaw(aggregateParams)
+        .then((result) => result.toArray())
+        .then(([data]) => {
+          if (data === undefined) {
+            throw new NotFound(`No record found for id '${id}'`)
+          }
+
+          return data
+        })
+        .catch(errorHandler)
+    }
+
     return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
       .then((data) => {
