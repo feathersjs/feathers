@@ -126,6 +126,7 @@ export class MongoDbAdapter<
     return q
   }
 
+  /* TODO: Remove $out and $merge stages, else it returns an empty cursor. I think its same to assume this is primarily for querying. */
   async aggregateRaw(params: ServiceParams) {
     const model = await this.getModel(params)
     const pipeline = params.pipeline || []
@@ -156,6 +157,7 @@ export class MongoDbAdapter<
     if (filters.$limit !== undefined) {
       pipeline.push({ $limit: filters.$limit })
     }
+
     return pipeline
   }
 
@@ -206,6 +208,20 @@ export class MongoDbAdapter<
     return data
   }
 
+  async countDocuments(params: ServiceParams) {
+    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
+    const { query } = this.filterQuery(null, params)
+    if (paginate && paginate.default) {
+      const model = await this.getModel(params)
+      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+        return model.estimatedDocumentCount()
+      } else {
+        return model.countDocuments(query, params.mongodb)
+      }
+    }
+    return Promise.resolve(0)
+  }
+
   async _get(id: AdapterId, params: ServiceParams = {} as ServiceParams): Promise<Result> {
     const {
       query,
@@ -223,8 +239,6 @@ export class MongoDbAdapter<
         query: {
           ...params.query,
           $limit: 1,
-          // TODO: Do we need this $and like its needed in find?
-          // Or should it just be `[this.id]: this.getObjectId(id)`
           $and: (params.query.$and || []).concat({
             [this.id]: this.getObjectId(id)
           })
@@ -258,31 +272,52 @@ export class MongoDbAdapter<
   async _find(params?: ServiceParams & { paginate: false }): Promise<Result[]>
   async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
-    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
-    const { filters, query } = this.filterQuery(null, params)
-    const useAggregation = !params.mongodb && filters.$limit !== 0
-    const countDocuments = async () => {
-      if (paginate && paginate.default) {
-        const model = await this.getModel(params)
-        if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-          return model.estimatedDocumentCount()
-        } else {
-          return model.countDocuments(query, { ...params.mongodb })
+    const { paginate } = this.getOptions(params)
+    const { filters } = this.filterQuery(null, params)
+
+    // TODO: Handle accurate aggregation count
+    if (params.pipeline) {
+      if (filters.$limit === 0) {
+        const page = {
+          total: await this.countDocuments(params),
+          limit: filters.$limit,
+          skip: filters.$skip || 0,
+          data: [] as Result[]
         }
+
+        return paginate && paginate.default ? page : page.data
       }
-      return Promise.resolve(0)
+
+      const [data, total] = await Promise.all([this.aggregateRaw(params), this.countDocuments(params)])
+
+      const page = {
+        total,
+        limit: filters.$limit,
+        skip: filters.$skip || 0,
+        data: (await data.toArray()) as unknown as Result[]
+      }
+
+      return paginate && paginate.default ? page : page.data
     }
 
-    const [request, total] = await Promise.all([
-      useAggregation ? this.aggregateRaw(params) : this.findRaw(params),
-      countDocuments()
-    ])
+    if (filters.$limit === 0) {
+      const page = {
+        total: await this.countDocuments(params),
+        limit: filters.$limit,
+        skip: filters.$skip || 0,
+        data: [] as Result[]
+      }
+
+      return paginate && paginate.default ? page : page.data
+    }
+
+    const [data, total] = await Promise.all([this.findRaw(params), this.countDocuments(params)])
 
     const page = {
       total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : ((await request.toArray()) as any as Result[])
+      data: (await data.toArray()) as unknown as Result[]
     }
 
     return paginate && paginate.default ? page : page.data
@@ -409,12 +444,24 @@ export class MongoDbAdapter<
       filters: { $select }
     } = this.filterQuery(id, params)
     const model = await this.getModel(params)
-
-    const result = await model.findOneAndReplace(query, this.normalizeId(id, data), {
+    const findOptions: FindOneAndReplaceOptions = {
       ...(params.mongodb as FindOneAndReplaceOptions),
       returnDocument: 'after',
       projection: this.getProjection($select)
-    })
+    }
+
+    if (params.pipeline) {
+      return this._get(id, params)
+        .then(async (result) => {
+          await model.replaceOne({ [this.id]: id }, findOptions)
+          return result
+        })
+        .catch(errorHandler)
+    }
+
+    const result = await model
+      .findOneAndReplace(query, this.normalizeId(id, data), findOptions)
+      .catch(errorHandler)
 
     if (result.value === null) {
       throw new NotFound(`No record found for id '${id}'`)
