@@ -453,21 +453,21 @@ export class MongoDbAdapter<
     const model = await this.getModel(params)
     const {
       query,
-      filters: { $select }
+      filters: { $select, $sort }
     } = this.filterQuery(id, params)
-    const deleteOptions = { ...params.mongodb }
     const findParams = {
       ...params,
       paginate: false,
       query: {
         ...query,
-        $select
+        $select,
+        $sort
       }
     }
 
     return this._findOrGet(id, findParams)
       .then(async (items) => {
-        await model.deleteMany(query, deleteOptions)
+        await model.deleteMany(query, params.mongodb)
         return items
       })
       .catch(errorHandler)
