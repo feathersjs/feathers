@@ -381,7 +381,7 @@ export class MongoDbAdapter<
     const model = await this.getModel(params)
     const {
       query,
-      filters: { $select }
+      filters: { $sort, $select }
     } = this.filterQuery(id, params)
 
     const replacement = Object.keys(data).reduce((current, key) => {
@@ -400,28 +400,48 @@ export class MongoDbAdapter<
     }, {} as any)
 
     if (id === null) {
-      const originalIds = await this._findOrGet(id, {
-        ...params,
-        query: {
-          ...query,
-          $select: [this.id]
-        },
-        paginate: false
-      })
-      const items = Array.isArray(originalIds) ? originalIds : [originalIds]
-      const idList = items.map((item: any) => item[this.id])
       const findParams = {
         ...params,
         paginate: false,
         query: {
-          [this.id]: { $in: idList },
-          $select
+          ...params.query,
+          $select: [this.id]
         }
       }
 
-      await model.updateMany(query, replacement, params.mongodb)
+      return this._find(findParams)
+        .then(async (result) => {
+          const idList = (result as Result[]).map((item: any) => item[this.id])
+          await model.updateMany({ [this.id]: { $in: idList } }, replacement, params.mongodb)
+          return this._find({
+            ...findParams,
+            query: {
+              [this.id]: { $in: idList },
+              $sort,
+              $select
+            }
+          })
+        })
+        .catch(errorHandler)
+    }
 
-      return this._findOrGet(id, findParams).catch(errorHandler)
+    if (params.pipeline) {
+      const { query: findQuery } = this.filterQuery(null, params)
+
+      if (Object.keys(findQuery).length === 0) {
+        await model.updateOne({ [this.id]: id }, replacement, params.mongodb)
+        return this._get(id, params)
+      }
+
+      return this._get(id, params)
+        .then(async () => {
+          await model.updateOne({ [this.id]: id }, replacement, params.mongodb)
+          return this._get(id, {
+            ...params,
+            query: { $select }
+          })
+        })
+        .catch(errorHandler)
     }
 
     const updateOptions: FindOneAndUpdateOptions = {
