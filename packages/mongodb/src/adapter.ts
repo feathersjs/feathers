@@ -9,7 +9,8 @@ import {
   ReplaceOptions,
   FindOneAndReplaceOptions,
   FindOneAndUpdateOptions,
-  Document
+  Document,
+  FindOneAndDeleteOptions
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
@@ -41,6 +42,7 @@ export interface MongoDBAdapterParams<Q = AdapterQuery>
     | CountDocumentsOptions
     | ReplaceOptions
     | FindOneAndReplaceOptions
+    | FindOneAndDeleteOptions
 }
 
 export type AdapterId = Id | ObjectId
@@ -227,10 +229,6 @@ export class MongoDbAdapter<
       query,
       filters: { $select }
     } = this.filterQuery(id, params)
-    const findOptions: FindOptions = {
-      ...params.mongodb,
-      projection: this.getProjection($select)
-    }
 
     if (params.pipeline) {
       /* We wouldn't need this aggregateParams if aggregateRaw took signature aggregateRaw(id, params) instead of just aggregateRaw(params). Because aggregateRaw ultimately calls makeFeathersPipeline(params) without id. That also makes aggregateRaw more flexible and consistent with other methods like _findOrGet. But, its a breaking change. */
@@ -254,6 +252,11 @@ export class MongoDbAdapter<
           return result
         })
         .catch(errorHandler)
+    }
+
+    const findOptions: FindOptions = {
+      ...params.mongodb,
+      projection: this.getProjection($select)
     }
 
     return this.getModel(params)
@@ -444,24 +447,34 @@ export class MongoDbAdapter<
       filters: { $select }
     } = this.filterQuery(id, params)
     const model = await this.getModel(params)
-    const findOptions: FindOneAndReplaceOptions = {
+    const replacement = this.normalizeId(id, data)
+
+    if (params.pipeline) {
+      const { query: findQuery } = this.filterQuery(null, params)
+
+      if (Object.keys(findQuery).length === 0) {
+        await model.replaceOne({ [this.id]: id }, replacement, params.mongodb)
+        return this._get(id, params)
+      }
+
+      return this._get(id, params)
+        .then(async () => {
+          await model.replaceOne({ [this.id]: id }, replacement, params.mongodb)
+          return this._get(id, {
+            ...params,
+            query: { $select }
+          })
+        })
+        .catch(errorHandler)
+    }
+
+    const replaceOptions: FindOneAndReplaceOptions = {
       ...(params.mongodb as FindOneAndReplaceOptions),
       returnDocument: 'after',
       projection: this.getProjection($select)
     }
 
-    if (params.pipeline) {
-      return this._get(id, params)
-        .then(async (result) => {
-          await model.replaceOne({ [this.id]: id }, findOptions)
-          return result
-        })
-        .catch(errorHandler)
-    }
-
-    const result = await model
-      .findOneAndReplace(query, this.normalizeId(id, data), findOptions)
-      .catch(errorHandler)
+    const result = await model.findOneAndReplace(query, replacement, replaceOptions).catch(errorHandler)
 
     if (result.value === null) {
       throw new NotFound(`No record found for id '${id}'`)
@@ -482,18 +495,10 @@ export class MongoDbAdapter<
     }
 
     const model = await this.getModel(params)
-    const {
-      query,
-      filters: { $select, $sort }
-    } = this.filterQuery(id, params)
+    const { query } = this.filterQuery(id, params)
     const findParams = {
       ...params,
-      paginate: false,
-      query: {
-        ...query,
-        $select,
-        $sort
-      }
+      paginate: false
     }
 
     if (id === null) {
@@ -506,10 +511,28 @@ export class MongoDbAdapter<
         .catch(errorHandler)
     }
 
-    return this._get(id, findParams)
-      .then(async (result) => {
-        await model.deleteOne({ [this.id]: id }, params.mongodb)
-        return result
+    if (params.pipeline) {
+      return this._get(id, params)
+        .then(async (result) => {
+          await model.deleteOne({ [this.id]: id }, params.mongodb)
+          return result
+        })
+        .catch(errorHandler)
+    }
+
+    const deleteOptions = {
+      ...(params.mongodb as FindOneAndDeleteOptions),
+      projection: this.getProjection(params.query?.$select)
+    }
+
+    return model
+      .findOneAndDelete(query, deleteOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+
+        return result.value as Result
       })
       .catch(errorHandler)
   }

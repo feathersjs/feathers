@@ -477,17 +477,64 @@ describe('Feathers MongoDB Service', () => {
 
     it('can use aggregation in _get', async () => {
       const dave = await app.service('people').create({ name: 'Dave', age: 25 })
-      const result1 = await app.service('people').get(dave._id, {
-        query: { $select: ['name'] }
-      })
-      const result2 = await app.service('people').get(dave._id, {
-        query: { $select: ['name'] },
-        pipeline: []
+      const result = await app.service('people').get(dave._id, {
+        pipeline: [{ $addFields: { aggregation: true } }]
       })
 
-      assert.deepStrictEqual(result1, result2)
+      assert.deepStrictEqual(result, { ...dave, aggregation: true })
 
       app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in _update', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').update(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation and query in _update', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').update(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          query: { name: 'Dave' },
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in _remove', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').remove(dave._id, {
+        pipeline: [{ $addFields: { aggregation: true } }]
+      })
+
+      assert.deepStrictEqual(result, { ...dave, aggregation: true })
+
+      try {
+        await await app.service('people').get(dave._id)
+        throw new Error('Should never get here')
+      } catch (error: any) {
+        assert.strictEqual(error.name, 'NotFound', 'Got a NotFound Feathers error')
+      }
     })
   })
 
