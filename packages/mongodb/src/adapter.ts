@@ -465,10 +465,20 @@ export class MongoDbAdapter<
       }
     }
 
-    return this._findOrGet(id, findParams)
-      .then(async (items) => {
-        await model.deleteMany(query, params.mongodb)
-        return items
+    if (id === null) {
+      return this._find(findParams)
+        .then(async (result) => {
+          const idList = (result as Result[]).map((item: any) => item[this.id])
+          await model.deleteMany({ [this.id]: { $in: idList } }, params.mongodb)
+          return result
+        })
+        .catch(errorHandler)
+    }
+
+    return this._get(id, findParams)
+      .then(async (result) => {
+        await model.deleteOne({ [this.id]: id }, params.mongodb)
+        return result
       })
       .catch(errorHandler)
   }
