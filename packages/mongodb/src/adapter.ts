@@ -8,6 +8,7 @@ import {
   CountDocumentsOptions,
   ReplaceOptions,
   FindOneAndReplaceOptions,
+  FindOneAndUpdateOptions,
   Document
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
@@ -345,8 +346,8 @@ export class MongoDbAdapter<
       query,
       filters: { $select }
     } = this.filterQuery(id, params)
-    const updateOptions = { ...params.mongodb }
-    const modifier = Object.keys(data).reduce((current, key) => {
+
+    const replacement = Object.keys(data).reduce((current, key) => {
       const value = (data as any)[key]
 
       if (key.charAt(0) !== '$') {
@@ -360,28 +361,51 @@ export class MongoDbAdapter<
 
       return current
     }, {} as any)
-    const originalIds = await this._findOrGet(id, {
-      ...params,
-      query: {
-        ...query,
-        $select: [this.id]
-      },
-      paginate: false
-    })
-    const items = Array.isArray(originalIds) ? originalIds : [originalIds]
-    const idList = items.map((item: any) => item[this.id])
-    const findParams = {
-      ...params,
-      paginate: false,
-      query: {
-        [this.id]: { $in: idList },
-        $select
+
+    if (id === null) {
+      const updateOptions = { ...params.mongodb }
+      const originalIds = await this._findOrGet(id, {
+        ...params,
+        query: {
+          ...query,
+          $select: [this.id]
+        },
+        paginate: false
+      })
+      const items = Array.isArray(originalIds) ? originalIds : [originalIds]
+      const idList = items.map((item: any) => item[this.id])
+      const findParams = {
+        ...params,
+        paginate: false,
+        query: {
+          [this.id]: { $in: idList },
+          $select
+        }
       }
+
+      await model.updateMany(query, replacement, updateOptions)
+
+      return this._findOrGet(id, findParams).catch(errorHandler)
     }
 
-    await model.updateMany(query, modifier, updateOptions)
+    const projection = $select
+      ? {
+          ...this.getSelect($select),
+          [this.id]: 1
+        }
+      : {}
 
-    return this._findOrGet(id, findParams).catch(errorHandler)
+    const result = await model.findOneAndUpdate(query, replacement, {
+      ...(params.mongodb as FindOneAndUpdateOptions),
+      returnDocument: 'after',
+      projection
+    })
+
+    if (result.value === null) {
+      throw new NotFound(`No record found for id '${id}'`)
+    }
+
+    return result.value as Result
   }
 
   async _update(id: AdapterId, data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
