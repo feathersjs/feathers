@@ -106,7 +106,7 @@ export class MongoDbAdapter<
   async findRaw(params: ServiceParams) {
     const { filters, query } = this.filterQuery(null, params)
     const model = await this.getModel(params)
-    const q = model.find(query, { ...params.mongodb })
+    const q = model.find(query, params.mongodb)
 
     if (filters.$select !== undefined) {
       q.project(this.getSelect(filters.$select))
@@ -142,13 +142,14 @@ export class MongoDbAdapter<
     const { filters, query } = this.filterQuery(null, params)
     const pipeline: Document[] = [{ $match: query }]
 
+    if (filters.$sort !== undefined) {
+      pipeline.push({ $sort: filters.$sort })
+    }
+
     if (filters.$select !== undefined) {
       pipeline.push({ $project: this.getSelect(filters.$select) })
     }
 
-    if (filters.$sort !== undefined) {
-      pipeline.push({ $sort: filters.$sort })
-    }
 
     if (filters.$skip !== undefined) {
       pipeline.push({ $skip: filters.$skip })
@@ -222,7 +223,8 @@ export class MongoDbAdapter<
       ...projection
     }
 
-    if (!params.mongodb && params.pipeline) {
+    if (params.pipeline) {
+      /* We wouldn't need this aggregateParams if aggregateRaw took signature aggregateRaw(id, params) instead of just aggregateRaw(params). Because aggregateRaw ultimately calls makeFeathersPipeline(params) without id. That also makes aggregateRaw more flexible and consistent with other methods like _findOrGet. But, its a breaking change. */
       const aggregateParams = {
         ...params,
         query: {
