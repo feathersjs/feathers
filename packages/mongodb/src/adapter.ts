@@ -7,6 +7,7 @@ import {
   DeleteOptions,
   CountDocumentsOptions,
   ReplaceOptions,
+  FindOneAndReplaceOptions,
   Document
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
@@ -39,6 +40,7 @@ export interface MongoDBAdapterParams<Q = AdapterQuery>
     | DeleteOptions
     | CountDocumentsOptions
     | ReplaceOptions
+    | FindOneAndReplaceOptions
 }
 
 export type AdapterId = Id | ObjectId
@@ -387,13 +389,30 @@ export class MongoDbAdapter<
       throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
     }
 
+    const {
+      query,
+      filters: { $select }
+    } = this.filterQuery(id, params)
     const model = await this.getModel(params)
-    const { query } = this.filterQuery(id, params)
-    const replaceOptions = { ...params.mongodb }
 
-    await model.replaceOne(query, this.normalizeId(id, data), replaceOptions)
+    const projection = $select
+      ? {
+          ...this.getSelect($select),
+          [this.id]: 1
+        }
+      : {}
 
-    return this._findOrGet(id, params).catch(errorHandler)
+    const result = await model.findOneAndReplace(query, this.normalizeId(id, data), {
+      ...(params.mongodb as FindOneAndReplaceOptions),
+      returnDocument: 'after',
+      projection
+    })
+
+    if (result.value === null) {
+      throw new NotFound(`No record found for id '${id}'`)
+    }
+
+    return result.value as Result
   }
 
   async _remove(id: null, params?: ServiceParams): Promise<Result[]>
@@ -430,3 +449,10 @@ export class MongoDbAdapter<
       .catch(errorHandler)
   }
 }
+
+// function hasAggregation(params: AdapterParams) {
+//   if (!params.query || Object.keys(params.query).length === 0) {
+//     return false
+//   }
+//   return true
+// }

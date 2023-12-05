@@ -507,6 +507,23 @@ describe('Feathers MongoDB Service', () => {
     })
   })
 
+  // TODO: Should this test be part of the adapterTests?
+  describe('Updates mutated query', () => {
+    it('Can re-query mutated data', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app
+        .service('people')
+        .update(dave._id, { name: 'Marshal' }, { query: { name: 'Dave' } })
+
+      assert.deepStrictEqual(result, {
+        ...dave,
+        name: 'Marshal'
+      })
+
+      app.service('people').remove(dave._id)
+    })
+  })
+
   testSuite(app, errors, 'people', '_id')
   testSuite(app, errors, 'people-customid', 'customid')
 })
