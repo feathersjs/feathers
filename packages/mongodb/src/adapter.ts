@@ -159,7 +159,10 @@ export class MongoDbAdapter<
     return pipeline
   }
 
-  getProjection(select: string[] | { [key: string]: number }) {
+  getProjection(select?: string[] | { [key: string]: number }) {
+    if (!select) {
+      return undefined
+    }
     if (Array.isArray(select)) {
       if (!select.includes(this.id)) {
         select = [this.id, ...select]
@@ -208,10 +211,9 @@ export class MongoDbAdapter<
       query,
       filters: { $select }
     } = this.filterQuery(id, params)
-    const projection = $select ? this.getProjection($select) : {}
     const findOptions: FindOptions = {
       ...params.mongodb,
-      projection
+      projection: this.getProjection($select)
     }
 
     if (params.pipeline) {
@@ -307,10 +309,9 @@ export class MongoDbAdapter<
 
       return entry
     }
-    const projection = params.query?.$select ? this.getProjection(params.query.$select) : {}
     const findOptions: FindOptions = {
       ...params.mongodb,
-      projection
+      projection: this.getProjection(params.query?.$select)
     }
 
     const promise = Array.isArray(data)
@@ -385,12 +386,10 @@ export class MongoDbAdapter<
       return this._findOrGet(id, findParams).catch(errorHandler)
     }
 
-    const projection = $select ? this.getProjection($select) : {}
-
     const result = await model.findOneAndUpdate(query, replacement, {
       ...(params.mongodb as FindOneAndUpdateOptions),
       returnDocument: 'after',
-      projection
+      projection: this.getProjection($select)
     })
 
     if (result.value === null) {
@@ -411,12 +410,10 @@ export class MongoDbAdapter<
     } = this.filterQuery(id, params)
     const model = await this.getModel(params)
 
-    const projection = $select ? this.getProjection($select) : {}
-
     const result = await model.findOneAndReplace(query, this.normalizeId(id, data), {
       ...(params.mongodb as FindOneAndReplaceOptions),
       returnDocument: 'after',
-      projection
+      projection: this.getProjection($select)
     })
 
     if (result.value === null) {
