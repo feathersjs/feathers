@@ -424,17 +424,21 @@ export class MongoDbAdapter<
       return this._findOrGet(id, findParams).catch(errorHandler)
     }
 
-    const result = await model.findOneAndUpdate(query, replacement, {
+    const updateOptions: FindOneAndUpdateOptions = {
       ...(params.mongodb as FindOneAndUpdateOptions),
       returnDocument: 'after',
       projection: this.getProjection($select)
-    })
-
-    if (result.value === null) {
-      throw new NotFound(`No record found for id '${id}'`)
     }
 
-    return result.value as Result
+    return model
+      .findOneAndUpdate(query, replacement, updateOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+        return result.value as Result
+      })
+      .catch(errorHandler)
   }
 
   async _update(id: AdapterId, data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -474,13 +478,15 @@ export class MongoDbAdapter<
       projection: this.getProjection($select)
     }
 
-    const result = await model.findOneAndReplace(query, replacement, replaceOptions).catch(errorHandler)
-
-    if (result.value === null) {
-      throw new NotFound(`No record found for id '${id}'`)
-    }
-
-    return result.value as Result
+    return model
+      .findOneAndReplace(query, replacement, replaceOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+        return result.value as Result
+      })
+      .catch(errorHandler)
   }
 
   async _remove(id: null, params?: ServiceParams): Promise<Result[]>
@@ -520,7 +526,7 @@ export class MongoDbAdapter<
         .catch(errorHandler)
     }
 
-    const deleteOptions = {
+    const deleteOptions: FindOneAndDeleteOptions = {
       ...(params.mongodb as FindOneAndDeleteOptions),
       projection: this.getProjection(params.query?.$select)
     }
@@ -531,7 +537,6 @@ export class MongoDbAdapter<
         if (result.value === null) {
           throw new NotFound(`No record found for id '${id}'`)
         }
-
         return result.value as Result
       })
       .catch(errorHandler)
