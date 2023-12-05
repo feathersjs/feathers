@@ -15,7 +15,6 @@ import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
 import {
   AdapterBase,
-  select,
   AdapterParams,
   AdapterServiceOptions,
   PaginationOptions,
@@ -109,7 +108,7 @@ export class MongoDbAdapter<
     const q = model.find(query, params.mongodb)
 
     if (filters.$select !== undefined) {
-      q.project(this.getSelect(filters.$select))
+      q.project(this.getProjection(filters.$select))
     }
 
     if (filters.$sort !== undefined) {
@@ -135,7 +134,7 @@ export class MongoDbAdapter<
     const feathersPipeline = this.makeFeathersPipeline(params)
     const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
 
-    return model.aggregate([...before, ...feathersPipeline, ...after])
+    return model.aggregate([...before, ...feathersPipeline, ...after], params.mongodb)
   }
 
   makeFeathersPipeline(params: ServiceParams) {
@@ -147,9 +146,8 @@ export class MongoDbAdapter<
     }
 
     if (filters.$select !== undefined) {
-      pipeline.push({ $project: this.getSelect(filters.$select) })
+      pipeline.push({ $project: this.getProjection(filters.$select) })
     }
-
 
     if (filters.$skip !== undefined) {
       pipeline.push({ $skip: filters.$skip })
@@ -161,7 +159,7 @@ export class MongoDbAdapter<
     return pipeline
   }
 
-  getSelect(select: string[] | { [key: string]: number }) {
+  getProjection(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
       if (!select.includes(this.id)) {
         select = [this.id, ...select]
@@ -210,17 +208,10 @@ export class MongoDbAdapter<
       query,
       filters: { $select }
     } = this.filterQuery(id, params)
-    const projection = $select
-      ? {
-          projection: {
-            ...this.getSelect($select),
-            [this.id]: 1
-          }
-        }
-      : {}
+    const projection = $select ? this.getProjection($select) : {}
     const findOptions: FindOptions = {
       ...params.mongodb,
-      ...projection
+      projection
     }
 
     if (params.pipeline) {
@@ -229,6 +220,7 @@ export class MongoDbAdapter<
         ...params,
         query: {
           ...params.query,
+          $limit: 1,
           // TODO: Do we need this $and like its needed in find?
           // Or should it just be `[this.id]: this.getObjectId(id)`
           $and: (params.query.$and || []).concat({
@@ -238,24 +230,24 @@ export class MongoDbAdapter<
       }
       return this.aggregateRaw(aggregateParams)
         .then((result) => result.toArray())
-        .then(([data]) => {
-          if (data === undefined) {
+        .then(([result]) => {
+          if (result === undefined) {
             throw new NotFound(`No record found for id '${id}'`)
           }
 
-          return data
+          return result
         })
         .catch(errorHandler)
     }
 
     return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
-      .then((data) => {
-        if (data == null) {
+      .then((result) => {
+        if (result == null) {
           throw new NotFound(`No record found for id '${id}'`)
         }
 
-        return data
+        return result
       })
       .catch(errorHandler)
   }
@@ -301,7 +293,6 @@ export class MongoDbAdapter<
     data: Data | Data[],
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
-    const writeOptions = params.mongodb
     const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
@@ -316,18 +307,23 @@ export class MongoDbAdapter<
 
       return entry
     }
+    const projection = params.query?.$select ? this.getProjection(params.query.$select) : {}
+    const findOptions: FindOptions = {
+      ...params.mongodb,
+      projection
+    }
 
     const promise = Array.isArray(data)
       ? model
-          .insertMany(data.map(setId), writeOptions)
-          .then(async (result) =>
-            model.find({ _id: { $in: Object.values(result.insertedIds) } }, params.mongodb).toArray()
+          .insertMany(data.map(setId), params.mongodb)
+          .then((result) =>
+            model.find({ _id: { $in: Object.values(result.insertedIds) } }, findOptions).toArray()
           )
       : model
-          .insertOne(setId(data), writeOptions)
-          .then(async (result) => model.findOne({ _id: result.insertedId }, params.mongodb))
+          .insertOne(setId(data), params.mongodb)
+          .then((result) => model.findOne({ _id: result.insertedId }, findOptions))
 
-    return promise.then(select(params, this.id)).catch(errorHandler)
+    return promise.catch(errorHandler)
   }
 
   async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
@@ -365,7 +361,6 @@ export class MongoDbAdapter<
     }, {} as any)
 
     if (id === null) {
-      const updateOptions = { ...params.mongodb }
       const originalIds = await this._findOrGet(id, {
         ...params,
         query: {
@@ -385,17 +380,12 @@ export class MongoDbAdapter<
         }
       }
 
-      await model.updateMany(query, replacement, updateOptions)
+      await model.updateMany(query, replacement, params.mongodb)
 
       return this._findOrGet(id, findParams).catch(errorHandler)
     }
 
-    const projection = $select
-      ? {
-          ...this.getSelect($select),
-          [this.id]: 1
-        }
-      : {}
+    const projection = $select ? this.getProjection($select) : {}
 
     const result = await model.findOneAndUpdate(query, replacement, {
       ...(params.mongodb as FindOneAndUpdateOptions),
@@ -421,12 +411,7 @@ export class MongoDbAdapter<
     } = this.filterQuery(id, params)
     const model = await this.getModel(params)
 
-    const projection = $select
-      ? {
-          ...this.getSelect($select),
-          [this.id]: 1
-        }
-      : {}
+    const projection = $select ? this.getProjection($select) : {}
 
     const result = await model.findOneAndReplace(query, this.normalizeId(id, data), {
       ...(params.mongodb as FindOneAndReplaceOptions),
