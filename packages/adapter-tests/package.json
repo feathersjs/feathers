@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.0",
+    "@types/node": "^20.10.3",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",

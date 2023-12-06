@@ -103,7 +103,6 @@ Just like on the server _all_ methods you want to use have to be listed in the `
 
 </BlockQuote>
 
-
 ### Route placeholders
 
 Service URLs can have placeholders, e.g. `users/:userId/messages`. (see in [express](../express.md#params.route) or [koa](../koa.md#params.route))
@@ -121,7 +120,7 @@ const app = feathers()
 // Set up Socket.io client with the socket
 app.configure(socketio(socket))
 
-// Call `users/2/messages` 
+// Call `users/2/messages`
 app.service('users/:userId/messages').find({
   route: {
     userId: 2
@@ -130,7 +129,7 @@ app.service('users/:userId/messages').find({
 ```
 
 This can also be achieved by using the client bundled,
-sharing several `servicePath` variable exported in the [service shared file](`../../guides/cli/service.shared.md#Variables`) file.
+sharing several `servicePath` variable exported in the [service shared file](../../guides/cli/service.shared.md#Variables) file.
 
 ```ts
 import rest from '@feathersjs/rest-client'
@@ -157,14 +156,13 @@ const client = createClient(connection)
 
 const messageService = client.service('users/:userId/messages')
 
-// Call `users/2/messages` 
+// Call `users/2/messages`
 app.service('users/:userId/messages').find({
   route: {
     userId: 2
   }
 })
 ```
-
 
 ## Direct connection
 
