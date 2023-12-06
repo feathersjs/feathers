@@ -521,13 +521,13 @@ const messages = app.service('users/:userId/messages')
 // Call the `http://feathers-api.com/users/2/messages` URL
 messages.find({
   route: {
-    userId: 2,
-  },
+    userId: 2
+  }
 })
 ```
 
 This can also be achieved by using the client bundled,
-sharing several `servicePath` variable exported in the [service shared file](`../../guides/cli/service.shared.md#Variables`) file.
+sharing several `servicePath` variable exported in the [service shared file](../../guides/cli/service.shared.md#Variables) file.
 
 ```ts
 import rest from '@feathersjs/rest-client'
