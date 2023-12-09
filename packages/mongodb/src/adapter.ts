@@ -309,6 +309,7 @@ export class MongoDbAdapter<
       return data
     }
 
+    /* TODO: This seems a little funky. The user shouldn't need to have service.options.paginate to count documents necessarily. Shouldn't this just always return { total: 123 } if no pagination option? Else it always return an empty array. Or we can keep it this way, and document that you can use `this.countDocuments` if you don't have paginate option. Just seems weird. */
     if (filters.$limit === 0) {
       return page({
         total: await this.countDocuments(params),
@@ -320,10 +321,12 @@ export class MongoDbAdapter<
 
     if (params.paginate === false) {
       const data = await result.then((result) => result.toArray())
-      return page({
-        total: data.length,
-        data: data as Result[]
-      })
+      return data as Result[]
+      /* TODO: Wait...how does the below code work? Is there somewhere else that is handling params.paginate only returning an array? Comment the return statement above and uncomment this block...shouldn't that throw an error? */
+      // return page({
+      //   total: data.length,
+      //   data: data as Result[]
+      // })
     }
 
     const [data, total] = await Promise.all([
@@ -348,7 +351,6 @@ export class MongoDbAdapter<
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
 
-      // Generate a MongoId if we use a custom id
       if (this.id !== '_id' && typeof entry[this.id] === 'undefined') {
         return {
           [this.id]: new ObjectId().toHexString(),
@@ -573,10 +575,3 @@ export class MongoDbAdapter<
       .catch(errorHandler)
   }
 }
-
-// function hasAggregation(params: AdapterParams) {
-//   if (!params.query || Object.keys(params.query).length === 0) {
-//     return false
-//   }
-//   return true
-// }
