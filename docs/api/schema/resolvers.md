@@ -361,7 +361,7 @@ app.service('users').hooks({
 })
 ```
 
-For a more complicated example. We will make a seperate `queryResolver`, called `companyFilterQueryResolver`, that will act as a ownership filter. We will have a `Company` service that is owned by a `User`. We will assume our app has two registered users and two companies. Each user owning one company. For simplicity, `User1` owns `Company1`, and `User2` owns `Company2`
+For a more complicated example. We will make a separate `queryResolver`, called `companyFilterQueryResolver`, that will act as a ownership filter. We will have a `Company` service that is owned by a `User`. We will assume our app has two registered users and two companies. Each user owning one company. For simplicity, `User1` owns `Company1`, and `User2` owns `Company2`
 
 We want to make sure only the user that owns the company can make any requests related to it. Our schema contains a `ownerUser` field, this is the owner of the company. When a request is made to the company schema, we are effectivly filtering our search for companies to be only those whose `ownerUser` matches the requesting user's id. 
 
