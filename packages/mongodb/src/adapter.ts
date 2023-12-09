@@ -49,6 +49,11 @@ export type AdapterId = Id | ObjectId
 
 export type NullableAdapterId = AdapterId | null
 
+type Page = {
+  total: number
+  data: any
+}
+
 // Create the service.
 export class MongoDbAdapter<
   Result,
@@ -109,12 +114,12 @@ export class MongoDbAdapter<
     const model = await this.getModel(params)
     const q = model.find(query, params.mongodb)
 
-    if (filters.$select !== undefined) {
-      q.project(this.getProjection(filters.$select))
-    }
-
     if (filters.$sort !== undefined) {
       q.sort(filters.$sort)
+    }
+
+    if (filters.$select !== undefined) {
+      q.project(this.getProjection(filters.$select))
     }
 
     if (filters.$skip !== undefined) {
@@ -211,17 +216,31 @@ export class MongoDbAdapter<
   }
 
   async countDocuments(params: ServiceParams) {
-    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
+    const { useEstimatedDocumentCount } = this.getOptions(params)
     const { query } = this.filterQuery(null, params)
-    if (paginate && paginate.default) {
-      const model = await this.getModel(params)
-      if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-        return model.estimatedDocumentCount()
-      } else {
-        return model.countDocuments(query, params.mongodb)
+
+    if (params.pipeline) {
+      const aggregateParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id],
+          $sort: undefined,
+          $skip: undefined,
+          $limit: undefined
+        }
       }
+      const result = await this.aggregateRaw(aggregateParams).then((result) => result.toArray())
+      return result.length
     }
-    return Promise.resolve(0)
+
+    const model = await this.getModel(params)
+
+    if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+      return model.estimatedDocumentCount()
+    }
+
+    return model.countDocuments(query, params.mongodb)
   }
 
   async _get(id: AdapterId, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -278,52 +297,44 @@ export class MongoDbAdapter<
     const { paginate } = this.getOptions(params)
     const { filters } = this.filterQuery(null, params)
 
-    // TODO: Handle accurate aggregation count
-    if (params.pipeline) {
-      if (filters.$limit === 0) {
-        const page = {
-          total: await this.countDocuments(params),
+    const page = ({ total, data }: Page) => {
+      if (paginate && paginate.default) {
+        return {
           limit: filters.$limit,
           skip: filters.$skip || 0,
-          data: [] as Result[]
+          total,
+          data
         }
-
-        return paginate && paginate.default ? page : page.data
       }
-
-      const [data, total] = await Promise.all([this.aggregateRaw(params), this.countDocuments(params)])
-
-      const page = {
-        total,
-        limit: filters.$limit,
-        skip: filters.$skip || 0,
-        data: (await data.toArray()) as unknown as Result[]
-      }
-
-      return paginate && paginate.default ? page : page.data
+      return data
     }
 
     if (filters.$limit === 0) {
-      const page = {
+      return page({
         total: await this.countDocuments(params),
-        limit: filters.$limit,
-        skip: filters.$skip || 0,
         data: [] as Result[]
-      }
-
-      return paginate && paginate.default ? page : page.data
+      })
     }
 
-    const [data, total] = await Promise.all([this.findRaw(params), this.countDocuments(params)])
+    const result = params.pipeline ? this.aggregateRaw(params) : this.findRaw(params)
 
-    const page = {
+    if (params.paginate === false) {
+      const data = await result.then((result) => result.toArray())
+      return page({
+        total: data.length,
+        data: data as Result[]
+      })
+    }
+
+    const [data, total] = await Promise.all([
+      result.then((result) => result.toArray()),
+      this.countDocuments(params)
+    ])
+
+    return page({
       total,
-      limit: filters.$limit,
-      skip: filters.$skip || 0,
-      data: (await data.toArray()) as unknown as Result[]
-    }
-
-    return paginate && paginate.default ? page : page.data
+      data: data as Result[]
+    })
   }
 
   async _create(data: Data, params?: ServiceParams): Promise<Result>

@@ -83,6 +83,11 @@ const testSuite = adapterTests([
   'params.adapter + multi'
 ])
 
+const defaultPaginate = {
+  default: 10,
+  max: 50
+}
+
 describe('Feathers MongoDB Service', () => {
   const personSchema = {
     $id: 'Person',
@@ -473,6 +478,19 @@ describe('Feathers MongoDB Service', () => {
       })
       assert.deepEqual(result[0].person, bob)
       assert.equal(result.length, 1)
+    })
+
+    it('can count documents with aggregation', async () => {
+      const service = app.service('people')
+      const paginateBefore = service.options.paginate
+      service.options.paginate = defaultPaginate
+      const query = { age: { $gte: 25 } }
+      const findResult = await app.service('people').find({ query })
+      const aggregationResult = await app.service('people').find({ query, pipeline: [] })
+
+      assert.deepStrictEqual(findResult, aggregationResult)
+
+      service.options.paginate = paginateBefore
     })
 
     it('can use aggregation in _get', async () => {
