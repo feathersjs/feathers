@@ -15,10 +15,14 @@ const defaultConfig = ({}: AppGeneratorContext) => ({
 
 const customEnvironment = {
   port: {
-    __name: 'PORT',
+    __name: 'FEATHERS_PORT',
     __format: 'number'
   },
-  host: 'HOSTNAME',
+  host: 'FEATHERS_HOSTNAME',
+  origins: {
+    __name: 'FEATHERS_ORIGINS',
+    __format: 'json'
+  },
   authentication: {
     secret: 'FEATHERS_SECRET'
   }
@@ -41,9 +45,9 @@ export const configurationSchema = {
   required: [ 'host', 'port', 'public' ],
   properties: {
     ...defaultAppSettings,
-    host: { type: 'string' },
     port: { type: 'number' },
-    public: { type: 'string' }
+    public: { type: 'string' },
+    origins: { type: 'array', items: { type: 'string' } }
   }
 } as const
 
@@ -61,9 +65,9 @@ import { dataValidator } from './validators'
 export const configurationSchema = Type.Intersect([
   defaultAppConfiguration,
   Type.Object({
-    host: Type.String(),
     port: Type.Number(),
-    public: Type.String()
+    public: Type.String(),
+    origins: Type.Array(Type.String())
   })
 ])
 

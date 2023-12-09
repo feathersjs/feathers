@@ -6,14 +6,14 @@ const template = ({}: AppGeneratorContext) => /* ts */ `import { app } from './a
 import { logger } from './logger'
 
 const port = app.get('port')
-const host = app.get('host')
+const origin = app.get('origins')[0]
 
 process.on('unhandledRejection', (reason) =>
   logger.error('Unhandled Rejection %O', reason)
 )
 
 app.listen(port).then(() => {
-  logger.info(\`Feathers app listening on http://\${host}:\${port}\`)
+  logger.info(\`Feathers app listening on \${origin}\`)
 })
 `
 

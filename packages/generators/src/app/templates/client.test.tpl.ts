@@ -11,7 +11,7 @@ import { createClient } from '../${lib}/client'
 import rest from '@feathersjs/rest-client'
 
 const port = app.get('port')
-const appUrl = \`http://\${app.get('host')}:\${port}\`
+const appUrl = \`http://localhost:\${port}\`
 
 describe('client tests', () => {
   const client = createClient(rest(appUrl).axios(axios))
