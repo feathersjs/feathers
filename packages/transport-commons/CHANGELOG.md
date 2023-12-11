@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **transport-commons:** Allow case insensitive route lookups ([#3353](https://github.com/feathersjs/feathers/issues/3353)) ([a4a5ab6](https://github.com/feathersjs/feathers/commit/a4a5ab6cb59048176292cd71c04a32aa71ac4642))
+
+## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
+
+### Bug Fixes
+
+- **client:** Replace placeholders in URL with route params ([#3270](https://github.com/feathersjs/feathers/issues/3270)) ([a0624eb](https://github.com/feathersjs/feathers/commit/a0624eb5a7919aa1b179a71beb1c1b9cab574525))
+- **knex:** Update all dependencies and Knex peer ([#3308](https://github.com/feathersjs/feathers/issues/3308)) ([d2f9860](https://github.com/feathersjs/feathers/commit/d2f986036c4741cce2339d8abbcc6b2eb037a12a))
+
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+### Bug Fixes
+
+- **client:** Add underscored methods to clients ([#3176](https://github.com/feathersjs/feathers/issues/3176)) ([f3c01f7](https://github.com/feathersjs/feathers/commit/f3c01f7b8266bfc642c55b77ba8e5bb333542630))
+
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+### Bug Fixes
+
+- **transport-commons:** Handle invalid service paths on socket lookups ([#3241](https://github.com/feathersjs/feathers/issues/3241)) ([c397ab3](https://github.com/feathersjs/feathers/commit/c397ab3a0cd184044ae4f73540549b30a396821c))
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **core:** Use Symbol.for to instantiate shared symbols ([#3087](https://github.com/feathersjs/feathers/issues/3087)) ([7f3fc21](https://github.com/feathersjs/feathers/commit/7f3fc2167576f228f8183568eb52b077160e8d65))
+- **transport-commons:** Fix dispatching of arrays ([#3075](https://github.com/feathersjs/feathers/issues/3075)) ([98fdda5](https://github.com/feathersjs/feathers/commit/98fdda53187acee88137b39662c766cc62cd7b55))
+
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Bug Fixes

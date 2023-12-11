@@ -129,7 +129,7 @@ describe('@feathersjs/schema/hooks', () => {
         $select: ['user', 'text']
       }
     })
-    assert.strictEqual(Object.keys(messages[0]).length, 2)
+    assert.deepStrictEqual(Object.keys(messages[0]), ['text', 'user'])
   })
 
   it('resolves find results with paginated result object', async () => {

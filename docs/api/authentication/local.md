@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/authentication-local@pre --save
+npm install @feathersjs/authentication-local --save
 ```
 
 `@feathersjs/authentication-local` provides a `LocalStrategy` for authenticating with a username/email and password combination, e.g.
@@ -51,8 +51,8 @@ export const authentication = (app: Application) => {
 
 Options are set in the [authentication configuration](./service.md#configuration) under the strategy name. Available options are:
 
-- `usernameField`: Name of the username field (e.g. `'email'`)
-- `passwordField`: Name of the password field (e.g. `'password'`)
+- `usernameField`: Name of the username field (e.g. `'email'`), may be a nested property (e.g. `'auth.email'`)
+- `passwordField`: Name of the password field (e.g. `'password'`), may be a nested property (e.g. `'auth.password'`)
 - `hashSize` (default: `10`): The BCrypt salt length
 - `errorMessage` (default: `'Invalid login'`): The error message to return on errors
 - `entityUsernameField` (default: `usernameField`): Name of the username field on the entity if authentication request data and entity field names are different

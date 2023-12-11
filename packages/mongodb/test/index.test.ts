@@ -2,10 +2,10 @@ import { Db, MongoClient, ObjectId } from 'mongodb'
 import adapterTests from '@feathersjs/adapter-tests'
 import assert from 'assert'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-
+import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'
 import { feathers } from '@feathersjs/feathers'
 import errors from '@feathersjs/errors'
-import { MongoDBService } from '../src'
+import { MongoDBService, AdapterId } from '../src'
 
 const testSuite = adapterTests([
   '.options',
@@ -46,6 +46,7 @@ const testSuite = adapterTests([
   '.patch + NotFound',
   '.patch + id + query id',
   '.create',
+  '.create ignores query',
   '.create + $select',
   '.create multi',
   'internal .find',
@@ -63,6 +64,7 @@ const testSuite = adapterTests([
   '.find + $skip',
   '.find + $select',
   '.find + $or',
+  '.find + $and',
   '.find + $in',
   '.find + $nin',
   '.find + $lt',
@@ -72,6 +74,7 @@ const testSuite = adapterTests([
   '.find + $ne',
   '.find + $gt + $lt + $sort',
   '.find + $or nested + $sort',
+  '.find + $and + $or',
   '.find + paginate',
   '.find + paginate + $limit + $skip',
   '.find + paginate + $limit 0',
@@ -81,16 +84,43 @@ const testSuite = adapterTests([
 ])
 
 describe('Feathers MongoDB Service', () => {
-  type Person = {
-    _id: string
-    name: string
-    age: number
-    friends?: string[]
-    team: string
-    $push: {
-      friends: string
+  const personSchema = {
+    $id: 'Person',
+    type: 'object',
+    additionalProperties: false,
+    required: ['_id', 'name', 'age'],
+    properties: {
+      _id: { oneOf: [{ type: 'string' }, { type: 'object' }] },
+      name: { type: 'string' },
+      age: { type: 'number' },
+      friends: { type: 'array', items: { type: 'string' } },
+      team: { type: 'string' },
+      $push: {
+        type: 'object',
+        properties: {
+          friends: { type: 'string' }
+        }
+      }
     }
-  }
+  } as const
+  const personQuery = {
+    $id: 'PersonQuery',
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      ...querySyntax(personSchema.properties, {
+        name: {
+          $regex: { type: 'string' }
+        }
+      })
+    }
+  } as const
+  const validator = new Ajv({
+    coerceTypes: true
+  })
+  const personQueryValidator = getValidator(personQuery, validator)
+
+  type Person = Omit<FromSchema<typeof personSchema>, '_id'> & { _id: AdapterId }
   type Todo = {
     _id: string
     name: string
@@ -133,6 +163,12 @@ describe('Feathers MongoDB Service', () => {
         events: ['testing']
       })
     )
+
+    app.service('people').hooks({
+      before: {
+        find: [hooks.validateQuery(personQueryValidator)]
+      }
+    })
 
     db.collection('people-customid').deleteMany({})
     db.collection('people').deleteMany({})
@@ -437,6 +473,22 @@ describe('Feathers MongoDB Service', () => {
       })
       assert.deepEqual(result[0].person, bob)
       assert.equal(result.length, 1)
+    })
+  })
+
+  describe('query validation', () => {
+    it('validated queries are not sanitized', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').find({
+        query: {
+          name: {
+            $regex: 'Da.*'
+          }
+        }
+      })
+      assert.deepStrictEqual(result, [dave])
+
+      app.service('people').remove(dave._id)
     })
   })
 

@@ -27,6 +27,7 @@ type HookStore = {
   after: { [method: string]: HookFunction[] }
   error: { [method: string]: HookFunction[] }
   collected: { [method: string]: AroundHookFunction[] }
+  collectedAll: { before?: AroundHookFunction[]; after?: AroundHookFunction[] }
 }
 
 type HookEnabled = { __hooks: HookStore }
@@ -55,13 +56,14 @@ export function convertHookData(input: any) {
 }
 
 export function collectHooks(target: HookEnabled, method: string) {
-  const { collected, around } = target.__hooks
+  const { collected, collectedAll, around } = target.__hooks
 
   return [
     ...(around.all || []),
     ...(around[method] || []),
-    ...(collected.all || []),
-    ...(collected[method] || [])
+    ...(collectedAll.before || []),
+    ...(collected[method] || []),
+    ...(collectedAll.after || [])
   ] as AroundHookFunction[]
 }
 
@@ -72,7 +74,8 @@ export function enableHooks(object: any) {
     before: {},
     after: {},
     error: {},
-    collected: {}
+    collected: {},
+    collectedAll: {}
   }
 
   Object.defineProperty(object, '__hooks', {
@@ -101,14 +104,31 @@ export function enableHooks(object: any) {
 
         storeHooks.push(...mapHooks)
 
-        if (store.before[method] || store.after[method] || store.error[method]) {
-          const collected = collect({
-            before: store.before[method] || [],
-            after: store.after[method] || [],
-            error: store.error[method] || []
-          })
+        if (method === 'all') {
+          if (store.before[method] || store.error[method]) {
+            const beforeAll = collect({
+              before: store.before[method] || [],
+              error: store.error[method] || []
+            })
+            store.collectedAll.before = [beforeAll]
+          }
 
-          store.collected[method] = [collected]
+          if (store.after[method]) {
+            const afterAll = collect({
+              after: store.after[method] || []
+            })
+            store.collectedAll.after = [afterAll]
+          }
+        } else {
+          if (store.before[method] || store.after[method] || store.error[method]) {
+            const collected = collect({
+              before: store.before[method] || [],
+              after: store.after[method] || [],
+              error: store.error[method] || []
+            })
+
+            store.collected[method] = [collected]
+          }
         }
       })
     )
@@ -128,7 +148,10 @@ export function createContext(service: Service, method: string, data: HookContex
 }
 
 export class FeathersHookManager<A> extends HookManager {
-  constructor(public app: A, public method: string) {
+  constructor(
+    public app: A,
+    public method: string
+  ) {
     super()
     this._middleware = []
   }

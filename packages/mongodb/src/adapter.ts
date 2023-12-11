@@ -17,7 +17,8 @@ import {
   AdapterParams,
   AdapterServiceOptions,
   PaginationOptions,
-  AdapterQuery
+  AdapterQuery,
+  getLimit
 } from '@feathersjs/adapter-commons'
 import { Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler'
@@ -75,8 +76,9 @@ export class MongoDbAdapter<
   }
 
   filterQuery(id: NullableAdapterId, params: ServiceParams) {
-    const { $select, $sort, $limit, $skip, ...query } = (params.query || {}) as AdapterQuery
-
+    const options = this.getOptions(params)
+    const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
+    const $limit = getLimit(_limit, options.paginate)
     if (id !== null) {
       query.$and = (query.$and || []).concat({
         [this.id]: this.getObjectId(id)
@@ -93,7 +95,7 @@ export class MongoDbAdapter<
     }
   }
 
-  getModel(params: ServiceParams) {
+  getModel(params: ServiceParams = {} as ServiceParams) {
     const { Model } = this.getOptions(params)
     return Promise.resolve(Model)
   }
@@ -157,6 +159,9 @@ export class MongoDbAdapter<
 
   getSelect(select: string[] | { [key: string]: number }) {
     if (Array.isArray(select)) {
+      if (!select.includes(this.id)) {
+        select = [this.id, ...select]
+      }
       return select.reduce<{ [key: string]: number }>(
         (value, name) => ({
           ...value,
@@ -164,6 +169,13 @@ export class MongoDbAdapter<
         }),
         {}
       )
+    }
+
+    if (!select[this.id]) {
+      return {
+        ...select,
+        [this.id]: 1
+      }
     }
 
     return select
@@ -226,7 +238,6 @@ export class MongoDbAdapter<
     const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
     const { filters, query } = this.filterQuery(null, params)
     const useAggregation = !params.mongodb && filters.$limit !== 0
-
     const countDocuments = async () => {
       if (paginate && paginate.default) {
         const model = await this.getModel(params)
@@ -281,9 +292,7 @@ export class MongoDbAdapter<
       ? model
           .insertMany(data.map(setId), writeOptions)
           .then(async (result) =>
-            Promise.all(
-              Object.values(result.insertedIds).map(async (_id) => model.findOne({ _id }, params.mongodb))
-            )
+            model.find({ _id: { $in: Object.values(result.insertedIds) } }, params.mongodb).toArray()
           )
       : model
           .insertOne(setId(data), writeOptions)
@@ -292,12 +301,16 @@ export class MongoDbAdapter<
     return promise.then(select(params, this.id)).catch(errorHandler)
   }
 
-  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
-  async _patch(id: AdapterId, data: PatchData, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableAdapterId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: AdapterId, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
   async _patch(
     id: NullableAdapterId,
-    _data: PatchData,
+    data: PatchData | Partial<Result>,
+    _params?: ServiceParams
+  ): Promise<Result | Result[]>
+  async _patch(
+    id: NullableAdapterId,
+    _data: PatchData | Partial<Result>,
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('patch', params)) {

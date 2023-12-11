@@ -1,6 +1,6 @@
 import { createDebug } from '@feathersjs/commons'
 import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
-import { FeathersError } from '@feathersjs/errors'
+import { FeathersError, GeneralError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
@@ -25,7 +25,11 @@ export type OAuthParams = Omit<Params, 'route'> & {
 }
 
 export class OAuthError extends FeathersError {
-  constructor(message: string, data: any, public location: string) {
+  constructor(
+    message: string,
+    data: any,
+    public location: string
+  ) {
     super(message, 'NotAuthenticated', 401, 'not-authenticated', data)
   }
 }
@@ -60,7 +64,10 @@ export const redirectHook = () => async (context: HookContext, next: NextFunctio
 export class OAuthService {
   grant: any
 
-  constructor(public service: AuthenticationService, public settings: OauthSetupSettings) {
+  constructor(
+    public service: AuthenticationService,
+    public settings: OauthSetupSettings
+  ) {
     const config = getGrantConfig(service)
 
     this.grant = Grant({ config })
@@ -92,10 +99,11 @@ export class OAuthService {
   async authenticate(params: OAuthParams, result: GrantResponse) {
     const name = params.route.provider
     const { linkStrategy, authService } = this.settings
-    const { accessToken, grant, query = {}, redirect } = params.session
+    const { accessToken, grant, headers, query = {}, redirect } = params.session
     const strategy = this.service.getStrategy(name) as OAuthStrategy
     const authParams = {
       ...params,
+      headers,
       authStrategies: [name],
       authentication: accessToken
         ? {
@@ -106,6 +114,7 @@ export class OAuthService {
       query,
       redirect
     }
+
     const payload = grant?.response || result?.session?.response || result?.state?.response || params.query
     const authentication = {
       strategy: name,
@@ -113,6 +122,10 @@ export class OAuthService {
     }
 
     try {
+      if (payload.error) {
+        throw new GeneralError(payload.error_description || payload.error, payload)
+      }
+
       debug(`Calling ${authService}.create authentication with strategy ${name}`)
 
       const authResult = await this.service.create(authentication, authParams)
@@ -143,7 +156,7 @@ export class OAuthService {
   }
 
   async find(params: OAuthParams) {
-    const { session, query } = params
+    const { session, query, headers } = params
     const { feathers_token, redirect, ...restQuery } = query
     const handlerParams = {
       ...params,
@@ -157,6 +170,7 @@ export class OAuthService {
 
     session.redirect = redirect
     session.query = restQuery
+    session.headers = headers
 
     return this.handler('GET', handlerParams, {})
   }

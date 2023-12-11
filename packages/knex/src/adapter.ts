@@ -1,6 +1,6 @@
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
 import { _ } from '@feathersjs/commons'
-import { AdapterBase, PaginationOptions, filterQuery } from '@feathersjs/adapter-commons'
+import { AdapterBase, PaginationOptions, AdapterQuery, getLimit } from '@feathersjs/adapter-commons'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
@@ -32,7 +32,6 @@ export class KnexAdapter<
   ServiceParams extends KnexAdapterParams<any> = KnexAdapterParams,
   PatchData = Partial<Data>
 > extends AdapterBase<Result, Data, PatchData, ServiceParams, KnexAdapterOptions> {
-  table: string
   schema?: string
 
   constructor(options: KnexAdapterOptions) {
@@ -51,30 +50,34 @@ export class KnexAdapter<
         ...options.filters,
         $and: (value: any) => value
       },
-      operators: [...(options.operators || []), '$like', '$notlike', '$ilike', '$and', '$or']
+      operators: [...(options.operators || []), '$like', '$notlike', '$ilike']
     })
-
-    this.table = options.name
-    this.schema = options.schema
-  }
-
-  get Model() {
-    return this.options.Model
   }
 
   get fullName() {
-    return this.schema ? `${this.schema}.${this.table}` : this.table
+    const { name, schema } = this.getOptions({} as ServiceParams)
+    return schema ? `${schema}.${name}` : name
+  }
+
+  get Model() {
+    return this.getModel()
+  }
+
+  getModel(params: ServiceParams = {} as ServiceParams) {
+    const { Model } = this.getOptions(params)
+    return Model
   }
 
   db(params?: ServiceParams) {
-    const { Model, table, schema } = this
+    const { Model, name, schema } = this.getOptions(params)
 
     if (params && params.transaction && params.transaction.trx) {
       const { trx } = params.transaction
       // debug('ran %s with transaction %s', fullName, id)
-      return schema ? (trx.withSchema(schema).table(table) as Knex.QueryBuilder) : trx(table)
+      return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name)
     }
-    return schema ? (Model.withSchema(schema).table(table) as Knex.QueryBuilder) : Model(table)
+
+    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name)
   }
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {
@@ -115,17 +118,18 @@ export class KnexAdapter<
     }, knexQuery)
   }
 
-  createQuery(params: ServiceParams) {
-    const { table, id } = this
+  createQuery(params: ServiceParams = {} as ServiceParams) {
+    const { name, id } = this.getOptions(params)
     const { filters, query } = this.filterQuery(params)
     const builder = this.db(params)
 
     // $select uses a specific find syntax, so it has to come first.
     if (filters.$select) {
+      const select = filters.$select.map((column) => (column.includes('.') ? column : `${name}.${column}`))
       // always select the id field, but make sure we only select it once
-      builder.select(...new Set([...filters.$select, `${table}.${id}`]))
+      builder.select(...new Set([...select, `${name}.${id}`]))
     } else {
-      builder.select(`${table}.*`)
+      builder.select(`${name}.*`)
     }
 
     // build up the knex query out of the query params, include $and and $or filters
@@ -147,9 +151,14 @@ export class KnexAdapter<
 
   filterQuery(params: ServiceParams) {
     const options = this.getOptions(params)
-    const { filters, query } = filterQuery(params?.query || {}, options)
+    const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
+    const $limit = getLimit(_limit, options.paginate)
 
-    return { filters, query, paginate: options.paginate }
+    return {
+      paginate: options.paginate,
+      filters: { $select, $sort, $limit, $skip },
+      query
+    }
   }
 
   async _find(params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
@@ -157,8 +166,9 @@ export class KnexAdapter<
   async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
     const { filters, paginate } = this.filterQuery(params)
+    const { name, id } = this.getOptions(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)
-    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${this.table}.${this.id} as total`)
+    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${name}.${id} as total`)
 
     // Handle $limit
     if (filters.$limit) {
@@ -171,8 +181,8 @@ export class KnexAdapter<
     }
 
     // provide default sorting if its not set
-    if (!filters.$sort) {
-      builder.orderBy(`${this.table}.${this.id}`, 'asc')
+    if (!filters.$sort && builder.client.driverName === 'mssql') {
+      builder.orderBy(`${name}.${id}`, 'asc')
     }
 
     const data = filters.$limit === 0 ? [] : await builder.catch(errorHandler)
@@ -192,16 +202,18 @@ export class KnexAdapter<
   }
 
   async _findOrGet(id: NullableId, params?: ServiceParams) {
-    const findParams = {
-      ...params,
-      paginate: false,
-      query: {
-        ...params?.query,
-        ...(id !== null ? { [`${this.table}.${this.id}`]: id } : {})
-      }
+    if (id !== null) {
+      const { name, id: idField } = this.getOptions(params)
+      const builder = params.knex ? params.knex.clone() : this.createQuery(params)
+      const idQuery = builder.andWhere(`${name}.${idField}`, '=', id).catch(errorHandler)
+
+      return idQuery as Promise<Result[]>
     }
 
-    return this._find(findParams as any) as any as Promise<Result[]>
+    return this._find({
+      ...params,
+      paginate: false
+    })
   }
 
   async _get(id: Id, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -227,49 +239,59 @@ export class KnexAdapter<
       return Promise.all(data.map((current) => this._create(current, params)))
     }
 
-    const client = this.db(params).client.config.client
+    const { client } = this.db(params).client.config
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).returning(this.id).catch(errorHandler)
+    const rows: any = await this.db(params)
+      .insert(data, returning, { includeTriggerModifications: true })
+      .catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
       return rows as Result[]
     }
 
-    return this._get(id, params)
+    return this._get(id, {
+      ...params,
+      query: _.pick(params?.query || {}, '$select')
+    })
   }
 
-  async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
-  async _patch(id: Id, data: PatchData, params?: ServiceParams): Promise<Result>
-  async _patch(id: NullableId, data: PatchData, _params?: ServiceParams): Promise<Result | Result[]>
+  async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
+  async _patch(id: Id, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result>
   async _patch(
     id: NullableId,
-    raw: PatchData,
+    data: PatchData | Partial<Result>,
+    _params?: ServiceParams
+  ): Promise<Result | Result[]>
+  async _patch(
+    id: NullableId,
+    raw: PatchData | Partial<Result>,
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
     if (id === null && !this.allowsMulti('patch', params)) {
       throw new MethodNotAllowed('Can not patch multiple entries')
     }
 
+    const { name, id: idField } = this.getOptions(params)
     const data = _.omit(raw, this.id)
     const results = await this._findOrGet(id, {
       ...params,
       query: {
         ...params?.query,
-        $select: [`${this.table}.${this.id}`]
+        $select: [`${name}.${idField}`]
       }
     })
-    const idList = results.map((current: any) => current[this.id])
+    const idList = results.map((current: any) => current[idField])
     const updateParams = {
       ...params,
       query: {
-        [`${this.table}.${this.id}`]: { $in: idList },
+        [`${name}.${idField}`]: { $in: idList },
         ...(params?.query?.$select ? { $select: params?.query?.$select } : {})
       }
     }
     const builder = this.createQuery(updateParams)
 
-    await builder.update(data)
+    await builder.update(data, [], { includeTriggerModifications: true })
 
     const items = await this._findOrGet(null, updateParams)
 
@@ -300,7 +322,7 @@ export class KnexAdapter<
       return result
     }, {})
 
-    await this.db(params).update(newObject, '*').where(this.id, id)
+    await this.db(params).update(newObject, '*', { includeTriggerModifications: true }).where(this.id, id)
 
     return this._get(id, params)
   }
@@ -323,7 +345,7 @@ export class KnexAdapter<
     // build up the knex query out of the query params
     this.knexify(q, query)
 
-    await q.del().catch(errorHandler)
+    await q.delete([], { includeTriggerModifications: true }).catch(errorHandler)
 
     if (id !== null) {
       if (items.length === 1) {

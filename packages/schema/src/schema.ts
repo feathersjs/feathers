@@ -31,7 +31,10 @@ export class SchemaWrapper<S extends JSONSchemaDefinition> implements Schema<Fro
   validator: AsyncValidateFunction
   readonly _type!: FromSchema<S>
 
-  constructor(public definition: S, ajv: Ajv = DEFAULT_AJV) {
+  constructor(
+    public definition: S,
+    ajv: Ajv = DEFAULT_AJV
+  ) {
     this.ajv = ajv
     this.validator = this.ajv.compile({
       $async: true,

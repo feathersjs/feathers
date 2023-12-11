@@ -14,7 +14,7 @@ The examples on this page are using [TypeBox](../../api/schema/typebox.md). For 
 
 ## Patterns
 
-There a four main types of schemas and resolvers. The schemas, resolvers and TypeScript types are declared as follows:
+There a four main types of schemas and resolvers. The schemas, resolvers and types are declared as follows:
 
 ```ts
 // The schema definition
@@ -23,70 +23,92 @@ export const nameSchema = Type.Object({
 })
 // The TypeScript type inferred from the schema
 export type Name = Static<typeof nameSchema>
+// The validator for the schema
+export const nameValidator = getValidator(nameSchema, dataValidator)
 // The resolver for the schema
-export const nameResolver = resolve<Name, HookContext>({
-  properties: {}
-})
-// The validator if it is a schema for data
-export const nameValidator = getDataValidator(nameSchema, dataValidator)
+export const nameResolver = resolve<Name, HookContext>({})
 ```
 
-## Main Schemas and Resolvers
+## Main schema and resolvers
 
 This schema defines the main data model of all properties and is normally the shape of the data that is returned. This includes database properties as well as associations and other computed properties.
 
 ```ts
-// Main data model schema https://dove.feathersjs.com/guides/cli/schemas-and-resolvers.html#main-schemas-and-resolvers
-export const messagesSchema = Type.Object(
+// Main data model schema
+export const messageSchema = Type.Object(
   {
-    _id: objectId,
+    id: Type.Number(),
     text: Type.String()
   },
-  { $id: 'Messages', additionalProperties: false }
+  { $id: 'Message', additionalProperties: false }
 )
-export type Messages = Static<typeof messagesSchema>
-export const messagesResolver = resolve<Messages, HookContext>({
-  properties: {}
-})
+export type Message = Static<typeof messageSchema>
+export const messageValidator = getValidator(messageSchema, dataValidator)
+export const messageResolver = resolve<Message, HookContext>({})
 ```
 
 ## External Resolvers
 
+The external resolver defines the data that is sent to a client and is often use to e.g. hide protected properties they should not see:
+
 ```ts
-// External resolvers https://dove.feathersjs.com/guides/cli/schemas-and-resolvers.html#external-resolvers
 export const messagesExternalResolver = resolve<Messages, HookContext>({
-  properties: {}
+  someSecretProperty: async () => undefined
 })
 ```
 
-## Data Schema and Resolvers
+## Data schema and resolvers
+
+The data schema validates the data when creating a new entry calling [service.create](../../api/services.md#createdata-params). It usually picks its properties from the [main schema](#main-schemas-and-resolvers) but can be changed to whatever is needed.
 
 ```ts
-// Schema for creating new entries https://dove.feathersjs.com/guides/cli/schemas-and-resolvers.html#data-schema-and-resolvers
-export const messagesDataSchema = Type.Pick(messagesSchema, ['string'], {
-  $id: 'MessagesData',
-  additionalProperties: false
+// Schema for creating new entries
+export const messageDataSchema = Type.Pick(messageSchema, ['text'], {
+  $id: 'MessageData'
 })
-export type MessagesData = Static<typeof messagesDataSchema>
-export const messagesDataValidator = getDataValidator(messagesDataSchema, dataValidator)
-export const messagesDataResolver = resolve<Messages, HookContext>({
-  properties: {}
-})
+export type MessageData = Static<typeof messageDataSchema>
+export const messageDataValidator = getValidator(messageDataSchema, dataValidator)
+export const messageDataResolver = resolve<Message, HookContext>({})
 ```
 
-### create, patch and update
+## Patch schema and Resolvers
+
+The patch schema is used for updating existing entries calling [service.patch](../../api/services.md#patchid-data-params). This is often different then the data schema for new entries and by default is a partial of the [main schema](#main-schemas-and-resolvers).
+
+```ts
+// Schema for updating existing entries
+export const messagePatchSchema = Type.Partial(messageSchema, {
+  $id: 'MessagePatch'
+})
+export type MessagePatch = Static<typeof messagePatchSchema>
+export const messagePatchValidator = getValidator(messagePatchSchema, dataValidator)
+export const messagePatchResolver = resolve<Message, HookContext>({})
+```
 
 ## Query Schema and Resolvers
 
+The query schema defines what can be sent in queries in [params.query](../../api/services.md#params) and also converts strings to the correct type.
+
 ```ts
-// Schema for allowed query properties https://dove.feathersjs.com/guides/cli/schemas-and-resolvers.html#query-schema-and-resolvers
-export const messagesQueryProperties = Type.Pick(messagesSchema, ['_id', 'name'], {
-  additionalProperties: false
-})
-export const messagesQuerySchema = querySyntax(messagesQueryProperties)
-export type MessagesQuery = Static<typeof messagesQuerySchema>
-export const messagesQueryValidator = getValidator(messagesQuerySchema, queryValidator)
-export const messagesQueryResolver = resolve<MessagesQuery, HookContext>({
-  properties: {}
-})
+// Schema for allowed query properties
+export const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'])
+export const messageQuerySchema = Type.Intersect(
+  [
+    querySyntax(messageQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
+)
+export type MessageQuery = Static<typeof messageQuerySchema>
+export const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
+export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 ```
+
+To add additional operators like `$like` see the [querySyntax](../../api/schema/typebox.md#querysyntax) documentation. You can also add your own query parameters in the `Type.Object({}, { additionalProperties: false })` definition.
+
+<BlockQuote type="warning" label="Important">
+
+Note that references (`Type.Ref`) can not be used in a query schema. Association querying is usually done by dot separated properties which have to be added manually in [MongoDB](../../api/databases/mongodb.md#querying) and [SQL](../../api/databases/knex.md#associations).
+
+</BlockQuote>

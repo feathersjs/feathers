@@ -14,10 +14,10 @@ npm install @feathersjs/errors --save
 
 ## Documentation
 
-Refer to the [Feathers errors API documentation](https://docs.feathersjs.com/api/errors.html) for more details.
+Refer to the [Feathers errors API documentation](https://feathersjs.com/api/errors.html) for more details.
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

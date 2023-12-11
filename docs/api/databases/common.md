@@ -25,28 +25,21 @@ app.use('/messages', new NameService())
 app.use('/messages', new NameService({ id, events, paginate }))
 ```
 
-### `service([options])`
-
-The `service` function returns a new service instance initialized with the given options. Internally just calls `new NameService(options)` from above.
-
-```ts
-import { service } from 'feathers-<name>'
-
-app.use('/messages', service())
-app.use('/messages', service({ id, events, paginate }))
-```
-
 ### Options
 
-- `id` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
-- `paginate` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
-- `multi` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+The following options are available for all database adapters:
+
+- `id {string}` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
+- `paginate {Object}` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
+- `multi {string[]|boolean}` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
 
 The following legacy options are still available but should be avoided:
 
-- `events` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
-- `operators` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema validator](../schema/validators.md#validatequery)
-- `filters` (_optional_, **deprecated**) - A list of top level `$` query parameters to allow (e.g. `[ '$populate' ]`). Not necessary when using a [query schema validator](../schema/validators.md#validatequery)
+- `events {string[]}` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
+- `operators {string[]}` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema](../schema/validators.md#validatequery)
+- `filters {Object}` (_optional_, **deprecated**) - An object of additional top level query filters, e.g. `{ $populate: true }`. Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`. Not necessary when using a [query schema](../schema/validators.md#validatequery)
+
+For database specific options see the adapter documentation.
 
 ## Pagination
 
@@ -98,9 +91,48 @@ app.service('todos').find({
 
 <BlockQuote type="info" label="note">
 
-Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-238407741))
+Disabling or changing the default pagination is not available in the client. Only `params.query` is passed to the server (also see a [workaround here](https://github.com/feathersjs/feathers/issues/382#issuecomment-288125825))
 
 </BlockQuote>
+
+## params.adapter
+
+Setting the `adapter` in the [service method `params`](../services.md#params) allows do dynamically modify the database adapter options based on the request. This e.g. allows to temporarily allow multiple entry creation/changes or the pagination settings.
+
+```ts
+const messages = [
+  {
+    text: 'message 1'
+  },
+  {
+    text: 'message 2'
+  }
+]
+
+// Enable multiple entry insertion for this request
+app.service('messages').create(messages, {
+  adapter: {
+    multi: true
+  }
+})
+```
+
+<BlockQuote type="tip">
+
+If the adapter has a `Model` option, `params.adapter.Model` can be used to point to different databases based on the request to e.g. allow multi-tenant systems. This is usually done by setting `context.params.adapter` in a [hook](../hooks.md).
+
+</BlockQuote>
+
+## params.paginate
+
+Setting `paginate` in the [service method `params`](../services.md#params) allows to change or disable the default pagination for a single request:
+
+```ts
+// Get all messages as an array
+const allMessages = await app.service('messages').find({
+  paginate: false
+})
+```
 
 ## Extending Adapters
 
@@ -108,68 +140,7 @@ There are two ways to extend existing database adapters. Either by extending the
 
 ### Classes
 
-All modules also export an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) as `Service` that can be directly extended like this:
-
-```js
-'use strict'
-
-const { Service } = require('feathers-<database>')
-
-class MyService extends Service {
-  create(data, params) {
-    data.created_at = new Date()
-
-    return super.create(data, params)
-  }
-
-  update(id, data, params) {
-    data.updated_at = new Date()
-
-    return super.update(id, data, params)
-  }
-}
-
-app.use(
-  '/todos',
-  new MyService({
-    paginate: {
-      default: 2,
-      max: 4
-    }
-  })
-)
-```
-
-### Hooks
-
-Another option is weaving in functionality through [hooks](../hooks.md). For example, `createdAt` and `updatedAt` timestamps could be added like this:
-
-```js
-const feathers = require('@feathersjs/feathers')
-
-// Import the database adapter of choice
-const service = require('feathers-<adapter>')
-
-const app = feathers().use(
-  '/todos',
-  service({
-    paginate: {
-      default: 2,
-      max: 4
-    }
-  })
-)
-
-app.service('todos').hooks({
-  before: {
-    create: [(context) => (context.data.createdAt = new Date())],
-
-    update: [(context) => (context.data.updatedAt = new Date())]
-  }
-})
-
-app.listen(3030)
-```
+All modules also export an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) as `<Name>Service` that can be directly extended. See the [Service CLI guide](../../guides/cli/service.class.md) on how to override existing and implement new methods.
 
 ## Service methods
 
@@ -193,30 +164,6 @@ const message = await app.service('/messages')._get('<message id>')
 These methods are only available internally on the server, not on the client side and only for the Feathers database adapters. They do _not_ send any events.
 
 </BlockQuote>
-
-### adapter.Model
-
-If the ORM or database supports models, the model instance or reference to the collection belonging to this adapter can be found in `adapter.Model`. This allows to easily make custom queries using that model, e.g. in a hook:
-
-```js
-// Make a MongoDB aggregation (`messages` is using `feathers-mongodb`)
-app.service('messages').hooks({
-  before: {
-    async find(context) {
-      const results = await service.Model.aggregate([
-        { $match: { item_id: id } },
-        {
-          $group: { _id: null, total_quantity: { $sum: '$quantity' } }
-        }
-      ]).toArray()
-
-      // Do something with results
-
-      return context
-    }
-  }
-})
-```
 
 ### adapter.find(params)
 

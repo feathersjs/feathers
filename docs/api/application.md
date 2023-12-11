@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/feathers@pre --save
+npm install @feathersjs/feathers --save
 ```
 
 The core `@feathersjs/feathers` module provides the ability to initialize a new Feathers application instance. It works in Node, React Native and the browser (see the [client](./client.md) chapter for more information). Each instance allows for registration and retrieval of [services](./services.md), [hooks](./hooks.md), plugin configuration, and getting and setting configuration options. An initialized Feathers application is referred to as the **app object**.
@@ -153,6 +153,12 @@ const lookup = app.lookup('messages/4321')
 lookup.service.find({
   route: lookup.data
 })
+```
+
+Case insensitive lookups can be enabled in the `app` file like this:
+
+```ts
+app.routes.caseSensitive = false
 ```
 
 ## .hooks(hooks)

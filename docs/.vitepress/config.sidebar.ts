@@ -41,6 +41,10 @@ export default {
           link: '/guides/basics/generator.md'
         },
         {
+          text: 'Authentication',
+          link: '/guides/basics/authentication.md'
+        },
+        {
           text: 'Services',
           link: '/guides/basics/services.md'
         },
@@ -53,8 +57,8 @@ export default {
           link: '/guides/basics/schemas.md'
         },
         {
-          text: 'Authentication',
-          link: '/guides/basics/authentication.md'
+          text: 'Logging in',
+          link: '/guides/basics/login.md'
         }
         // {
         //   text: 'Writing Tests',
@@ -83,20 +87,9 @@ export default {
       collapsed: true,
       items: [
         {
-          text: 'Using the CLI',
+          text: '📖 Readme',
           link: '/guides/cli/index.md'
         },
-        {
-          text: 'Generate App',
-          link: '/guides/cli/generate-app.md'
-        }
-      ]
-    },
-    {
-      text: 'App Structure',
-      collapsible: true,
-      collapsed: false,
-      items: [
         {
           text: '📂 config',
           items: [
@@ -143,11 +136,12 @@ export default {
                     {
                       text: '📄 &lt;service&gt;.schemas',
                       link: '/guides/cli/service.schemas.md'
+                    },
+                    {
+                      text: '📄 &lt;service&gt;.shared',
+                      link: '/guides/cli/service.shared.md'
                     }
                   ]
-                },
-                {
-                  text: '📄 index'
                 }
               ]
             },

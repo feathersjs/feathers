@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- allow \_patch to modify the entire base schema ([#3300](https://github.com/feathersjs/feathers/issues/3300)) ([0f41622](https://github.com/feathersjs/feathers/commit/0f41622307589b3a0b62ac411a73e6a601bda171))
+
+## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
+
+### Bug Fixes
+
+- **knex:** Update all dependencies and Knex peer ([#3308](https://github.com/feathersjs/feathers/issues/3308)) ([d2f9860](https://github.com/feathersjs/feathers/commit/d2f986036c4741cce2339d8abbcc6b2eb037a12a))
+- **memory:** Ensure correct pagination totals ([#3307](https://github.com/feathersjs/feathers/issues/3307)) ([c59e1b8](https://github.com/feathersjs/feathers/commit/c59e1b80cb43571077b035ab2bf0b44f9daa5ab8))
+
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.5](https://github.com/feathersjs/feathers/compare/v5.0.4...v5.0.5) (2023-04-28)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+## [5.0.4](https://github.com/feathersjs/feathers/compare/v5.0.3...v5.0.4) (2023-04-12)
+
+### Bug Fixes
+
+- Make sure all Readme files are up to date ([#3154](https://github.com/feathersjs/feathers/issues/3154)) ([a5f0b38](https://github.com/feathersjs/feathers/commit/a5f0b38bbf2a11486415a39533bcc6c67fb51e3e))
+- **memory:** Fix memory adapter readme ([#3153](https://github.com/feathersjs/feathers/issues/3153)) ([a9d826a](https://github.com/feathersjs/feathers/commit/a9d826a7dbe7df4501fbf82a47d2c3a77ca9e0c0))
+
+## [5.0.3](https://github.com/feathersjs/feathers/compare/v5.0.2...v5.0.3) (2023-04-05)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+
+## [5.0.1](https://github.com/feathersjs/feathers/compare/v5.0.0...v5.0.1) (2023-03-15)
+
+### Bug Fixes
+
+- **memory/mongodb:** $select as only property & force 'id' in '$select' ([#3081](https://github.com/feathersjs/feathers/issues/3081)) ([fbe3cf5](https://github.com/feathersjs/feathers/commit/fbe3cf5199e102b5aeda2ae33828d5034df3d105))
+
+# [5.0.0](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.38...v5.0.0) (2023-02-24)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+# [5.0.0-pre.38](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.37...v5.0.0-pre.38) (2023-02-17)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+# [5.0.0-pre.37](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.36...v5.0.0-pre.37) (2023-02-09)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+# [5.0.0-pre.36](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.35...v5.0.0-pre.36) (2023-01-29)
+
+**Note:** Version bump only for package @feathersjs/memory
+
+# [5.0.0-pre.35](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.34...v5.0.0-pre.35) (2023-01-12)
+
+### Features
+
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+
 # [5.0.0-pre.34](https://github.com/feathersjs/feathers/compare/v5.0.0-pre.33...v5.0.0-pre.34) (2022-12-14)
 
 ### Features

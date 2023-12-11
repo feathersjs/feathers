@@ -4,7 +4,7 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/rest-client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/rest-client)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-> REST client services for different Ajax libraries
+> REST client services for different HTTP libraries
 
 ## Installation
 
@@ -14,10 +14,10 @@ npm install @feathersjs/rest-client --save
 
 ## Documentation
 
-Refer to the [Feathers REST client API documentation](https://docs.feathersjs.com/api/client/rest.html) for more details.
+Refer to the [Feathers REST client API documentation](https://feathersjs.com/api/client/rest.html) for more details.
 
 ## License
 
-Copyright (c) 2022 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

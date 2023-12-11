@@ -381,4 +381,39 @@ describe('`after` hooks', () => {
       test: 43
     })
   })
+
+  it('.after all and method specific hooks run in the correct order (#3002)', async () => {
+    const app = feathers().use('/dummy', {
+      async get(id: any) {
+        return { id, items: [] as any }
+      }
+    })
+    const service = app.service('dummy')
+
+    service.hooks({
+      after: {
+        all(context) {
+          context.result.items.push('first')
+
+          return context
+        },
+        get: [
+          function (context) {
+            context.result.items.push('second')
+
+            return context
+          },
+          function (context) {
+            context.result.items.push('third')
+
+            return context
+          }
+        ]
+      }
+    })
+
+    const data = await service.get(10)
+
+    assert.deepStrictEqual(data.items, ['first', 'second', 'third'])
+  })
 })

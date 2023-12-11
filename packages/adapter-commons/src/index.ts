@@ -3,7 +3,7 @@ import { Params } from '@feathersjs/feathers'
 
 export * from './declarations'
 export * from './service'
-export { filterQuery, FILTERS, OPERATORS } from './query'
+export * from './query'
 export * from './sort'
 
 // Return a function that filters a result object or array

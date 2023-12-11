@@ -17,6 +17,7 @@ onBeforeUnmount(toggleHomeClass)
       <div class="feathers-home-hero relative">
         <div class="relative aspect-15/9 overflow-hidden">
           <img
+            id="hero-day-bg"
             class="hero-bg-light w-screen transition-opacity duration-1000 pointer-events-none"
             src="/img/illustration/hero-day-bg.svg"
             alt="A sunny daytime background looking over FeathersJS Valley."
@@ -24,22 +25,23 @@ onBeforeUnmount(toggleHomeClass)
             height="902"
           />
           <img
+            id="hero-night-bg"
             class="hero-bg-dark w-screen absolute inset-0 transition-opacity duration-1000 pointer-events-none"
-            :class="[isDark ? 'opacity-100' : 'opacity-0 ']"
             src="/img/illustration/hero-night-bg.svg"
             alt="A chill nighttime background overlooking FeathersJS Valley"
             width="1504"
             height="902"
           />
           <img
+            id="hero-day-sun-solo"
             class="hero-bg-dark w-screen absolute inset-0 transition-all duration-1000 pointer-events-none"
-            :class="[isDark ? 'top-[300%] opacity-0' : '-top-[69%] opacity-100']"
             src="/img/illustration/hero-day-sun-solo.svg"
             alt="The FeathersJS Birds enjoying a cool night in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
             width="1583"
             height="1580"
           />
           <img
+            id="hero-night-moon-solo"
             class="hero-bg-dark w-screen absolute inset-0 transition-all duration-1000 pointer-events-none"
             :class="[isDark ? '-top-[69%] opacity-100' : 'top-[300%] opacity-0']"
             src="/img/illustration/hero-night-moon-solo.svg"
@@ -48,7 +50,8 @@ onBeforeUnmount(toggleHomeClass)
             height="1580"
           />
           <img
-            class="hero-bg-dark w-screen absolute inset-0 transition-opacity duration-1000 pointer-events-none"
+            id="hero-day-foreground"
+            class="w-screen absolute inset-0 transition-opacity duration-1000 pointer-events-none"
             src="/img/illustration/hero-day-foreground.svg"
             alt="The FeathersJS Birds enjoying a cool night in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
             width="1504"
@@ -56,7 +59,6 @@ onBeforeUnmount(toggleHomeClass)
           />
           <img
             class="hero-bg-dark w-screen absolute inset-0 transition-opacity duration-1000 pointer-events-none"
-            :class="[isDark ? 'opacity-100' : 'opacity-0 ']"
             src="/img/illustration/hero-night-foreground.svg"
             alt="The FeathersJS Birds enjoying a cool night in the valley of Feathers where a lovely treehouse sits next to the river running between the mountains."
             width="1504"
@@ -73,7 +75,7 @@ onBeforeUnmount(toggleHomeClass)
               The API and Real-time <br />
               Application Framework
             </div>
-            <div class="mx-auto mt-4 lg:mt-12">
+            <div class="mx-auto mt-4 lg:mt-12 hidden md:block">
               <CTAButton primary>Get Started</CTAButton>
             </div>
           </div>
@@ -85,7 +87,9 @@ onBeforeUnmount(toggleHomeClass)
           For TypeScript and JavaScript in Node.js, React Native and the browser
         </p>
         <div class="scale-80">
-          <CTAButton primary class="mt-3 mb-6 md:mb-10">Get Started</CTAButton>
+          <CTAButton href="/guides/basics/starting.html" primary class="mt-3 mb-6 md:mb-10"
+            >Quick Start</CTAButton
+          >
         </div>
       </div>
     </div>
@@ -104,6 +108,22 @@ onBeforeUnmount(toggleHomeClass)
     margin-top: -144px;
     margin-bottom: 40px;
   }
+}
+
+#hero-day-sun-solo,
+.dark #hero-night-moon-solo {
+  @apply -top-[69%] opacity-100;
+}
+.dark #hero-day-sun-solo,
+#hero-night-moon-solo {
+  @apply top-[300%] opacity-0;
+}
+
+.hero-bg-dark {
+  opacity: 0;
+}
+.dark .hero-bg-dark {
+  opacity: 1;
 }
 
 .illustration {

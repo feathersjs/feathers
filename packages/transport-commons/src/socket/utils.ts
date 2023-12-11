@@ -55,7 +55,7 @@ export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnectio
         // If we are getting events from an array but try to dispatch individual data
         // try to get the individual item to dispatch from the correct index.
         if (!Array.isArray(data) && Array.isArray(context.result) && Array.isArray(result)) {
-          result = context.result.find((resultData) => isEqual(resultData, data))
+          result = result.find((resultData) => isEqual(resultData, data))
         }
 
         debug(`Dispatching '${eventName}' to Socket ${socket.id} with`, result)
@@ -69,10 +69,12 @@ export function getDispatcher(emit: string, socketMap: WeakMap<RealTimeConnectio
 export async function runMethod(
   app: Application,
   connection: RealTimeConnection,
-  path: string,
-  method: string,
+  _path: string,
+  _method: string,
   args: any[]
 ) {
+  const path = typeof _path === 'string' ? _path : null
+  const method = typeof _method === 'string' ? _method : null
   const trace = `method '${method}' on service '${path}'`
   const methodArgs = args.slice(0)
   const callback =
@@ -91,7 +93,7 @@ export async function runMethod(
 
     // No valid service was found throw a NotFound error
     if (lookup === null) {
-      throw new NotFound(`Service '${path}' not found`)
+      throw new NotFound(path === null ? `Invalid service path` : `Service '${path}' not found`)
     }
 
     const { service, params: route = {} } = lookup

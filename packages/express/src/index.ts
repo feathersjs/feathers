@@ -9,7 +9,16 @@ import { rest, RestOptions, formatter } from './rest'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
 import { Application, ExpressOverrides } from './declarations'
 import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication'
-import { default as original, static as serveStatic, json, raw, text, urlencoded, query } from 'express'
+import {
+  default as original,
+  static as serveStatic,
+  json,
+  raw,
+  text,
+  urlencoded,
+  query,
+  Router
+} from 'express'
 
 export {
   original,
@@ -21,6 +30,7 @@ export {
   urlencoded,
   query,
   rest,
+  Router,
   RestOptions,
   formatter,
   errorHandler,

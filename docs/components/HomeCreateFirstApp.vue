@@ -1,6 +1,6 @@
 <template>
   <div class="py-16 xl:py-24 bg-secondary text-center lg:text-lg">
-    <h2 class="md:text-xl lg:text-2xl font-bold">Create your first real-time app in minutes</h2>
+    <h2 class="md:text-xl lg:text-2xl font-bold">Create your first Feathers API in minutes</h2>
     <div class="py-8">
       <img src="/img/coding-bird.svg" alt="" class="w-3/4 max-w-4xl mx-auto" />
     </div>

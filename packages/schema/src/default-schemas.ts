@@ -117,7 +117,28 @@ export const sqlSettingsSchema = {
   type: 'object',
   properties: {
     client: { type: 'string' },
-    connection: { type: 'string' }
+    pool: {
+      type: 'object',
+      properties: {
+        min: { type: 'number' },
+        max: { type: 'number' }
+      }
+    },
+    connection: {
+      oneOf: [
+        { type: 'string' },
+        {
+          type: 'object',
+          properties: {
+            host: { type: 'string' },
+            port: { type: 'number' },
+            user: { type: 'string' },
+            password: { type: 'string' },
+            database: { type: 'string' }
+          }
+        }
+      ]
+    }
   }
 } as const
 

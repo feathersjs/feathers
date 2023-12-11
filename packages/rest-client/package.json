@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "5.0.0-pre.34",
+  "version": "5.0.12",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -42,7 +42,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test/build",
+    "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
@@ -53,28 +53,28 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
-    "@types/superagent": "^4.1.16",
-    "qs": "^6.11.0"
+    "@feathersjs/commons": "^5.0.12",
+    "@feathersjs/errors": "^5.0.12",
+    "@feathersjs/feathers": "^5.0.12",
+    "@types/superagent": "^4.1.24",
+    "qs": "^6.11.2"
   },
   "devDependencies": {
-    "@feathersjs/express": "^5.0.0-pre.34",
-    "@feathersjs/memory": "^5.0.0-pre.34",
-    "@feathersjs/tests": "^5.0.0-pre.34",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
-    "@types/node-fetch": "^2.6.2",
-    "@types/qs": "^6.9.7",
-    "axios": "^1.2.0",
-    "mocha": "^10.1.0",
+    "@feathersjs/express": "^5.0.12",
+    "@feathersjs/memory": "^5.0.12",
+    "@feathersjs/tests": "^5.0.12",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.3",
+    "@types/node-fetch": "^2.6.9",
+    "@types/qs": "^6.9.10",
+    "axios": "^1.6.2",
+    "mocha": "^10.2.0",
     "node-fetch": "^2.6.1",
-    "rxjs": "^7.5.7",
+    "rxjs": "^7.8.1",
     "shx": "^0.3.4",
-    "superagent": "^8.0.4",
+    "superagent": "^8.1.2",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.3"
+    "typescript": "^5.3.2"
   },
-  "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

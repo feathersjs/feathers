@@ -19,12 +19,12 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
         ...context.params,
         query
       }
-
-      if (typeof next === 'function') {
-        return next()
-      }
     } catch (error: any) {
       throw error.ajv ? new BadRequest(error.message, error.errors) : error
+    }
+
+    if (typeof next === 'function') {
+      return next()
     }
   }
 }
@@ -36,8 +36,8 @@ export const validateData = <H extends HookContext>(schema: Schema<any> | DataVa
       typeof (schema as Schema<any>).validate === 'function'
         ? (schema as Schema<any>).validate.bind(schema)
         : typeof schema === 'function'
-        ? schema
-        : (schema as any)[context.method]
+          ? schema
+          : (schema as any)[context.method]
 
     if (validator) {
       try {

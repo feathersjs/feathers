@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/transport-commons",
   "description": "Shared functionality for websocket providers",
-  "version": "5.0.0-pre.34",
+  "version": "5.0.12",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -33,7 +33,7 @@
   },
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test/build",
+    "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "npm run mocha",
     "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
@@ -54,21 +54,21 @@
     "*.js"
   ],
   "dependencies": {
-    "@feathersjs/commons": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
+    "@feathersjs/commons": "^5.0.12",
+    "@feathersjs/errors": "^5.0.12",
+    "@feathersjs/feathers": "^5.0.12",
     "encodeurl": "^1.0.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/encodeurl": "^1.0.0",
-    "@types/lodash": "^4.14.191",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
-    "mocha": "^10.1.0",
+    "@types/encodeurl": "^1.0.2",
+    "@types/lodash": "^4.14.202",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.3",
+    "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.3"
+    "typescript": "^5.3.2"
   },
-  "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

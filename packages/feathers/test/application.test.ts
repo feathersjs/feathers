@@ -66,6 +66,7 @@ describe('Feathers application', () => {
     it('calling .use with invalid path throws', () => {
       const app = feathers()
 
+      //@ts-ignore
       assert.throws(() => app.use(null, {}), {
         message: "'null' is not a valid service path."
       })
@@ -190,10 +191,15 @@ describe('Feathers application', () => {
     })
 
     it('services can be re-used (#566)', (done) => {
-      const app1 = feathers()
-      const app2 = feathers()
+      const service = {
+        async create(data: any) {
+          return data
+        }
+      }
+      const app1 = feathers<{ dummy: typeof service; testing: any }>()
+      const app2 = feathers<{ dummy: typeof service; testing: any }>()
 
-      app2.use('/dummy', {
+      app2.use('dummy', {
         async create(data: any) {
           return data
         }
@@ -219,19 +225,20 @@ describe('Feathers application', () => {
         done()
       })
 
-      app1.use('/testing', app2.service('dummy'))
+      app1.use('testing', app2.service('dummy'))
 
       app1.service('testing').create({ message: 'Hi' })
     })
 
     it('async hooks run before regular hooks', async () => {
-      const app = feathers()
-
-      app.use('/dummy', {
+      const service = {
         async create(data: any) {
           return data
         }
-      })
+      }
+      const app = feathers<{ dummy: typeof service }>()
+
+      app.use('dummy', service)
 
       const dummy = app.service('dummy')
 
@@ -298,6 +305,20 @@ describe('Feathers application', () => {
       const wrappedService = app.service('dummy')
 
       assert.ok((wrappedService.create as any)[TEST])
+    })
+
+    it('.service does does not access object properties', async () => {
+      const app = feathers()
+
+      assert.throws(() => app.service('something'), {
+        message: "Can not find service 'something'"
+      })
+      assert.throws(() => app.service('__proto__'), {
+        message: "Can not find service '__proto__'"
+      })
+      assert.throws(() => app.service('toString'), {
+        message: "Can not find service 'toString'"
+      })
     })
   })
 

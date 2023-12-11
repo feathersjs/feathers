@@ -20,32 +20,41 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
+  "workspaces": [
+    "docs",
+    "packages/*"
+  ],
   "scripts": {
-    "install": "lerna bootstrap",
-    "publish": "lerna publish && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish": "lerna publish --force-publish && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:major": "lerna publish major && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:minor": "lerna publish minor && git commit -am \"chore: Update changelog\" && git push origin",
+    "publish:patch": "lerna publish patch && git commit -am \"chore: Update changelog\" && git push origin",
     "publish:premajor": "lerna publish premajor --preid pre --pre-dist-tag pre && git commit -am \"chore: Update version and changelog\" && git push origin",
     "publish:prerelease": "lerna publish prerelease --preid pre --pre-dist-tag pre --dist-tag pre --force-publish && git commit -am \"chore: Update version and changelog\" && git push origin",
     "prettier": "npx prettier \"packages/{,!(node_modules)/**/(src|test)/**/}*.ts\" --write",
     "eslint": "eslint \"packages/**/*.ts\" --fix",
     "lint": "npm run prettier && npm run eslint",
     "compile": "lerna run compile",
-    "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch,chalk",
+    "build:docs": "npm run build --workspace docs",
+    "update-dependencies": "ncu -u && npm exec --workspaces -- ncu -u --dep prod,dev,optional,peer -x node-fetch,chalk,\"@sinclair/typebox\"",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests"
+    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",
+    "generate:package": "pinion run generators/package.ts"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.45.0",
-    "@typescript-eslint/parser": "^5.45.0",
-    "c8": "^7.12.0",
-    "eslint": "^8.28.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "lerna": "^6.1.0",
-    "npm-check-updates": "^16.4.3",
-    "prettier": "^2.8.0",
-    "typescript": "^4.9.3"
+    "@feathershq/pinion": "^0.4.0-pre.3",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
+    "c8": "^8.0.1",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "lerna": "^8.0.0",
+    "npm-check-updates": "^16.14.11",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
   }
 }

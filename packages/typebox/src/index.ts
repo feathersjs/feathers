@@ -1,4 +1,13 @@
-import { Type, TObject, TInteger, TOptional, TSchema, TIntersect, ObjectOptions } from '@sinclair/typebox'
+import {
+  Type,
+  TObject,
+  TInteger,
+  TOptional,
+  TSchema,
+  ObjectOptions,
+  TIntersect,
+  TUnion
+} from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
@@ -17,8 +26,10 @@ export type TDataSchemaMap = {
  * @param validator The AJV validation instance
  * @returns A compiled validation function
  */
-export const getValidator = <T = any, R = T>(schema: TObject, validator: Ajv): Validator<T, R> =>
-  jsonSchema.getValidator(schema as any, validator)
+export const getValidator = <T = any, R = T>(
+  schema: TObject | TIntersect | TUnion<TObject[]>,
+  validator: Ajv
+): Validator<T, R> => jsonSchema.getValidator(schema as any, validator)
 
 /**
  * Returns compiled validation functions to validate data for the `create`, `update` and `patch`
@@ -38,8 +49,8 @@ export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv):
  * @param allowedValues array of strings for the enum
  * @returns TypeBox.Type
  */
-export function StringEnum<T extends string[]>(allowedValues: [...T]) {
-  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues })
+export function StringEnum<T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) {
+  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
 }
 
 const arrayOfKeys = <T extends TObject>(type: T) => {
@@ -61,13 +72,16 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
  * @returns The `$sort` syntax schema
  */
 export function sortDefinition<T extends TObject>(schema: T) {
-  const properties = Object.keys(schema.properties).reduce((res, key) => {
-    const result = res as any
+  const properties = Object.keys(schema.properties).reduce(
+    (res, key) => {
+      const result = res as any
 
-    result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
+      result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
 
-    return result
-  }, {} as { [K in keyof T['properties']]: TOptional<TInteger> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: TOptional<TInteger> }
+  )
 
   return Type.Object(properties, { additionalProperties: false })
 }
@@ -88,17 +102,21 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Object({
-          $gt: def,
-          $gte: def,
-          $lt: def,
-          $lte: def,
-          $ne: def,
-          $in: Type.Array(def),
-          $nin: Type.Array(def),
-          ...extension
-        }),
-        { additionalProperties: false }
+        Type.Intersect(
+          [
+            Type.Object({
+              $gt: def,
+              $gte: def,
+              $lt: def,
+              $lte: def,
+              $ne: def,
+              $in: def.type === 'array' ? def : Type.Array(def),
+              $nin: def.type === 'array' ? def : Type.Array(def)
+            }),
+            Type.Object(extension)
+          ],
+          { additionalProperties: false }
+        )
       )
     ])
   )
@@ -121,18 +139,17 @@ export const queryProperties = <
   definition: T,
   extensions: X = {} as X
 ) => {
-  const properties = Object.keys(definition.properties).reduce((res, key) => {
-    const result = res as any
-    const value = definition.properties[key]
+  const properties = Object.keys(definition.properties).reduce(
+    (res, key) => {
+      const result = res as any
+      const value = definition.properties[key]
 
-    if (value.$ref) {
-      throw new Error(`Can not create query syntax schema for reference property '${key}'`)
-    }
+      result[key] = queryProperty(value, extensions[key])
 
-    result[key] = queryProperty(value, extensions[key])
-
-    return result
-  }, {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> })
+      return result
+    },
+    {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> }
+  )
 
   return Type.Optional(Type.Object(properties, { additionalProperties: false }))
 }
@@ -147,7 +164,7 @@ export const queryProperties = <
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
 export const querySyntax = <
-  T extends TObject | TIntersect,
+  T extends TObject,
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   type: T,
@@ -155,6 +172,8 @@ export const querySyntax = <
   options: ObjectOptions = { additionalProperties: false }
 ) => {
   const propertySchema = queryProperties(type, extensions)
+  const $or = Type.Array(propertySchema)
+  const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
   return Type.Intersect(
     [
@@ -165,8 +184,8 @@ export const querySyntax = <
             $skip: Type.Number({ minimum: 0 }),
             $sort: sortDefinition(type),
             $select: arrayOfKeys(type),
-            $or: Type.Array(propertySchema),
-            $and: Type.Array(propertySchema)
+            $and,
+            $or
           },
           { additionalProperties: false }
         )
@@ -176,3 +195,6 @@ export const querySyntax = <
     options
   )
 }
+
+export const ObjectIdSchema = () =>
+  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: false })])

@@ -4,20 +4,26 @@ outline: deep
 
 # Quick start
 
-Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without additional boilerplate or tooling. If you want to jump right into creating a complete application you can go to the [Creating An App](./generator.md) chapter.
+Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers app, an API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without additional boilerplate or tooling. If you want to jump right into creating a complete application you can go to the [Creating An App](./generator.md) chapter.
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
-Feathers works with all [currently active releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
+Feathers works with all [currently active NodeJS releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
+
+<BlockQuote type="tip">
+
+You can follow this guide on your own computer in the terminal or try the steps out live without installing anything in the [Feathers Quick Start on Stackblitz](https://stackblitz.com/@daffl/collections/feathers-quick-start).
+
+</BlockQuote>
 
 After successful installation, the `node` and `npm` commands should be available on the terminal:
 
 ```
-$ node --version
+node --version
 ```
 
 ```
-$ npm --version
+npm --version
 ```
 
 <BlockQuote type="warning" label="Important">
@@ -40,7 +46,7 @@ Since any Feathers application is a Node application, we can create a default [p
 ```sh
 npm init --yes
 # Install TypeScript and its NodeJS wrapper
-npm i typescript ts-node --save-dev
+npm i typescript ts-node @types/node --save-dev
 # Also initialize a TS configuration file that uses modern JavaScript
 npx tsc --init --target es2020
 ```
@@ -60,7 +66,7 @@ npm init --yes
 Feathers can be installed like any other Node module by installing the [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with module loaders like Vite, Webpack, and in React Native.
 
 ```sh
-npm install @feathersjs/feathers@pre --save
+npm install @feathersjs/feathers --save
 ```
 
 <BlockQuote label="note">
@@ -174,7 +180,9 @@ node app.mjs
 
 </LanguageBlock>
 
-We will see something like this:
+[Try it out live >](https://stackblitz.com/edit/node-mupbmh?embed=1&file=app.ts&view=editor)
+
+We will see something like this in the terminal:
 
 ```sh
 A new message has been created { id: 0, text: 'Hello Feathers' }
@@ -183,21 +191,25 @@ All messages [ { id: 0, text: 'Hello Feathers' },
   { id: 1, text: 'Hello again' } ]
 ```
 
-Here we implemented only `find` and `create` but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up some of the most important concepts upon which Feathers is built.
+Here we implemented only `find` and `create`, but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up some of the most important concepts upon which Feathers is built.
 
-## An API server
+## An API Server
 
-We created a Feathers application and a service and we are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API webserver. This is where Feathers transports come in. A transport takes a service like the one we created above and turns it into a server that other clients (like a web- or mobile application) can talk to.
+So far we've created a Feathers application, a message service, and are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API server. This is where Feathers transports come in.
 
-In the following example we will take our existing service and use
+A transport takes a service like the one we created above and turns it into a server that other clients can talk to, like a website or mobile application.
+
+In the following example we will take our existing service and use:
 
 - `@feathersjs/koa` which uses [KoaJS](https://koajs.com/) to automatically turn our services into a REST API
 - `@feathersjs/socketio` which uses Socket.io to do the same as a WebSocket, real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy).
 
+Run:
+
 <LanguageBlock global-id="ts">
 
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre --save
+npm install @feathersjs/socketio @feathersjs/koa --save
 ```
 
 Then update `app.ts` with the following content:
@@ -205,17 +217,15 @@ Then update `app.ts` with the following content:
 </LanguageBlock>
 <LanguageBlock global-id="js">
 
-Run
-
 ```sh
-npm install @feathersjs/socketio@pre @feathersjs/koa@pre koa-static --save
+npm install @feathersjs/socketio @feathersjs/koa koa-static --save
 ```
 
 Then update `app.mjs` with the following content:
 
 </LanguageBlock>
 
-```ts{2-4,42-55,59-62,64-67}
+```ts{2-4,42-55,58-65}
 import { feathers } from '@feathersjs/feathers'
 import { koa, rest, bodyParser, errorHandler, serveStatic } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
@@ -256,7 +266,7 @@ type ServiceTypes = {
   messages: MessageService
 }
 
-// Creates an ExpressJS compatible Feathers application
+// Creates an KoaJS compatible Feathers application
 const app = koa<ServiceTypes>(feathers())
 
 // Use the current folder for static file hosting
@@ -289,6 +299,8 @@ app.service('messages').create({
   text: 'Hello world from the server'
 })
 ```
+
+[Try it out live >](https://stackblitz.com/edit/node-zfinli?embed=1&file=app.ts)
 
 <LanguageBlock global-id="ts">
 
@@ -347,21 +359,28 @@ In the same folder, add the following `index.html` page:
   <head>
     <meta charset="UTF-8" />
     <title>Feathers Example</title>
-    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/base.css" />
-    <link rel="stylesheet" href="//unpkg.com/feathers-chat@4.0.0/public/chat.css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.46.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="https://feathersjs.com/feathers-chat.css" />
   </head>
-  <body>
-    <main id="main" class="container">
-      <h1>Welcome to Feathers</h1>
-      <form class="form" onsubmit="sendMessage(event.preventDefault())">
-        <input type="text" id="message-text" placeholder="Enter message here" />
-        <button type="submit" class="button button-primary">Send message</button>
-      </form>
+  <body data-theme="dracula">
+    <main id="main" class="p-8">
+      <h1 class="font-medium leading-tight text-5xl mt-0 mb-2">Welcome to Feathers</h1>
 
-      <h2>Here are the current messages:</h2>
+      <div class="form-control w-full py-2">
+        <form class="input-group overflow-hidden" onsubmit="sendMessage(event)">
+          <input name="message" id="message-text" type="text" class="input input-bordered w-full" />
+          <button type="submit" class="btn">Send</button>
+        </form>
+      </div>
+      <h2 class="pt-1 pb-2 text-lg">Messages</h2>
     </main>
 
-    <script src="//unpkg.com/@feathersjs/client@^5.0.0-pre.24/dist/feathers.js"></script>
+    <script src="//unpkg.com/@feathersjs/client@^5.0.0/dist/feathers.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       // Set up socket.io
@@ -373,8 +392,10 @@ In the same folder, add the following `index.html` page:
       app.configure(feathers.socketio(socket))
 
       // Form submission handler that sends a new message
-      async function sendMessage() {
+      async function sendMessage(event) {
         const messageInput = document.getElementById('message-text')
+
+        event.preventDefault()
 
         // Create a new message with the input field value
         await app.service('messages').create({
@@ -386,7 +407,9 @@ In the same folder, add the following `index.html` page:
 
       // Renders a single message on the page
       function addMessage(message) {
-        document.getElementById('main').innerHTML += `<p>${message.text}</p>`
+        document.getElementById('main').innerHTML += `<div class="chat chat-start">
+          <div class="chat-bubble">${message.text}</div>
+        </div>`
       }
 
       const main = async () => {
@@ -406,7 +429,9 @@ In the same folder, add the following `index.html` page:
 </html>
 ```
 
-If you now in the browser go to
+[Try it out live >](https://stackblitz.com/edit/node-m7cjfd?embed=1&file=index.html)
+
+Now in the browser if you go to
 
 ```
 http://localhost:3030

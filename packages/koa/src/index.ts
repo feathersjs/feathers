@@ -3,7 +3,7 @@ import koaQs from 'koa-qs'
 import { Application as FeathersApplication } from '@feathersjs/feathers'
 import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
-import bodyParser from 'koa-bodyparser'
+import { koaBody as bodyParser } from 'koa-body'
 import cors from '@koa/cors'
 import serveStatic from 'koa-static'
 
@@ -53,11 +53,16 @@ export function koa<S = any, C = any>(
     },
 
     async teardown(server?: any) {
-      return feathersTeardown
-        .call(this, server)
-        .then(
-          () => new Promise((resolve, reject) => this.server.close((e) => (e ? reject(e) : resolve(this))))
-        )
+      return feathersTeardown.call(this, server).then(
+        () =>
+          new Promise((resolve, reject) => {
+            if (this.server) {
+              this.server.close((e) => (e ? reject(e) : resolve(this)))
+            } else {
+              resolve(this)
+            }
+          })
+      )
     }
   } as Application)
 
@@ -82,6 +87,13 @@ export function koa<S = any, C = any>(
   })
 
   koaQs(app as any)
+
+  Object.getOwnPropertySymbols(koaApp).forEach((symbol) => {
+    const target = app as any
+    const source = koaApp as any
+
+    target[symbol] = source[symbol]
+  })
 
   // This reinitializes hooks
   app.setup = feathersApp.setup as any

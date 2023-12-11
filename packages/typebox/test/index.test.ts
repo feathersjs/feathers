@@ -1,4 +1,5 @@
 import assert from 'assert'
+import { ObjectId as MongoObjectId } from 'mongodb'
 import { Ajv } from '@feathersjs/schema'
 import {
   querySyntax,
@@ -7,7 +8,7 @@ import {
   defaultAppConfiguration,
   getDataValidator,
   getValidator,
-  queryProperties
+  ObjectIdSchema
 } from '../src'
 
 describe('@feathersjs/schema/typebox', () => {
@@ -37,20 +38,6 @@ describe('@feathersjs/schema/typebox', () => {
 
       validated = (await validator({ ...query, something: 'wrong' })) as any as Query
       assert.ok(!validated)
-    })
-
-    it('queryProperties errors for unsupported query types', () => {
-      assert.throws(
-        () =>
-          queryProperties(
-            Type.Object({
-              something: Type.Ref(Type.Object({}, { $id: 'something' }))
-            })
-          ),
-        {
-          message: "Can not create query syntax schema for reference property 'something'"
-        }
-      )
     })
 
     it('querySyntax works with no properties', async () => {
@@ -93,6 +80,27 @@ describe('@feathersjs/schema/typebox', () => {
     })
   })
 
+  it('$in and $nin works with array type', async () => {
+    const schema = Type.Object({
+      things: Type.Array(Type.Number())
+    })
+    const querySchema = querySyntax(schema)
+    const validator = new Ajv().compile(querySchema)
+
+    type Query = Static<typeof querySchema>
+
+    const query: Query = {
+      things: {
+        $in: [10, 20],
+        $nin: [30]
+      }
+    }
+
+    const validated = (await validator(query)) as any as Query
+
+    assert.ok(validated)
+  })
+
   it('defaultAppConfiguration', async () => {
     const configSchema = Type.Intersect([
       defaultAppConfiguration,
@@ -113,8 +121,32 @@ describe('@feathersjs/schema/typebox', () => {
     assert.ok(validated)
   })
 
+  // Test ObjectId validation
+  it('ObjectId', async () => {
+    const schema = Type.Object({
+      _id: ObjectIdSchema()
+    })
+
+    const validator = new Ajv({
+      strict: false
+    }).compile(schema)
+    const validated = await validator({
+      _id: '507f191e810c19729de860ea'
+    })
+    assert.ok(validated)
+
+    const validated2 = await validator({
+      _id: new MongoObjectId()
+    })
+    assert.ok(validated2)
+  })
+
   it('validators', () => {
     assert.strictEqual(typeof getDataValidator(Type.Object({}), new Ajv()), 'object')
     assert.strictEqual(typeof getValidator(Type.Object({}), new Ajv()), 'function')
+    assert.strictEqual(
+      typeof getValidator(Type.Intersect([Type.Object({}), Type.Object({})]), new Ajv()),
+      'function'
+    )
   })
 })

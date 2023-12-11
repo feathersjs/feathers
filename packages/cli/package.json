@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/cli",
   "description": "The command line interface for creating Feathers applications",
-  "version": "5.0.0-pre.34",
+  "version": "5.0.12",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "bin": {
@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
+    "compile": "shx rm -rf lib/ && tsc",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
@@ -52,39 +52,37 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.5",
+    "@feathersjs/generators": "^5.0.12",
     "chalk": "^4.0.1",
-    "commander": "^9.4.1",
-    "lodash": "^4.17.21",
-    "prettier": "^2.8.0"
+    "commander": "^11.1.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-commons": "^5.0.0-pre.34",
-    "@feathersjs/authentication": "^5.0.0-pre.34",
-    "@feathersjs/authentication-client": "^5.0.0-pre.34",
-    "@feathersjs/authentication-local": "^5.0.0-pre.34",
-    "@feathersjs/authentication-oauth": "^5.0.0-pre.34",
-    "@feathersjs/configuration": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "@feathersjs/express": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
-    "@feathersjs/knex": "^5.0.0-pre.34",
-    "@feathersjs/koa": "^5.0.0-pre.34",
-    "@feathersjs/mongodb": "^5.0.0-pre.34",
-    "@feathersjs/rest-client": "^5.0.0-pre.34",
-    "@feathersjs/schema": "^5.0.0-pre.34",
-    "@feathersjs/socketio": "^5.0.0-pre.34",
-    "@feathersjs/transport-commons": "^5.0.0-pre.34",
-    "@feathersjs/typebox": "^5.0.0-pre.34",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
-    "@types/prettier": "^2.7.1",
-    "axios": "^1.2.0",
-    "mocha": "^10.1.0",
+    "@feathersjs/adapter-commons": "^5.0.12",
+    "@feathersjs/authentication": "^5.0.12",
+    "@feathersjs/authentication-client": "^5.0.12",
+    "@feathersjs/authentication-local": "^5.0.12",
+    "@feathersjs/authentication-oauth": "^5.0.12",
+    "@feathersjs/configuration": "^5.0.12",
+    "@feathersjs/errors": "^5.0.12",
+    "@feathersjs/express": "^5.0.12",
+    "@feathersjs/feathers": "^5.0.12",
+    "@feathersjs/knex": "^5.0.12",
+    "@feathersjs/koa": "^5.0.12",
+    "@feathersjs/mongodb": "^5.0.12",
+    "@feathersjs/rest-client": "^5.0.12",
+    "@feathersjs/schema": "^5.0.12",
+    "@feathersjs/socketio": "^5.0.12",
+    "@feathersjs/transport-commons": "^5.0.12",
+    "@feathersjs/typebox": "^5.0.12",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.3",
+    "@types/prettier": "^2.7.3",
+    "axios": "^1.6.2",
+    "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.3.0",
-    "typescript": "^4.9.3"
+    "type-fest": "^4.8.3",
+    "typescript": "^5.3.2"
   },
-  "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

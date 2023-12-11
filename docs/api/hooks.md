@@ -27,7 +27,7 @@ app.service('messages').hooks({
 
         await next()
 
-        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - start}ms`)
+        console.log(`Method ${context.method} on ${context.path} took ${Date.now() - startTime}ms`)
       }
     ]
   },
@@ -155,6 +155,12 @@ The `context` object is the same throughout a service method call so it is possi
 
 </BlockQuote>
 
+<BlockQuote type="warning" label="Important">
+
+If you want to inspect the hook context, e.g. via `console.log`, the object returned by [context.toJSON()](#contexttojson) should be used, otherwise you won't see all properties that are available.
+
+</BlockQuote>
+
 ### `context.app`
 
 `context.app` is a _read only_ property that contains the [Feathers application object](./application.md). This can be used to retrieve other services (via `context.app.service('name')`) or configuration values.
@@ -243,6 +249,10 @@ Setting `context.http` properties will have no effect when using a websocket rea
 ### `context.event`
 
 `context.event` is a **writeable, optional** property that allows service events to be skipped by setting it to `null`
+
+### `context.toJSON()`
+
+`context.toJSON()` returns a full object representation of the hook context and all its properties.
 
 ## Registering hooks
 

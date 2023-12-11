@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import { highlight } from './highlight'
 import { discord, font, github, ogImage, ogUrl, twitter, feathersDescription, feathersName } from './meta'
 import sidebar from './config.sidebar'
 import nav from './config.nav'
@@ -47,16 +46,6 @@ export default defineConfig({
   ],
   lastUpdated: true,
   markdown: {
-    config: async (md) => {
-      md.set({
-        highlight: await highlight({
-          light: 'vitesse-light',
-          dark: 'vitesse-dark'
-        })
-      })
-
-      return md
-    },
     theme: {
       light: 'vitesse-light',
       dark: 'vitesse-dark'

@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/socketio@pre --save
+npm install @feathersjs/socketio --save
 ```
 
 The [@feathersjs/socketio](https://github.com/feathersjs/socketio) module allows to call [service methods](./services.md) and receive [real-time events](./events.md) via [Socket.io](http://socket.io/), a NodeJS library which enables real-time bi-directional, event-based communication.
@@ -81,6 +81,34 @@ app.listen(3030)
 Try to avoid listening and sending events on the `socket` directly since it circumvents Feathers secure dispatch mechanisms available through [channels](./channels.md) and [hooks](./hooks.md).
 
 </BlockQuote>
+
+#### Using uWebSockets.js
+
+uWS can be used as a drop in replacement for socket handling.  
+As a result you'll see lower latencies, a better memory footprint and even slightly less overall resource usage.  
+You will on the other hand need to install the following extra package to get things working.
+
+```
+npm install uNetworking/uWebSockets.js#20.31.0 --save
+```
+
+Now you can use the `io.attachApp` function to attach uWS as a replacement.
+
+```ts
+import { feathers } from '@feathersjs/feathers'
+import socketio from '@feathersjs/socketio'
+import { App } from 'uWebSockets.js'
+
+const app = feathers()
+
+app.configure(
+  socketio((io) => {
+    io.attachApp(App())
+  })
+)
+
+app.listen(3030)
+```
 
 ### socketio(options [, callback])
 

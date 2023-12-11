@@ -6,19 +6,12 @@ outline: deep
 
 This guide explains the new features and changes necessary to migrate to the Feathers v5 (Dove) release. It expects applications to be using the previous Feathers v4 (Crow). See the [v4 (Crow) migration guide](https://crow.docs.feathersjs.com/guides/migrating.html) for upgrading to the previous version.
 
-## Status
-
-The final v5 release is expected on November 30th, 2022. Aside from the breaking changes and new features documented here. For more information
-
-- Follow [the v5 milestone](https://github.com/feathersjs/feathers/milestone/11) - open issues are in development, closed issues are already published as a prerelease
-- See the current [v5 Changelog](https://github.com/feathersjs/feathers/blob/dove/CHANGELOG.md)
-
 ## Testing the prerelease
 
-You can run the following to test the latest Dove pre-release in your application:
+You can run the following to upgrade all Feathers core packages:
 
 ```
-npx npm-check-updates --upgrade --target newest --filter /@feathersjs/
+npx npm-check-updates --upgrade --filter /@feathersjs/
 npm install
 ```
 
@@ -33,6 +26,14 @@ There are so many new features in this release that they got their own page! Rea
 The new [schemas and resolvers](../api/schema/index.md) cover most use cases previously provided by higher level ORMs like Sequelize or Mongoose in a more flexible and Feathers friendly way. This allows for a better database integration into Feathers without the overhead of a full ORM which is why the more low level [MongoDB](../api/databases/mongodb.md) and [Knex](../api/databases/knex.md) (SQL) database adapters have been moved into Feathers core for first-class SQL and MongoDB database support.
 
 ## TypeScript
+
+<LanguageBlock global-id="js">
+
+You have selected JavaScript as the language which does not have type information.
+
+</LanguageBlock>
+
+<LanguageBlock global-id="ts">
 
 The new version comes with major improvements in TypeScript support from improved service typings, fully typed hook context and typed configuration. You can see the changes necessary in the Feathers chat [here](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
@@ -59,6 +60,8 @@ export type HookContext = FeathersHookContext<Application>
 Now `import { HookContext } from './declarations'` can be used as the context in hooks.
 
 ### Service types
+
+
 
 Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
 
@@ -101,6 +104,8 @@ declare module '@feathersjs/feathers/lib/declarations' {
 }
 ```
 
+</LanguageBlock>
+
 ## Deprecations and breaking changes
 
 ### Express middleware order
@@ -111,7 +116,7 @@ The Express `rest` adapter now needs to be configured in the correct order, usua
 
 The import of `feathers` has changed from
 
-```js
+```ts
 const feathers = require('@feathersjs/feathers')
 
 import feathers from '@feathersjs/feathers'
@@ -119,10 +124,32 @@ import feathers from '@feathersjs/feathers'
 
 To
 
-```js
+```ts
 const { feathers } = require('@feathersjs/feathers')
 
 import { feathers } from '@feathersjs/feathers'
+```
+
+The Express exports for TypeScript have changed from
+
+```ts
+import express from '@feathersjs/express'
+
+app.use(express.json())
+app.use(express.urlencoded())
+app.use(express.notFound())
+app.use(express.errorHandler())
+```
+
+To
+
+```ts
+import express, { json, urlencoded, notFound, errorHandler } from '@feathersjs/express'
+
+app.use(json())
+app.use(urlencoded())
+app.use(notFound())
+app.use(errorHandler())
 ```
 
 ### Custom Filters & Operators
@@ -235,17 +262,17 @@ The automatic environment variable substitution in `@feathersjs/configuration` w
 
 The `debug` module has been removed as a direct dependency. This reduces the the client bundle size and allows to support other platforms (like Deno). The original `debug` functionality can now be initialized as follows:
 
-```js
-const feathers = require('@feathersjs/feathers')
-const debug = require('debug')
+```ts
+import { feathers } from '@feathersjs/feathers'
+import debug from 'debug'
 
 feathers.setDebug(debug)
 ```
 
 It is also possible to set a custom logger like this:
 
-```js
-const feathers = require('@feathersjs/feathers')
+```ts
+import { feathers } from '@feathersjs/feathers'
 
 const customDebug =
   (name) =>
@@ -338,3 +365,4 @@ app.service('myservice').hooks([
 - The undocumented `service._setup` method introduced in v1 will no longer be called. It was used to circumvent middleware inconsistencies from Express 3 and is no longer necessary.
 - The undocumented `app.providers` has been removed since it provided the same functionality as [`app.mixins`](../api/application.md#mixins)
 - `app.disable`, `app.disabled`, `app.enable` and `app.enabled` have been removed from basic Feathers applications. It will still be available in an Express-compatible Feathers application. `app.get()` and `app.set()` should be used instead.
+- The `req.authentication` property is no longer set on the express requests, use `req.feathers.authentication` instead.

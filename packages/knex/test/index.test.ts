@@ -3,9 +3,11 @@ import assert from 'assert'
 import { feathers, HookContext, Service } from '@feathersjs/feathers'
 import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
+import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
 import connection from './connection'
-import { KnexService, transaction } from '../src/index'
+import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index'
+import { AdapterQuery } from '@feathersjs/adapter-commons/lib'
 
 const testSuite = adapterTests([
   '.options',
@@ -45,6 +47,7 @@ const testSuite = adapterTests([
   '.patch + query + NotFound',
   '.patch + id + query id',
   '.create',
+  '.create ignores query',
   '.create + $select',
   '.create multi',
   'internal .find',
@@ -62,6 +65,7 @@ const testSuite = adapterTests([
   '.find + $skip',
   '.find + $select',
   '.find + $or',
+  '.find + $and',
   '.find + $in',
   '.find + $nin',
   '.find + $lt',
@@ -71,6 +75,7 @@ const testSuite = adapterTests([
   '.find + $ne',
   '.find + $gt + $lt + $sort',
   '.find + $or nested + $sort',
+  '.find + $and + $or',
   'params.adapter + paginate',
   'params.adapter + multi',
   '.find + paginate',
@@ -86,40 +91,75 @@ const db = knex(connection(TYPE) as any)
 // Create a public database to mimic a "schema"
 const schemaName = 'public'
 
-function clean() {
-  return Promise.all([
-    db.schema.dropTableIfExists(people.fullName).then(() => {
-      return db.schema.createTable(people.fullName, (table) => {
-        table.increments('id')
-        table.string('name').notNullable()
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    }),
-    db.schema.dropTableIfExists(peopleId.fullName).then(() => {
-      return db.schema.createTable(peopleId.fullName, (table) => {
-        table.increments('customid')
-        table.string('name')
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    }),
-    db.schema.dropTableIfExists(users.fullName).then(() => {
-      return db.schema.createTable(users.fullName, (table) => {
-        table.increments('id')
-        table.string('name')
-        table.integer('age')
-        table.integer('time')
-        table.boolean('created')
-        return table
-      })
-    })
-  ])
+const clean = async () => {
+  await db.schema.dropTableIfExists('todos')
+  await db.schema.dropTableIfExists(people.fullName)
+  await db.schema.createTable(people.fullName, (table) => {
+    table.increments('id')
+    table.string('name').notNullable()
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
+  await db.schema.createTable('todos', (table) => {
+    table.increments('id')
+    table.string('text')
+    table.integer('personId')
+    return table
+  })
+  await db.schema.dropTableIfExists(peopleId.fullName)
+  await db.schema.createTable(peopleId.fullName, (table) => {
+    table.increments('customid')
+    table.string('name')
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
+
+  await db.schema.dropTableIfExists(users.fullName)
+  await db.schema.createTable(users.fullName, (table) => {
+    table.increments('id')
+    table.string('name')
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
 }
+
+const personSchema = {
+  $id: 'Person',
+  type: 'object',
+  additionalProperties: false,
+  required: ['_id', 'name', 'age'],
+  properties: {
+    id: { type: 'number' },
+    name: { type: 'string' },
+    age: { type: ['number', 'null'] },
+    time: { type: 'string' },
+    create: { type: 'boolean' }
+  }
+} as const
+const personQuery = {
+  $id: 'PersonQuery',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...querySyntax(personSchema.properties, {
+      name: {
+        $like: { type: 'string' },
+        $ilike: { type: 'string' },
+        $notlike: { type: 'string' }
+      }
+    })
+  }
+} as const
+const validator = new Ajv({
+  coerceTypes: true
+})
+const personQueryValidator = getValidator(personQuery, validator)
 
 type Person = {
   id: number
@@ -129,10 +169,28 @@ type Person = {
   create: boolean
 }
 
+type Todo = {
+  id: number
+  text: string
+  personId: number
+  personName: string
+}
+
 type ServiceTypes = {
   people: KnexService<Person>
   'people-customid': KnexService<Person>
   users: KnexService<Person>
+  todos: KnexService<Todo>
+}
+
+class TodoService extends KnexService<Todo> {
+  createQuery(params: KnexAdapterParams<AdapterQuery>) {
+    const query = super.createQuery(params)
+
+    query.join('people as person', 'todos.personId', 'person.id').select('person.name as personName')
+
+    return query
+  }
 }
 
 const people = new KnexService({
@@ -154,6 +212,11 @@ const users = new KnexService({
   events: ['testing']
 })
 
+const todos = new TodoService({
+  Model: db,
+  name: 'todos'
+})
+
 describe('Feathers Knex Service', () => {
   const app = feathers<ServiceTypes>()
     .hooks({
@@ -164,8 +227,14 @@ describe('Feathers Knex Service', () => {
     .use('people', people)
     .use('people-customid', peopleId)
     .use('users', users)
+    .use('todos', todos)
   const peopleService = app.service('people')
 
+  peopleService.hooks({
+    before: {
+      find: [hooks.validateQuery(personQueryValidator)]
+    }
+  })
   before(() => {
     if (TYPE === 'sqlite') {
       // Attach the public database to mimic a "schema"
@@ -360,11 +429,26 @@ describe('Feathers Knex Service', () => {
     })
 
     it('attaches the SQL error', async () => {
-      await assert.rejects(() => peopleService.create({}))
+      await assert.rejects(
+        () => peopleService.create({}),
+        (error: any) => {
+          assert.ok(error[ERROR])
+          return true
+        }
+      )
+    })
+
+    it('get by id works with `createQuery` as params.knex', async () => {
+      const knex = peopleService.createQuery()
+      const dave = await peopleService.get(daves[0].id, { knex })
+
+      assert.deepStrictEqual(dave, daves[0])
     })
   })
 
   describe('hooks', () => {
+    type ModelStub = { getModel: () => Knex }
+
     afterEach(async () => {
       await db('people').truncate()
     })
@@ -406,7 +490,7 @@ describe('Feathers Knex Service', () => {
     it('does commit, rollback, nesting', async () => {
       const app = feathers<{
         people: typeof people
-        test: Pick<Service, 'create'> & { Model: Knex }
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       app.hooks({
@@ -418,7 +502,7 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (data: any, params) => {
           const created = await app.service('people').create({ name: 'Foo' }, { ...params })
 
@@ -444,9 +528,9 @@ describe('Feathers Knex Service', () => {
     it('does use savepoints for nested calls', async () => {
       const app = feathers<{
         people: typeof people
-        success: Pick<Service, 'create'> & { Model: Knex }
-        fail: Pick<Service, 'create'> & { Model: Knex }
-        test: Pick<Service, 'create'> & { Model: Knex }
+        success: Pick<Service, 'create'> & ModelStub
+        fail: Pick<Service, 'create'> & ModelStub
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       app.hooks({
@@ -458,14 +542,14 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('success', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           return app.service('people').create({ name: 'Success' }, { ...params })
         }
       })
 
       app.use('fail', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           await app.service('people').create({ name: 'Fail' }, { ...params })
           throw new TypeError('Deliberate')
@@ -473,7 +557,7 @@ describe('Feathers Knex Service', () => {
       })
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (_data, params) => {
           await app.service('success').create({}, { ...params })
           await app
@@ -496,7 +580,7 @@ describe('Feathers Knex Service', () => {
     it('allows waiting for transaction to complete', async () => {
       const app = feathers<{
         people: typeof people
-        test: Pick<Service, 'create'> & { Model: Knex }
+        test: Pick<Service, 'create'> & ModelStub
       }>()
 
       let seq: string[] = []
@@ -531,7 +615,7 @@ describe('Feathers Knex Service', () => {
       app.use('people', people)
 
       app.use('test', {
-        Model: db,
+        getModel: () => db,
         create: async (data: any, params) => {
           const peeps = await app.service('people').create({ name: 'Foo' }, { ...params })
 
@@ -595,6 +679,46 @@ describe('Feathers Knex Service', () => {
         'people: committed true',
         'people: trx ended'
       ])
+    })
+  })
+
+  describe('associations', () => {
+    const todoService = app.service('todos')
+
+    it('create, query and get with associations, can unambigiously $select', async () => {
+      const dave = await peopleService.create({
+        name: 'Dave',
+        age: 133
+      })
+      const todo = await todoService.create({
+        text: 'Do dishes',
+        personId: dave.id
+      })
+
+      const [found] = await todoService.find({
+        paginate: false,
+        query: {
+          'person.age': { $gt: 100 }
+        }
+      })
+      const got = await todoService.get(todo.id)
+
+      assert.deepStrictEqual(
+        await todoService.get(todo.id, {
+          query: { $select: ['id', 'text'] }
+        }),
+        {
+          id: todo.id,
+          text: todo.text,
+          personName: 'Dave'
+        }
+      )
+      assert.strictEqual(got.personName, dave.name)
+      assert.deepStrictEqual(got, todo)
+      assert.deepStrictEqual(found, todo)
+
+      peopleService.remove(dave.id)
+      todoService.remove(todo.id)
     })
   })
 

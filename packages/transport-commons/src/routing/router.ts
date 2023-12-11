@@ -13,7 +13,10 @@ export class RouteNode<T = any> {
   children: { [key: string]: RouteNode } = {}
   placeholders: RouteNode[] = []
 
-  constructor(public name: string, public depth: number) {}
+  constructor(
+    public name: string,
+    public depth: number
+  ) {}
 
   get hasChildren() {
     return Object.keys(this.children).length !== 0 || this.placeholders.length !== 0
@@ -112,10 +115,18 @@ export class RouteNode<T = any> {
 }
 
 export class Router<T = any> {
+  public caseSensitive = true
+
   constructor(public root: RouteNode<T> = new RouteNode<T>('', 0)) {}
 
   getPath(path: string) {
-    return stripSlashes(path).split('/')
+    const result = stripSlashes(path).split('/')
+
+    if (!this.caseSensitive) {
+      return result.map((p) => (p.startsWith(':') ? p : p.toLowerCase()))
+    }
+
+    return result
   }
 
   insert(path: string, data: T) {

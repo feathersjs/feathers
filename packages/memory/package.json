@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/memory",
   "description": "An in memory service store",
-  "version": "5.0.0-pre.34",
+  "version": "5.0.12",
   "homepage": "https://github.com/feathersjs/feathers",
   "main": "lib/",
   "types": "lib/",
@@ -38,7 +38,7 @@
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../cli/test/build",
+    "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/**/*.test.ts"
   },
@@ -49,20 +49,20 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.0-pre.34",
-    "@feathersjs/commons": "^5.0.0-pre.34",
-    "@feathersjs/errors": "^5.0.0-pre.34",
-    "sift": "^16.0.1"
+    "@feathersjs/adapter-commons": "^5.0.12",
+    "@feathersjs/commons": "^5.0.12",
+    "@feathersjs/errors": "^5.0.12",
+    "sift": "^17.0.1"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.0-pre.34",
-    "@feathersjs/feathers": "^5.0.0-pre.34",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.10",
-    "mocha": "^10.1.0",
+    "@feathersjs/adapter-tests": "^5.0.12",
+    "@feathersjs/feathers": "^5.0.12",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.3",
+    "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.3"
+    "typescript": "^5.3.2"
   },
-  "gitHead": "42cca600d00f0b3b9d89fa79be30fcd46bc50132"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

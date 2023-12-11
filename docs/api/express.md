@@ -12,7 +12,7 @@ outline: deep
 </Badges>
 
 ```
-npm install @feathersjs/express@pre --save
+npm install @feathersjs/express --save
 ```
 
 The `@feathersjs/express` module contains [Express](http://expressjs.com/) framework integrations for Feathers:
@@ -30,7 +30,7 @@ const app = express(feathers())
 
 <BlockQuote type="warning" label="Important">
 
-As of Feathers v5, [Koa](./koa.md) is the recommended framework integration since it is more modern, faster and easier to use. When chosen explicitly, you should be already familiar [Express](http://expressjs.com/en/guide/routing.html).
+As of Feathers v5, [Koa](./koa.md) is the recommended framework integration since it is more modern, faster and easier to use. When chosen explicitly, you should already be familiar with [Express](http://expressjs.com/en/guide/routing.html).
 
 </BlockQuote>
 
@@ -530,7 +530,7 @@ The following options can be passed when creating a new error handler:
 import { authenticate } from '@feathersjs/express'
 
 app.use('/hello', authenticate('jwt'), (req, res) => {
-  const { user } = req
+  const { user } = req.feathers
 
   res.render(`Hello ${user.email}`)
 })
@@ -543,7 +543,7 @@ app.use(
     strategies: ['jwt', 'api-key']
   }),
   (req, res) => {
-    const { user } = req
+    const { user } = req.feathers
 
     res.render(`Hello ${user.email}`)
   }
@@ -570,7 +570,7 @@ const setQueryAuthentication = (req, res, next) => {
 
 // Request this with `hello?access_token=<your jwt>`
 app.use('/hello', setQueryAuthentication, authenticate('jwt'), (req, res) => {
-  const { user } = req
+  const { user } = req.feathers
 
   res.render(`Hello ${user.email}`)
 })

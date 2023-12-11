@@ -39,7 +39,7 @@ ${chalk.grey('npm init feathers myapp')}
 ${chalk.green('Hooray')}! Your Feathers app is ready to go! 🚀
 Go to the ${chalk.grey(name)} folder to get started.
 
-To learn more visit ${chalk.grey('https://dove.feathersjs.com/guides')}
+To learn more visit ${chalk.grey('https://feathersjs.com/guides')}
 `)
     } catch (error) {
       console.error(`${chalk.red('Error')}: ${error.message}`)

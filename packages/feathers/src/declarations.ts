@@ -3,6 +3,10 @@ import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
+type Entries<T> = {
+  [K in keyof T]: [K, T[K]]
+}[keyof T][]
+type GetKeyByValue<Obj, Value> = Extract<Entries<Obj>[number], [PropertyKey, Value]>[0]
 
 export type { NextFunction }
 
@@ -72,7 +76,7 @@ export interface ServiceMethods<
   ServiceParams = Params,
   PatchData = Partial<Data>
 > {
-  find(params?: ServiceParams): Promise<Result | Result[]>
+  find(params?: ServiceParams & { paginate?: PaginationParams }): Promise<Result | Result[]>
 
   get(id: Id, params?: ServiceParams): Promise<Result>
 
@@ -137,7 +141,7 @@ export interface ServiceAddons<A = Application, S = Service> extends EventEmitte
 }
 
 export interface ServiceHookOverloads<S, P = Params> {
-  find(params: P, context: HookContext): Promise<HookContext>
+  find(params: P & { paginate?: PaginationParams }, context: HookContext): Promise<HookContext>
 
   get(id: Id, params: P, context: HookContext): Promise<HookContext>
 
@@ -331,6 +335,13 @@ export interface Params<Q = Query> {
   headers?: { [key: string]: any }
 }
 
+export interface PaginationOptions {
+  default?: number
+  max?: number
+}
+
+export type PaginationParams = false | PaginationOptions
+
 export interface Http {
   /**
    * A writeable, optional property with status code override.
@@ -348,6 +359,8 @@ export interface Http {
 
 export type HookType = 'before' | 'after' | 'error' | 'around'
 
+type Serv<FA> = FA extends Application<infer S> ? S : never
+
 export interface HookContext<A = Application, S = any> extends BaseHookContext<ServiceGenericType<S>> {
   /**
    * A read only property that contains the Feathers application object. This can be used to
@@ -363,7 +376,7 @@ export interface HookContext<A = Application, S = any> extends BaseHookContext<S
    * A read only property and contains the service name (or path) without leading or
    * trailing slashes.
    */
-  readonly path: string
+  path: 0 extends 1 & S ? keyof Serv<A> & string : GetKeyByValue<Serv<A>, S> & string
   /**
    * A read only property and contains the service this hook currently runs on.
    */

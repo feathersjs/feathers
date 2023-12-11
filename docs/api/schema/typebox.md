@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # TypeBox
 
 `@feathersjs/typebox` allows to define JSON schemas with [TypeBox](https://github.com/sinclairzx81/typebox), a JSON schema type builder with static type resolution for TypeScript.
@@ -30,6 +34,206 @@ const messageSchema = Type.Object(
 
 type Message = Static<typeof messageSchema>
 ```
+
+## Result and data schemas
+
+A good approach to define schemas in a Feathers application is to create the main schema first. This is usually the properties that are in the database and things like associated entries. Then we can get the data schema by e.g. picking the properties a client submits using `Type.Pick`
+
+```ts
+import { Type } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+
+const userSchema = Type.Object(
+  {
+    id: Type.Number(),
+    email: Type.String(),
+    password: Type.String(),
+    avatar: Type.Optional(Type.String())
+  },
+  { $id: 'User', additionalProperties: false }
+)
+type User = Static<typeof userSchema>
+
+// Pick the data for creating a new user
+const userDataSchema = Type.Pick(userSchema, ['email', 'password'])
+
+type UserData = Static<typeof userDataSchema>
+
+const messageSchema = Type.Object(
+  {
+    id: Type.Number(),
+    text: Type.String(),
+    createdAt: Type.Number(),
+    userId: Type.Number(),
+    // Reference the user
+    user: Type.Ref(userSchema)
+  },
+  { $id: 'Message', additionalProperties: false }
+)
+
+type Message = Static<typeof messageSchema>
+
+// Pick the data for creating a new message
+const messageDataSchema = Type.Pick(messageSchema, ['text'])
+
+type MessageData = Static<typeof messageDataSchema>
+```
+
+## Query schemas
+
+### querySyntax
+
+`querySyntax(definition, extensions, options)` returns a schema to validate the [Feathers query syntax](../databases/querying.md) for all properties in a TypeBox definition.
+
+```ts
+import { querySyntax } from '@feathersjs/typebox'
+
+// Schema for allowed query properties
+const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+const messageQuerySchema = querySyntax(messageQueryProperties)
+
+type MessageQuery = Static<typeof messageQuerySchema>
+```
+
+Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+
+```ts
+import { querySyntax } from '@feathersjs/typebox'
+
+// Schema for allowed query properties
+const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+const messageQuerySchema = Type.Intersect(
+  [
+    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
+    querySyntax(messageQueryProperties, {
+      name: {
+        $ilike: Type.String()
+      }
+    }),
+    // Add additional query properties here
+    Type.Object({})
+  ],
+  { additionalProperties: false }
+)
+```
+
+To allow additional query properties outside of the query syntax use the intersection type:
+
+```ts
+import { querySyntax } from '@feathersjs/typebox'
+
+// Schema for allowed query properties
+const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+const messageQuerySchema = Type.Intersect(
+  [
+    querySyntax(messageQueryProperties),
+    Type.Object({
+      isActive: Type.Boolean()
+    })
+  ],
+  { additionalProperties: false }
+)
+
+type MessageQuery = Static<typeof messageQuerySchema>
+```
+
+### queryProperty
+
+`queryProperty(definition)` returns a schema for the [Feathers query syntax](../databases/querying.md) for a single property.
+
+## Validators
+
+The following functions are available to get a [validator function](./validators.md) from a TypeBox schema.
+
+<BlockQuote type="info" label="note">
+
+See the [validators](./validators.md) chapter for more information on validators and validator functions.
+
+</BlockQuote>
+
+### getDataValidator
+
+`getDataValidator(definition, validator)` returns validators for the data of `create`, `update` and `patch` service methods. You can either pass a single definition in which case all properties of the `patch` schema will be optional or individual validators for `create`, `update` and `patch`.
+
+```ts
+import { Ajv } from '@feathersjs/schema'
+import { Type, getDataValidator } from '@feathersjs/typebox'
+import type { Static } from '@feathersjs/typebox'
+
+const userSchema = Type.Object(
+  {
+    id: Type.Number(),
+    email: Type.String(),
+    password: Type.String(),
+    avatar: Type.Optional(Type.String())
+  },
+  { $id: 'User', additionalProperties: false }
+)
+type User = Static<typeof userSchema>
+
+// Pick the data for creating a new user
+const userDataSchema = Type.Pick(userSchema, ['email', 'password'])
+
+const dataValidator = new Ajv()
+
+const userDataValidator = getDataValidator(userDataSchema, dataValidator)
+
+// For more granular control
+const userDataValidator = getDataValidator(
+  {
+    create: userDataSchema,
+    update: userDataSchema,
+    patch: Type.Partial(userDataSchema)
+  },
+  dataValidator
+)
+```
+
+### getValidator
+
+`getValidator(definition, validator)` returns a single validator function for a TypeBox schema.
+
+```ts
+import { Ajv } from '@feathersjs/schema'
+import { Type, getValidator } from '@feathersjs/typebox'
+
+// Schema for allowed query properties
+const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
+  additionalProperties: false
+})
+const messageQuerySchema = querySyntax(messageQueryProperties)
+type MessageQuery = Static<typeof messageQuerySchema>
+
+// Since queries can be only strings we can to coerce them
+const queryValidator = new Ajv({
+  coerceTypes: true
+})
+
+const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
+```
+
+## Validating Dates
+
+When validating dates sent from the client, the most spec-compliant solution is to use the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6). For example, SQLite date values are strings in the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6), which is `YYYY-MM-DDTHH:MM:SS.SSS`. The character between the date and time formats is generally specified as the letter `T`, as in `2016-01-01T10:20:05.123`. For date values, you implement this spec with `Type.String` and not `Type.Date`.
+
+When using AJV you can validate this format with the `ajv-formats` package, which the Feathers CLI installs for you. Using it with `@feathersjs/typebox` looks like this:
+
+```ts
+const userSchema = Type.Object(
+  {
+    createdAt: Type.String({ format: 'date-time' })
+  },
+  { $id: 'User', additionalProperties: false }
+)
+```
+
+See the `@feathersjs/mongodb` docs for more information on [validating dates with MongoDB](/api/databases/mongodb#dates).
 
 ## Types
 
@@ -338,7 +542,7 @@ The sections of this format are described as follows:
 ###### `iso-date-time`
 
 ```ts
-Type.String({ format: 'date-time' })
+Type.String({ format: 'iso-date-time' })
 ```
 
 Validates against the [date-time](https://www.rfc-editor.org/rfc/rfc3339#section-5.6) described in RFC3339/ISO8601, which is the following format:
@@ -670,6 +874,10 @@ const T = {
 import { StringEnum } from '@feathersjs/typebox'
 
 const T = StringEnum(['crow', 'dove', 'eagle'])
+// Add additional options
+const T = StringEnum(['crow', 'dove', 'eagle'], {
+    default: 'crow'
+})
 ```
 
 To obtain the TypeScript type, use the `Static` utility:
@@ -975,7 +1183,7 @@ const T = {
 
 ### Modifiers
 
-TypeBox provides modifiers that can be applied to an objects properties. This allows for `optional` and `readonly` to be applied to that property. The following table illustates how they map between TypeScript and JSON Schema.
+TypeBox provides modifiers that can be applied to an objects properties. This allows for `optional` and `readonly` to be applied to that property. The following table illustrates how they map between TypeScript and JSON Schema.
 
 #### Optional
 
@@ -1248,11 +1456,81 @@ Omitting this keyword has the same behavior as an empty object.
 
 ### Extended
 
-In addition to JSON schema types, TypeBox provides several extended types that allow for the composition of `function` and `constructor` types. These additional types are not valid JSON Schema and will not validate using typical JSON Schema validation. However, these types can be used to frame JSON schema and describe callable interfaces that may receive JSON validated data. These types are as follows.
+In addition to JSON schema types, TypeBox provides several extended types that allow for the composition of `function` and `constructor` types. These additional types are not valid JSON Schema and will not validate using typical JSON Schema validation. However, these types can be used to frame JSON schema and describe callable interfaces that may receive JSON validated data. Since these are nonstandard types, most applications will not need them. Consider using the [Standard Types](#standard), instead, as using these types may make it difficult to upgrade your application in the future.
 
 #### Extended Configuration
 
-Utilities in this section require updating `src/schemas/validators.ts` to the [Extended Ajv Configuration](https://github.com/sinclairzx81/typebox#ajv) shown in the Typebox documentation.
+Utilities in this section require updating `src/schemas/validators.ts` to the Extended Ajv Configuration, as shown here: 
+
+```ts
+import { TypeGuard } from '@sinclair/typebox/guard'
+import { Value }     from '@sinclair/typebox/value'
+import { Type }      from '@sinclair/typebox'
+import addFormats    from 'ajv-formats'
+import Ajv           from 'ajv'
+
+function schemaOf(schemaOf: string, value: unknown, schema: unknown) {
+  switch (schemaOf) {
+    case 'Constructor':
+      return TypeGuard.TConstructor(schema) && Value.Check(schema, value) // not supported
+    case 'Function':
+      return TypeGuard.TFunction(schema) && Value.Check(schema, value) // not supported
+    case 'Date':
+      return TypeGuard.TDate(schema) && Value.Check(schema, value)
+    case 'Promise':
+      return TypeGuard.TPromise(schema) && Value.Check(schema, value) // not supported
+    case 'Uint8Array':
+      return TypeGuard.TUint8Array(schema) && Value.Check(schema, value)
+    case 'Undefined':
+      return TypeGuard.TUndefined(schema) && Value.Check(schema, value) // not supported
+    case 'Void':
+      return TypeGuard.TVoid(schema) && Value.Check(schema, value)
+    default:
+      return false
+  }
+}
+
+export function createAjv() {
+  return addFormats(new Ajv({}), [
+    'date-time', 
+    'time', 
+    'date', 
+    'email',  
+    'hostname', 
+    'ipv4', 
+    'ipv6', 
+    'uri', 
+    'uri-reference', 
+    'uuid',
+    'uri-template', 
+    'json-pointer', 
+    'relative-json-pointer', 
+    'regex'
+  ])
+  .addKeyword({ type: 'object', keyword: 'instanceOf', validate: schemaOf })
+  .addKeyword({ type: 'null', keyword: 'typeOf', validate: schemaOf })
+  .addKeyword('exclusiveMinimumTimestamp')
+  .addKeyword('exclusiveMaximumTimestamp')
+  .addKeyword('minimumTimestamp')
+  .addKeyword('maximumTimestamp')
+  .addKeyword('minByteLength')
+  .addKeyword('maxByteLength')
+}
+
+const ajv = createAjv()
+
+const R = ajv.validate(Type.Object({                 // const R = true
+  buffer: Type.Uint8Array(),
+  date: Type.Date(),
+  void: Type.Void()
+}), {
+  buffer: new Uint8Array(),
+  date: new Date(),
+  void: null
+})
+```
+
+If you see an error stating `Error: strict mode: unknown keyword: "instanceOf"`, it's likely because you need to extend your configuration, as shown above.
 
 #### Constructor
 
@@ -1386,6 +1664,45 @@ const T = {
 }
 ```
 
+
+#### Symbol
+
+Verifies that the value is of type `Symbol`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.Symbol()
+```
+
+```js
+type T = symbol
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'Symbol'
+}
+```
+
+#### BigInt
+
+Verifies that the value is of type `BigInt`. Requires [Extended Ajv Configuration](#extended-configuration).
+
+```js
+const T = Type.BigInt()
+```
+
+```js
+type T = bigint
+```
+
+```js
+const T = {
+  type: 'null',
+  typeOf: 'BigInt'
+}
+```
+
 #### Void
 
 Verifies that the value is `null`. Requires [Extended Ajv Configuration](#extended-configuration).
@@ -1413,202 +1730,4 @@ const T = Type.String({ $id: 'T' })
 const R = Type.Ref(T)
 ```
 
-## Validating Dates
-
-When validating dates sent from the client, the most spec-compliant solution is to use the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6). For example, SQLite date values are strings in the [ISO8601 format](https://www.rfc-editor.org/rfc/rfc3339#section-5.6), which is `YYYY-MM-DDTHH:MM:SS.SSS`. The character between the date and time formats is generally specified as the letter `T`, as in `2016-01-01T10:20:05.123`. For date values, you implement this spec with `Type.String` and not `Type.Date`.
-
-When using AJV you can validate this format with the `ajv-formats` package, which the Feathers CLI installs for you. Using it with `@feathersjs/typebox` looks like this:
-
-```ts
-const userSchema = Type.Object(
-  {
-    createdAt: Type.String({ format: 'date-time' })
-  },
-  { $id: 'User', additionalProperties: false }
-)
-```
-
-See the `@feathersjs/mongodb` docs for more information on [validating dates with MongoDB](/api/databases/mongodb#dates).
-
-## Result and data schemas
-
-A good approach to define schemas in a Feathers application is to create the main schema first. This is usually the properties that are in the database and things like associated entries. Then we can get the data schema by e.g. picking the properties a client submits using `Type.Pick`
-
-```ts
-import { Type } from '@feathersjs/typebox'
-import type { Static } from '@feathersjs/typebox'
-
-const userSchema = Type.Object(
-  {
-    id: Type.Number(),
-    email: Type.String(),
-    password: Type.String(),
-    avatar: Type.Optional(Type.String())
-  },
-  { $id: 'User', additionalProperties: false }
-)
-type User = Static<typeof userSchema>
-
-// Pick the data for creating a new user
-const userDataSchema = Type.Pick(userSchema, ['email', 'password'])
-
-type UserData = Static<typeof userDataSchema>
-
-const messageSchema = Type.Object(
-  {
-    id: Type.Number(),
-    text: Type.String(),
-    createdAt: Type.Number(),
-    userId: Type.Number(),
-    // Reference the user
-    user: Type.Ref(userSchema)
-  },
-  { $id: 'Message', additionalProperties: false }
-)
-
-type Message = Static<typeof messageSchema>
-
-// Pick the data for creating a new message
-const messageDataSchema = Type.Pick(messageSchema, ['text'])
-
-type MessageData = Static<typeof messageDataSchema>
-```
-
-## Query schemas
-
-### querySyntax
-
-`querySyntax(definition, extensions, options)` returns a schema to validate the [Feathers query syntax](../databases/querying.md) for all properties in a TypeBox definition.
-
-```ts
-import { querySyntax } from '@feathersjs/typebox'
-
-// Schema for allowed query properties
-const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
-  additionalProperties: false
-})
-const messageQuerySchema = querySyntax(messageQueryProperties)
-
-type MessageQuery = Static<typeof messageQuerySchema>
-```
-
-To allow additional query parameters like `$ilike`, `$regex` etc. for properties you can pass an object with the property names and additional types:
-
-```ts
-import { querySyntax } from '@feathersjs/typebox'
-
-// Schema for allowed query properties
-const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
-  additionalProperties: false
-})
-const messageQuerySchema = Type.Intersect(
-  [
-    // This will additioanlly allow querying for `{ name: { $ilike: 'Dav%' } }`
-    querySyntax(messageQueryProperties, {
-      name: {
-        $ilike: Type.String()
-      }
-    }),
-    // Add additional query properties here
-    Type.Object({})
-  ],
-  { additionalProperties: false }
-)
-```
-
-To allow additional query properties outside of the query syntax use the intersection type:
-
-```ts
-import { querySyntax } from '@feathersjs/typebox'
-
-// Schema for allowed query properties
-const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
-  additionalProperties: false
-})
-const messageQuerySchema = Type.Intersect(
-  [
-    querySyntax(messageQueryProperties),
-    Type.Object({
-      isActive: Type.Boolean()
-    })
-  ],
-  { additionalProperties: false }
-)
-
-type MessageQuery = Static<typeof messageQuerySchema>
-```
-
-### queryProperty
-
-`queryProperty(definition)` returns a schema for the [Feathers query syntax](../databases/querying.md) for a single property.
-
-## Validators
-
-The following functions are available to get a [validator function](./validators.md) from a TypeBox schema.
-
-<BlockQuote type="info" label="note">
-
-See the [validators](./validators.md) chapter for more information on validators and validator functions.
-
-</BlockQuote>
-
-### getDataValidator
-
-`getDataValidator(definition, validator)` returns validators for the data of `create`, `update` and `patch` service methods. You can either pass a single definition in which case all properties of the `patch` schema will be optional or individual validators for `create`, `update` and `patch`.
-
-```ts
-import { Ajv } from '@feathersjs/schema'
-import { Type, getDataValidator } from '@feathersjs/typebox'
-import type { Static } from '@feathersjs/typebox'
-
-const userSchema = Type.Object(
-  {
-    id: Type.Number(),
-    email: Type.String(),
-    password: Type.String(),
-    avatar: Type.Optional(Type.String())
-  },
-  { $id: 'User', additionalProperties: false }
-)
-type User = Static<typeof userSchema>
-
-// Pick the data for creating a new user
-const userDataSchema = Type.Pick(userSchema, ['email', 'password'])
-
-const dataValidator = new Ajv()
-
-const userDataValidator = getDataValidator(userDataSchema, dataValidator)
-
-// For more granular control
-const userDataValidator = getDataValidator(
-  {
-    create: userDataSchema,
-    update: userDataSchema,
-    patch: Type.Partial(userDataSchema)
-  },
-  dataValidator
-)
-```
-
-### getValidator
-
-`getValidator(definition, validator)` returns a single validator function for a TypeBox schema.
-
-```ts
-import { Ajv } from '@feathersjs/schema'
-import { Type, getValidator } from '@feathersjs/typebox'
-
-// Schema for allowed query properties
-const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
-  additionalProperties: false
-})
-const messageQuerySchema = querySyntax(messageQueryProperties)
-type MessageQuery = Static<typeof messageQuerySchema>
-
-// Since queries can be only strings we can to coerce them
-const queryValidator = new Ajv({
-  coerceTypes: true
-})
-
-const messageQueryValidator = getValidator(messageQuerySchema, queryValidator)
-```
+For a more detailed example see the [result and data schema](#result-and-data-schemas) section.

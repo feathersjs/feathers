@@ -1,10 +1,7 @@
 import { Application, getServiceOptions, Params, RealTimeConnection } from '@feathersjs/feathers'
-import { createDebug } from '@feathersjs/commons'
 import { channels } from '../channels'
 import { routing } from '../routing'
 import { getDispatcher, runMethod } from './utils'
-
-const debug = createDebug('@feathersjs/transport-commons')
 
 export interface SocketOptions {
   done: Promise<any>
@@ -51,10 +48,9 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
           methods.forEach((method) => {
             if (!result[method]) {
               result[method] = (...args: any[]) => {
-                const path = args.shift()
+                const [path, ...rest] = args
 
-                debug(`Got '${method}' call for service '${path}'`)
-                runMethod(app, getParams(connection), path, method, args)
+                runMethod(app, getParams(connection), path, method, rest)
               }
             }
           })
