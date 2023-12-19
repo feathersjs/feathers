@@ -322,7 +322,7 @@ export class KnexAdapter<
       return result
     }, {})
 
-    await this.db(params).update(newObject, '*', { includeTriggerModifications: true }).where(this.id, id)
+    await this.db(params).update(newObject, '*', { includeTriggerModifications: true }).where(this.id, id).catch(errorHandler)
 
     return this._get(id, params)
   }
