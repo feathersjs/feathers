@@ -7,7 +7,7 @@ import socketioClient from '@feathersjs/socketio-client'
 import authClient from '../../src/index'
 import getApp from './fixture'
 import commonTests from './commons'
-import { AuthenticationResult } from '@feathersjs/authentication/lib'
+import { AuthenticationResult } from '@feathersjs/authentication'
 
 describe('@feathersjs/authentication-client Socket.io integration', () => {
   let app: Application
