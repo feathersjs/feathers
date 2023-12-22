@@ -37,7 +37,6 @@ node_modules
 dist/
 .nyc_output/
 .cache
-.mocha-puppeteer
 
 # TypeScript compiled files
 packages/**/lib

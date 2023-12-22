@@ -46,15 +46,15 @@
   },
   "devDependencies": {
     "@feathershq/pinion": "^0.4.0-pre.3",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
     "c8": "^8.0.1",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "lerna": "^8.0.0",
-    "npm-check-updates": "^16.14.11",
-    "prettier": "^3.1.0",
-    "typescript": "^5.3.2"
+    "eslint-plugin-prettier": "^5.1.1",
+    "lerna": "^8.0.1",
+    "npm-check-updates": "^16.14.12",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import { nFormatter } from './helpers'
-import _formatDistance from 'date-fns/formatDistance/index.js'
+import { formatDistance as _formatDistance } from 'date-fns'
 import { PackageOutput } from './types'
 const intlFormat = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
