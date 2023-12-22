@@ -8,7 +8,7 @@ import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathers
 import { Service, restTests } from '@feathersjs/tests'
 import { BadRequest } from '@feathersjs/errors'
 
-import * as express from '../src'
+import * as express from '../src/index'
 
 const expressify = express.default
 const { rest } = express

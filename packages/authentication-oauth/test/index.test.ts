@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert'
 import { feathers } from '@feathersjs/feathers'
-import { oauth, OauthSetupSettings } from '../src'
+import { oauth, OauthSetupSettings } from '../src/index'
 import { AuthenticationService } from '@feathersjs/authentication'
 
 describe('@feathersjs/authentication-oauth', () => {

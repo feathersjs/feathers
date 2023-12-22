@@ -5,7 +5,7 @@ import { default as _axios } from 'axios'
 import { feathers } from '@feathersjs/feathers'
 import { createApplication } from '@feathersjs/authentication-local/test/fixture'
 import { authenticate, AuthenticationResult } from '@feathersjs/authentication'
-import * as express from '../src'
+import * as express from '../src/index'
 
 const expressify = express.default
 const axios = _axios.create({

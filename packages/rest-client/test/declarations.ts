@@ -1,5 +1,5 @@
 import { CustomMethod } from '@feathersjs/feathers'
-import { RestService } from '../src'
+import { RestService } from '../src/index'
 
 type Data = { message: string }
 type Result = {

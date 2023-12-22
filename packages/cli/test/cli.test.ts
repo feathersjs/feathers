@@ -1,5 +1,5 @@
 import { strict } from 'assert'
-import { program } from '../src'
+import { program } from '../src/index'
 
 describe('cli tests', () => {
   it('exports the program', async () => {

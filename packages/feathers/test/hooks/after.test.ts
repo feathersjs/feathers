@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { feathers, Id } from '../../src'
+import { feathers, Id } from '../../src/index'
 
 describe('`after` hooks', () => {
   it('.after hooks can return a promise', async () => {

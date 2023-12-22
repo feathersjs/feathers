@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { ObjectId } from 'mongodb'
-import { filterQuery } from '../src'
+import { filterQuery } from '../src/index'
 
 describe('@feathersjs/adapter-commons/filterQuery', () => {
   describe('$sort', () => {

@@ -3,7 +3,7 @@ import Koa from 'koa'
 import axios from 'axios'
 import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
 import { Service, restTests } from '@feathersjs/tests'
-import { koa, rest, Application, bodyParser, errorHandler } from '../src'
+import { koa, rest, Application, bodyParser, errorHandler } from '../src/index'
 
 describe('@feathersjs/koa', () => {
   let app: Application

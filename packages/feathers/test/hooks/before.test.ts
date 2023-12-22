@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { feathers, Params, ServiceInterface } from '../../src'
+import { feathers, Params, ServiceInterface } from '../../src/index'
 
 describe('`before` hooks', () => {
   it('.before hooks can return a promise', async () => {

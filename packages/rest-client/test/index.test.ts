@@ -2,7 +2,7 @@
 import fetch from 'node-fetch'
 import { strict as assert } from 'assert'
 import { feathers } from '@feathersjs/feathers'
-import { default as init, FetchClient } from '../src'
+import { default as init, FetchClient } from '../src/index'
 
 describe('REST client tests', function () {
   it('is built correctly', () => {

@@ -3,7 +3,7 @@ import adapterTests from '@feathersjs/adapter-tests'
 import errors from '@feathersjs/errors'
 import { feathers } from '@feathersjs/feathers'
 
-import { MemoryService } from '../src'
+import { MemoryService } from '../src/index'
 
 const testSuite = adapterTests([
   '.options',

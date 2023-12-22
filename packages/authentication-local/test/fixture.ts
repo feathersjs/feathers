@@ -2,7 +2,7 @@ import { feathers } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 
-import { LocalStrategy, hooks } from '../src'
+import { LocalStrategy, hooks } from '../src/index'
 const { hashPassword, protect } = hooks
 
 export type ServiceTypes = {

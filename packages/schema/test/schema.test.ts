@@ -1,6 +1,6 @@
 import assert from 'assert'
 
-import { schema, Infer, queryProperty } from '../src'
+import { schema, Infer, queryProperty } from '../src/index'
 import Ajv, { AnySchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 

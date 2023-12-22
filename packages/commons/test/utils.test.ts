@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { strict as assert } from 'assert'
-import { _, stripSlashes, isPromise, createSymbol } from '../src'
+import { _, stripSlashes, isPromise, createSymbol } from '../src/index'
 
 describe('@feathersjs/commons utils', () => {
   it('stripSlashes', () => {

@@ -4,7 +4,7 @@ import { feathers, Application } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
 import socketioClient from '@feathersjs/socketio-client'
 
-import authClient from '../../src'
+import authClient from '../../src/index'
 import getApp from './fixture'
 import commonTests from './commons'
 import { AuthenticationResult } from '@feathersjs/authentication/lib'

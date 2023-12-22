@@ -1,6 +1,6 @@
 import assert from 'assert'
 
-import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../src'
+import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../src/index'
 
 type Todo = {
   id?: string

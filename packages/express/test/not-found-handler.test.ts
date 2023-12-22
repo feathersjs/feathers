@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import { NotFound } from '@feathersjs/errors'
 
-import { notFound } from '../src'
+import { notFound } from '../src/index'
 
 const handler = notFound as any
 

@@ -1,4 +1,4 @@
-import { AdapterBase, AdapterParams, PaginationOptions } from '../src'
+import { AdapterBase, AdapterParams, PaginationOptions } from '../src/index'
 import { Id, NullableId, Paginated } from '@feathersjs/feathers'
 import { BadRequest, MethodNotAllowed } from '@feathersjs/errors/lib'
 

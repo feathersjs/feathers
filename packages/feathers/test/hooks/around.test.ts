@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { feathers, Params, ServiceInterface } from '../../src'
+import { feathers, Params, ServiceInterface } from '../../src/index'
 
 describe('`around` hooks', () => {
   it('around hooks can set hook.result which will skip service method', async () => {

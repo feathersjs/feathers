@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { feathers, Application, FeathersService } from '../../src'
+import { feathers, Application, FeathersService } from '../../src/index'
 
 describe('`error` hooks', () => {
   describe('on direct service method errors', () => {

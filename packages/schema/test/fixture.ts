@@ -18,7 +18,7 @@ import {
   getValidator,
   getDataValidator,
   virtual
-} from '../src'
+} from '../src/index'
 
 const fixtureAjv = new Ajv({
   coerceTypes: true,

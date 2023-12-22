@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { HookContext } from '@feathersjs/feathers'
-import { http } from '../src'
+import { http } from '../src/index'
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {
   it('getResponse body', () => {

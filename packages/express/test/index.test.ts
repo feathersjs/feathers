@@ -7,7 +7,7 @@ import path from 'path'
 import https from 'https'
 import { feathers, HookContext, Id } from '@feathersjs/feathers'
 
-import { default as feathersExpress, rest, notFound, errorHandler, original, serveStatic } from '../src'
+import { default as feathersExpress, rest, notFound, errorHandler, original, serveStatic } from '../src/index'
 import { RequestListener } from 'http'
 
 describe('@feathersjs/express', () => {

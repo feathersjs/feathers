@@ -5,7 +5,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'
 import { feathers } from '@feathersjs/feathers'
 import errors from '@feathersjs/errors'
-import { MongoDBService, AdapterId } from '../src'
+import { MongoDBService, AdapterId } from '../src/index'
 
 const testSuite = adapterTests([
   '.options',

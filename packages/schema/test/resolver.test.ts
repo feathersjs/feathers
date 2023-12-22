@@ -1,7 +1,7 @@
 import assert from 'assert'
 import { BadRequest } from '@feathersjs/errors'
 
-import { FromSchema, schema, resolve, virtual } from '../src'
+import { FromSchema, schema, resolve, virtual } from '../src/index'
 
 describe('@feathersjs/schema/resolver', () => {
   const userSchema = {

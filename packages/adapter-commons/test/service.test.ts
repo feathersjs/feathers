@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { VALIDATED } from '../src'
+import { VALIDATED } from '../src/index'
 import { MethodService } from './fixture'
 
 const METHODS: ['find', 'get', 'create', 'update', 'patch', 'remove'] = [
