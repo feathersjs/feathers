@@ -61,8 +61,6 @@ Now `import { HookContext } from './declarations'` can be used as the context in
 
 ### Service types
 
-
-
 Service types now only need the actual service class type and should no longer include the `& ServiceAddons<any>`. E.g. for the messages service like this:
 
 ```ts
@@ -97,7 +95,7 @@ export interface MyServiceParams extends Params<MyQuery> {
 You can revert to the previous behaviour by overriding he `Params` declaration:
 
 ```ts
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface Params {
     [key: string]: any
   }

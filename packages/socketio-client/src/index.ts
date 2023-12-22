@@ -9,7 +9,7 @@ import { Service, SocketService } from './client'
 
 export { SocketService }
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     /**

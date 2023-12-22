@@ -3,8 +3,6 @@ import type { Middleware, Application as KoaApplication } from '@feathersjs/koa'
 
 import type { ServiceOptions } from '@feathersjs/feathers'
 
-import '@feathersjs/koa'
-import '@feathersjs/express'
 import expressCookieSession from 'cookie-session'
 import koaCookieSession from 'koa-session'
 
@@ -61,7 +59,7 @@ export const getGrantConfig = (service: AuthenticationService): GrantConfig => {
   return grant
 }
 
-export const setExpressParams: RequestHandler = (req, res, next) => {
+export const setExpressParams: RequestHandler = (req: any, res, next) => {
   req.session.destroy ||= () => {
     req.session = null
   }
@@ -105,7 +103,7 @@ export const authenticationServiceOptions = (
       koa: {
         before: [koaSession, setKoaParams]
       }
-    }
+    } as any
   }
 
   const {
@@ -119,5 +117,5 @@ export const authenticationServiceOptions = (
     express: {
       before: [expressSession, setExpressParams]
     }
-  }
+  } as any
 }

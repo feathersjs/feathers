@@ -4,6 +4,7 @@
     "src/**/*.ts"
   ],
   "compilerOptions": {
+    "declarationDir": "./types",
     "outDir": "lib"
   }
 }
