@@ -48,7 +48,8 @@ export const generate = (context: Context) =>
             compile: 'npm run compile:cjs && npm run compile:esm && npm run pack'
           }
         }),
-        'package.json'
+        'package.json',
+        { force: true }
       )
     )
     .then(
@@ -60,6 +61,7 @@ export const generate = (context: Context) =>
             outDir: 'lib'
           }
         }),
-        'tsconfig.json'
+        'tsconfig.json',
+        { force: true }
       )
     )
