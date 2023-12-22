@@ -1,4 +1,3 @@
-import { Service, SocketService } from '@feathersjs/transport-commons/client'
 import { Socket } from 'socket.io-client'
 import {
   Application,
@@ -6,6 +5,7 @@ import {
   defaultEventMap,
   defaultServiceMethods
 } from '@feathersjs/feathers'
+import { Service, SocketService } from './client'
 
 export { SocketService }
 
