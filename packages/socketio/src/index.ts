@@ -100,4 +100,4 @@ function configureSocketio(port?: any, options?: any, config?: any) {
   }
 }
 
-export = configureSocketio
+export default configureSocketio
