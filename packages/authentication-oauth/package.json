@@ -71,6 +71,8 @@
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.12",
+    "@feathersjs/express": "^5.0.12",
+    "@feathersjs/koa": "^5.0.12",
     "@types/cookie-session": "^2.0.48",
     "@types/express": "^4.17.21",
     "@types/koa-session": "^6.4.5",
