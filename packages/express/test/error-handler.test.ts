@@ -6,7 +6,7 @@ import fs from 'fs'
 import { join } from 'path'
 import { BadRequest, NotAcceptable, NotAuthenticated, NotFound, PaymentError } from '@feathersjs/errors'
 
-import { errorHandler } from '../src'
+import { errorHandler } from '../src/index'
 
 const content = '<html><head></head><body>Error</body></html>'
 

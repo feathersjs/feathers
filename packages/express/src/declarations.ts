@@ -5,9 +5,9 @@ import {
   Params as FeathersParams,
   HookContext,
   ServiceMethods,
-  ServiceInterface,
-  RouteLookup
+  ServiceInterface
 } from '@feathersjs/feathers'
+import { RouteLookup } from '@feathersjs/transport-commons'
 
 interface ExpressUseHandler<T, Services> {
   <L extends keyof Services & string>(
@@ -37,7 +37,7 @@ export type Application<Services = any, Settings = any> = Omit<Express, 'listen'
   FeathersApplication<Services, Settings> &
   ExpressOverrides<Services>
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface ServiceOptions {
     express?: {
       before?: express.RequestHandler[]

@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import { _ } from '../src'
+import { _ } from '../src/index'
 
 describe('module', () => {
   it('is commonjs compatible', () => {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-empty-function */
 import assert from 'assert'
-import { feathers, Feathers, getServiceOptions, Id, version } from '../src'
+import { feathers, Feathers, getServiceOptions, Id, version } from '../src/index'
 
 describe('Feathers application', () => {
   it('initializes', () => {

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { errorHandler } from '../src'
+import { errorHandler } from '../src/index'
 
 describe('Knex Error handler', () => {
   it('sqlState', () => {

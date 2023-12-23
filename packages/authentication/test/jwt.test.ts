@@ -4,7 +4,7 @@ import { feathers, Application, Service } from '@feathersjs/feathers'
 import { memory } from '@feathersjs/memory'
 import { getDispatch, resolve, resolveDispatch } from '@feathersjs/schema'
 
-import { AuthenticationService, JWTStrategy, hooks } from '../src'
+import { AuthenticationService, JWTStrategy, hooks } from '../src/index'
 import { ServerResponse } from 'http'
 import { MockRequest } from './fixtures'
 

@@ -3,7 +3,7 @@ import omit from 'lodash/omit'
 import { Application, HookContext } from '@feathersjs/feathers'
 import { resolve } from '@feathersjs/schema'
 
-import { LocalStrategy, passwordHash } from '../src'
+import { LocalStrategy, passwordHash } from '../src/index'
 import { createApplication, ServiceTypes } from './fixture'
 
 describe('@feathersjs/authentication-local/strategy', () => {

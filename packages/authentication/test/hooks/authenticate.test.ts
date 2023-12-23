@@ -3,7 +3,7 @@ import assert from 'assert'
 import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers'
 
 import { Strategy1, Strategy2 } from '../fixtures'
-import { AuthenticationService, hooks } from '../../src'
+import { AuthenticationService, hooks } from '../../src/index'
 
 const { authenticate } = hooks
 

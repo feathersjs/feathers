@@ -1,5 +1,5 @@
-import { AuthenticationService } from '@feathersjs/authentication/lib'
-import { feathers } from '@feathersjs/feathers/lib'
+import { AuthenticationService } from '@feathersjs/authentication'
+import { feathers } from '@feathersjs/feathers'
 import { strict as assert } from 'assert'
 import { getGrantConfig } from '../src/utils'
 

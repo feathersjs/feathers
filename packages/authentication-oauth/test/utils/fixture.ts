@@ -8,7 +8,7 @@ import {
   AuthenticationParams
 } from '@feathersjs/authentication'
 import { provider } from './provider'
-import { oauth, OAuthStrategy } from '../../src'
+import { oauth, OAuthStrategy } from '../../src/index'
 
 export interface ServiceTypes {
   authentication: AuthenticationService

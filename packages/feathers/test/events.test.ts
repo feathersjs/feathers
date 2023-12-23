@@ -1,7 +1,7 @@
 import assert from 'assert'
 import { EventEmitter } from 'events'
 
-import { feathers } from '../src'
+import { feathers } from '../src/index'
 
 describe('Service events', () => {
   it('app is an event emitter', (done) => {

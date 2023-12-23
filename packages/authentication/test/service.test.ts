@@ -6,7 +6,7 @@ import { feathers, Application } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 
 import { defaultOptions } from '../src/options'
-import { AuthenticationService } from '../src'
+import { AuthenticationService } from '../src/index'
 
 import { Strategy1 } from './fixtures'
 

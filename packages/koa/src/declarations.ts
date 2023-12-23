@@ -1,6 +1,8 @@
 import Koa, { Next } from 'koa'
 import { Server } from 'http'
-import { Application as FeathersApplication, HookContext, Params, RouteLookup } from '@feathersjs/feathers'
+import { Application as FeathersApplication, HookContext, Params } from '@feathersjs/feathers'
+import { RouteLookup } from '@feathersjs/transport-commons'
+
 import '@feathersjs/authentication'
 
 export type ApplicationAddons = {
@@ -18,7 +20,7 @@ export type FeathersKoaContext<A = Application> = Koa.Context & {
 
 export type Middleware<A = Application> = (context: FeathersKoaContext<A>, next: Next) => any
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface ServiceOptions {
     koa?: {
       before?: Middleware[]

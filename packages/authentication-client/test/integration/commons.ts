@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { Application } from '@feathersjs/feathers'
-import '../../src'
+import '../../src/index'
 
 export default (
   getApp: () => Application,

@@ -1,4 +1,4 @@
-import { MethodNotAllowed } from '@feathersjs/errors/lib'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import { HookContext, NullableId, Params } from '@feathersjs/feathers'
 import encodeUrl from 'encodeurl'
 

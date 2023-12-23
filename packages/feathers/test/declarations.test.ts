@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { hooks } from '@feathersjs/hooks'
-import { feathers, ServiceInterface, Application, HookContext, NextFunction } from '../src'
+import { feathers, ServiceInterface, Application, HookContext, NextFunction } from '../src/index'
 
 interface Todo {
   id: number

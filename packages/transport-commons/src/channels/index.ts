@@ -1,4 +1,10 @@
-import { Application, FeathersService, RealTimeConnection, getServiceOptions } from '@feathersjs/feathers'
+import {
+  Application,
+  FeathersService,
+  RealTimeConnection,
+  getServiceOptions,
+  ServiceGenericType
+} from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { compact, flattenDeep, noop } from 'lodash'
 import { Channel } from './channel/base'
@@ -9,7 +15,7 @@ import EventEmitter from 'events'
 const debug = createDebug('@feathersjs/transport-commons/channels')
 const { CHANNELS } = keys
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface ServiceAddons<A, S> extends EventEmitter {
     // eslint-disable-line
     publish(publisher: Publisher<ServiceGenericType<S>, A, this>): this

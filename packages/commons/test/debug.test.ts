@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import { createDebug, setDebug, noopDebug } from '../src'
+import { createDebug, setDebug, noopDebug } from '../src/index'
 
 const myDebug = createDebug('hello test')
 

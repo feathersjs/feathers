@@ -1,7 +1,7 @@
 import { Ajv } from '@feathersjs/schema'
 import assert from 'assert'
 import { ObjectId } from 'mongodb'
-import { keywordObjectId, resolveObjectId, resolveQueryObjectId } from '../src'
+import { keywordObjectId, resolveObjectId, resolveQueryObjectId } from '../src/index'
 
 describe('ObjectId resolvers', () => {
   it('resolveObjectId', async () => {

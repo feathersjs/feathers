@@ -1,5 +1,5 @@
 import assert from 'assert'
-import * as errors from '../src'
+import * as errors from '../src/index'
 
 const { convert } = errors
 

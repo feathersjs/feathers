@@ -1,12 +1,12 @@
-import { Application, FeathersService, ServiceOptions } from '@feathersjs/feathers'
+import { Application, FeathersService, ServiceOptions, Service } from '@feathersjs/feathers'
 import { Router } from './router'
 
-declare module '@feathersjs/feathers/lib/declarations' {
-  interface RouteLookup {
-    service: Service
-    params: { [key: string]: any }
-  }
+export interface RouteLookup {
+  service: Service
+  params: { [key: string]: any }
+}
 
+declare module '@feathersjs/feathers' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
     // eslint-disable-line
