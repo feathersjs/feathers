@@ -52,7 +52,34 @@ describe('@feathersjs/schema/json-schema', () => {
       }
     }
 
-    const validator = new Ajv({ strict: false }).compile(schema)
+    const validator = new Ajv({ strict: false }).compile(querySchema)
+
+    assert.ok(validator(q))
+  })
+
+  it('$in and $nin works with array definitions', async () => {
+    const schema = {
+      things: {
+        type: 'array',
+        items: { type: 'number' }
+      }
+    } as const
+
+    const querySchema = {
+      type: 'object',
+      properties: querySyntax(schema)
+    } as const
+
+    type Query = FromSchema<typeof querySchema>
+
+    const q: Query = {
+      things: {
+        $in: [10, 20],
+        $nin: [30]
+      }
+    }
+
+    const validator = new Ajv({ strict: false }).compile(querySchema)
 
     assert.ok(validator(q))
   })

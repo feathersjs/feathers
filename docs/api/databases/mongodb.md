@@ -208,7 +208,7 @@ Here's how it works with the operators that match the Feathers Query syntax. Let
 const query = {
   text: { $regex: 'feathersjs', $options: 'igm' },
   $sort: { createdAt: -1 },
-  $skip: 0,
+  $skip: 20,
   $limit: 10
 }
 ```

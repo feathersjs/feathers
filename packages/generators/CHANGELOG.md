@@ -3,24 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **generators:** use `export type` vs `export` ([#3246](https://github.com/feathersjs/feathers/issues/3246)) ([82d30fd](https://github.com/feathersjs/feathers/commit/82d30fd37914e61935e068e89fc389f6bf47aaad))
+
+## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
+
+### Bug Fixes
+
+- **knex:** Update all dependencies and Knex peer ([#3308](https://github.com/feathersjs/feathers/issues/3308)) ([d2f9860](https://github.com/feathersjs/feathers/commit/d2f986036c4741cce2339d8abbcc6b2eb037a12a))
+- **schema:** HookContext is now typed in schema ([#3306](https://github.com/feathersjs/feathers/issues/3306)) ([65fab86](https://github.com/feathersjs/feathers/commit/65fab86407b813122f24db928a59986c7286f270))
+
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+### Bug Fixes
+
+- **generators:** Fix configure channels when not real-time app ([#3271](https://github.com/feathersjs/feathers/issues/3271)) ([c619ab2](https://github.com/feathersjs/feathers/commit/c619ab2c57f692c419fee610c269c1502b124852))
+
 ## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
 
 **Note:** Version bump only for package @feathersjs/generators
 
-
-
-
-
 ## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
-
 
 ### Bug Fixes
 
-* **generators:** Fix channel/service configuration order for Koa based apps ([580344e](https://github.com/feathersjs/feathers/commit/580344e96fe8a2f17fd53476af5a0c7ddefac0b6))
-
-
-
-
+- **generators:** Fix channel/service configuration order for Koa based apps ([580344e](https://github.com/feathersjs/feathers/commit/580344e96fe8a2f17fd53476af5a0c7ddefac0b6))
 
 ## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
 

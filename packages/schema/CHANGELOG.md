@@ -3,21 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **schema:** Allow $in and $nin queries to work for arrays ([#3352](https://github.com/feathersjs/feathers/issues/3352)) ([677c214](https://github.com/feathersjs/feathers/commit/677c214a353a7f9a1f90649b9bbec4d0d6517a6f))
+- **schema:** Remove undefined $select when using resolveResult hook ([#3354](https://github.com/feathersjs/feathers/issues/3354)) ([c43e009](https://github.com/feathersjs/feathers/commit/c43e009188eb84f98e3f5f29ac4444e6967afc1f))
+
+## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
+
+### Bug Fixes
+
+- **knex:** Update all dependencies and Knex peer ([#3308](https://github.com/feathersjs/feathers/issues/3308)) ([d2f9860](https://github.com/feathersjs/feathers/commit/d2f986036c4741cce2339d8abbcc6b2eb037a12a))
+
+## [5.0.10](https://github.com/feathersjs/feathers/compare/v5.0.9...v5.0.10) (2023-10-03)
+
+### Bug Fixes
+
+- **schema:** Add typescript as peerDependency ([#3287](https://github.com/feathersjs/feathers/issues/3287)) ([cb562ee](https://github.com/feathersjs/feathers/commit/cb562eeddfa88e34fe5727d4000fa037746b0249))
+
+## [5.0.9](https://github.com/feathersjs/feathers/compare/v5.0.8...v5.0.9) (2023-09-27)
+
+**Note:** Version bump only for package @feathersjs/schema
+
 ## [5.0.8](https://github.com/feathersjs/feathers/compare/v5.0.7...v5.0.8) (2023-07-19)
 
 **Note:** Version bump only for package @feathersjs/schema
 
-
-
-
-
 ## [5.0.7](https://github.com/feathersjs/feathers/compare/v5.0.6...v5.0.7) (2023-07-14)
 
 **Note:** Version bump only for package @feathersjs/schema
-
-
-
-
 
 ## [5.0.6](https://github.com/feathersjs/feathers/compare/v5.0.5...v5.0.6) (2023-06-15)
 

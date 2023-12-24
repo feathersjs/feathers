@@ -37,8 +37,14 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
     this.base = `${settings.base}/${this.name}`
   }
 
-  makeUrl(query: Query, id?: string | number | null) {
+  makeUrl(query: Query, id?: string | number | null, route?: { [key: string]: string }) {
     let url = this.base
+
+    if (route) {
+      Object.keys(route).forEach((key) => {
+        url = url.replace(`:${key}`, route[key])
+      })
+    }
 
     query = query || {}
 
@@ -68,7 +74,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
         return this.request(
           {
             body: data,
-            url: this.makeUrl(params.query),
+            url: this.makeUrl(params.query, null, params.route),
             method: 'POST',
             headers: Object.assign(
               {
@@ -92,7 +98,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
   _find(params?: P) {
     return this.request(
       {
-        url: this.makeUrl(params.query),
+        url: this.makeUrl(params.query, null, params.route),
         method: 'GET',
         headers: Object.assign({}, params.headers)
       },
@@ -111,7 +117,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
     return this.request(
       {
-        url: this.makeUrl(params.query, id),
+        url: this.makeUrl(params.query, id, params.route),
         method: 'GET',
         headers: Object.assign({}, params.headers)
       },
@@ -126,7 +132,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
   _create(data: D, params?: P) {
     return this.request(
       {
-        url: this.makeUrl(params.query),
+        url: this.makeUrl(params.query, null, params.route),
         body: data,
         method: 'POST',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
@@ -148,7 +154,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
     return this.request(
       {
-        url: this.makeUrl(params.query, id),
+        url: this.makeUrl(params.query, id, params.route),
         body: data,
         method: 'PUT',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
@@ -170,7 +176,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
     return this.request(
       {
-        url: this.makeUrl(params.query, id),
+        url: this.makeUrl(params.query, id, params.route),
         body: data,
         method: 'PATCH',
         headers: Object.assign({ 'Content-Type': 'application/json' }, params.headers)
@@ -192,7 +198,7 @@ export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClien
 
     return this.request(
       {
-        url: this.makeUrl(params.query, id),
+        url: this.makeUrl(params.query, id, params.route),
         method: 'DELETE',
         headers: Object.assign({}, params.headers)
       },

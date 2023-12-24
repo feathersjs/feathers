@@ -128,6 +128,86 @@ describe('client', () => {
     })
   })
 
+  it('replace placeholder in service paths', async () => {
+    service = new Service({
+      events: ['created'],
+      name: ':slug/todos',
+      method: 'emit',
+      connection
+    }) as any
+
+    const idCb = (path: any, _id: any, _params: any, callback: DummyCallback) => callback(null, path)
+    const idDataCb = (path: any, _id: any, _data: any, _params: any, callback: DummyCallback) =>
+      callback(null, path)
+    const dataCb = (path: any, _data: any, _params: any, callback: DummyCallback) => {
+      callback(null, path)
+    }
+
+    connection.once('create', dataCb)
+    service.methods('customMethod')
+
+    let res = await service.create(testData, {
+      route: {
+        slug: 'mySlug'
+      }
+    })
+
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('get', idCb)
+    res = await service.get(1, {
+      route: {
+        slug: 'mySlug'
+      }
+    })
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('remove', idCb)
+    res = await service.remove(12, {
+      route: {
+        slug: 'mySlug'
+      }
+    })
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('update', idDataCb)
+    res = await service.update(12, testData, {
+      route: {
+        slug: 'mySlug'
+      }
+    })
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('patch', idDataCb)
+    res = await service.patch(12, testData, {
+      route: {
+        slug: 'mySlug'
+      }
+    })
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('customMethod', dataCb)
+    res = await service.customMethod(
+      { message: 'test' },
+      {
+        route: {
+          slug: 'mySlug'
+        }
+      }
+    )
+    assert.strictEqual(res, 'mySlug/todos')
+
+    connection.once('find', (path: any, _params: any, callback: DummyCallback) => callback(null, path))
+
+    res = await service.find({
+      query: { test: true },
+      route: {
+        slug: 'mySlug'
+      }
+    })
+    assert.strictEqual(res, 'mySlug/todos')
+  })
+
   it('converts to feathers-errors (#19)', async () => {
     connection.once('create', (_path: any, _data: any, _params: any, callback: DummyCallback) =>
       callback(new NotAuthenticated('Test', { hi: 'me' }).toJSON())

@@ -155,6 +155,12 @@ lookup.service.find({
 })
 ```
 
+Case insensitive lookups can be enabled in the `app` file like this:
+
+```ts
+app.routes.caseSensitive = false
+```
+
 ## .hooks(hooks)
 
 `app.hooks(hooks) -> app` allows registration of application-level hooks. For more information see the [application hooks section in the hooks chapter](./hooks.md#application-hooks).

@@ -113,4 +113,63 @@ describe('REST client tests', function () {
       message: 'Custom fetch client'
     })
   })
+
+  it('replace placeholder in route URLs', async () => {
+    const app = feathers()
+    let expectedValue: string | null = null
+    class MyFetchClient extends FetchClient {
+      request(options: any, _params: any) {
+        assert.equal(options.url, expectedValue)
+        return Promise.resolve()
+      }
+    }
+    app.configure(init('http://localhost:8889').fetch(fetch, {}, MyFetchClient))
+
+    expectedValue = 'http://localhost:8889/admin/todos'
+    await app.service(':slug/todos').find({
+      route: {
+        slug: 'admin'
+      }
+    })
+    await app.service(':slug/todos').create(
+      {},
+      {
+        route: {
+          slug: 'admin'
+        }
+      }
+    )
+    expectedValue = 'http://localhost:8889/admin/todos/0'
+    await app.service(':slug/todos').get(0, {
+      route: {
+        slug: 'admin'
+      }
+    })
+    expectedValue = 'http://localhost:8889/admin/todos/0'
+    await app.service(':slug/todos').patch(
+      0,
+      {},
+      {
+        route: {
+          slug: 'admin'
+        }
+      }
+    )
+    expectedValue = 'http://localhost:8889/admin/todos/0'
+    await app.service(':slug/todos').update(
+      0,
+      {},
+      {
+        route: {
+          slug: 'admin'
+        }
+      }
+    )
+    expectedValue = 'http://localhost:8889/admin/todos/0'
+    await app.service(':slug/todos').remove(0, {
+      route: {
+        slug: 'admin'
+      }
+    })
+  })
 })

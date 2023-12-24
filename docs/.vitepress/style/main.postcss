@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 :root body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif !important;
+  font-family:
+    'Poppins',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif !important;
 }
 html {
   -webkit-tap-highlight-color: transparent;
@@ -12,6 +22,12 @@ html {
 .home-page .VPNavBar {
   border-bottom: none;
 }
+
+.home-page .VPNav {
+  --vp-nav-bg-color: transparent;
+  --vp-c-gutter: transparent;
+}
+
 /* Remove the search button from the home page. Keyboard shortcut still works. */
 .home-page #docsearch {
   /* display: none; */
@@ -98,24 +114,6 @@ body .bg-base-100 {
   #app.home-page .VPNav {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-  }
-  #app:not('.home-page') .VPNav.no-sidebar {
-    backdrop-filter: saturate(50%) blur(2px);
-    -webkit-backdrop-filter: saturate(50%) blur(2px);
-    background: none;
-  }
-  .dark #app .VPNav.no-sidebar {
-    backdrop-filter: saturate(50%) blur(2px);
-    -webkit-backdrop-filter: saturate(50%) blur(2px);
-    background: none;
-  }
-  #app:not('.home-page') .VPNavBar.has-sidebar .content[data-v-1dc33fef] {
-    backdrop-filter: saturate(50%) blur(2px);
-    -webkit-backdrop-filter: saturate(50%) blur(2px);
-    background: #ffffffcc;
-  }
-  .dark #app:not('.home-page') .VPNavBar.has-sidebar .content[data-v-1dc33fef] {
-    background: #242424cc;
   }
 }
 

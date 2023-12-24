@@ -20,9 +20,10 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "workspaces": [
+    "docs",
     "packages/*"
   ],
   "scripts": {
@@ -36,21 +37,24 @@
     "eslint": "eslint \"packages/**/*.ts\" --fix",
     "lint": "npm run prettier && npm run eslint",
     "compile": "lerna run compile",
-    "update-dependencies": "ncu -u && lerna exec -- ncu -u -x node-fetch,chalk",
+    "build:docs": "npm run build --workspace docs",
+    "update-dependencies": "ncu -u && npm exec --workspaces -- ncu -u --dep prod,dev,optional,peer -x node-fetch,chalk,\"@sinclair/typebox\"",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
-    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests"
+    "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",
+    "generate:package": "pinion run generators/package.ts"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.3.0",
-    "@typescript-eslint/parser": "^6.3.0",
+    "@feathershq/pinion": "^0.4.0-pre.3",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
     "c8": "^8.0.1",
-    "eslint": "^8.46.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "lerna": "^7.1.4",
-    "npm-check-updates": "^16.10.18",
-    "prettier": "^3.0.1",
-    "typescript": "^5.1.6"
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.1",
+    "lerna": "^8.0.1",
+    "npm-check-updates": "^16.14.12",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
   }
 }

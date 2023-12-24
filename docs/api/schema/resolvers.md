@@ -1,7 +1,6 @@
 ---
 outline: deep
 ---
-
 # Resolvers
 
 Resolvers dynamically resolve individual properties based on a context, in a Feathers application usually the [hook context](../hooks.md#hook-context).
@@ -155,11 +154,11 @@ const userResolver = resolve<User, MyContext>(
 
 ## Hooks
 
-In a Feathers application, resolvers are used through [hooks](../hooks.md) to convert service method query, data and responses. The context for these resolvers is always the [hook context](../hooks.md#hook-context).
+In a Feathers application, resolvers are used through [hooks](../hooks.md) to convert service `query`, `data` and `response`. The context for these resolvers is always the [hook context](../hooks.md#hook-context).
 
 ### resolveData
 
-Data resolvers use the `hooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
+Data resolvers use the `hooks.resolveData(...resolvers)` hook and convert the `data` from a `create`, `update` or `patch` [service method](../services.md) or a [custom method](../services.md#custom-methods). This can be used to validate against the schema and e.g. hash a password before storing it in the database or to remove properties the user is not allowed to write. It is possible to pass multiple objects containing resolvers which will run in the order they are passed. Subsequent resolver objects will receive the output from previous resolvers. `schemaHooks.resolveData` can be used as an `around` and `before` hook.
 
 ```ts
 import { hooks as schemaHooks, resolve } from '@feathersjs/schema'
@@ -325,6 +324,12 @@ In order to get the safe data from resolved associations **all services** involv
 
 Query resolvers use the `hooks.resolveQuery(...resolvers)` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveQuery` can be used as an `around` or `before` hook.
 
+In this example for a `User` schema we are first checking if a user is available in our request. In the case a user is available we are ruturning the user's ID. Otherwise we return whatever value was provided for `id`. 
+
+`context.params.user` would only be set if the request contains a user. This is usually the case when an external request is made. In the case of an internal request we may not have a specific user we are dealing with, and we will just return `value`.
+
+If we were to receive an internal request, such as `app.service('users').get(123)`, `context.params.user` would be `undefined` and  we would just return the `value` which is `123`. 
+
 ```ts
 import { hooks as schemaHooks, resolve } from '@feathersjs/schema'
 import { Type } from '@feathersjs/typebox'
@@ -364,3 +369,47 @@ app.service('users').hooks({
   }
 })
 ```
+
+For a more complicated example. We will make a separate `queryResolver`, called `companyFilterQueryResolver`, that will act as a ownership filter. We will have a `Company` service that is owned by a `User`. We will assume our app has two registered users and two companies. Each user owning one company. For simplicity, `User1` owns `Company1`, and `User2` owns `Company2`
+
+We want to make sure only the user that owns the company can make any requests related to it. Our schema contains a `ownerUser` field, this is the owner of the company. When a request is made to the company schema, we are effectivly filtering our search for companies to be only those whose `ownerUser` matches the requesting user's id. 
+
+So if a `GET /company` request is made by `User1`, our resolver will convert our query to `GET /company?name=Company1&ownerUser={User1.id}`. The result will only return an array of 1 company to `User1`
+
+Similarily, if a patch request was made by `User1` to modify `Company2`. A `404` would occur, as resulting query would search the database for a `Company2` that is owned by `User1` which does not exist.
+
+```ts
+// Main data model schema
+export const companySchema = Type.Object(
+  {
+    id: Type.String({ format: 'uuid' }),
+    name: Type.String(),
+    ownerUser: Type.Ref(userSchema)
+  },
+  { $id: 'Company', additionalProperties: false }
+)
+
+// Schema for allowed query properties
+export const companyQueryProperties = Type.Pick(companySchema, ['id'])
+export const companyQuerySchema = Type.Intersect(
+  [
+    querySyntax(companyQueryProperties),
+    // Add additional query properties here
+    Type.Object({}, { additionalProperties: false })
+  ],
+  { additionalProperties: false }
+)
+export type CompanyQuery = Static<typeof companyQuerySchema>
+export const companyQueryValidator = getValidator(companyQuerySchema, queryValidator)
+export const companyQueryResolver = resolve<CompanyQuery, HookContext>({})
+
+export const companyFilterQueryResolver = resolve<Company, HookContext>({
+  ownerUser: async (value, obj, context) => {
+    if (context.params.user) {
+      return context.params.user.id
+    }
+    return value
+  }
+})
+```
+
