@@ -18,7 +18,8 @@ declare module './declarations' {
 export const ${database} = (app: Application) => {
   const connection = app.get('${database}') as string
   
-  const databaseRegex = /\\/([a-zA-Z0-9_\\-]+)(?:\\?|$)/;
+  const databaseRegex = /\/([a-zA-Z0-9_\\-]+)(?:\?|$)/;
+
   const databaseName = databaseRegex.exec(connection)?.[1];
   
   const mongoClient = MongoClient.connect(connection)
