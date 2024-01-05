@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **generators:** Harden mongodb.js to reliably extract database from any connection string ([#3264](https://github.com/feathersjs/feathers/issues/3264)) ([7b0f82c](https://github.com/feathersjs/feathers/commit/7b0f82c631ff5549cdc9a8e0ffcc705d067c2157))
+
 ## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
 
 **Note:** Version bump only for package @feathersjs/generators

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **generators:** Harden mongodb.js to reliably extract database from any connection string ([#3264](https://github.com/feathersjs/feathers/issues/3264)) ([7b0f82c](https://github.com/feathersjs/feathers/commit/7b0f82c631ff5549cdc9a8e0ffcc705d067c2157))
+- **knex:** Add Error Handler to knex \_update function ([#3371](https://github.com/feathersjs/feathers/issues/3371)) ([210f103](https://github.com/feathersjs/feathers/commit/210f1037bf69c641d4fd335cd4f084cbbac0a922))
+- **schema:** Fix setting dispatch on existing nested objects ([#3380](https://github.com/feathersjs/feathers/issues/3380)) ([04efd5a](https://github.com/feathersjs/feathers/commit/04efd5ab3339beafa0e1a9ef851483a387c6ec96))
+
 ## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
 
 **Note:** Version bump only for package feathers

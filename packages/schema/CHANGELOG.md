@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **schema:** Fix setting dispatch on existing nested objects ([#3380](https://github.com/feathersjs/feathers/issues/3380)) ([04efd5a](https://github.com/feathersjs/feathers/commit/04efd5ab3339beafa0e1a9ef851483a387c6ec96))
+
 ## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
 
 **Note:** Version bump only for package @feathersjs/schema
