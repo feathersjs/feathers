@@ -1,4 +1,4 @@
-import { generator, renderTemplate, toFile } from '@feathershq/pinion'
+import { generator, renderTemplate, toFile } from '@featherscloud/pinion'
 import { ModuleContext } from '../package'
 
 interface Context extends ModuleContext {}

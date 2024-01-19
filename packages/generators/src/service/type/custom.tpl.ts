@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 export const template = ({
   className,
@@ -99,7 +99,7 @@ export const getOptions = (app: Application) => {
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     renderSource(
       template,
       toFile<ServiceGeneratorContext>(({ lib, folder, fileName }) => [

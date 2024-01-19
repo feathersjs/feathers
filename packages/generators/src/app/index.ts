@@ -1,8 +1,17 @@
-import { sep } from 'path'
+import { sep, dirname } from 'path'
 import chalk from 'chalk'
-import { generator, prompt, runGenerators, fromFile, install, copyFiles, toFile } from '@feathershq/pinion'
-import { FeathersBaseContext, FeathersAppInfo, initializeBaseContext, addVersions } from '../commons'
-import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection'
+import { prompt, runGenerators, fromFile, copyFiles, toFile } from '@featherscloud/pinion'
+import {
+  FeathersBaseContext,
+  FeathersAppInfo,
+  initializeBaseContext,
+  addVersions,
+  install
+} from '../commons.js'
+import { generate as connectionGenerator, prompts as connectionPrompts } from '../connection/index.js'
+
+// Set __dirname in es module
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 export interface AppGeneratorData extends FeathersAppInfo {
   /**
@@ -36,7 +45,7 @@ export type AppGeneratorContext = FeathersBaseContext &
 export type AppGeneratorArguments = FeathersBaseContext & Partial<AppGeneratorData>
 
 export const generate = (ctx: AppGeneratorArguments) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(initializeBaseContext())
     .then((ctx) => ({
       ...ctx,
@@ -44,7 +53,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
       devDependencies: []
     }))
     .then(
-      prompt<AppGeneratorArguments, AppGeneratorContext>((ctx) => [
+      prompt((ctx) => [
         {
           name: 'language',
           type: 'list',
@@ -142,7 +151,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
       }
     })
     .then(
-      install<AppGeneratorContext>(
+      install(
         ({ transports, framework, dependencyVersions, dependencies, schema }) => {
           const hasSocketio = transports.includes('websockets')
 
@@ -181,7 +190,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
       )
     )
     .then(
-      install<AppGeneratorContext>(
+      install(
         ({ language, devDependencies, dependencyVersions }) => {
           devDependencies.push(
             'nodemon',

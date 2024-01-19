@@ -1,6 +1,6 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile, when } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({
   name,
@@ -42,7 +42,7 @@ export const createClient = <Configuration = any> (
 `
 
 export const generate = async (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<AppGeneratorContext>(
       (ctx) => ctx.client,
       renderSource(

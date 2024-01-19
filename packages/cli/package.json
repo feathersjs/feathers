@@ -3,7 +3,8 @@
   "description": "The command line interface for creating Feathers applications",
   "version": "5.0.14",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
+  "main": "lib/index.js",
+  "type": "module",
   "bin": {
     "feathers": "./bin/feathers"
   },
@@ -45,7 +46,7 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
+    "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --require tsx --recursive test/**.test.ts test/**/*.test.ts",
     "test": "npm run compile && npm run mocha"
   },
   "publishConfig": {

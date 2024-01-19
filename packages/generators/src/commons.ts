@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { join } from 'path'
+import { join, dirname } from 'path'
 import { PackageJson } from 'type-fest'
 import { readFile, writeFile } from 'fs/promises'
 import {
@@ -10,11 +10,15 @@ import {
   getCallable,
   renderTemplate,
   inject,
-  Location
-} from '@feathershq/pinion'
-import * as ts from 'typescript'
+  Location,
+  exec
+} from '@featherscloud/pinion'
+import ts from 'typescript'
 import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
+
+// Set __dirname in es module
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'package.json')).toString())
 
@@ -249,6 +253,20 @@ export const renderSource =
     const renderer = renderTemplate(content, fileName, options)
 
     return renderer(ctx).then(prettify(target))
+  }
+
+export const install =
+  <C extends PinionContext & { language: 'js' | 'ts' }>(
+    dependencies: Callable<string[], C>,
+    dev: Callable<boolean, C>,
+    packager: Callable<string, C>
+  ) =>
+  async (ctx: C) => {
+    const dependencyList = await getCallable(dependencies, ctx)
+    const packageManager = await getCallable(packager, ctx)
+    const flags = dev ? [packageManager === 'yarn' ? '--dev' : '--save-dev'] : []
+
+    return exec(packager, [packageManager === 'yarn' ? 'add' : 'install', ...dependencyList, ...flags])(ctx)
   }
 
 /**

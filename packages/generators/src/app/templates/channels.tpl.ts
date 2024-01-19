@@ -1,6 +1,6 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile, when } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({
   language
@@ -43,7 +43,7 @@ export const channels = (app: Application) => {
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<AppGeneratorContext>(
       ({ transports }) => transports.includes('websockets'),
       renderSource(

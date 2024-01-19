@@ -1,6 +1,6 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile, when } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({ lib }: AppGeneratorContext) => /* ts */ `import assert from 'assert'
 import axios from 'axios'
@@ -23,6 +23,6 @@ describe('client tests', () => {
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<AppGeneratorContext>((ctx) => ctx.client, renderSource(template, toFile('test', 'client.test')))
   )

@@ -1,4 +1,4 @@
-export * from '@feathershq/pinion'
+export * from '@featherscloud/pinion'
 
 export * from './commons'
 export * as app from './app'

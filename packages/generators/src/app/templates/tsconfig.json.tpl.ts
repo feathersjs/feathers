@@ -1,8 +1,8 @@
-import { generator, toFile, when, writeJSON } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
+import { toFile, when, writeJSON } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '../index.js'
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<AppGeneratorContext>(
       (ctx) => ctx.language === 'ts',
       writeJSON<AppGeneratorContext>(

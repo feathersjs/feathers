@@ -29,8 +29,9 @@
   "engines": {
     "node": ">= 16"
   },
-  "main": "lib/",
+  "main": "lib/index.js",
   "types": "lib/",
+  "type": "module",
   "files": [
     "CHANGELOG.md",
     "LICENSE",
@@ -43,7 +44,7 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
-    "test": "npm run compile && mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "npm run compile && mocha --config ../../.mocharc.json --require tsx --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
     "lib": "lib"
@@ -52,7 +53,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.5",
+    "@featherscloud/pinion": "^0.5.0",
     "chalk": "^4.0.1",
     "lodash": "^4.17.21",
     "prettier": "^3.2.4",
@@ -88,7 +89,7 @@
     "pg": "^8.11.3",
     "shx": "^0.3.4",
     "sqlite3": "^5.1.7",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "type-fest": "^4.9.0",
     "typescript": "^5.3.3"
   },

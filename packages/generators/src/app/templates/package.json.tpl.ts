@@ -1,5 +1,5 @@
-import { generator, toFile, writeJSON } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
+import { toFile, writeJSON } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '../index.js'
 
 const jsPackageJson = (lib: string) => ({
   type: 'module',
@@ -75,4 +75,4 @@ const packageJson = ({
 })
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(writeJSON(packageJson, toFile('package.json')))
+  Promise.resolve(ctx).then(writeJSON(packageJson, toFile('package.json')))

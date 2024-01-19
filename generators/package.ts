@@ -1,5 +1,5 @@
-import type { Callable, PinionContext } from '@feathershq/pinion'
-import { generator, install, prompt, runGenerators, toFile } from '@feathershq/pinion'
+import type { Callable, PinionContext } from '@featherscloud/pinion'
+import { generator, install, prompt, runGenerators, toFile } from '@featherscloud/pinion'
 
 export interface ModuleContext extends PinionContext {
   name: string
