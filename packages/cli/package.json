@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@feathersjs/generators": "^5.0.14",
-    "chalk": "^4.0.1",
+    "chalk": "^5.3.0",
     "commander": "^11.1.0"
   },
   "devDependencies": {
