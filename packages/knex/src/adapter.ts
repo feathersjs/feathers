@@ -24,7 +24,7 @@ const OPERATORS = {
   $ilike: 'ilike'
 }
 
-const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql']
+const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql', 'sqlite3']
 
 export class KnexAdapter<
   Result,
