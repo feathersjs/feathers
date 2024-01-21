@@ -8,7 +8,7 @@ import {
   initializeBaseContext,
   install
 } from '../commons.js'
-import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index'
+import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index.js'
 
 // Set __dirname in es module
 const __dirname = dirname(new URL(import.meta.url).pathname)
