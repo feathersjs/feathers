@@ -2,9 +2,12 @@ import chalk from 'chalk'
 import { Command } from 'commander'
 import { dirname } from 'path'
 import { runGenerator, getContext, FeathersBaseContext, version } from '@feathersjs/generators'
+import { createRequire } from 'node:module'
 
 export * from 'commander'
 export { chalk }
+
+const require = createRequire(import.meta.url)
 
 export const commandRunner = (name: string) => async (options: any) => {
   const folder = dirname(require.resolve('@feathersjs/generators'))
@@ -13,7 +16,7 @@ export const commandRunner = (name: string) => async (options: any) => {
   })
 
   await Promise.resolve(ctx)
-    .then(runGenerator(folder, name, 'index'))
+    .then(runGenerator(folder, name, 'index.js'))
     .catch((error) => {
       const { logger } = ctx.pinion
 
