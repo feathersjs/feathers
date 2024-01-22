@@ -210,4 +210,4 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
       } as ServiceGeneratorContext
     })
     .then(runGenerators<ServiceGeneratorContext>(__dirname, 'templates'))
-    .then(runGenerator<ServiceGeneratorContext>(__dirname, 'type', ({ type }) => `${type}.tpl`))
+    .then(runGenerator<ServiceGeneratorContext>(__dirname, 'type', ({ type }) => `${type}.tpl.js`))

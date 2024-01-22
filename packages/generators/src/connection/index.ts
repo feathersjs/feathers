@@ -90,7 +90,7 @@ export const generate = (ctx: ConnectionGeneratorArguments) =>
         runGenerator<ConnectionGeneratorContext>(
           __dirname,
           'templates',
-          ({ database }) => `${getDatabaseAdapter(database)}.tpl`
+          ({ database }) => `${getDatabaseAdapter(database)}.tpl.js`
         ),
         mergeJSON<ConnectionGeneratorContext>(
           ({ connectionString, database }) =>
