@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth",
   "description": "oAuth 1 and 2 authentication for Feathers. Powered by Grant.",
-  "version": "5.0.14",
+  "version": "5.0.15",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -54,13 +54,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.14",
-    "@feathersjs/commons": "^5.0.14",
-    "@feathersjs/errors": "^5.0.14",
-    "@feathersjs/express": "^5.0.14",
-    "@feathersjs/feathers": "^5.0.14",
-    "@feathersjs/koa": "^5.0.14",
-    "@feathersjs/schema": "^5.0.14",
+    "@feathersjs/authentication": "^5.0.15",
+    "@feathersjs/commons": "^5.0.15",
+    "@feathersjs/errors": "^5.0.15",
+    "@feathersjs/express": "^5.0.15",
+    "@feathersjs/feathers": "^5.0.15",
+    "@feathersjs/koa": "^5.0.15",
+    "@feathersjs/schema": "^5.0.15",
     "cookie-session": "^2.0.0",
     "grant": "^5.4.22",
     "koa-session": "^6.4.0",
@@ -68,7 +68,7 @@
     "qs": "^6.11.2"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.14",
+    "@feathersjs/memory": "^5.0.15",
     "@types/cookie-session": "^2.0.48",
     "@types/express": "^4.17.21",
     "@types/koa-session": "^6.4.5",
