@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.17](https://github.com/feathersjs/feathers/compare/v5.0.16...v5.0.17) (2024-01-22)
+
+### Bug Fixes
+
+- **cli:** Fix another ES module issue ([#3395](https://github.com/feathersjs/feathers/issues/3395)) ([8e39884](https://github.com/feathersjs/feathers/commit/8e39884a23d0e7868546dce4f7a3ee6e954c2b31))
+
 ## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
 
 **Note:** Version bump only for package @feathersjs/cli
