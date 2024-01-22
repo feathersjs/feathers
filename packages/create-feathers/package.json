@@ -6,6 +6,7 @@
   "bin": {
     "create-feathers": "./bin/create-feathers"
   },
+  "type": "module",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -29,7 +30,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 18"
   },
   "files": [
     "CHANGELOG.md",
@@ -41,7 +42,7 @@
     "*.js"
   ],
   "scripts": {
-    "test": "echo \"No tests necessary\""
+    "test": "bin/create-feathers --help"
   },
   "publishConfig": {
     "access": "public"
