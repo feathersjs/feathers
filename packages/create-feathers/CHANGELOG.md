@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
+
+### Bug Fixes
+
+- Update npm create feathers to ES module ([#3393](https://github.com/feathersjs/feathers/issues/3393)) ([314ce70](https://github.com/feathersjs/feathers/commit/314ce707332eadbea4505e5e7560397632da6205))
+
 ## [5.0.15](https://github.com/feathersjs/feathers/compare/v5.0.14...v5.0.15) (2024-01-22)
 
 **Note:** Version bump only for package create-feathers
