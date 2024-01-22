@@ -1,5 +1,5 @@
-import { generator, renderTemplate, toFile } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
+import { renderTemplate, toFile } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({ name, description, language, database }: AppGeneratorContext) => /* md */ `# ${name}
 
@@ -54,4 +54,4 @@ For more information on all the things you can do with Feathers visit [docs.feat
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(renderTemplate(template, toFile('readme.md')))
+  Promise.resolve(ctx).then(renderTemplate(template, toFile('readme.md')))

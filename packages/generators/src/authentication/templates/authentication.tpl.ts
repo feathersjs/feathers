@@ -1,7 +1,7 @@
-import { generator, before, toFile } from '@feathershq/pinion'
-import { injectSource, renderSource } from '../../commons'
-import { AuthenticationGeneratorContext } from '../index'
-import { localTemplate, oauthTemplate } from '../../commons'
+import { before, toFile } from '@featherscloud/pinion'
+import { injectSource, renderSource } from '../../commons.js'
+import { AuthenticationGeneratorContext } from '../index.js'
+import { localTemplate, oauthTemplate } from '../../commons.js'
 
 const template = ({
   authStrategies
@@ -41,7 +41,7 @@ const configureTemplate = 'app.configure(authentication)'
 const toAppFile = toFile<AuthenticationGeneratorContext>(({ lib }) => [lib, 'app'])
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       renderSource(
         template,

@@ -1,6 +1,6 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { fileExists, renderSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile, when } from '@featherscloud/pinion'
+import { fileExists, renderSource } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 const sharedTemplate = ({
   camelName,
@@ -48,7 +48,7 @@ declare module '${relative}/client' {
 `
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<ServiceGeneratorContext>(
       ({ lib, language }) => fileExists(lib, `client.${language}`),
       renderSource(

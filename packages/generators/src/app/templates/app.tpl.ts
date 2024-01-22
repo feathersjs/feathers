@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const tsKoaApp = ({
   transports,
@@ -133,7 +133,7 @@ const template = (ctx: AppGeneratorContext) =>
   ctx.framework === 'express' ? tsExpressApp(ctx) : tsKoaApp(ctx)
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     renderSource(
       template,
       toFile<AppGeneratorContext>(({ lib }) => lib, 'app')

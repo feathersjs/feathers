@@ -1,5 +1,5 @@
 import { strictEqual } from 'assert'
-import { getJavaScript } from '../src/commons'
+import { getJavaScript } from '../lib/commons'
 
 describe('common tests', () => {
   it('getJavaScript returns transpiled JavaScript', () => {

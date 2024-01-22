@@ -1,6 +1,6 @@
-import { generator, toFile, after, prepend } from '@feathershq/pinion'
-import { fileExists, injectSource, renderSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile, after, prepend } from '@featherscloud/pinion'
+import { fileExists, injectSource, renderSource } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 export const template = ({
   camelName,
@@ -132,7 +132,7 @@ declare module '${relative}/declarations' {
 const toServiceIndex = toFile(({ lib }: ServiceGeneratorContext) => [lib, 'services', `index`])
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       renderSource(
         template,

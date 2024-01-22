@@ -1,6 +1,6 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { fileExists, localTemplate, renderSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile, when } from '@featherscloud/pinion'
+import { fileExists, localTemplate, renderSource } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 const authFieldsTemplate = (authStrategies: string[]) =>
   authStrategies
@@ -127,7 +127,7 @@ export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext<
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<ServiceGeneratorContext>(
       ({ schema }) => schema === 'json',
       renderSource(

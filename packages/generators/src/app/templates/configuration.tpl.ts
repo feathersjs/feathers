@@ -1,6 +1,6 @@
-import { generator, toFile, when, writeJSON } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile, when, writeJSON } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const defaultConfig = ({}: AppGeneratorContext) => ({
   host: 'localhost',
@@ -73,7 +73,7 @@ export const configurationValidator = getValidator(configurationSchema, dataVali
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(writeJSON(defaultConfig, toFile('config', 'default.json')))
     .then(writeJSON(testConfig, toFile('config', 'test.json')))
     .then(writeJSON(customEnvironment, toFile('config', 'custom-environment-variables.json')))

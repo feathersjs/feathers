@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { Command } from 'commander'
 import { dirname } from 'path'
-import { generator, runGenerator, getContext, FeathersBaseContext, version } from '@feathersjs/generators'
+import { runGenerator, getContext, FeathersBaseContext, version } from '@feathersjs/generators'
 
 export * from 'commander'
 export { chalk }
@@ -12,7 +12,7 @@ export const commandRunner = (name: string) => async (options: any) => {
     ...options
   })
 
-  await generator(ctx)
+  await Promise.resolve(ctx)
     .then(runGenerator(folder, name, 'index'))
     .catch((error) => {
       const { logger } = ctx.pinion

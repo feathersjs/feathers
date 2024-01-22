@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource, yyyymmddhhmmss } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile } from '@featherscloud/pinion'
+import { renderSource, yyyymmddhhmmss } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 const migrationTemplate = ({
   kebabPath,
@@ -85,7 +85,7 @@ export const getOptions = (app: Application): KnexAdapterOptions => {
 `
 
 export const generate = (ctx: ServiceGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       renderSource(
         template,

@@ -1,5 +1,5 @@
-import { generator, inject, before, toFile, when, append } from '@feathershq/pinion'
-import { AuthenticationGeneratorContext } from '../index'
+import { inject, before, toFile, when, append } from '@featherscloud/pinion'
+import { AuthenticationGeneratorContext } from '../index.js'
 
 const importTemplate = ({
   upperName,
@@ -24,7 +24,7 @@ declare module '@feathersjs/feathers' {
 const toDeclarationFile = toFile<AuthenticationGeneratorContext>(({ lib }) => lib, 'declarations.ts')
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       when(
         (ctx) => ctx.language === 'ts',

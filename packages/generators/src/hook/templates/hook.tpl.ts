@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { HookGeneratorContext } from '../index'
-import { renderSource } from '../../commons'
+import { toFile } from '@featherscloud/pinion'
+import { HookGeneratorContext } from '../index.js'
+import { renderSource } from '../../commons.js'
 
 const aroundTemplate = ({
   camelName,
@@ -25,7 +25,7 @@ export const ${camelName} = async (context: HookContext) => {
 }`
 
 export const generate = (ctx: HookGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     renderSource(
       (ctx) => (ctx.type === 'around' ? aroundTemplate(ctx) : regularTemplate(ctx)),
       toFile<HookGeneratorContext>(({ lib, kebabName }) => [lib, 'hooks', kebabName])

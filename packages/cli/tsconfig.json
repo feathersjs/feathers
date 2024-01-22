@@ -5,6 +5,7 @@
   ],
   "compilerOptions": {
     "outDir": "lib",
-    "resolveJsonModule": true
+    "module": "ESNext",
+    "moduleResolution": "Node"
   }
 }

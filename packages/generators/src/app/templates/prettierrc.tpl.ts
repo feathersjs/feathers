@@ -1,9 +1,9 @@
-import { generator, toFile, writeJSON } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
-import { PRETTIERRC } from '../../commons'
+import { toFile, writeJSON } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '../index.js'
+import { PRETTIERRC } from '../../commons.js'
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     writeJSON<AppGeneratorContext>(
       (ctx) => ({
         ...PRETTIERRC,

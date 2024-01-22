@@ -1,13 +1,18 @@
-import { generator, runGenerator, prompt, install, mergeJSON, toFile, when } from '@feathershq/pinion'
+import { dirname } from 'path'
+import { runGenerator, prompt, mergeJSON, toFile, when } from '@featherscloud/pinion'
 import chalk from 'chalk'
 import {
+  install,
   FeathersBaseContext,
   DatabaseType,
   getDatabaseAdapter,
   addVersions,
   checkPreconditions,
   initializeBaseContext
-} from '../commons'
+} from '../commons.js'
+
+// Set __dirname in es module
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
   name?: string
@@ -74,10 +79,11 @@ export const getDatabaseClient = (database: DatabaseType) =>
   database === 'other' ? null : DATABASE_CLIENTS[database]
 
 export const generate = (ctx: ConnectionGeneratorArguments) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(initializeBaseContext())
     .then(checkPreconditions())
-    .then(prompt<ConnectionGeneratorArguments, ConnectionGeneratorContext>(prompts))
+    .then(prompt(prompts))
+    .then((ctx) => ctx as ConnectionGeneratorContext)
     .then(
       when<ConnectionGeneratorContext>(
         (ctx) => ctx.database !== 'other',

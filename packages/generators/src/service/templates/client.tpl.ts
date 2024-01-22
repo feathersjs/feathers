@@ -1,6 +1,6 @@
-import { generator, toFile, after, before, when } from '@feathershq/pinion'
-import { fileExists, injectSource } from '../../commons'
-import { ServiceGeneratorContext } from '../index'
+import { toFile, after, before, when } from '@featherscloud/pinion'
+import { fileExists, injectSource } from '../../commons.js'
+import { ServiceGeneratorContext } from '../index.js'
 
 const importTemplate = ({ upperName, folder, fileName, camelName }: ServiceGeneratorContext) => /* ts */ `
 import { ${camelName}Client } from './services/${folder.join('/')}/${fileName}.shared'
@@ -18,7 +18,7 @@ const registrationTemplate = ({ camelName }: ServiceGeneratorContext) =>
 const toClientFile = toFile<ServiceGeneratorContext>(({ lib }) => [lib, 'client'])
 
 export const generate = async (ctx: ServiceGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<ServiceGeneratorContext>(
       ({ lib, language }) => fileExists(lib, `client.${language}`),
       injectSource(registrationTemplate, before('return client'), toClientFile),

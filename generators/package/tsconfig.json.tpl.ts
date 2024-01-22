@@ -1,4 +1,4 @@
-import { generator, toFile, writeJSON } from '@feathershq/pinion'
+import { generator, toFile, writeJSON } from '@featherscloud/pinion'
 import { ModuleContext } from '../package'
 
 export const generate = (context: ModuleContext) =>
