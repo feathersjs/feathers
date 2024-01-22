@@ -324,7 +324,7 @@ In order to get the safe data from resolved associations **all services** involv
 
 Query resolvers use the `hooks.resolveQuery(...resolvers)` hook to modify `params.query`. This is often used to set default values or limit the query so a user can only request data they are allowed to see. It is possible to pass multiple resolvers which will run in the order they are passed, using the previous data. `schemaHooks.resolveQuery` can be used as an `around` or `before` hook.
 
-In this example for a `User` schema we are first checking if a user is available in our request. In the case a user is available we are ruturning the user's ID. Otherwise we return whatever value was provided for `id`. 
+In this example for a `User` schema we are first checking if a user is available in our request. In the case a user is available we are returning the user's ID. Otherwise we return whatever value was provided for `id`. 
 
 `context.params.user` would only be set if the request contains a user. This is usually the case when an external request is made. In the case of an internal request we may not have a specific user we are dealing with, and we will just return `value`.
 
