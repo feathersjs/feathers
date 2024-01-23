@@ -28,6 +28,10 @@ If none of those work it's a very real possibility that we screwed something up 
 
 [Ask on StackOverflow using the `feathersjs` tag >](http://stackoverflow.com)
 
+## Consulting and app development
+
+[Feathers Cloud](https://feathers.cloud/) specialize in app development and consulting to get your app on the right track. [Contact us](https://feathers.cloud/consulting.html) to see how we can help.
+
 ## Support Feathers, get help
 
 By [becoming a sponsor](https://github.com/sponsors/daffl/) you support Feathers continued development and get access to a Feathers newsletter and tiers with 30 or 60 minute monthly office hour sessions to walk you through any issues you may be facing using FeathersJS. This may include architecture discussions, debug sessions, patterns, or more.
