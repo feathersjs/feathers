@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "type": "module",
   "bin": {
-    "feathers": "./bin/feathers"
+    "feathers": "./bin/feathers.js"
   },
   "keywords": [
     "feathers",
@@ -47,7 +47,7 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --require tsx --recursive test/**.test.ts test/**/*.test.ts",
-    "test": "npm run compile && npm run mocha"
+    "test": "npm run compile && npm run mocha && bin/feathers.js --help"
   },
   "publishConfig": {
     "access": "public"
