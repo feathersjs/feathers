@@ -42,7 +42,7 @@
     "*.js"
   ],
   "scripts": {
-    "test": "bin/create-feathers --help"
+    "test": "bin/create-feathers.js --help"
   },
   "publishConfig": {
     "access": "public"
