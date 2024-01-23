@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
+
+### Bug Fixes
+
+- **cli:** Add JS extension to binaries ([#3398](https://github.com/feathersjs/feathers/issues/3398)) ([aaf181d](https://github.com/feathersjs/feathers/commit/aaf181d924d0cb67c7792a54197082c59109264d))
+
 ## [5.0.18](https://github.com/feathersjs/feathers/compare/v5.0.17...v5.0.18) (2024-01-22)
 
 **Note:** Version bump only for package @feathersjs/cli
