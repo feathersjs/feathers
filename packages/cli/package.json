@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "type": "module",
   "bin": {
-    "feathers": "./bin/feathers"
+    "feathers": "./bin/feathers.js"
   },
   "keywords": [
     "feathers",

@@ -4,7 +4,7 @@
   "version": "5.0.18",
   "homepage": "https://feathersjs.com",
   "bin": {
-    "create-feathers": "./bin/create-feathers"
+    "create-feathers": "./bin/create-feathers.js"
   },
   "type": "module",
   "keywords": [
