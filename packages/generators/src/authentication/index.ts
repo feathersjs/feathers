@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 import { dirname } from 'path'
 import { runGenerators, prompt } from '@featherscloud/pinion'
+import { fileURLToPath } from 'url'
 import {
   addVersions,
   checkPreconditions,
@@ -11,7 +12,7 @@ import {
 import { generate as serviceGenerator, ServiceGeneratorContext } from '../service/index.js'
 
 // Set __dirname in es module
-const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface AuthenticationGeneratorContext extends ServiceGeneratorContext {
   service: string

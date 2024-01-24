@@ -16,9 +16,10 @@ import {
 import ts from 'typescript'
 import prettier, { Options as PrettierOptions } from 'prettier'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 // Set __dirname in es module
-const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'package.json')).toString())
 

@@ -1,10 +1,8 @@
 import { dirname } from 'path'
 import _ from 'lodash'
 import { runGenerator, runGenerators, prompt } from '@featherscloud/pinion'
+import { fileURLToPath } from 'url'
 import chalk from 'chalk'
-
-// Set __dirname in es module
-const __dirname = dirname(new URL(import.meta.url).pathname)
 
 import {
   checkPreconditions,
@@ -14,6 +12,9 @@ import {
   getDatabaseAdapter,
   initializeBaseContext
 } from '../commons.js'
+
+// Set __dirname in es module
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**

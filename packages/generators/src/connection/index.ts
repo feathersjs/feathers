@@ -1,5 +1,6 @@
 import { dirname } from 'path'
 import { runGenerator, prompt, mergeJSON, toFile, when } from '@featherscloud/pinion'
+import { fileURLToPath } from 'url'
 import chalk from 'chalk'
 import {
   install,
@@ -12,7 +13,7 @@ import {
 } from '../commons.js'
 
 // Set __dirname in es module
-const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface ConnectionGeneratorContext extends FeathersBaseContext {
   name?: string
