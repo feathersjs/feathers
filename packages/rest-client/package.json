@@ -56,7 +56,7 @@
     "@feathersjs/commons": "^5.0.19",
     "@feathersjs/errors": "^5.0.19",
     "@feathersjs/feathers": "^5.0.19",
-    "@types/superagent": "^8.1.1",
+    "@types/superagent": "^8.1.2",
     "qs": "^6.11.2"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "@feathersjs/memory": "^5.0.19",
     "@feathersjs/tests": "^5.0.19",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.6",
     "@types/node-fetch": "^2.6.11",
     "@types/qs": "^6.9.11",
     "axios": "^1.6.5",
