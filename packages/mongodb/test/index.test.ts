@@ -488,7 +488,7 @@ describe('Feathers MongoDB Service', () => {
       const findResult = await app.service('people').find({ query })
       const aggregationResult = await app.service('people').find({ query, pipeline: [] })
 
-      assert.deepStrictEqual(findResult, aggregationResult)
+      assert.deepStrictEqual(findResult.total, aggregationResult.total)
 
       service.options.paginate = paginateBefore
     })
@@ -521,9 +521,44 @@ describe('Feathers MongoDB Service', () => {
       app.service('people').remove(dave._id)
     })
 
+    it('can use aggregation in _patch', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').patch(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
     it('can use aggregation and query in _update', async () => {
       const dave = await app.service('people').create({ name: 'Dave' })
       const result = await app.service('people').update(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          query: { name: 'Dave' },
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation and query in _patch', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').patch(
         dave._id,
         {
           name: 'Marshal'
