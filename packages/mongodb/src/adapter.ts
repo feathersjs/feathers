@@ -49,11 +49,6 @@ export type AdapterId = Id | ObjectId
 
 export type NullableAdapterId = AdapterId | null
 
-type Page = {
-  total: number
-  data: any
-}
-
 // Create the service.
 export class MongoDbAdapter<
   Result,
@@ -133,7 +128,7 @@ export class MongoDbAdapter<
     return q
   }
 
-  /* TODO: Remove $out and $merge stages, else it returns an empty cursor. I think its same to assume this is primarily for querying. */
+  /* TODO: Remove $out and $merge stages, else it returns an empty cursor. I think its safe to assume this is primarily for querying. */
   async aggregateRaw(params: ServiceParams) {
     const model = await this.getModel(params)
     const pipeline = params.pipeline || []
@@ -250,7 +245,6 @@ export class MongoDbAdapter<
     } = this.filterQuery(id, params)
 
     if (params.pipeline) {
-      /* We wouldn't need this aggregateParams if aggregateRaw took signature aggregateRaw(id, params) instead of just aggregateRaw(params). Because aggregateRaw ultimately calls makeFeathersPipeline(params) without id. That also makes aggregateRaw more flexible and consistent with other methods like _findOrGet. But, its a breaking change. */
       const aggregateParams = {
         ...params,
         query: {
@@ -296,48 +290,38 @@ export class MongoDbAdapter<
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
     const { paginate } = this.getOptions(params)
     const { filters } = this.filterQuery(null, params)
+    const paginationDisabled = params.paginate === false || !paginate || !paginate.default
 
-    const page = ({ total, data }: Page) => {
-      if (paginate && paginate.default) {
-        return {
-          limit: filters.$limit,
-          skip: filters.$skip || 0,
-          total,
-          data
-        }
+    const getData = () => {
+      const result = params.pipeline ? this.aggregateRaw(params) : this.findRaw(params)
+      return result.then((result) => result.toArray())
+    }
+
+    if (paginationDisabled) {
+      if (filters.$limit === 0) {
+        return [] as Result[]
       }
-      return data
-    }
-
-    /* TODO: This seems a little funky. The user shouldn't need to have service.options.paginate to count documents necessarily. Shouldn't this just always return { total: 123 } if no pagination option? Else it always return an empty array. Or we can keep it this way, and document that you can use `this.countDocuments` if you don't have paginate option. Just seems weird. */
-    if (filters.$limit === 0) {
-      return page({
-        total: await this.countDocuments(params),
-        data: [] as Result[]
-      })
-    }
-
-    const result = params.pipeline ? this.aggregateRaw(params) : this.findRaw(params)
-
-    if (params.paginate === false) {
-      const data = await result.then((result) => result.toArray())
+      const data = await getData()
       return data as Result[]
-      /* TODO: Wait...how does the below code work? Is there somewhere else that is handling params.paginate only returning an array? Comment the return statement above and uncomment this block...shouldn't that throw an error? */
-      // return page({
-      //   total: data.length,
-      //   data: data as Result[]
-      // })
     }
 
-    const [data, total] = await Promise.all([
-      result.then((result) => result.toArray()),
-      this.countDocuments(params)
-    ])
+    if (filters.$limit === 0) {
+      return {
+        total: await this.countDocuments(params),
+        data: [] as Result[],
+        limit: filters.$limit,
+        skip: filters.$skip || 0
+      }
+    }
 
-    return page({
+    const [data, total] = await Promise.all([getData(), this.countDocuments(params)])
+
+    return {
       total,
-      data: data as Result[]
-    })
+      data: data as Result[],
+      limit: filters.$limit,
+      skip: filters.$skip || 0
+    }
   }
 
   async _create(data: Data, params?: ServiceParams): Promise<Result>
@@ -427,7 +411,8 @@ export class MongoDbAdapter<
           const idList = (result as Result[]).map((item: any) => item[this.id])
           await model.updateMany({ [this.id]: { $in: idList } }, replacement, params.mongodb)
           return this._find({
-            ...findParams,
+            ...params,
+            paginate: false,
             query: {
               [this.id]: { $in: idList },
               $sort,
@@ -439,14 +424,15 @@ export class MongoDbAdapter<
     }
 
     if (params.pipeline) {
-      const { query: findQuery } = this.filterQuery(null, params)
-
-      if (Object.keys(findQuery).length === 0) {
-        await model.updateOne({ [this.id]: id }, replacement, params.mongodb)
-        return this._get(id, params)
+      const getParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id]
+        }
       }
 
-      return this._get(id, params)
+      return this._get(id, getParams)
         .then(async () => {
           await model.updateOne({ [this.id]: id }, replacement, params.mongodb)
           return this._get(id, {
@@ -487,14 +473,15 @@ export class MongoDbAdapter<
     const replacement = this.normalizeId(id, data)
 
     if (params.pipeline) {
-      const { query: findQuery } = this.filterQuery(null, params)
-
-      if (Object.keys(findQuery).length === 0) {
-        await model.replaceOne({ [this.id]: id }, replacement, params.mongodb)
-        return this._get(id, params)
+      const getParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id]
+        }
       }
 
-      return this._get(id, params)
+      return this._get(id, getParams)
         .then(async () => {
           await model.replaceOne({ [this.id]: id }, replacement, params.mongodb)
           return this._get(id, {
