@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.20](https://github.com/feathersjs/feathers/compare/v5.0.19...v5.0.20) (2024-01-24)
+
+### Bug Fixes
+
+- **generators:** Use cross-platform ES module \_\_dirname ([#3402](https://github.com/feathersjs/feathers/issues/3402)) ([0ac4882](https://github.com/feathersjs/feathers/commit/0ac4882663bb6a78622be0d903ae6508ecb516ad))
+
 ## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
 
 ### Bug Fixes
