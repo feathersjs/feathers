@@ -1,10 +1,11 @@
 import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 import { prompt, runGenerators } from '@featherscloud/pinion'
 import _ from 'lodash'
 import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons.js'
 
 // Set __dirname in es module
-const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface HookGeneratorContext extends FeathersBaseContext {
   name: string
