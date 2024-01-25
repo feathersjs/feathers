@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/typebox",
   "description": "TypeBox integration for @feathersjs/schema",
-  "version": "5.0.20",
+  "version": "5.0.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -54,7 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/schema": "^5.0.20",
+    "@feathersjs/schema": "^5.0.21",
     "@sinclair/typebox": "^0.25.0"
   },
   "devDependencies": {
