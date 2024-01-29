@@ -45,3 +45,22 @@ jobs:
           fi
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
+  build-windows:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i npm -g
+      - run: npm install -g codeclimate-test-reporter
+      - run: npm install
+      - run: npm test
+        env:
+          CI: true

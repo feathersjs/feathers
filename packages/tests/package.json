@@ -34,7 +34,7 @@
   "scripts": {
     "prepublish": "npm run compile",
     "pack": "echo \"not necessary\"",
-    "test": "echo \"not necessary\"",
+    "test": "shx echo \"not necessary\"",
     "compile": "shx rm -rf lib/ && tsc"
   },
   "directories": {
