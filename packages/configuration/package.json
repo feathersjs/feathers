@@ -44,7 +44,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "NODE_CONFIG_DIR=./test/config mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "cross-env NODE_CONFIG_DIR=./test/config mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
   },
   "semistandard": {
     "env": [
@@ -67,6 +67,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.6",
+    "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
