@@ -56,8 +56,8 @@
     "@feathersjs/socketio-client": "^5.0.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
     "@feathersjs/express": "^5.0.21",
     "@feathersjs/memory": "^5.0.21",
     "@feathersjs/socketio": "^5.0.21",

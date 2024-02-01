@@ -19,9 +19,9 @@
     "vue": "^3.4.15"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.20",
+    "@feathersjs/generators": "^5.0.21",
     "@iconify-json/carbon": "^1.1.28",
-    "@types/node": "^20.11.6",
+    "@types/node": "^20.11.14",
     "@unocss/preset-typography": "^0.58.4",
     "@unocss/reset": "^0.58.4",
     "@unocss/transformer-directives": "^0.58.4",
@@ -36,7 +36,7 @@
     "unocss": "^0.58.4",
     "unplugin-auto-import": "^0.17.5",
     "unplugin-vue-components": "^0.26.0",
-    "vite-plugin-pwa": "^0.17.4",
+    "vite-plugin-pwa": "^0.17.5",
     "vitepress": "^1.0.0-rc.40",
     "vitepress-plugin-google-analytics": "^1.0.2",
     "vitepress-plugin-search": "^1.0.4-alpha.22",
