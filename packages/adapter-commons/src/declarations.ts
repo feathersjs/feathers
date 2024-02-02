@@ -93,9 +93,11 @@ export interface InternalServiceMethods<
    *
    * @param _params - Service call parameters {@link Params}
    */
-  _find(_params?: Params & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
-  _find(_params?: Params & { paginate: false }): Promise<Result[]>
-  _find(params?: Params): Promise<Result[] | Paginated<Result>>
+  _find(_params?: Params & { paginate: PaginationOptions }): Promise<Paginated<Result>>
+  _find(_params?: Params & { paginate?: false }): Promise<Result[]>
+  _find(
+    params?: (Params & { paginate: PaginationOptions }) | (Params & { paginate?: false })
+  ): Promise<Result[] | Paginated<Result>>
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.

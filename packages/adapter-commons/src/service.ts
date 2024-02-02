@@ -119,9 +119,11 @@ export abstract class AdapterBase<
    *
    * @param _params - Service call parameters {@link ServiceParams}
    */
-  abstract _find(_params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
-  abstract _find(_params?: ServiceParams & { paginate: false }): Promise<Result[]>
-  abstract _find(params?: ServiceParams): Promise<Result[] | Paginated<Result>>
+  abstract _find(_params?: ServiceParams & { paginate: PaginationOptions }): Promise<Paginated<Result>>
+  abstract _find(_params?: ServiceParams & { paginate?: false }): Promise<Result[]>
+  abstract _find(
+    params?: (ServiceParams & { paginate: PaginationOptions }) | (ServiceParams & { paginate?: false })
+  ): Promise<Result[] | Paginated<Result>>
 
   /**
    * Retrieve a single resource matching the given ID, skipping any service-level hooks.

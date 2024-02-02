@@ -161,10 +161,11 @@ export class KnexAdapter<
     }
   }
 
-  async _find(params?: ServiceParams & { paginate?: PaginationOptions }): Promise<Paginated<Result>>
-  async _find(params?: ServiceParams & { paginate: false }): Promise<Result[]>
-  async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
-  async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
+  async _find(params?: ServiceParams & { paginate: PaginationOptions }): Promise<Paginated<Result>>
+  async _find(params?: ServiceParams & { paginate?: false }): Promise<Result[]>
+  async _find(
+    params?: (ServiceParams & { paginate: PaginationOptions }) | (ServiceParams & { paginate?: false })
+  ): Promise<Paginated<Result> | Result[]> {
     const { filters, paginate } = this.filterQuery(params)
     const { name, id } = this.getOptions(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)

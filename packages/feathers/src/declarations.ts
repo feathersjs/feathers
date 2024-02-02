@@ -340,7 +340,7 @@ export interface PaginationOptions {
   max?: number
 }
 
-export type PaginationParams = false | PaginationOptions
+export type PaginationParams = PaginationOptions
 
 export interface Http {
   /**
