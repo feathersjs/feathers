@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.22](https://github.com/feathersjs/feathers/compare/v5.0.21...v5.0.22) (2024-02-15)
+
+### Bug Fixes
+
+- **knex:** Fix Knex adapter date comparison queries ([#3429](https://github.com/feathersjs/feathers/issues/3429)) ([23bafe1](https://github.com/feathersjs/feathers/commit/23bafe1204f79ce2ab0eaaa5544fab1a3ffb5f41))
+
 ## [5.0.21](https://github.com/feathersjs/feathers/compare/v5.0.20...v5.0.21) (2024-01-25)
 
 **Note:** Version bump only for package feathers
