@@ -86,7 +86,7 @@ export class KnexAdapter<
     return Object.keys(query || {}).reduce((currentQuery, key) => {
       const value = query[key]
 
-      if (_.isObject(value)) {
+      if (_.isObject(value) && !(value instanceof Date)) {
         return knexify(currentQuery, value, key)
       }
 
