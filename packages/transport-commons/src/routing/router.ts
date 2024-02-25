@@ -57,6 +57,7 @@ export class RouteNode<T = any> {
 
   remove(path: string[]) {
     if (path.length === this.depth) {
+      delete this.data
       return
     }
 
