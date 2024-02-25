@@ -64,7 +64,7 @@
     "@feathersjs/memory": "^5.0.22",
     "@feathersjs/tests": "^5.0.22",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.11.20",
     "@types/node-fetch": "^2.6.11",
     "@types/qs": "^6.9.11",
     "axios": "^1.6.7",
