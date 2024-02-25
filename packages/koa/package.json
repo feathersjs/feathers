@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/koa",
   "description": "Feathers KoaJS framework bindings and REST provider",
-  "version": "5.0.22",
+  "version": "5.0.23",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -49,11 +49,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.22",
-    "@feathersjs/commons": "^5.0.22",
-    "@feathersjs/errors": "^5.0.22",
-    "@feathersjs/feathers": "^5.0.22",
-    "@feathersjs/transport-commons": "^5.0.22",
+    "@feathersjs/authentication": "^5.0.23",
+    "@feathersjs/commons": "^5.0.23",
+    "@feathersjs/errors": "^5.0.23",
+    "@feathersjs/feathers": "^5.0.23",
+    "@feathersjs/transport-commons": "^5.0.23",
     "@koa/cors": "^5.0.0",
     "@types/koa": "^2.15.0",
     "@types/koa-qs": "^2.0.3",
@@ -66,9 +66,9 @@
     "koa-static": "^5.0.0"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.22",
-    "@feathersjs/memory": "^5.0.22",
-    "@feathersjs/tests": "^5.0.22",
+    "@feathersjs/authentication-local": "^5.0.23",
+    "@feathersjs/memory": "^5.0.23",
+    "@feathersjs/tests": "^5.0.23",
     "@types/koa-compose": "^3.2.8",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.20",
