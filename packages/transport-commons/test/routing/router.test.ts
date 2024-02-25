@@ -125,7 +125,7 @@ describe('router', () => {
     r.insert('/hello', 'one')
     r.insert('/hello/world', 'else')
 
-    assert.deepStrictEqual(r.lookup('hello'), { params: { }, data: 'one' })
+    assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'one' })
 
     r.remove('/hello')
 
@@ -133,7 +133,7 @@ describe('router', () => {
 
     r.insert('/hello', 'two')
 
-    assert.deepStrictEqual(r.lookup('hello'), { params: { }, data: 'two' })
+    assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'two' })
     assert.deepStrictEqual(r.lookup('hello/world'), { params: {}, data: 'else' })
   })
 })
