@@ -74,7 +74,7 @@
     "@types/koa-session": "^6.4.5",
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.20",
+    "@types/node": "^20.11.24",
     "@types/tough-cookie": "^4.0.5",
     "axios": "^1.6.7",
     "mocha": "^10.3.0",

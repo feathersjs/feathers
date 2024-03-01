@@ -76,7 +76,7 @@
     "@feathersjs/transport-commons": "^5.0.23",
     "@feathersjs/typebox": "^5.0.23",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.20",
+    "@types/node": "^20.11.24",
     "@types/prettier": "^2.7.3",
     "axios": "^1.6.7",
     "mocha": "^10.3.0",
