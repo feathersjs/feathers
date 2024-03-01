@@ -302,10 +302,46 @@ describe('client', () => {
       callback(null, null, data)
     }
 
+    const errorCb = (
+      _path: any,
+      _data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, _data?: any) => void
+    ) => {
+      callback(null, new Error(), null)
+    }
+
+    const timeoutErrorCb = (
+      _path: any,
+      _data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, _data?: any) => void
+    ) => {
+      callback(new Error(), null, null)
+    }
+
     connection.once('create', dataCb)
 
-    const res = await service.create(testData)
+    let res = await service.create(testData)
 
     assert.ok(res.created)
+
+    connection.once('create', errorCb)
+
+    try {
+      res = await service.create(testData)
+      assert.fail('should not reach')
+    } catch (e) {
+      assert.ok(e instanceof Error)
+    }
+
+    connection.once('create', timeoutErrorCb)
+
+    try {
+      res = await service.create(testData)
+      assert.fail('should not reach')
+    } catch (e) {
+      assert.ok(e instanceof Error)
+    }
   })
 })
