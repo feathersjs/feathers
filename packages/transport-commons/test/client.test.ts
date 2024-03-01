@@ -288,4 +288,24 @@ describe('client', () => {
 
     assert.strictEqual(client.off('test'), client)
   })
+
+  it("handles socket.io's weird behavior with ackTimeout", async () => {
+    connection.flags = { timeout: 10000 }
+
+    const dataCb = (
+      _path: any,
+      data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, data?: any) => void
+    ) => {
+      data.created = true
+      callback(null, null, data)
+    }
+
+    connection.once('create', dataCb)
+
+    const res = await service.create(testData)
+
+    assert.ok(res.created)
+  })
 })
