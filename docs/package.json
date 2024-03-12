@@ -11,22 +11,22 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@vueuse/core": "^10.8.0",
-    "date-fns": "^3.3.1",
-    "element-plus": "^2.5.6",
-    "query-string": "^8.2.0",
+    "@vueuse/core": "^10.9.0",
+    "date-fns": "^3.4.0",
+    "element-plus": "^2.6.1",
+    "query-string": "^9.0.0",
     "shiki": "^1.1.7",
-    "vue": "^3.4.19"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.22",
-    "@iconify-json/carbon": "^1.1.30",
-    "@types/node": "^20.11.20",
+    "@feathersjs/generators": "^5.0.23",
+    "@iconify-json/carbon": "^1.1.31",
+    "@types/node": "^20.11.26",
     "@unocss/preset-typography": "^0.58.5",
     "@unocss/reset": "^0.58.5",
     "@unocss/transformer-directives": "^0.58.5",
     "@vitejs/plugin-vue": "^5.0.4",
-    "esno": "^4.0.0",
+    "esno": "^4.7.0",
     "fast-glob": "^3.3.2",
     "flexsearch": "^0.7.43",
     "https-localhost": "^4.7.1",
@@ -36,8 +36,8 @@
     "unocss": "^0.58.5",
     "unplugin-auto-import": "^0.17.5",
     "unplugin-vue-components": "^0.26.0",
-    "vite-plugin-pwa": "^0.19.0",
-    "vitepress": "^1.0.0-rc.44",
+    "vite-plugin-pwa": "^0.19.2",
+    "vitepress": "^1.0.0-rc.45",
     "vitepress-plugin-google-analytics": "^1.0.2",
     "vitepress-plugin-search": "^1.0.4-alpha.22",
     "workbox-window": "^7.0.0"
