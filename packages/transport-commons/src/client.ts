@@ -86,9 +86,17 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params>
         })
       }
       args.unshift(method, path)
-      args.push(function (error: any, data: any) {
-        return error ? reject(convert(error)) : resolve(data)
-      })
+
+      const socketTimeout = this.connection.flags?.timeout || this.connection._opts?.ackTimeout
+      if (socketTimeout !== undefined) {
+        args.push(function (timeoutError: any, error: any, data: any) {
+          return timeoutError || error ? reject(convert(timeoutError || error)) : resolve(data)
+        })
+      } else {
+        args.push(function (error: any, data: any) {
+          return error ? reject(convert(error)) : resolve(data)
+        })
+      }
 
       debug(`Sending socket.${this.method}`, args)
 
