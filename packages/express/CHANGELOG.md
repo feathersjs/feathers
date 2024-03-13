@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+**Note:** Version bump only for package @feathersjs/express
+
 ## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
 
 ### Bug Fixes

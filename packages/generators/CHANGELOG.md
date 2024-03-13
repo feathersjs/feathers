@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+### Bug Fixes
+
+- **generators:** Use module format for JS Knex migrations ([#3444](https://github.com/feathersjs/feathers/issues/3444)) ([3feaa71](https://github.com/feathersjs/feathers/commit/3feaa719443aa30b1121d928ba5b7b8f43837ffb))
+
 ## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
 
 ### Bug Fixes

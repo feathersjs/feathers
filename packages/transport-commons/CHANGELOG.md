@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+### Bug Fixes
+
+- **socketio:** Handle ackTimeout of socket.io ([#3437](https://github.com/feathersjs/feathers/issues/3437)) ([2642072](https://github.com/feathersjs/feathers/commit/26420721f3eb16f716a9e68ab3ed9f415bab7a9c))
+
 ## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
 
 ### Bug Fixes
