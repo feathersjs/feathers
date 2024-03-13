@@ -239,6 +239,6 @@ export const ObjectIdSchema = () =>
   ({
     anyOf: [
       { type: 'string', objectid: true },
-      { type: 'object', properties: {}, additionalProperties: false }
+      { type: 'object', properties: {}, additionalProperties: true }
     ]
   }) as const
