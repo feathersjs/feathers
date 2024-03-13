@@ -55,13 +55,13 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
     .then(renderSource(knexfile, toFile('knexfile')))
     .then(
       mergeJSON<ConnectionGeneratorContext>(
-        {
+        (ctx) => ({
           scripts: {
             migrate: 'knex migrate:latest',
-            'migrate:make': 'knex migrate:make',
+            'migrate:make': 'knex migrate:make' + ctx.language === 'js' ? ' -x mjs' : '',
             test: 'cross-env NODE_ENV=test npm run migrate && npm run mocha'
           }
-        },
+        }),
         toFile('package.json')
       )
     )
