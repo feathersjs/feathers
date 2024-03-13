@@ -197,4 +197,4 @@ export const querySyntax = <
 }
 
 export const ObjectIdSchema = () =>
-  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: false })])
+  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: true })])
