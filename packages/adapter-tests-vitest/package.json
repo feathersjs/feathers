@@ -53,7 +53,7 @@
     "@types/node": "^20.8.4",
     "shx": "^0.3.4",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.1.1"
   },
   "peerDependencies": {
     "vitest": "^0.34.0"

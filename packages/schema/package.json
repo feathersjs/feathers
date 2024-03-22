@@ -70,7 +70,7 @@
     "ajv-formats": "^2.1.1",
     "shx": "^0.3.4",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.1.1"
   },
   "peerDependencies": {
     "typescript": ">=5.2"

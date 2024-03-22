@@ -79,7 +79,7 @@
     "shx": "^0.3.4",
     "tough-cookie": "^4.1.3",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.1.1"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

@@ -53,6 +53,6 @@
     "npm-check-updates": "^16.14.5",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "vitest": "^1.1.1"
   }
 }
