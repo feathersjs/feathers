@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict'
 
-const { program } = require('../lib')
+import { program } from '../lib/index.js'
 
 program.parse()

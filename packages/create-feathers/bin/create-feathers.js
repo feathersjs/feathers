@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
-const path = require('path')
-const { existsSync } = require('fs')
-const { mkdir } = require('fs/promises')
-const { Command, commandRunner, chalk } = require('@feathersjs/cli')
+import path from 'path'
+import { existsSync } from 'fs'
+import { mkdir } from 'fs/promises'
+import { Command, commandRunner, chalk } from '@feathersjs/cli'
 
 const program = new Command()
 const generateApp = commandRunner('app')
@@ -21,7 +21,7 @@ ${chalk.grey('npm init feathers myapp')}
   .action(async (name, options) => {
     try {
       const cwd = path.join(process.cwd(), name)
-      
+
       if (existsSync(cwd)) {
         throw new Error(`Can not create Feathers application, the folder "${name}" already exists`)
       }

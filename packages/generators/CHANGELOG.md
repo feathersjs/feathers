@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+### Bug Fixes
+
+- **generators:** Use module format for JS Knex migrations ([#3444](https://github.com/feathersjs/feathers/issues/3444)) ([3feaa71](https://github.com/feathersjs/feathers/commit/3feaa719443aa30b1121d928ba5b7b8f43837ffb))
+
+## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
+
+### Bug Fixes
+
+- **core:** Update to latest feathersjs/hooks ([#3434](https://github.com/feathersjs/feathers/issues/3434)) ([1499ccc](https://github.com/feathersjs/feathers/commit/1499ccc41fb3ebba97b2c84e0cb19bc48ad3c651))
+
+## [5.0.22](https://github.com/feathersjs/feathers/compare/v5.0.21...v5.0.22) (2024-02-15)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.21](https://github.com/feathersjs/feathers/compare/v5.0.20...v5.0.21) (2024-01-25)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.20](https://github.com/feathersjs/feathers/compare/v5.0.19...v5.0.20) (2024-01-24)
+
+### Bug Fixes
+
+- **generators:** Use cross-platform ES module \_\_dirname ([#3402](https://github.com/feathersjs/feathers/issues/3402)) ([0ac4882](https://github.com/feathersjs/feathers/commit/0ac4882663bb6a78622be0d903ae6508ecb516ad))
+
+## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.18](https://github.com/feathersjs/feathers/compare/v5.0.17...v5.0.18) (2024-01-22)
+
+### Bug Fixes
+
+- **cli:** Another fix for CLI ES module loading ([#3397](https://github.com/feathersjs/feathers/issues/3397)) ([3cb3bc9](https://github.com/feathersjs/feathers/commit/3cb3bc9a32602d82193b781b583ed0f37044e778))
+
+## [5.0.17](https://github.com/feathersjs/feathers/compare/v5.0.16...v5.0.17) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.15](https://github.com/feathersjs/feathers/compare/v5.0.14...v5.0.15) (2024-01-22)
+
+### Bug Fixes
+
+- **generators:** Move generators and CLI to featherscloud/pinion ([#3386](https://github.com/feathersjs/feathers/issues/3386)) ([eb87c99](https://github.com/feathersjs/feathers/commit/eb87c9922db56c5610e5b808f3ffe033c830e2b2))
+
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **generators:** Harden mongodb.js to reliably extract database from any connection string ([#3264](https://github.com/feathersjs/feathers/issues/3264)) ([7b0f82c](https://github.com/feathersjs/feathers/commit/7b0f82c631ff5549cdc9a8e0ffcc705d067c2157))
+
+## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
+
+**Note:** Version bump only for package @feathersjs/generators
+
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **generators:** use `export type` vs `export` ([#3246](https://github.com/feathersjs/feathers/issues/3246)) ([82d30fd](https://github.com/feathersjs/feathers/commit/82d30fd37914e61935e068e89fc389f6bf47aaad))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes

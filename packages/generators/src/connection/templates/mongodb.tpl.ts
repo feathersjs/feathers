@@ -1,6 +1,6 @@
-import { generator, toFile, before, prepend, append } from '@feathershq/pinion'
-import { ConnectionGeneratorContext } from '../index'
-import { injectSource, renderSource } from '../../commons'
+import { toFile, before, prepend, append } from '@featherscloud/pinion'
+import { ConnectionGeneratorContext } from '../index.js'
+import { injectSource, renderSource } from '../../commons.js'
 
 const template = ({
   database
@@ -37,7 +37,7 @@ const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
 const toValidatorFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'validators'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       renderSource(
         template,

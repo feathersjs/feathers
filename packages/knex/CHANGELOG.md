@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
+
+### Bug Fixes
+
+- **core:** Update to latest feathersjs/hooks ([#3434](https://github.com/feathersjs/feathers/issues/3434)) ([1499ccc](https://github.com/feathersjs/feathers/commit/1499ccc41fb3ebba97b2c84e0cb19bc48ad3c651))
+
+## [5.0.22](https://github.com/feathersjs/feathers/compare/v5.0.21...v5.0.22) (2024-02-15)
+
+### Bug Fixes
+
+- **knex:** Fix Knex adapter date comparison queries ([#3429](https://github.com/feathersjs/feathers/issues/3429)) ([23bafe1](https://github.com/feathersjs/feathers/commit/23bafe1204f79ce2ab0eaaa5544fab1a3ffb5f41))
+
+## [5.0.21](https://github.com/feathersjs/feathers/compare/v5.0.20...v5.0.21) (2024-01-25)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.20](https://github.com/feathersjs/feathers/compare/v5.0.19...v5.0.20) (2024-01-24)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.18](https://github.com/feathersjs/feathers/compare/v5.0.17...v5.0.18) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.17](https://github.com/feathersjs/feathers/compare/v5.0.16...v5.0.17) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.15](https://github.com/feathersjs/feathers/compare/v5.0.14...v5.0.15) (2024-01-22)
+
+### Bug Fixes
+
+- **generators:** Move generators and CLI to featherscloud/pinion ([#3386](https://github.com/feathersjs/feathers/issues/3386)) ([eb87c99](https://github.com/feathersjs/feathers/commit/eb87c9922db56c5610e5b808f3ffe033c830e2b2))
+- **knex:** Add sqlite to returning clients ([#3389](https://github.com/feathersjs/feathers/issues/3389)) ([59fb40b](https://github.com/feathersjs/feathers/commit/59fb40b9eb34950ef2dd35b7de4762f224a171f1))
+
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **knex:** Add Error Handler to knex \_update function ([#3371](https://github.com/feathersjs/feathers/issues/3371)) ([210f103](https://github.com/feathersjs/feathers/commit/210f1037bf69c641d4fd335cd4f084cbbac0a922))
+
+## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- allow \_patch to modify the entire base schema ([#3300](https://github.com/feathersjs/feathers/issues/3300)) ([0f41622](https://github.com/feathersjs/feathers/commit/0f41622307589b3a0b62ac411a73e6a601bda171))
+- **knex:** Add includeTriggerModifications for MSSQL support ([#3355](https://github.com/feathersjs/feathers/issues/3355)) ([cbe44b0](https://github.com/feathersjs/feathers/commit/cbe44b0e91506ab06c86355af67f83d5197bd896))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes

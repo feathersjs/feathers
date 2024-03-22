@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests with mocha",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,12 +52,13 @@
     "@feathersjs/feathers": "^5.0.24",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.30",
-    "mocha": "^10.2.0",
+    "mocha": "^10.3.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },
   "peerDependencies": {
-    "mocha": "^10.3.0"
+    "mocha": "^10.3.0",
+    "typescript": "^5.4.2"
   }
 }

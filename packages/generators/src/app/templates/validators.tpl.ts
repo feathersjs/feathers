@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const validatorTemplate = /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/validators.html
 import { Ajv, addFormats } from '@feathersjs/schema'
@@ -31,7 +31,7 @@ export const queryValidator: Ajv = addFormats(new Ajv({
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     renderSource(
       validatorTemplate,
       toFile<AppGeneratorContext>(({ lib }) => lib, 'validators')

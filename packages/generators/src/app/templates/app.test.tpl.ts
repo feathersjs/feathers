@@ -1,6 +1,6 @@
-import { generator, toFile } from '@feathershq/pinion'
-import { renderSource } from '../../commons'
-import { AppGeneratorContext } from '../index'
+import { toFile } from '@featherscloud/pinion'
+import { renderSource } from '../../commons.js'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({
   lib
@@ -47,4 +47,4 @@ describe('Feathers application tests', () => {
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(renderSource(template, toFile('test', 'app.test')))
+  Promise.resolve(ctx).then(renderSource(template, toFile('test', 'app.test')))

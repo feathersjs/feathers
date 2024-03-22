@@ -158,7 +158,7 @@ app.service('users').hooks({
 
 ### passwordHash
 
-The `passwordHash` utility provides a [property resolver function](../schema//resolvers.md#property-resolvers) that uses a local strategy to securely [hash the password](#hashpassword-password) before storing it in the database. The following options are available:
+The `passwordHash` utility provides a [property resolver function](../schema/resolvers.md#property-resolvers) that uses a local strategy to securely [hash the password](#hashpassword-password) before storing it in the database. The following options are available:
 
 - `strategy` - The name of the local strategy (usually `'local'`)
 - `service` - The path of the authentication service (will use `app.get('defaultAuthentication')` by default)

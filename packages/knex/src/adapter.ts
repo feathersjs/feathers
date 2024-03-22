@@ -24,7 +24,7 @@ const OPERATORS = {
   $ilike: 'ilike'
 }
 
-const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql']
+const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql', 'sqlite3']
 
 export class KnexAdapter<
   Result,
@@ -86,7 +86,7 @@ export class KnexAdapter<
     return Object.keys(query || {}).reduce((currentQuery, key) => {
       const value = query[key]
 
-      if (_.isObject(value)) {
+      if (_.isObject(value) && !(value instanceof Date)) {
         return knexify(currentQuery, value, key)
       }
 
@@ -241,7 +241,9 @@ export class KnexAdapter<
 
     const { client } = this.db(params).client.config
     const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
-    const rows: any = await this.db(params).insert(data, returning).catch(errorHandler)
+    const rows: any = await this.db(params)
+      .insert(data, returning, { includeTriggerModifications: true })
+      .catch(errorHandler)
     const id = data[this.id] || rows[0][this.id] || rows[0]
 
     if (!id) {
@@ -289,7 +291,7 @@ export class KnexAdapter<
     }
     const builder = this.createQuery(updateParams)
 
-    await builder.update(data)
+    await builder.update(data, [], { includeTriggerModifications: true })
 
     const items = await this._findOrGet(null, updateParams)
 
@@ -320,7 +322,10 @@ export class KnexAdapter<
       return result
     }, {})
 
-    await this.db(params).update(newObject, '*').where(this.id, id)
+    await this.db(params)
+      .update(newObject, '*', { includeTriggerModifications: true })
+      .where(this.id, id)
+      .catch(errorHandler)
 
     return this._get(id, params)
   }
@@ -343,7 +348,7 @@ export class KnexAdapter<
     // build up the knex query out of the query params
     this.knexify(q, query)
 
-    await q.del().catch(errorHandler)
+    await q.delete([], { includeTriggerModifications: true }).catch(errorHandler)
 
     if (id !== null) {
       if (items.length === 1) {

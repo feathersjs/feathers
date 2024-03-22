@@ -90,7 +90,7 @@ export const resolveResult = <H extends HookContext>(...resolvers: Resolver<any,
       resolve,
       query: {
         ...query,
-        ...(!hasVirtualSelects ? { $select } : {})
+        ...(!!$select && !hasVirtualSelects ? { $select } : {})
       }
     }
 
@@ -157,6 +157,12 @@ export const resolveExternal =
       const status = context.params.resolve
       const { isPaginated, data } = getResult(context)
       const resolveAndGetDispatch = async (current: any) => {
+        const currentExistingDispatch = getDispatch(current)
+
+        if (currentExistingDispatch !== null) {
+          return currentExistingDispatch
+        }
+
         const resolved = await runResolvers(resolvers, current, context, status)
         const currentDispatch = Object.keys(resolved).reduce(
           (res, key) => {

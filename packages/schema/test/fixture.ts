@@ -17,7 +17,8 @@ import {
   FromSchema,
   getValidator,
   getDataValidator,
-  virtual
+  virtual,
+  resolveExternal
 } from '../src'
 
 const fixtureAjv = new Ajv({
@@ -198,6 +199,13 @@ class MessageService extends MemoryService<Message, MessageData, ServiceParams> 
   }
 }
 
+const findResult = { message: 'Hello' }
+class CustomService {
+  async find() {
+    return [findResult]
+  }
+}
+
 const customMethodDataResolver = resolve<any, HookContext<Application>>({
   properties: {
     userId: async () => 0,
@@ -209,6 +217,7 @@ type ServiceTypes = {
   users: MemoryService<User, UserData, ServiceParams>
   messages: MessageService
   paginatedMessages: MemoryService<Message, MessageData, ServiceParams>
+  custom: CustomService
 }
 type Application = FeathersApplication<ServiceTypes>
 
@@ -223,6 +232,14 @@ app.use(
 app.use('messages', new MessageService(), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
 })
+app.use('custom', new CustomService())
+
+app.service('custom').hooks({
+  around: {
+    all: [resolveExternal(resolve<any, HookContext<Application>>({}))]
+  }
+})
+
 app.use('paginatedMessages', memory({ paginate: { default: 10 } }))
 
 app.service('messages').hooks({

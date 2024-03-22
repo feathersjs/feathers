@@ -1,5 +1,5 @@
-import { generator, renderTemplate, toFile } from '@feathershq/pinion'
-import { AppGeneratorContext } from '../index'
+import { renderTemplate, toFile } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '../index.js'
 
 const template = ({ name, description }: AppGeneratorContext) => /* html */ `<!DOCTYPE html>
 <html lang="en">
@@ -41,4 +41,4 @@ const template = ({ name, description }: AppGeneratorContext) => /* html */ `<!D
 `
 
 export const generate = (ctx: AppGeneratorContext) =>
-  generator(ctx).then(renderTemplate(template, toFile('public', 'index.html')))
+  Promise.resolve(ctx).then(renderTemplate(template, toFile('public', 'index.html')))

@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/adapter-tests-vitest",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "description": "Feathers shared database adapter test suite with vitest",
   "homepage": "https://feathersjs.com",
   "keywords": [

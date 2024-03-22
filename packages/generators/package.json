@@ -1,6 +1,6 @@
 {
   "name": "@feathersjs/generators",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "description": "Feathers CLI core generators, powered by Pinion",
   "homepage": "https://feathersjs.com",
   "keywords": [
@@ -29,8 +29,9 @@
   "engines": {
     "node": ">= 16"
   },
-  "main": "lib/",
+  "main": "lib/index.js",
   "types": "lib/",
+  "type": "module",
   "files": [
     "CHANGELOG.md",
     "LICENSE",
@@ -52,8 +53,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathershq/pinion": "^0.3.5",
-    "chalk": "^4.0.1",
+    "@featherscloud/pinion": "^0.5.3",
+    "chalk": "^5.3.0",
     "lodash": "^4.17.21",
     "prettier": "^3.2.5",
     "typescript": "^5.4.3",

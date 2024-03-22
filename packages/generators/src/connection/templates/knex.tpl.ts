@@ -1,6 +1,6 @@
-import { generator, toFile, before, mergeJSON } from '@feathershq/pinion'
-import { ConnectionGeneratorContext } from '../index'
-import { injectSource, renderSource } from '../../commons'
+import { toFile, before, mergeJSON } from '@featherscloud/pinion'
+import { ConnectionGeneratorContext } from '../index.js'
+import { injectSource, renderSource } from '../../commons.js'
 import { mkdir } from 'fs/promises'
 import path from 'path'
 
@@ -45,7 +45,7 @@ const configureTemplate = ({ database }: ConnectionGeneratorContext) => `app.con
 const toAppFile = toFile<ConnectionGeneratorContext>(({ lib }) => [lib, 'app'])
 
 export const generate = (ctx: ConnectionGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       renderSource(
         template,
@@ -55,13 +55,13 @@ export const generate = (ctx: ConnectionGeneratorContext) =>
     .then(renderSource(knexfile, toFile('knexfile')))
     .then(
       mergeJSON<ConnectionGeneratorContext>(
-        {
+        (ctx) => ({
           scripts: {
             migrate: 'knex migrate:latest',
-            'migrate:make': 'knex migrate:make',
+            'migrate:make': 'knex migrate:make' + ctx.language === 'js' ? ' -x mjs' : '',
             test: 'cross-env NODE_ENV=test npm run migrate && npm run mocha'
           }
-        },
+        }),
         toFile('package.json')
       )
     )

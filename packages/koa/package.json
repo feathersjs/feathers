@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/koa",
   "description": "Feathers KoaJS framework bindings and REST provider",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -68,11 +68,12 @@
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.24",
     "@feathersjs/memory": "^5.0.24",
-    "@feathersjs/tests-vitest": "^5.0.11",
+    "@feathersjs/tests-vitest": "^5.0.24",
     "@types/koa-compose": "^3.2.8",
     "@types/node": "^20.11.30",
     "axios": "^1.6.8",
     "get-port": "^7.1.0",
+    "@feathersjs/tests": "^5.0.24",
     "shx": "^0.3.4",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"

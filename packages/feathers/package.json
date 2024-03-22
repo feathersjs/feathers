@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/feathers",
   "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "http://feathersjs.com",
   "repository": {
     "type": "git",
@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "mocha": "^10.3.0",
     "shx": "^0.3.4",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"

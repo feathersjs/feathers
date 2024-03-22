@@ -1,9 +1,9 @@
 import crypto from 'crypto'
-import { generator, toFile, mergeJSON } from '@feathershq/pinion'
-import { AuthenticationGeneratorContext } from '../index'
+import { toFile, mergeJSON } from '@featherscloud/pinion'
+import { AuthenticationGeneratorContext } from '../index.js'
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(
       mergeJSON<AuthenticationGeneratorContext>(
         ({ authStrategies }) => {

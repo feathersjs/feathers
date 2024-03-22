@@ -1,11 +1,12 @@
 {
   "name": "create-feathers",
   "description": "Create a new Feathers application",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "https://feathersjs.com",
   "bin": {
-    "create-feathers": "./bin/create-feathers"
+    "create-feathers": "./bin/create-feathers.js"
   },
+  "type": "module",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -29,7 +30,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 18"
   },
   "files": [
     "CHANGELOG.md",
@@ -41,7 +42,7 @@
     "*.js"
   ],
   "scripts": {
-    "test": "echo \"No tests necessary\""
+    "test": "bin/create-feathers.js --help"
   },
   "publishConfig": {
     "access": "public"

@@ -292,4 +292,60 @@ describe('client', () => {
 
     assert.strictEqual(client.off('test'), client)
   })
+
+  it("handles socket.io's weird behavior with ackTimeout", async () => {
+    connection.flags = { timeout: 10000 }
+
+    const dataCb = (
+      _path: any,
+      data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, data?: any) => void
+    ) => {
+      data.created = true
+      callback(null, null, data)
+    }
+
+    const errorCb = (
+      _path: any,
+      _data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, _data?: any) => void
+    ) => {
+      callback(null, new Error(), null)
+    }
+
+    const timeoutErrorCb = (
+      _path: any,
+      _data: any,
+      _params: any,
+      callback: (timeoutError: any, err: any, _data?: any) => void
+    ) => {
+      callback(new Error(), null, null)
+    }
+
+    connection.once('create', dataCb)
+
+    let res = await service.create(testData)
+
+    assert.ok(res.created)
+
+    connection.once('create', errorCb)
+
+    try {
+      res = await service.create(testData)
+      assert.fail('should not reach')
+    } catch (e) {
+      assert.ok(e instanceof Error)
+    }
+
+    connection.once('create', timeoutErrorCb)
+
+    try {
+      res = await service.create(testData)
+      assert.fail('should not reach')
+    } catch (e) {
+      assert.ok(e instanceof Error)
+    }
+  })
 })

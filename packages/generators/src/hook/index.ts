@@ -1,6 +1,11 @@
-import { generator, prompt, runGenerators } from '@feathershq/pinion'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { prompt, runGenerators } from '@featherscloud/pinion'
 import _ from 'lodash'
-import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons'
+import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons.js'
+
+// Set __dirname in es module
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface HookGeneratorContext extends FeathersBaseContext {
   name: string
@@ -10,7 +15,7 @@ export interface HookGeneratorContext extends FeathersBaseContext {
 }
 
 export const generate = (ctx: HookGeneratorContext) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(initializeBaseContext())
     .then(checkPreconditions())
     .then(

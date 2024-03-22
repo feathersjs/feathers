@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+### Bug Fixes
+
+- **generators:** Use module format for JS Knex migrations ([#3444](https://github.com/feathersjs/feathers/issues/3444)) ([3feaa71](https://github.com/feathersjs/feathers/commit/3feaa719443aa30b1121d928ba5b7b8f43837ffb))
+- **socketio:** Handle ackTimeout of socket.io ([#3437](https://github.com/feathersjs/feathers/issues/3437)) ([2642072](https://github.com/feathersjs/feathers/commit/26420721f3eb16f716a9e68ab3ed9f415bab7a9c))
+
+## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
+
+### Bug Fixes
+
+- **core:** Update to latest feathersjs/hooks ([#3434](https://github.com/feathersjs/feathers/issues/3434)) ([1499ccc](https://github.com/feathersjs/feathers/commit/1499ccc41fb3ebba97b2c84e0cb19bc48ad3c651))
+- **transport-commons:** Properly delete route data ([#3433](https://github.com/feathersjs/feathers/issues/3433)) ([af01bdb](https://github.com/feathersjs/feathers/commit/af01bdbe050dd428d6fffefa1874e9a6e4182bad))
+
+## [5.0.22](https://github.com/feathersjs/feathers/compare/v5.0.21...v5.0.22) (2024-02-15)
+
+### Bug Fixes
+
+- **knex:** Fix Knex adapter date comparison queries ([#3429](https://github.com/feathersjs/feathers/issues/3429)) ([23bafe1](https://github.com/feathersjs/feathers/commit/23bafe1204f79ce2ab0eaaa5544fab1a3ffb5f41))
+
+## [5.0.21](https://github.com/feathersjs/feathers/compare/v5.0.20...v5.0.21) (2024-01-25)
+
+**Note:** Version bump only for package feathers
+
+## [5.0.20](https://github.com/feathersjs/feathers/compare/v5.0.19...v5.0.20) (2024-01-24)
+
+### Bug Fixes
+
+- **generators:** Use cross-platform ES module \_\_dirname ([#3402](https://github.com/feathersjs/feathers/issues/3402)) ([0ac4882](https://github.com/feathersjs/feathers/commit/0ac4882663bb6a78622be0d903ae6508ecb516ad))
+
+## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
+
+### Bug Fixes
+
+- **cli:** Add JS extension to binaries ([#3398](https://github.com/feathersjs/feathers/issues/3398)) ([aaf181d](https://github.com/feathersjs/feathers/commit/aaf181d924d0cb67c7792a54197082c59109264d))
+
+## [5.0.18](https://github.com/feathersjs/feathers/compare/v5.0.17...v5.0.18) (2024-01-22)
+
+### Bug Fixes
+
+- **cli:** Another fix for CLI ES module loading ([#3397](https://github.com/feathersjs/feathers/issues/3397)) ([3cb3bc9](https://github.com/feathersjs/feathers/commit/3cb3bc9a32602d82193b781b583ed0f37044e778))
+
+## [5.0.17](https://github.com/feathersjs/feathers/compare/v5.0.16...v5.0.17) (2024-01-22)
+
+### Bug Fixes
+
+- **cli:** Fix another ES module issue ([#3395](https://github.com/feathersjs/feathers/issues/3395)) ([8e39884](https://github.com/feathersjs/feathers/commit/8e39884a23d0e7868546dce4f7a3ee6e954c2b31))
+
+## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
+
+### Bug Fixes
+
+- Update npm create feathers to ES module ([#3393](https://github.com/feathersjs/feathers/issues/3393)) ([314ce70](https://github.com/feathersjs/feathers/commit/314ce707332eadbea4505e5e7560397632da6205))
+
+## [5.0.15](https://github.com/feathersjs/feathers/compare/v5.0.14...v5.0.15) (2024-01-22)
+
+### Bug Fixes
+
+- **generators:** Move generators and CLI to featherscloud/pinion ([#3386](https://github.com/feathersjs/feathers/issues/3386)) ([eb87c99](https://github.com/feathersjs/feathers/commit/eb87c9922db56c5610e5b808f3ffe033c830e2b2))
+- **knex:** Add sqlite to returning clients ([#3389](https://github.com/feathersjs/feathers/issues/3389)) ([59fb40b](https://github.com/feathersjs/feathers/commit/59fb40b9eb34950ef2dd35b7de4762f224a171f1))
+
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **generators:** Harden mongodb.js to reliably extract database from any connection string ([#3264](https://github.com/feathersjs/feathers/issues/3264)) ([7b0f82c](https://github.com/feathersjs/feathers/commit/7b0f82c631ff5549cdc9a8e0ffcc705d067c2157))
+- **knex:** Add Error Handler to knex \_update function ([#3371](https://github.com/feathersjs/feathers/issues/3371)) ([210f103](https://github.com/feathersjs/feathers/commit/210f1037bf69c641d4fd335cd4f084cbbac0a922))
+- **schema:** Fix setting dispatch on existing nested objects ([#3380](https://github.com/feathersjs/feathers/issues/3380)) ([04efd5a](https://github.com/feathersjs/feathers/commit/04efd5ab3339beafa0e1a9ef851483a387c6ec96))
+
+## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
+
+**Note:** Version bump only for package feathers
+
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- allow \_patch to modify the entire base schema ([#3300](https://github.com/feathersjs/feathers/issues/3300)) ([0f41622](https://github.com/feathersjs/feathers/commit/0f41622307589b3a0b62ac411a73e6a601bda171))
+- **authentication-client:** Allow to abort fetch ([#3310](https://github.com/feathersjs/feathers/issues/3310)) ([ff3e104](https://github.com/feathersjs/feathers/commit/ff3e104b62d02d45261a293aff4e9491241f486f))
+- **express:** Re-export Router ([#3349](https://github.com/feathersjs/feathers/issues/3349)) ([0cbdb03](https://github.com/feathersjs/feathers/commit/0cbdb03a2d810f4855da9b21602c96e4fed7fce5))
+- **generators:** use `export type` vs `export` ([#3246](https://github.com/feathersjs/feathers/issues/3246)) ([82d30fd](https://github.com/feathersjs/feathers/commit/82d30fd37914e61935e068e89fc389f6bf47aaad))
+- **knex:** Add includeTriggerModifications for MSSQL support ([#3355](https://github.com/feathersjs/feathers/issues/3355)) ([cbe44b0](https://github.com/feathersjs/feathers/commit/cbe44b0e91506ab06c86355af67f83d5197bd896))
+- **schema:** Allow $in and $nin queries to work for arrays ([#3352](https://github.com/feathersjs/feathers/issues/3352)) ([677c214](https://github.com/feathersjs/feathers/commit/677c214a353a7f9a1f90649b9bbec4d0d6517a6f))
+- **schema:** Remove undefined $select when using resolveResult hook ([#3354](https://github.com/feathersjs/feathers/issues/3354)) ([c43e009](https://github.com/feathersjs/feathers/commit/c43e009188eb84f98e3f5f29ac4444e6967afc1f))
+- **transport-commons:** Allow case insensitive route lookups ([#3353](https://github.com/feathersjs/feathers/issues/3353)) ([a4a5ab6](https://github.com/feathersjs/feathers/commit/a4a5ab6cb59048176292cd71c04a32aa71ac4642))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes

@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.24](https://github.com/feathersjs/feathers/compare/v5.0.23...v5.0.24) (2024-03-13)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.23](https://github.com/feathersjs/feathers/compare/v5.0.22...v5.0.23) (2024-02-25)
+
+### Bug Fixes
+
+- **core:** Update to latest feathersjs/hooks ([#3434](https://github.com/feathersjs/feathers/issues/3434)) ([1499ccc](https://github.com/feathersjs/feathers/commit/1499ccc41fb3ebba97b2c84e0cb19bc48ad3c651))
+
+## [5.0.22](https://github.com/feathersjs/feathers/compare/v5.0.21...v5.0.22) (2024-02-15)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.21](https://github.com/feathersjs/feathers/compare/v5.0.20...v5.0.21) (2024-01-25)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.20](https://github.com/feathersjs/feathers/compare/v5.0.19...v5.0.20) (2024-01-24)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.19](https://github.com/feathersjs/feathers/compare/v5.0.18...v5.0.19) (2024-01-23)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.18](https://github.com/feathersjs/feathers/compare/v5.0.17...v5.0.18) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.17](https://github.com/feathersjs/feathers/compare/v5.0.16...v5.0.17) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.16](https://github.com/feathersjs/feathers/compare/v5.0.15...v5.0.16) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.15](https://github.com/feathersjs/feathers/compare/v5.0.14...v5.0.15) (2024-01-22)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.14](https://github.com/feathersjs/feathers/compare/v5.0.13...v5.0.14) (2024-01-05)
+
+### Bug Fixes
+
+- **schema:** Fix setting dispatch on existing nested objects ([#3380](https://github.com/feathersjs/feathers/issues/3380)) ([04efd5a](https://github.com/feathersjs/feathers/commit/04efd5ab3339beafa0e1a9ef851483a387c6ec96))
+
+## [5.0.13](https://github.com/feathersjs/feathers/compare/v5.0.12...v5.0.13) (2023-12-29)
+
+**Note:** Version bump only for package @feathersjs/schema
+
+## [5.0.12](https://github.com/feathersjs/feathers/compare/v5.0.11...v5.0.12) (2023-11-28)
+
+### Bug Fixes
+
+- **schema:** Allow $in and $nin queries to work for arrays ([#3352](https://github.com/feathersjs/feathers/issues/3352)) ([677c214](https://github.com/feathersjs/feathers/commit/677c214a353a7f9a1f90649b9bbec4d0d6517a6f))
+- **schema:** Remove undefined $select when using resolveResult hook ([#3354](https://github.com/feathersjs/feathers/issues/3354)) ([c43e009](https://github.com/feathersjs/feathers/commit/c43e009188eb84f98e3f5f29ac4444e6967afc1f))
+
 ## [5.0.11](https://github.com/feathersjs/feathers/compare/v5.0.10...v5.0.11) (2023-10-11)
 
 ### Bug Fixes

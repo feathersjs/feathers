@@ -187,6 +187,13 @@ describe('@feathersjs/schema/hooks', () => {
     })
   })
 
+  it('resolves safe dispatch with static data', async () => {
+    const service = app.service('custom')
+
+    await service.find()
+    assert.deepStrictEqual(await service.find(), [{ message: 'Hello' }])
+  })
+
   it('resolves data for custom methods', async () => {
     const result = await app.service('messages').customMethod({ message: 'Hello' })
     const user = {

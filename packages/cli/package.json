@@ -1,11 +1,12 @@
 {
   "name": "@feathersjs/cli",
   "description": "The command line interface for creating Feathers applications",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
+  "main": "lib/index.js",
+  "type": "module",
   "bin": {
-    "feathers": "./bin/feathers"
+    "feathers": "./bin/feathers.js"
   },
   "keywords": [
     "feathers",
@@ -46,14 +47,14 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "vitest": "vitest run",
-    "test": "npm run compile && npm run vitest"
+    "test": "npm run compile && npm run vitest && bin/feathers.js --help"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@feathersjs/generators": "^5.0.24",
-    "chalk": "^4.0.1",
+    "chalk": "^5.3.0",
     "commander": "^12.0.0"
   },
   "devDependencies": {

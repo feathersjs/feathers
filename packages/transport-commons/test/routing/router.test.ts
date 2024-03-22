@@ -118,4 +118,22 @@ describe('router', () => {
     r.remove('/hello/here/thing')
     assert.ok(!r.root.hasChildren)
   })
+
+  it('re-initialize a service with children. (#3432)', () => {
+    const r = new Router<string>()
+
+    r.insert('/hello', 'one')
+    r.insert('/hello/world', 'else')
+
+    assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'one' })
+
+    r.remove('/hello')
+
+    assert.deepStrictEqual(r.lookup('hello/world'), { params: {}, data: 'else' })
+
+    r.insert('/hello', 'two')
+
+    assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'two' })
+    assert.deepStrictEqual(r.lookup('hello/world'), { params: {}, data: 'else' })
+  })
 })

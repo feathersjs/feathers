@@ -110,8 +110,8 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
               $lt: def,
               $lte: def,
               $ne: def,
-              $in: Type.Array(def),
-              $nin: Type.Array(def)
+              $in: def.type === 'array' ? def : Type.Array(def),
+              $nin: def.type === 'array' ? def : Type.Array(def)
             }),
             Type.Object(extension)
           ],
@@ -197,4 +197,4 @@ export const querySyntax = <
 }
 
 export const ObjectIdSchema = () =>
-  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: false })])
+  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: true })])

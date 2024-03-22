@@ -1,7 +1,7 @@
-import { generator, toFile, when } from '@feathershq/pinion'
-import { fileExists, renderSource } from '../../commons'
-import { AuthenticationGeneratorContext } from '../index'
-import { localTemplate } from '../../commons'
+import { toFile, when } from '@featherscloud/pinion'
+import { fileExists, renderSource } from '../../commons.js'
+import { AuthenticationGeneratorContext } from '../index.js'
+import { localTemplate } from '../../commons.js'
 
 const template = ({
   authStrategies,
@@ -66,7 +66,7 @@ describe('application client tests', () => {
 `
 
 export const generate = (ctx: AuthenticationGeneratorContext) =>
-  generator(ctx).then(
+  Promise.resolve(ctx).then(
     when<AuthenticationGeneratorContext>(
       ({ lib, language }) => fileExists(lib, `client.${language}`),
       renderSource(

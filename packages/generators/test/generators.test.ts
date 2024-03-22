@@ -3,7 +3,7 @@ import os from 'os'
 import path from 'path'
 import { mkdtemp } from 'fs/promises'
 import assert from 'assert'
-import { getContext } from '@feathershq/pinion'
+import { getContext } from '@featherscloud/pinion'
 
 import { AppGeneratorContext } from '../src/app'
 import { FeathersBaseContext } from '../src/commons'
@@ -15,8 +15,8 @@ import { generate as generateApp } from '../lib/app'
 import { generate as generateConnection } from '../lib/connection'
 import { generate as generateAuthentication } from '../lib/authentication'
 import { generate as generateService } from '../lib/service'
-import { listAllFiles } from '@feathershq/pinion/lib/utils'
-import { AuthenticationGeneratorArguments } from '../src/authentication'
+import { listAllFiles } from '@featherscloud/pinion/lib/utils'
+import { AuthenticationGeneratorArguments } from '../lib/authentication'
 
 const matrix = {
   language: ['js', 'ts'] as const,

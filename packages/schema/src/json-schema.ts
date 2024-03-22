@@ -112,14 +112,20 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
           $lt: definition,
           $lte: definition,
           $ne: definition,
-          $in: {
-            type: 'array',
-            items: definition
-          },
-          $nin: {
-            type: 'array',
-            items: definition
-          },
+          $in:
+            definition.type === 'array'
+              ? definition
+              : {
+                  type: 'array',
+                  items: definition
+                },
+          $nin:
+            definition.type === 'array'
+              ? definition
+              : {
+                  type: 'array',
+                  items: definition
+                },
           ...extensions
         }
       }
@@ -233,6 +239,6 @@ export const ObjectIdSchema = () =>
   ({
     anyOf: [
       { type: 'string', objectid: true },
-      { type: 'object', properties: {}, additionalProperties: false }
+      { type: 'object', properties: {}, additionalProperties: true }
     ]
   }) as const

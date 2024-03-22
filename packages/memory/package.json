@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/memory",
   "description": "An in memory service store",
-  "version": "5.0.11",
+  "version": "5.0.24",
   "homepage": "https://github.com/feathersjs/feathers",
   "main": "lib/",
   "types": "lib/",
@@ -55,9 +55,10 @@
     "sift": "^17.0.1"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests-vitest": "^5.0.11",
+    "@feathersjs/adapter-tests-vitest": "^5.0.24",
     "@feathersjs/feathers": "^5.0.24",
     "@types/node": "^20.11.30",
+    "@feathersjs/adapter-tests": "^5.0.24",
     "shx": "^0.3.4",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"

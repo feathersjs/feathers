@@ -1,5 +1,8 @@
+import { dirname } from 'path'
 import _ from 'lodash'
-import { generator, runGenerator, runGenerators, prompt } from '@feathershq/pinion'
+import { runGenerator, runGenerators, prompt } from '@featherscloud/pinion'
+import { fileURLToPath } from 'url'
+import chalk from 'chalk'
 
 import {
   checkPreconditions,
@@ -8,8 +11,10 @@ import {
   fileExists,
   getDatabaseAdapter,
   initializeBaseContext
-} from '../commons'
-import chalk from 'chalk'
+} from '../commons.js'
+
+// Set __dirname in es module
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface ServiceGeneratorContext extends FeathersBaseContext {
   /**
@@ -83,104 +88,102 @@ export type ServiceGeneratorArguments = FeathersBaseContext &
   >
 
 export const generate = (ctx: ServiceGeneratorArguments) =>
-  generator(ctx)
+  Promise.resolve(ctx)
     .then(initializeBaseContext())
     .then(checkPreconditions())
     .then(
-      prompt<ServiceGeneratorArguments, ServiceGeneratorContext>(
-        ({ name, path, type, schema, authentication, isEntityService, feathers, lib, language }) => {
-          const sqlDisabled = DATABASE_TYPES.every(
-            (name) => name === 'mongodb' || name === 'other' || !fileExists(lib, `${name}.${language}`)
-          )
-          const mongodbDisabled = !fileExists(lib, `mongodb.${language}`)
+      prompt(({ name, path, type, schema, authentication, isEntityService, feathers, lib, language }) => {
+        const sqlDisabled = DATABASE_TYPES.every(
+          (name) => name === 'mongodb' || name === 'other' || !fileExists(lib, `${name}.${language}`)
+        )
+        const mongodbDisabled = !fileExists(lib, `mongodb.${language}`)
 
-          return [
-            {
-              name: 'name',
-              type: 'input',
-              when: !name,
-              message: 'What is the name of your service?',
-              validate: (input) => {
-                if (!input || input === 'authentication') {
-                  return 'Invalid service name'
-                }
-
-                return true
+        return [
+          {
+            name: 'name',
+            type: 'input',
+            when: !name,
+            message: 'What is the name of your service?',
+            validate: (input: any) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service name'
               }
-            },
-            {
-              name: 'path',
-              type: 'input',
-              when: !path,
-              message: 'Which path should the service be registered on?',
-              default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`,
-              validate: (input) => {
-                if (!input || input === 'authentication') {
-                  return 'Invalid service path'
-                }
 
-                return true
-              }
-            },
-            {
-              name: 'authentication',
-              type: 'confirm',
-              when: authentication === undefined && !isEntityService,
-              message: 'Does this service require authentication?'
-            },
-            {
-              name: 'type',
-              type: 'list',
-              when: !type,
-              message: 'What database is the service using?',
-              default: getDatabaseAdapter(feathers?.database),
-              choices: [
-                {
-                  value: 'knex',
-                  name: `SQL${sqlDisabled ? chalk.gray(' (connection not available)') : ''}`,
-                  disabled: sqlDisabled
-                },
-                {
-                  value: 'mongodb',
-                  name: `MongoDB${mongodbDisabled ? chalk.gray(' (connection not available)') : ''}`,
-                  disabled: mongodbDisabled
-                },
-                {
-                  value: 'custom',
-                  name: 'A custom service'
-                }
-              ]
-            },
-            {
-              name: 'schema',
-              type: 'list',
-              when: schema === undefined,
-              message: 'Which schema definition format do you want to use?',
-              suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
-              default: feathers?.schema,
-              choices: (answers: ServiceGeneratorContext) => [
-                {
-                  value: 'typebox',
-                  name: `TypeBox ${chalk.gray(' (recommended)')}`
-                },
-                {
-                  value: 'json',
-                  name: 'JSON schema'
-                },
-                {
-                  value: false,
-                  name: `No schema${
-                    answers.type !== 'custom' ? chalk.gray(' (not recommended with a database)') : ''
-                  }`
-                }
-              ]
+              return true
             }
-          ]
-        }
-      )
+          },
+          {
+            name: 'path',
+            type: 'input',
+            when: !path,
+            message: 'Which path should the service be registered on?',
+            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`,
+            validate: (input: any) => {
+              if (!input || input === 'authentication') {
+                return 'Invalid service path'
+              }
+
+              return true
+            }
+          },
+          {
+            name: 'authentication',
+            type: 'confirm',
+            when: authentication === undefined && !isEntityService,
+            message: 'Does this service require authentication?'
+          },
+          {
+            name: 'type',
+            type: 'list',
+            when: !type,
+            message: 'What database is the service using?',
+            default: getDatabaseAdapter(feathers?.database),
+            choices: [
+              {
+                value: 'knex',
+                name: `SQL${sqlDisabled ? chalk.gray(' (connection not available)') : ''}`,
+                disabled: sqlDisabled
+              },
+              {
+                value: 'mongodb',
+                name: `MongoDB${mongodbDisabled ? chalk.gray(' (connection not available)') : ''}`,
+                disabled: mongodbDisabled
+              },
+              {
+                value: 'custom',
+                name: 'A custom service'
+              }
+            ]
+          },
+          {
+            name: 'schema',
+            type: 'list',
+            when: schema === undefined,
+            message: 'Which schema definition format do you want to use?',
+            suffix: chalk.grey(' Schemas allow to type, validate, secure and populate data'),
+            default: feathers?.schema,
+            choices: (answers: ServiceGeneratorContext) => [
+              {
+                value: 'typebox',
+                name: `TypeBox ${chalk.gray(' (recommended)')}`
+              },
+              {
+                value: 'json',
+                name: 'JSON schema'
+              },
+              {
+                value: false,
+                name: `No schema${
+                  answers.type !== 'custom' ? chalk.gray(' (not recommended with a database)') : ''
+                }`
+              }
+            ]
+          }
+        ]
+      })
     )
     .then(async (ctx): Promise<ServiceGeneratorContext> => {
-      const { name, path, type, authStrategies = [] } = ctx
+      const { name, path, type, authStrategies = [] } = ctx as any as ServiceGeneratorContext
       const kebabName = _.kebabCase(name)
       const camelName = _.camelCase(name)
       const upperName = _.upperFirst(camelName)
@@ -205,7 +208,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
         relative,
         authStrategies,
         ...ctx
-      }
+      } as ServiceGeneratorContext
     })
     .then(runGenerators<ServiceGeneratorContext>(__dirname, 'templates'))
-    .then(runGenerator<ServiceGeneratorContext>(__dirname, 'type', ({ type }) => `${type}.tpl`))
+    .then(runGenerator<ServiceGeneratorContext>(__dirname, 'type', ({ type }) => `${type}.tpl.js`))

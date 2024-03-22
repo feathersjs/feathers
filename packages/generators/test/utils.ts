@@ -3,6 +3,9 @@ import pkg from '../package.json'
 import { DependencyVersions } from '../src/commons'
 import { readFileSync } from 'fs'
 
+// Set __dirname in es module
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+
 export function combinate<O extends Record<string | number, any[]>>(obj: O) {
   let combos: { [k in keyof O]: O[k][number] }[] = []
   for (const key of Object.keys(obj)) {

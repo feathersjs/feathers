@@ -68,16 +68,20 @@ Next, we create a hook called `allow-anonymous` that sets `params.authentication
 import { Hook, HookContext } from '@feathersjs/feathers';
 
 export default (): Hook => {
-  return async (context: HookContext) => {
+  return async (context: HookContext, next?: NextFunction) => {
     const { params } = context;
 
-    if(params.provider && !params.authentication) {
+    if (params.provider && !params.authentication) {
       context.params = {
         ...params,
         authentication: {
           strategy: 'anonymous'
         }
       }
+    }
+
+    if (next) {
+      await next();
     }
 
     return context;
