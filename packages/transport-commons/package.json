@@ -54,19 +54,19 @@
     "*.js"
   ],
   "dependencies": {
-    "@feathersjs/commons": "^5.0.11",
-    "@feathersjs/errors": "^5.0.11",
-    "@feathersjs/feathers": "^5.0.11",
+    "@feathersjs/commons": "^5.0.24",
+    "@feathersjs/errors": "^5.0.24",
+    "@feathersjs/feathers": "^5.0.24",
     "encodeurl": "^1.0.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/encodeurl": "^1.0.0",
-    "@types/lodash": "^4.14.199",
-    "@types/node": "^20.8.4",
+    "@types/encodeurl": "^1.0.2",
+    "@types/lodash": "^4.17.0",
+    "@types/node": "^20.11.30",
     "shx": "^0.3.4",
-    "typescript": "^5.2.2",
-    "vitest": "^1.1.1"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

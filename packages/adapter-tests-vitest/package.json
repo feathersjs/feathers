@@ -50,13 +50,13 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^20.8.4",
+    "@types/node": "^20.11.30",
     "shx": "^0.3.4",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.3",
     "vitest": "^1.1.1"
   },
   "peerDependencies": {
-    "vitest": "^0.34.0"
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
