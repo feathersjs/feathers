@@ -78,6 +78,7 @@
     "axios": "^1.6.8",
     "shx": "^0.3.4",
     "tough-cookie": "^4.1.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },

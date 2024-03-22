@@ -58,9 +58,7 @@
     "@sinclair/typebox": "^0.25.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.26",
-    "mocha": "^10.3.0",
     "shx": "^0.3.4",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
