@@ -719,8 +719,8 @@ describe('Feathers Knex Service', () => {
       assert.deepStrictEqual(got, todo)
       assert.deepStrictEqual(found, todo)
 
-      peopleService.remove(dave.id)
-      todoService.remove(todo.id)
+      await todoService.remove(todo.id)
+      await peopleService.remove(dave.id)
     })
   })
 
