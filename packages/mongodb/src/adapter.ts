@@ -7,13 +7,15 @@ import {
   DeleteOptions,
   CountDocumentsOptions,
   ReplaceOptions,
-  Document
+  FindOneAndReplaceOptions,
+  FindOneAndUpdateOptions,
+  Document,
+  FindOneAndDeleteOptions
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
 import {
   AdapterBase,
-  select,
   AdapterParams,
   AdapterServiceOptions,
   PaginationOptions,
@@ -39,6 +41,8 @@ export interface MongoDBAdapterParams<Q = AdapterQuery>
     | DeleteOptions
     | CountDocumentsOptions
     | ReplaceOptions
+    | FindOneAndReplaceOptions
+    | FindOneAndDeleteOptions
 }
 
 export type AdapterId = Id | ObjectId
@@ -103,14 +107,14 @@ export class MongoDbAdapter<
   async findRaw(params: ServiceParams) {
     const { filters, query } = this.filterQuery(null, params)
     const model = await this.getModel(params)
-    const q = model.find(query, { ...params.mongodb })
-
-    if (filters.$select !== undefined) {
-      q.project(this.getSelect(filters.$select))
-    }
+    const q = model.find(query, params.mongodb)
 
     if (filters.$sort !== undefined) {
       q.sort(filters.$sort)
+    }
+
+    if (filters.$select !== undefined) {
+      q.project(this.getProjection(filters.$select))
     }
 
     if (filters.$skip !== undefined) {
@@ -124,6 +128,7 @@ export class MongoDbAdapter<
     return q
   }
 
+  /* TODO: Remove $out and $merge stages, else it returns an empty cursor. I think its safe to assume this is primarily for querying. */
   async aggregateRaw(params: ServiceParams) {
     const model = await this.getModel(params)
     const pipeline = params.pipeline || []
@@ -132,19 +137,19 @@ export class MongoDbAdapter<
     const feathersPipeline = this.makeFeathersPipeline(params)
     const after = index >= 0 ? pipeline.slice(index + 1) : pipeline
 
-    return model.aggregate([...before, ...feathersPipeline, ...after])
+    return model.aggregate([...before, ...feathersPipeline, ...after], params.mongodb)
   }
 
   makeFeathersPipeline(params: ServiceParams) {
     const { filters, query } = this.filterQuery(null, params)
     const pipeline: Document[] = [{ $match: query }]
 
-    if (filters.$select !== undefined) {
-      pipeline.push({ $project: this.getSelect(filters.$select) })
-    }
-
     if (filters.$sort !== undefined) {
       pipeline.push({ $sort: filters.$sort })
+    }
+
+    if (filters.$select !== undefined) {
+      pipeline.push({ $project: this.getProjection(filters.$select) })
     }
 
     if (filters.$skip !== undefined) {
@@ -154,10 +159,14 @@ export class MongoDbAdapter<
     if (filters.$limit !== undefined) {
       pipeline.push({ $limit: filters.$limit })
     }
+
     return pipeline
   }
 
-  getSelect(select: string[] | { [key: string]: number }) {
+  getProjection(select?: string[] | { [key: string]: number }) {
+    if (!select) {
+      return undefined
+    }
     if (Array.isArray(select)) {
       if (!select.includes(this.id)) {
         select = [this.id, ...select]
@@ -201,32 +210,76 @@ export class MongoDbAdapter<
     return data
   }
 
+  async countDocuments(params: ServiceParams) {
+    const { useEstimatedDocumentCount } = this.getOptions(params)
+    const { query } = this.filterQuery(null, params)
+
+    if (params.pipeline) {
+      const aggregateParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id],
+          $sort: undefined,
+          $skip: undefined,
+          $limit: undefined
+        }
+      }
+      const result = await this.aggregateRaw(aggregateParams).then((result) => result.toArray())
+      return result.length
+    }
+
+    const model = await this.getModel(params)
+
+    if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
+      return model.estimatedDocumentCount()
+    }
+
+    return model.countDocuments(query, params.mongodb)
+  }
+
   async _get(id: AdapterId, params: ServiceParams = {} as ServiceParams): Promise<Result> {
     const {
       query,
       filters: { $select }
     } = this.filterQuery(id, params)
-    const projection = $select
-      ? {
-          projection: {
-            ...this.getSelect($select),
-            [this.id]: 1
-          }
+
+    if (params.pipeline) {
+      const aggregateParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $limit: 1,
+          $and: (params.query.$and || []).concat({
+            [this.id]: this.getObjectId(id)
+          })
         }
-      : {}
+      }
+      return this.aggregateRaw(aggregateParams)
+        .then((result) => result.toArray())
+        .then(([result]) => {
+          if (result === undefined) {
+            throw new NotFound(`No record found for id '${id}'`)
+          }
+
+          return result
+        })
+        .catch(errorHandler)
+    }
+
     const findOptions: FindOptions = {
       ...params.mongodb,
-      ...projection
+      projection: this.getProjection($select)
     }
 
     return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
-      .then((data) => {
-        if (data == null) {
+      .then((result) => {
+        if (result == null) {
           throw new NotFound(`No record found for id '${id}'`)
         }
 
-        return data
+        return result
       })
       .catch(errorHandler)
   }
@@ -235,34 +288,40 @@ export class MongoDbAdapter<
   async _find(params?: ServiceParams & { paginate: false }): Promise<Result[]>
   async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
-    const { paginate, useEstimatedDocumentCount } = this.getOptions(params)
-    const { filters, query } = this.filterQuery(null, params)
-    const useAggregation = !params.mongodb && filters.$limit !== 0
-    const countDocuments = async () => {
-      if (paginate && paginate.default) {
-        const model = await this.getModel(params)
-        if (useEstimatedDocumentCount && typeof model.estimatedDocumentCount === 'function') {
-          return model.estimatedDocumentCount()
-        } else {
-          return model.countDocuments(query, { ...params.mongodb })
-        }
+    const { paginate } = this.getOptions(params)
+    const { filters } = this.filterQuery(null, params)
+    const paginationDisabled = params.paginate === false || !paginate || !paginate.default
+
+    const getData = () => {
+      const result = params.pipeline ? this.aggregateRaw(params) : this.findRaw(params)
+      return result.then((result) => result.toArray())
+    }
+
+    if (paginationDisabled) {
+      if (filters.$limit === 0) {
+        return [] as Result[]
       }
-      return Promise.resolve(0)
+      const data = await getData()
+      return data as Result[]
     }
 
-    const [request, total] = await Promise.all([
-      useAggregation ? this.aggregateRaw(params) : this.findRaw(params),
-      countDocuments()
-    ])
+    if (filters.$limit === 0) {
+      return {
+        total: await this.countDocuments(params),
+        data: [] as Result[],
+        limit: filters.$limit,
+        skip: filters.$skip || 0
+      }
+    }
 
-    const page = {
+    const [data, total] = await Promise.all([getData(), this.countDocuments(params)])
+
+    return {
       total,
+      data: data as Result[],
       limit: filters.$limit,
-      skip: filters.$skip || 0,
-      data: filters.$limit === 0 ? [] : ((await request.toArray()) as any as Result[])
+      skip: filters.$skip || 0
     }
-
-    return paginate && paginate.default ? page : page.data
   }
 
   async _create(data: Data, params?: ServiceParams): Promise<Result>
@@ -272,12 +331,10 @@ export class MongoDbAdapter<
     data: Data | Data[],
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
-    const writeOptions = params.mongodb
     const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
 
-      // Generate a MongoId if we use a custom id
       if (this.id !== '_id' && typeof entry[this.id] === 'undefined') {
         return {
           [this.id]: new ObjectId().toHexString(),
@@ -287,18 +344,22 @@ export class MongoDbAdapter<
 
       return entry
     }
+    const findOptions: FindOptions = {
+      ...params.mongodb,
+      projection: this.getProjection(params.query?.$select)
+    }
 
     const promise = Array.isArray(data)
       ? model
-          .insertMany(data.map(setId), writeOptions)
-          .then(async (result) =>
-            model.find({ _id: { $in: Object.values(result.insertedIds) } }, params.mongodb).toArray()
+          .insertMany(data.map(setId), params.mongodb)
+          .then((result) =>
+            model.find({ _id: { $in: Object.values(result.insertedIds) } }, findOptions).toArray()
           )
       : model
-          .insertOne(setId(data), writeOptions)
-          .then(async (result) => model.findOne({ _id: result.insertedId }, params.mongodb))
+          .insertOne(setId(data), params.mongodb)
+          .then((result) => model.findOne({ _id: result.insertedId }, findOptions))
 
-    return promise.then(select(params, this.id)).catch(errorHandler)
+    return promise.catch(errorHandler)
   }
 
   async _patch(id: null, data: PatchData | Partial<Result>, params?: ServiceParams): Promise<Result[]>
@@ -321,10 +382,10 @@ export class MongoDbAdapter<
     const model = await this.getModel(params)
     const {
       query,
-      filters: { $select }
+      filters: { $sort, $select }
     } = this.filterQuery(id, params)
-    const updateOptions = { ...params.mongodb }
-    const modifier = Object.keys(data).reduce((current, key) => {
+
+    const replacement = Object.keys(data).reduce((current, key) => {
       const value = (data as any)[key]
 
       if (key.charAt(0) !== '$') {
@@ -338,28 +399,69 @@ export class MongoDbAdapter<
 
       return current
     }, {} as any)
-    const originalIds = await this._findOrGet(id, {
-      ...params,
-      query: {
-        ...query,
-        $select: [this.id]
-      },
-      paginate: false
-    })
-    const items = Array.isArray(originalIds) ? originalIds : [originalIds]
-    const idList = items.map((item: any) => item[this.id])
-    const findParams = {
-      ...params,
-      paginate: false,
-      query: {
-        [this.id]: { $in: idList },
-        $select
+
+    if (id === null) {
+      const findParams = {
+        ...params,
+        paginate: false,
+        query: {
+          ...params.query,
+          $select: [this.id]
+        }
       }
+
+      return this._find(findParams)
+        .then(async (result) => {
+          const idList = (result as Result[]).map((item: any) => item[this.id])
+          await model.updateMany({ [this.id]: { $in: idList } }, replacement, params.mongodb)
+          return this._find({
+            ...params,
+            paginate: false,
+            query: {
+              [this.id]: { $in: idList },
+              $sort,
+              $select
+            }
+          })
+        })
+        .catch(errorHandler)
     }
 
-    await model.updateMany(query, modifier, updateOptions)
+    if (params.pipeline) {
+      const getParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id]
+        }
+      }
 
-    return this._findOrGet(id, findParams).catch(errorHandler)
+      return this._get(id, getParams)
+        .then(async () => {
+          await model.updateOne({ [this.id]: id }, replacement, params.mongodb)
+          return this._get(id, {
+            ...params,
+            query: { $select }
+          })
+        })
+        .catch(errorHandler)
+    }
+
+    const updateOptions: FindOneAndUpdateOptions = {
+      ...(params.mongodb as FindOneAndUpdateOptions),
+      returnDocument: 'after',
+      projection: this.getProjection($select)
+    }
+
+    return model
+      .findOneAndUpdate(query, replacement, updateOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+        return result.value as Result
+      })
+      .catch(errorHandler)
   }
 
   async _update(id: AdapterId, data: Data, params: ServiceParams = {} as ServiceParams): Promise<Result> {
@@ -367,13 +469,48 @@ export class MongoDbAdapter<
       throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
     }
 
+    const {
+      query,
+      filters: { $select }
+    } = this.filterQuery(id, params)
     const model = await this.getModel(params)
-    const { query } = this.filterQuery(id, params)
-    const replaceOptions = { ...params.mongodb }
+    const replacement = this.normalizeId(id, data)
 
-    await model.replaceOne(query, this.normalizeId(id, data), replaceOptions)
+    if (params.pipeline) {
+      const getParams = {
+        ...params,
+        query: {
+          ...params.query,
+          $select: [this.id]
+        }
+      }
 
-    return this._findOrGet(id, params).catch(errorHandler)
+      return this._get(id, getParams)
+        .then(async () => {
+          await model.replaceOne({ [this.id]: id }, replacement, params.mongodb)
+          return this._get(id, {
+            ...params,
+            query: { $select }
+          })
+        })
+        .catch(errorHandler)
+    }
+
+    const replaceOptions: FindOneAndReplaceOptions = {
+      ...(params.mongodb as FindOneAndReplaceOptions),
+      returnDocument: 'after',
+      projection: this.getProjection($select)
+    }
+
+    return model
+      .findOneAndReplace(query, replacement, replaceOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+        return result.value as Result
+      })
+      .catch(errorHandler)
   }
 
   async _remove(id: null, params?: ServiceParams): Promise<Result[]>
@@ -388,24 +525,43 @@ export class MongoDbAdapter<
     }
 
     const model = await this.getModel(params)
-    const {
-      query,
-      filters: { $select }
-    } = this.filterQuery(id, params)
-    const deleteOptions = { ...params.mongodb }
+    const { query } = this.filterQuery(id, params)
     const findParams = {
       ...params,
-      paginate: false,
-      query: {
-        ...query,
-        $select
-      }
+      paginate: false
     }
 
-    return this._findOrGet(id, findParams)
-      .then(async (items) => {
-        await model.deleteMany(query, deleteOptions)
-        return items
+    if (id === null) {
+      return this._find(findParams)
+        .then(async (result) => {
+          const idList = (result as Result[]).map((item: any) => item[this.id])
+          await model.deleteMany({ [this.id]: { $in: idList } }, params.mongodb)
+          return result
+        })
+        .catch(errorHandler)
+    }
+
+    if (params.pipeline) {
+      return this._get(id, params)
+        .then(async (result) => {
+          await model.deleteOne({ [this.id]: id }, params.mongodb)
+          return result
+        })
+        .catch(errorHandler)
+    }
+
+    const deleteOptions: FindOneAndDeleteOptions = {
+      ...(params.mongodb as FindOneAndDeleteOptions),
+      projection: this.getProjection(params.query?.$select)
+    }
+
+    return model
+      .findOneAndDelete(query, deleteOptions)
+      .then((result) => {
+        if (result.value === null) {
+          throw new NotFound(`No record found for id '${id}'`)
+        }
+        return result.value as Result
       })
       .catch(errorHandler)
   }

@@ -83,6 +83,11 @@ const testSuite = adapterTests([
   'params.adapter + multi'
 ])
 
+const defaultPaginate = {
+  default: 10,
+  max: 50
+}
+
 describe('Feathers MongoDB Service', () => {
   const personSchema = {
     $id: 'Person',
@@ -474,6 +479,116 @@ describe('Feathers MongoDB Service', () => {
       assert.deepEqual(result[0].person, bob)
       assert.equal(result.length, 1)
     })
+
+    it('can count documents with aggregation', async () => {
+      const service = app.service('people')
+      const paginateBefore = service.options.paginate
+      service.options.paginate = defaultPaginate
+      const query = { age: { $gte: 25 } }
+      const findResult = await app.service('people').find({ query })
+      const aggregationResult = await app.service('people').find({ query, pipeline: [] })
+
+      assert.deepStrictEqual(findResult.total, aggregationResult.total)
+
+      service.options.paginate = paginateBefore
+    })
+
+    it('can use aggregation in _get', async () => {
+      const dave = await app.service('people').create({ name: 'Dave', age: 25 })
+      const result = await app.service('people').get(dave._id, {
+        pipeline: [{ $addFields: { aggregation: true } }]
+      })
+
+      assert.deepStrictEqual(result, { ...dave, aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in _update', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').update(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in _patch', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').patch(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation and query in _update', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').update(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          query: { name: 'Dave' },
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation and query in _patch', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').patch(
+        dave._id,
+        {
+          name: 'Marshal'
+        },
+        {
+          query: { name: 'Dave' },
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in _remove', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').remove(dave._id, {
+        pipeline: [{ $addFields: { aggregation: true } }]
+      })
+
+      assert.deepStrictEqual(result, { ...dave, aggregation: true })
+
+      try {
+        await await app.service('people').get(dave._id)
+        throw new Error('Should never get here')
+      } catch (error: any) {
+        assert.strictEqual(error.name, 'NotFound', 'Got a NotFound Feathers error')
+      }
+    })
   })
 
   describe('query validation', () => {
@@ -487,6 +602,23 @@ describe('Feathers MongoDB Service', () => {
         }
       })
       assert.deepStrictEqual(result, [dave])
+
+      app.service('people').remove(dave._id)
+    })
+  })
+
+  // TODO: Should this test be part of the adapterTests?
+  describe('Updates mutated query', () => {
+    it('Can re-query mutated data', async () => {
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app
+        .service('people')
+        .update(dave._id, { name: 'Marshal' }, { query: { name: 'Dave' } })
+
+      assert.deepStrictEqual(result, {
+        ...dave,
+        name: 'Marshal'
+      })
 
       app.service('people').remove(dave._id)
     })
