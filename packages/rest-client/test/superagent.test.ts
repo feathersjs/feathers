@@ -14,7 +14,7 @@ import getPort from 'get-port'
 describe('Superagent REST connector', async function () {
   let server: Server
 
-  const port = getPort()
+  const port = await getPort()
   const url = `http://localhost:${port}`
   const setup = rest(url).superagent(superagent)
   const app = feathers<ServiceTypes>().configure(setup)

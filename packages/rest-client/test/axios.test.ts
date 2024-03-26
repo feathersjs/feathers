@@ -27,7 +27,7 @@ describe('Axios REST connector', async function () {
     server = await createServer().listen(port)
   })
 
-  afterAfll(() => new Promise<void>((resolve) => server.close(() => resolve())))
+  afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
   it('supports custom headers', async () => {
     const headers = {
