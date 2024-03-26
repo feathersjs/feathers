@@ -18,6 +18,6 @@ Refer to the [Feathers TypeBox documentation](https://feathersjs.com/api/schema/
 
 ## License
 
-Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2024 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
