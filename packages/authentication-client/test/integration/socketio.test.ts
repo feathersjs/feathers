@@ -8,15 +8,12 @@ import authClient from '../../src'
 import getApp from './fixture'
 import commonTests from './commons'
 import { AuthenticationResult } from '@feathersjs/authentication/lib'
+import getPort from 'get-port'
 
-describe('@feathersjs/authentication-client Socket.io integration', () => {
-  let app: Application
-
-  beforeAll(async () => {
-    app = getApp(feathers().configure(socketio()))
-
-    await app.listen(9777)
-  })
+describe('@feathersjs/authentication-client Socket.io integration', async () => {
+  const app = getApp(feathers().configure(socketio()))
+  const port = await getPort()
+  await app.listen(port)
 
   afterAll(() => new Promise<void>((resolve) => app.io.close(() => resolve())))
 
@@ -30,7 +27,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
       ...user
     })
 
-    const socket = io('http://localhost:9777', {
+    const socket = io(`http://localhost:${port}`, {
       transports: ['websocket'],
       transportOptions: {
         websocket: {
@@ -55,7 +52,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
 
   it('reconnects after socket disconnection', async () => {
     const user = { email: 'disconnecttest@example.com', password: 'alsosecret' }
-    const socket = io('http://localhost:9777', {
+    const socket = io(`http://localhost:${port}`, {
       timeout: 500,
       reconnection: true,
       reconnectionDelay: 100
@@ -86,7 +83,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
     () => app,
     () => {
       return feathers()
-        .configure(socketioClient(io('http://localhost:9777')))
+        .configure(socketioClient(io(`http://localhost:${port}`)))
         .configure(authClient())
     },
     {

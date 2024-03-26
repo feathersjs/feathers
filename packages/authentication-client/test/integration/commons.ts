@@ -108,7 +108,7 @@ export default (
       assert.ok(result!.accessToken)
       assert.ok(result!.user)
 
-      assert.rejects(() => client.service('dummy').find(), {
+      await assert.rejects(() => client.service('dummy').find(), {
         name: 'NotAuthenticated',
         code: 401,
         message: 'Not authenticated'
