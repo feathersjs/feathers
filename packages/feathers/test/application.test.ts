@@ -193,7 +193,7 @@ describe('Feathers application', () => {
     })
 
     it('services can be re-used (#566)', () =>
-      new Promise<void>((resolve, reject) => {
+      new Promise<void>((resolve) => {
         const service = {
           async create(data: any) {
             return data
@@ -512,7 +512,7 @@ describe('Feathers application', () => {
 
   describe('sub apps', () => {
     it('re-registers sub-app services with prefix', () =>
-      new Promise<void>((resolve, reject) => {
+      new Promise<void>((resolve) => {
         const app = feathers()
         const subApp = feathers()
 

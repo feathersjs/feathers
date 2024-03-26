@@ -84,9 +84,9 @@ describe('@feathersjs/express/rest provider', () => {
     })
   })
 
-  describe('CRUD', () => {
+  describe('CRUD', async () => {
     let app: express.Application
-    let port: number
+    const port = await getPort()
 
     beforeAll(async () => {
       app = expressify(feathers())
@@ -119,8 +119,6 @@ describe('@feathersjs/express/rest provider', () => {
           }
         ]
       } as ApplicationHookMap<express.Application>)
-
-      port = await getPort()
 
       await app.listen(port, () => app.use('tasks', new Service()))
     })

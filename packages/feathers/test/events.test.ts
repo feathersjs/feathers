@@ -5,7 +5,7 @@ import { feathers } from '../src'
 
 describe('Service events', () => {
   it('app is an event emitter', () =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<void>((resolve) => {
       const app = feathers()
 
       assert.strictEqual(typeof app.on, 'function')
@@ -18,7 +18,7 @@ describe('Service events', () => {
     }))
 
   it('works with service that is already an EventEmitter', () =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<void>((resolve) => {
       const app = feathers()
       const service: any = new EventEmitter()
 
@@ -42,7 +42,7 @@ describe('Service events', () => {
 
   describe('emits event data on a service', () => {
     it('.create and created', () =>
-      new Promise<void>((resolve, reject) => {
+      new Promise<void>((resolve) => {
         const app = feathers().use('/creator', {
           async create(data: any) {
             return data

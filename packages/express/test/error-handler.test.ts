@@ -5,6 +5,7 @@ import axios from 'axios'
 import fs from 'fs'
 import { join } from 'path'
 import { BadRequest, NotAcceptable, NotAuthenticated, NotFound, PaymentError } from '@feathersjs/errors'
+import getPort from 'get-port'
 
 import { errorHandler } from '../src'
 import { Server } from 'http'
@@ -20,9 +21,10 @@ const jsonHandler = function (error: Error, _req: Request, res: Response, _next:
 }
 
 describe('error-handler', () => {
-  describe('supports catch-all custom handlers', () => {
+  describe('supports catch-all custom handlers', async () => {
     let app: Application
     let server: Server
+    const port = await getPort()
 
     beforeAll(() => {
       app = express()
@@ -36,7 +38,7 @@ describe('error-handler', () => {
           })
         )
 
-      server = app.listen(5050)
+      server = app.listen(port)
     })
 
     afterAll(
@@ -47,15 +49,15 @@ describe('error-handler', () => {
     )
 
     describe('JSON handler', () => {
-      const options = {
-        url: 'http://localhost:5050/error',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
-      }
-
       it('can send a custom response', async () => {
+        const options = {
+          url: `http://localhost:${port}/error`,
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          }
+        }
+
         try {
           await axios(options)
           assert.fail('Should never get here')
@@ -211,11 +213,12 @@ describe('error-handler', () => {
     })
   })
 
-  describe('use as app error handler', () => {
+  describe('use as app error handler', async () => {
     let app: Application
     let server: Server
+    const port = await getPort()
 
-    before(() => {
+    beforeAll(async () => {
       app = express()
         .get('/error', function (_req: Request, _res: Response, next: NextFunction) {
           next(new Error('Something went wrong'))
@@ -249,7 +252,7 @@ describe('error-handler', () => {
           })
         )
 
-      server = app.listen(5050)
+      server = app.listen(port)
     })
 
     afterAll(
@@ -263,7 +266,7 @@ describe('error-handler', () => {
       it('is an instance of GeneralError', async () => {
         try {
           await axios({
-            url: 'http://localhost:5050/error',
+            url: `http://localhost:${port}/error`,
             responseType: 'json'
           })
           assert.fail('Should never get here')
@@ -285,7 +288,7 @@ describe('error-handler', () => {
           fs.readFile(join(__dirname, '..', 'public', '404.html'), async function (_err, html) {
             try {
               await axios({
-                url: 'http://localhost:5050/path/to/nowhere',
+                url: `http://localhost:${port}/path/to/nowhere`,
                 headers: {
                   'Content-Type': 'text/html',
                   Accept: 'text/html'
@@ -305,7 +308,7 @@ describe('error-handler', () => {
           fs.readFile(join(__dirname, '..', 'public', 'default.html'), async function (_err, html) {
             try {
               await axios({
-                url: 'http://localhost:5050/error',
+                url: `http://localhost:${port}/error`,
                 headers: {
                   'Content-Type': 'text/html',
                   Accept: 'text/html'
@@ -325,7 +328,7 @@ describe('error-handler', () => {
       it('500', async () => {
         try {
           await axios({
-            url: 'http://localhost:5050/error',
+            url: `http://localhost:${port}/error`,
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json'
@@ -346,7 +349,7 @@ describe('error-handler', () => {
       it('404', async () => {
         try {
           await axios({
-            url: 'http://localhost:5050/path/to/nowhere',
+            url: `http://localhost:${port}/path/to/nowhere`,
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json'
@@ -367,7 +370,7 @@ describe('error-handler', () => {
       it('400', async () => {
         try {
           await axios({
-            url: 'http://localhost:5050/bad-request',
+            url: `http://localhost:${port}/bad-request`,
             headers: {
               'Content-Type': 'application/json',
               Accept: 'application/json'
@@ -396,7 +399,7 @@ describe('error-handler', () => {
 
     it('returns JSON by default', async () => {
       try {
-        await axios('http://localhost:5050/bad-request')
+        await axios(`http://localhost:${port}/bad-request`)
         assert.fail('Should never get here')
       } catch (error: any) {
         assert.equal(error.response.status, 400)

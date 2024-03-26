@@ -6,9 +6,9 @@ import { Service, restTests } from '@feathersjs/tests-vitest'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 import getPort from 'get-port'
 
-describe('@feathersjs/koa', () => {
+describe('@feathersjs/koa', async () => {
   let app: Application
-  let port: number
+  const port = await getPort()
 
   beforeAll(async () => {
     app = koa(feathers())
@@ -58,7 +58,6 @@ describe('@feathersjs/koa', () => {
       ]
     } as ApplicationHookMap<Application>)
 
-    port = await getPort()
     await app.listen(port)
   })
 

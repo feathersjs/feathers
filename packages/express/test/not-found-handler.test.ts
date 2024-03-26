@@ -7,7 +7,7 @@ const handler = notFound as any
 
 describe('not-found-handler', () => {
   it('returns NotFound error', () =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<void>((resolve) => {
       handler()(
         {
           url: 'some/where',
@@ -26,7 +26,7 @@ describe('not-found-handler', () => {
     }))
 
   it('returns NotFound error with URL when verbose', () =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<void>((resolve) => {
       handler({ verbose: true })(
         {
           url: 'some/where',
