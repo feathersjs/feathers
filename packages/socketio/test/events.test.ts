@@ -5,7 +5,7 @@ import { Id, RealTimeConnection } from '@feathersjs/feathers'
 import mockApp from './mock-app'
 
 describe('@feathersjs/socketio/events', async () => {
-  const { app, socket, port, connection, close } = await mockApp()
+  const { app, socket, port, close } = await mockApp()
 
   afterAll(async () => {
     await close()
