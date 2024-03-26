@@ -1,133 +1,21 @@
 import { strict as assert } from 'assert'
-import {
-  feathers,
-  Application,
-  HookContext,
-  NullableId,
-  Params,
-  ApplicationHookContext
-} from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import { Request, Response } from 'express'
-import { omit, extend } from 'lodash'
+import omit from 'lodash/omit.js'
 import { io } from 'socket.io-client'
 import axios from 'axios'
-import { Server } from 'http'
-import { Service } from '@feathersjs/tests-vitest'
-import { Socket } from 'socket.io-client'
 import getPort from 'get-port'
 
-import methodTests from './methods'
-import eventTests from './events'
 import socketio from '../src'
-import { FeathersSocket, NextFunction } from '../src/middleware.js'
+import mockApp from './mock-app'
 
-class VerifierService {
-  async find(params: Params) {
-    return { params }
-  }
+describe('@feathersjs/socketio', async () => {
+  const { app, socket, port, socketParams, close } = await mockApp()
 
-  async create(data: any, params: Params) {
-    return { data, params }
-  }
-
-  async update(id: NullableId, data: any, params: Params) {
-    return { id, data, params }
-  }
-}
-
-describe('@feathersjs/socketio', () => {
-  let app: Application
-  let server: Server
-  let socket: Socket
-
-  const socketParams: any = {
-    user: { name: 'David' },
-    provider: 'socketio'
-  }
-  const options = {
-    get app() {
-      return app
-    },
-
-    get socket() {
-      return socket
-    }
-  }
-
-  beforeAll(
-    () =>
-      new Promise<void>(async (resolve, reject) => {
-        const errorHook = (hook: HookContext) => {
-          if (hook.params.query.hookError) {
-            throw new Error(`Error from ${hook.method}, ${hook.type} hook`)
-          }
-        }
-
-        app = feathers()
-          .configure(
-            socketio((io) => {
-              io.use(function (socket: FeathersSocket, next: NextFunction) {
-                socket.feathers.user = { name: 'David' }
-                socketParams.headers = socket.feathers.headers
-
-                const { channel } = socket.handshake.query as any
-
-                if (channel) {
-                  socket.feathers.channel = channel
-                }
-
-                next()
-              })
-            })
-          )
-          .use('/todo', new Service())
-          .use('/verify', new VerifierService())
-
-        app.service('todo').hooks({
-          before: {
-            get: errorHook
-          }
-        })
-
-        app.hooks({
-          setup: [
-            async (context: ApplicationHookContext, next: NextFunction) => {
-              assert.notStrictEqual(context.app, undefined)
-              await next()
-            }
-          ]
-        })
-
-        const port = await getPort()
-
-        app
-          .listen(port)
-          .then((srv) => {
-            server = srv
-            server.once('listening', () => {
-              app.use('/tasks', new Service())
-              app.service('tasks').hooks({
-                before: {
-                  get: errorHook
-                }
-              })
-            })
-          })
-          .catch(reject)
-
-        socket = io(`http://localhost:${port}`)
-        socket.on('connect', () => resolve())
-      })
-  )
-
-  afterAll(
-    () =>
-      new Promise<void>((resolve) => {
-        socket.disconnect()
-        server.close(() => resolve())
-      })
-  )
+  afterAll(async () => {
+    await close()
+  })
 
   it('runs io before setup (#131)', () =>
     new Promise<void>(async (resolve) => {
@@ -224,16 +112,16 @@ describe('@feathersjs/socketio', () => {
             assert.ok(!error)
             assert.deepStrictEqual(
               data.params,
-              extend(
-                {
-                  route: {},
-                  connection: socketParams,
-                  query: {
-                    test: 'param'
-                  }
+              {
+                route: {},
+                connection: {
+                  ...socketParams
                 },
-                socketParams
-              ),
+                query: {
+                  test: 'param'
+                },
+                ...socketParams
+              },
               'Passed handshake parameters as query'
             )
             resolve()
@@ -244,7 +132,7 @@ describe('@feathersjs/socketio', () => {
 
   it('connection and disconnect events (#1243, #1238)', () =>
     new Promise<void>((resolve) => {
-      const mySocket = io('http://localhost:7886?channel=dctest')
+      const mySocket = io(`http://localhost:${port}?channel=dctest`)
 
       app.once('connection', (connection) => {
         assert.strictEqual(connection.channel, 'dctest')
@@ -252,7 +140,7 @@ describe('@feathersjs/socketio', () => {
           assert.strictEqual(disconnection.channel, 'dctest')
           resolve()
         })
-        setTimeout(() => mySocket.close(), 100)
+        mySocket.close()
       })
 
       assert.ok(mySocket)
@@ -260,7 +148,7 @@ describe('@feathersjs/socketio', () => {
 
   it('app `disconnect` event disconnects socket (#2754)', () =>
     new Promise<void>((resolve) => {
-      const mySocket = io('http://localhost:7886?channel=dctest')
+      const mySocket = io(`http://localhost:${port}?channel=dctest`)
 
       app.once('connection', (connection) => {
         assert.strictEqual(connection.channel, 'dctest')
@@ -283,16 +171,4 @@ describe('@feathersjs/socketio', () => {
         resolve()
       })
     }))
-
-  describe('Service method calls', () => {
-    describe("('method', 'service')  event format", () => {
-      describe('Service', () => methodTests('todo', options))
-      describe('Dynamic Service', () => methodTests('todo', options))
-    })
-  })
-
-  describe('Service events', () => {
-    describe('Service', () => eventTests('todo', options))
-    describe('Dynamic Service', () => eventTests('tasks', options))
-  })
 })

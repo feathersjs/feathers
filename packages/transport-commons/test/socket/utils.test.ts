@@ -2,7 +2,7 @@ import assert from 'assert'
 import { EventEmitter } from 'events'
 import { feathers, Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { isPlainObject } from 'lodash'
+import isPlainObject from 'lodash/isPlainObject.js'
 
 import { routing } from '../../src/routing'
 import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils'
