@@ -488,7 +488,7 @@ describe('Feathers MongoDB Service', () => {
       })
       assert.deepStrictEqual(result, [dave])
 
-      app.service('people').remove(dave._id)
+      await app.service('people').remove(dave._id)
     })
   })
 
