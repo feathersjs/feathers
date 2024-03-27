@@ -85,8 +85,8 @@ export default (
         password
       })
 
-      client.authentication.reset()
-      client.authenticate()
+      await client.authentication.reset()
+      await client.authenticate()
       const result = await client.service('dummy').find()
 
       assert.strictEqual(result.provider, provider)
