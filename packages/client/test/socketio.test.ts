@@ -1,27 +1,32 @@
 import { io } from 'socket.io-client'
 import socketio from '@feathersjs/socketio'
 import { Server } from 'http'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 
 import * as feathers from '../dist/feathers'
 import app from './fixture'
+import getPort from 'get-port'
 
-describe('Socket.io connector', function () {
+describe('Socket.io connector', async function () {
   let server: Server
-  const socket = io('http://localhost:9988')
+  const port = await getPort()
+  const socket = io(`http://localhost:${port}`)
   const client = feathers.default().configure(feathers.socketio(socket))
 
-  before(async () => {
-    server = await app((app) => app.configure(socketio())).listen(9988)
+  beforeAll(async () => {
+    server = await app((app) => app.configure(socketio())).listen(port)
   })
 
-  after(function (done) {
-    socket.once('disconnect', () => {
-      server.close()
-      done()
-    })
-    socket.disconnect()
-  })
+  afterAll(
+    () =>
+      new Promise<void>((resolve) => {
+        socket.once('disconnect', () => {
+          server.close()
+          resolve()
+        })
+        socket.disconnect()
+      })
+  )
 
   clientTests(client, 'todos')
 })

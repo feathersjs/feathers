@@ -16,17 +16,18 @@ describe('Feathers application', () => {
     assert.ok(app.version > '5.0.0')
   })
 
-  it('is an event emitter', (done) => {
-    const app = feathers()
-    const original = { hello: 'world' }
+  it('is an event emitter', () =>
+    new Promise<void>((resolve) => {
+      const app = feathers()
+      const original = { hello: 'world' }
 
-    app.on('test', (data: any) => {
-      assert.deepStrictEqual(original, data)
-      done()
-    })
+      app.on('test', (data: any) => {
+        assert.deepStrictEqual(original, data)
+        resolve()
+      })
 
-    app.emit('test', original)
-  })
+      app.emit('test', original)
+    }))
 
   it('uses .defaultService if available', async () => {
     const app = feathers()
@@ -55,12 +56,13 @@ describe('Feathers application', () => {
     })
   })
 
-  it('additionally passes `app` as .configure parameter (#558)', (done) => {
-    feathers().configure(function (app) {
-      assert.strictEqual(this, app)
-      done()
-    })
-  })
+  it('additionally passes `app` as .configure parameter (#558)', () =>
+    new Promise<void>((resolve) => {
+      feathers().configure(function (app) {
+        assert.strictEqual(this, app)
+        resolve()
+      })
+    }))
 
   describe('Services', () => {
     it('calling .use with invalid path throws', () => {
@@ -190,45 +192,46 @@ describe('Feathers application', () => {
       assert.deepStrictEqual(result, { id: 'test' })
     })
 
-    it('services can be re-used (#566)', (done) => {
-      const service = {
-        async create(data: any) {
-          return data
+    it('services can be re-used (#566)', () =>
+      new Promise<void>((resolve) => {
+        const service = {
+          async create(data: any) {
+            return data
+          }
         }
-      }
-      const app1 = feathers<{ dummy: typeof service; testing: any }>()
-      const app2 = feathers<{ dummy: typeof service; testing: any }>()
+        const app1 = feathers<{ dummy: typeof service; testing: any }>()
+        const app2 = feathers<{ dummy: typeof service; testing: any }>()
 
-      app2.use('dummy', {
-        async create(data: any) {
-          return data
-        }
-      })
-
-      const dummy = app2.service('dummy')
-
-      dummy.hooks({
-        before: {
-          create: [
-            (hook) => {
-              hook.data.fromHook = true
-            }
-          ]
-        }
-      })
-
-      dummy.on('created', (data: any) => {
-        assert.deepStrictEqual(data, {
-          message: 'Hi',
-          fromHook: true
+        app2.use('dummy', {
+          async create(data: any) {
+            return data
+          }
         })
-        done()
-      })
 
-      app1.use('testing', app2.service('dummy'))
+        const dummy = app2.service('dummy')
 
-      app1.service('testing').create({ message: 'Hi' })
-    })
+        dummy.hooks({
+          before: {
+            create: [
+              (hook) => {
+                hook.data.fromHook = true
+              }
+            ]
+          }
+        })
+
+        dummy.on('created', (data: any) => {
+          assert.deepStrictEqual(data, {
+            message: 'Hi',
+            fromHook: true
+          })
+          resolve()
+        })
+
+        app1.use('testing', app2.service('dummy'))
+
+        app1.service('testing').create({ message: 'Hi' })
+      }))
 
     it('async hooks run before regular hooks', async () => {
       const service = {
@@ -406,20 +409,21 @@ describe('Feathers application', () => {
       assert.strictEqual(teardownCount, 2)
     })
 
-    it('registering app.setup but while still pending will be set up', (done) => {
-      const app = feathers()
+    it('registering app.setup but while still pending will be set up', () =>
+      new Promise<void>((resolve) => {
+        const app = feathers()
 
-      app.setup()
+        app.setup()
 
-      app.use('/dummy', {
-        async setup(appRef: any, path: any) {
-          assert.ok((app as any)._isSetup)
-          assert.strictEqual(appRef, app)
-          assert.strictEqual(path, 'dummy')
-          done()
-        }
-      })
-    })
+        app.use('/dummy', {
+          async setup(appRef: any, path: any) {
+            assert.ok((app as any)._isSetup)
+            assert.strictEqual(appRef, app)
+            assert.strictEqual(path, 'dummy')
+            resolve()
+          }
+        })
+      }))
   })
 
   describe('.teardown', () => {
@@ -507,62 +511,63 @@ describe('Feathers application', () => {
   })
 
   describe('sub apps', () => {
-    it('re-registers sub-app services with prefix', (done) => {
-      const app = feathers()
-      const subApp = feathers()
+    it('re-registers sub-app services with prefix', () =>
+      new Promise<void>((resolve) => {
+        const app = feathers()
+        const subApp = feathers()
 
-      subApp
-        .use('/service1', {
-          async get(id: string) {
-            return {
-              id,
-              name: 'service1'
+        subApp
+          .use('/service1', {
+            async get(id: string) {
+              return {
+                id,
+                name: 'service1'
+              }
             }
-          }
-        })
-        .use('/service2', {
-          async get(id: string) {
-            return {
-              id,
-              name: 'service2'
+          })
+          .use('/service2', {
+            async get(id: string) {
+              return {
+                id,
+                name: 'service2'
+              }
+            },
+
+            async create(data: any) {
+              return data
             }
-          },
-
-          async create(data: any) {
-            return data
-          }
-        })
-
-      app.use('/api/', subApp)
-
-      app.service('/api/service2').once('created', (data: any) => {
-        assert.deepStrictEqual(data, {
-          message: 'This is a test'
-        })
-
-        subApp.service('service2').once('created', (data: any) => {
-          assert.deepStrictEqual(data, {
-            message: 'This is another test'
           })
 
-          done()
-        })
+        app.use('/api/', subApp)
 
-        app.service('api/service2').create({
-          message: 'This is another test'
-        })
-      })
-      ;(async () => {
-        let data = await app.service('/api/service1').get(10)
-        assert.strictEqual(data.name, 'service1')
+        app.service('/api/service2').once('created', (data: any) => {
+          assert.deepStrictEqual(data, {
+            message: 'This is a test'
+          })
 
-        data = await app.service('/api/service2').get(1)
-        assert.strictEqual(data.name, 'service2')
+          subApp.service('service2').once('created', (data: any) => {
+            assert.deepStrictEqual(data, {
+              message: 'This is another test'
+            })
 
-        await subApp.service('service2').create({
-          message: 'This is a test'
+            resolve()
+          })
+
+          app.service('api/service2').create({
+            message: 'This is another test'
+          })
         })
-      })()
-    })
+        ;(async () => {
+          let data = await app.service('/api/service1').get(10)
+          assert.strictEqual(data.name, 'service1')
+
+          data = await app.service('/api/service2').get(1)
+          assert.strictEqual(data.name, 'service2')
+
+          await subApp.service('service2').create({
+            message: 'This is a test'
+          })
+        })()
+      }))
   })
 })

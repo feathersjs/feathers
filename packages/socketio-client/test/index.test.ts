@@ -3,7 +3,7 @@ import { strict as assert } from 'assert'
 import { Server } from 'http'
 import { CustomMethod, feathers } from '@feathersjs/feathers'
 import { io, Socket } from 'socket.io-client'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 
 import { createServer } from './server'
 import socketio, { SocketService } from '../src'
@@ -22,7 +22,7 @@ describe('@feathersjs/socketio-client', () => {
   let socket: Socket
   let server: Server
 
-  before(async () => {
+  beforeAll(async () => {
     server = await createServer().listen(9988)
     socket = io('http://localhost:9988')
 
@@ -34,10 +34,13 @@ describe('@feathersjs/socketio-client', () => {
     })
   })
 
-  after((done) => {
-    socket.disconnect()
-    server.close(done)
-  })
+  afterAll(
+    () =>
+      new Promise<void>((resolve) => {
+        socket.disconnect()
+        server.close(() => resolve())
+      })
+  )
 
   it('throws an error with no connection', () => {
     try {

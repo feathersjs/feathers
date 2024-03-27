@@ -19,7 +19,7 @@ describe('@feathersjs/schema/hooks', () => {
     }
   })
 
-  before(async () => {
+  beforeAll(async () => {
     user = (
       await app.service('users').create([
         {
@@ -38,12 +38,12 @@ describe('@feathersjs/schema/hooks', () => {
     })
   })
 
-  it('ran resolvers in sequence', async () => {
+  it('ran resolvers in sequence', () => {
     assert.strictEqual(user.name, 'hello (hello@feathersjs.com)')
   })
 
   it('validates data', async () => {
-    assert.rejects(() => app.service('users').create({ password: 'failing' } as any), {
+    await assert.rejects(() => app.service('users').create({ password: 'failing' } as any), {
       name: 'BadRequest'
     })
   })
@@ -249,7 +249,7 @@ describe('@feathersjs/schema/hooks', () => {
       user
     })
 
-    assert.rejects(
+    await assert.rejects(
       () =>
         app.service('messages').find({
           query: {

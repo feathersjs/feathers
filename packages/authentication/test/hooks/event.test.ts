@@ -22,62 +22,71 @@ describe('authentication/hooks/events', () => {
     remove: [hook('logout')]
   })
 
-  it('login', (done) => {
-    const data = {
-      message: 'test'
-    }
-
-    app.once('login', (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
-      try {
-        assert.deepStrictEqual(result, data)
-        assert.ok(params.testParam)
-        assert.ok(context.method, 'create')
-        done()
-      } catch (error: any) {
-        done(error)
+  it('login', () =>
+    new Promise<void>((resolve, reject) => {
+      const data = {
+        message: 'test'
       }
-    })
 
-    service.create(data, {
-      testParam: true,
-      provider: 'test'
-    } as any)
-  })
+      app.once(
+        'login',
+        (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
+          try {
+            assert.deepStrictEqual(result, data)
+            assert.ok(params.testParam)
+            assert.ok(context.method, 'create')
+            resolve()
+          } catch (error: any) {
+            reject(error)
+          }
+        }
+      )
 
-  it('logout', (done) => {
-    app.once('logout', (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
-      try {
+      service.create(data, {
+        testParam: true,
+        provider: 'test'
+      } as any)
+    }))
+
+  it('logout', () =>
+    new Promise<void>((resolve, reject) => {
+      app.once(
+        'logout',
+        (result: AuthenticationResult, params: AuthenticationParams, context: HookContext) => {
+          try {
+            assert.deepStrictEqual(result, {
+              id: 'test'
+            })
+            assert.ok(params.testParam)
+            assert.ok(context.method, 'remove')
+            resolve()
+          } catch (error: any) {
+            reject(error)
+          }
+        }
+      )
+
+      service.remove('test', {
+        testParam: true,
+        provider: 'test'
+      } as any)
+    }))
+
+  it('does nothing when provider is not set', () =>
+    new Promise<void>((resolve, reject) => {
+      const handler = () => {
+        reject(new Error('Should never get here'))
+      }
+
+      app.on('logout', handler)
+      service.once('removed', (result: AuthenticationResult) => {
+        app.removeListener('logout', handler)
         assert.deepStrictEqual(result, {
           id: 'test'
         })
-        assert.ok(params.testParam)
-        assert.ok(context.method, 'remove')
-        done()
-      } catch (error: any) {
-        done(error)
-      }
-    })
-
-    service.remove('test', {
-      testParam: true,
-      provider: 'test'
-    } as any)
-  })
-
-  it('does nothing when provider is not set', (done) => {
-    const handler = () => {
-      done(new Error('Should never get here'))
-    }
-
-    app.on('logout', handler)
-    service.once('removed', (result: AuthenticationResult) => {
-      app.removeListener('logout', handler)
-      assert.deepStrictEqual(result, {
-        id: 'test'
+        resolve()
       })
-      done()
-    })
 
-    service.remove('test')
-  })
+      service.remove('test')
+    }))
 })

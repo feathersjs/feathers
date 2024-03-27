@@ -3,15 +3,17 @@ import { strict as assert } from 'assert'
 import axios from 'axios'
 import { Server } from 'http'
 import { feathers } from '@feathersjs/feathers'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 import { NotAcceptable } from '@feathersjs/errors'
+import getPort from 'get-port'
 
 import createServer from './server'
 import rest from '../src'
 import { ServiceTypes } from './declarations'
 
-describe('Axios REST connector', function () {
-  const url = 'http://localhost:8889'
+describe('Axios REST connector', async function () {
+  const port = await getPort()
+  const url = `http://localhost:${port}`
   const connection = rest<ServiceTypes>(url).axios(axios)
   const app = feathers<ServiceTypes>()
     .configure(connection)
@@ -21,11 +23,11 @@ describe('Axios REST connector', function () {
   const service = app.service('todos')
   let server: Server
 
-  before(async () => {
-    server = await createServer().listen(8889)
+  beforeAll(async () => {
+    server = await createServer().listen(port)
   })
 
-  after((done) => server.close(done))
+  afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
   it('supports custom headers', async () => {
     const headers = {

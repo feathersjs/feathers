@@ -44,8 +44,8 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "mocha": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts",
-    "test": "npm run compile && npm run mocha"
+    "vitest": "vitest run",
+    "test": "npm run compile && npm run vitest"
   },
   "directories": {
     "lib": "lib"
@@ -58,11 +58,10 @@
     "@sinclair/typebox": "^0.25.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.26",
-    "mocha": "^10.3.0",
     "shx": "^0.3.4",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

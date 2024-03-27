@@ -40,7 +40,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "vitest run"
   },
   "directories": {
     "lib": "lib"
@@ -56,10 +56,10 @@
     "@feathersjs/transport-commons": "^5.0.24",
     "@koa/cors": "^5.0.0",
     "@types/koa": "^2.15.0",
+    "@types/koa__cors": "^5.0.0",
     "@types/koa-qs": "^2.0.3",
     "@types/koa-static": "^4.0.4",
-    "@types/koa__cors": "^5.0.0",
-    "koa": "^2.15.0",
+    "koa": "^2.15.2",
     "koa-body": "^6.0.1",
     "koa-compose": "^4.1.0",
     "koa-qs": "^3.0.0",
@@ -68,15 +68,15 @@
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.24",
     "@feathersjs/memory": "^5.0.24",
-    "@feathersjs/tests": "^5.0.24",
+    "@feathersjs/tests-vitest": "^5.0.24",
     "@types/koa-compose": "^3.2.8",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
-    "axios": "^1.6.7",
-    "mocha": "^10.3.0",
+    "@types/node": "^20.11.30",
+    "axios": "^1.6.8",
+    "get-port": "^7.1.0",
+    "@feathersjs/tests": "^5.0.24",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

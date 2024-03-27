@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert'
 import axios, { AxiosRequestConfig } from 'axios'
+import getPort from 'get-port'
 
 import { Server } from 'http'
 import { Request, Response, NextFunction } from 'express'
 import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import { Service, restTests } from '@feathersjs/tests-vitest'
 import { BadRequest } from '@feathersjs/errors'
 
 import * as express from '../src'
@@ -50,9 +51,10 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-      const server = await app.listen(4776)
+      const port = await getPort()
+      const server = await app.listen(port)
 
-      const res = await axios.get<any>('http://localhost:4776/todo/dishes')
+      const res = await axios.get<any>(`http://localhost:${port}/todo/dishes`)
 
       assert.strictEqual(res.data, 'The todo is: You have to do dishes')
       server.close()
@@ -82,10 +84,11 @@ describe('@feathersjs/express/rest provider', () => {
     })
   })
 
-  describe('CRUD', () => {
+  describe('CRUD', async () => {
     let app: express.Application
+    const port = await getPort()
 
-    before(async () => {
+    beforeAll(async () => {
       app = expressify(feathers())
         .use(express.cors())
         .use(express.json())
@@ -117,14 +120,14 @@ describe('@feathersjs/express/rest provider', () => {
         ]
       } as ApplicationHookMap<express.Application>)
 
-      await app.listen(4777, () => app.use('tasks', new Service()))
+      await app.listen(port, () => app.use('tasks', new Service()))
     })
 
-    after(() => app.teardown())
+    afterAll(() => app.teardown())
 
-    restTests('Services', 'todo', 4777)
-    restTests('Root Service', '/', 4777)
-    restTests('Dynamic Services', 'tasks', 4777)
+    restTests('Services', 'todo', port)
+    restTests('Root Service', '/', port)
+    restTests('Dynamic Services', 'tasks', port)
 
     describe('res.hook', () => {
       const convertHook = (hook: HookContext) => {
@@ -167,7 +170,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-        const res = await axios.get<any>('http://localhost:4777/hook/dishes?test=param')
+        const res = await axios.get<any>(`http://localhost:${port}/hook/dishes?test=param`)
         const paramsWithHeaders = {
           ...params,
           headers: res.data.params.headers
@@ -203,7 +206,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-        const res = await axios.get<any>('http://localhost:4777/hook-dispatch/dishes')
+        const res = await axios.get<any>(`http://localhost:${port}/hook-dispatch/dishes`)
         assert.deepStrictEqual(res.data, {
           id: 'dishes',
           fromDispatch: true
@@ -223,7 +226,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-        const res = await axios.get<any>('http://localhost:4777/hook-status/dishes')
+        const res = await axios.get<any>(`http://localhost:${port}/hook-status/dishes`)
 
         assert.strictEqual(res.status, 206)
       })
@@ -241,7 +244,7 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-        const res = await axios.get<any>('http://localhost:4777/hook-headers/dishes')
+        const res = await axios.get<any>(`http://localhost:${port}/hook-headers/dishes`)
 
         assert.strictEqual(res.headers.foo, 'first')
         assert.strictEqual(res.headers.bar, 'second, third')
@@ -270,7 +273,7 @@ describe('@feathersjs/express/rest provider', () => {
         })
 
         try {
-          await axios('http://localhost:4777/hook-error/dishes')
+          await axios(`http://localhost:${port}/hook-error/dishes`)
           assert.fail('Should never get here')
         } catch (error: any) {
           const { data } = error.response
@@ -311,9 +314,10 @@ describe('@feathersjs/express/rest provider', () => {
         })
         .configure(rest(express.formatter))
         .use('service', service)
-      const server = await app.listen(4778)
+      const port = await getPort()
+      const server = await app.listen(port)
 
-      const res = await axios.get<any>('http://localhost:4778/service/bla?some=param&another=thing')
+      const res = await axios.get<any>(`http://localhost:${port}/service/bla?some=param&another=thing`)
       const expected = {
         headers: res.data.headers,
         test: 'Happy',
@@ -350,9 +354,10 @@ describe('@feathersjs/express/rest provider', () => {
           }
         })
 
-      const server = await app.listen(4775)
+      const port = await getPort()
+      const server = await app.listen(port)
       const res = await axios({
-        url: 'http://localhost:4775/todo',
+        url: `http://localhost:${port}/todo`,
         method: 'post',
         data,
         headers: {
@@ -395,8 +400,9 @@ describe('@feathersjs/express/rest provider', () => {
           }
         )
 
-      const server = await app.listen(4776)
-      const res = await axios.post<any>('http://localhost:4776/todo', {
+      const port = await getPort()
+      const server = await app.listen(port)
+      const res = await axios.post<any>(`http://localhost:${port}/todo`, {
         text: 'Do dishes'
       })
 
@@ -443,8 +449,9 @@ describe('@feathersjs/express/rest provider', () => {
         }
       )
 
-      const server = await app.listen(4776)
-      const res = await axios.post<any>('http://localhost:4776/todo', {
+      const port = await getPort()
+      const server = await app.listen(port)
+      const res = await axios.post<any>(`http://localhost:${port}/todo`, {
         text: 'Do dishes'
       })
 
@@ -474,8 +481,9 @@ describe('@feathersjs/express/rest provider', () => {
       ]
       app.use(express.json()).configure(rest()).use('/array-middleware', middlewareArray)
 
-      const server = await app.listen(4776)
-      const res = await axios.post<any>('http://localhost:4776/array-middleware', {
+      const port = await getPort()
+      const server = await app.listen(port)
+      const res = await axios.post<any>(`http://localhost:${port}/array-middleware`, {
         text: 'Do dishes'
       })
 
@@ -489,8 +497,9 @@ describe('@feathersjs/express/rest provider', () => {
         res.json(data)
       )
 
-      const server = await app.listen(7988)
-      const res = await axios.get<any>('http://localhost:7988/test')
+      const port = await getPort()
+      const server = await app.listen(port)
+      const res = await axios.get<any>(`http://localhost:${port}/test`)
 
       assert.deepStrictEqual(res.data, data)
       server.close()
@@ -500,8 +509,9 @@ describe('@feathersjs/express/rest provider', () => {
   describe('HTTP status codes', () => {
     let app: express.Application
     let server: Server
+    let port: number
 
-    before(async () => {
+    beforeAll(async () => {
       app = expressify(feathers())
         .configure(rest(express.formatter))
         .use('todo', {
@@ -537,13 +547,15 @@ describe('@feathersjs/express/rest provider', () => {
         res.json({ message: error.message })
       })
 
-      server = await app.listen(4780)
+      port = await getPort()
+
+      server = await app.listen(port)
     })
 
-    after((done) => server.close(done))
+    afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
     it('throws a 405 for undefined service methods (#99)', async () => {
-      const res = await axios.get<any>('http://localhost:4780/todo/dishes')
+      const res = await axios.get<any>(`http://localhost:${port}/todo/dishes`)
 
       assert.ok(res.status === 200, 'Got OK status code for .get')
       assert.deepStrictEqual(
@@ -555,7 +567,7 @@ describe('@feathersjs/express/rest provider', () => {
       )
 
       try {
-        await axios.post<any>('http://localhost:4780/todo')
+        await axios.post<any>(`http://localhost:${port}/todo`)
         assert.fail('Should never get here')
       } catch (error: any) {
         assert.ok(error.response.status === 405, 'Got 405 for .create')
@@ -571,7 +583,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('throws a 404 for undefined route', async () => {
       try {
-        await axios.get<any>('http://localhost:4780/todo/foo/bar')
+        await axios.get<any>(`http://localhost:${port}/todo/foo/bar`)
         assert.fail('Should never get here')
       } catch (error: any) {
         assert.ok(error.response.status === 404, 'Got Not Found code')
@@ -579,7 +591,7 @@ describe('@feathersjs/express/rest provider', () => {
     })
 
     it('empty response sets 204 status codes, does not run other middleware (#391)', async () => {
-      const res = await axios.get<any>('http://localhost:4780/todo')
+      const res = await axios.get<any>(`http://localhost:${port}/todo`)
 
       assert.ok(res.status === 204, 'Got empty status code')
     })
@@ -588,8 +600,9 @@ describe('@feathersjs/express/rest provider', () => {
   describe('route parameters', () => {
     let server: Server
     let app: express.Application
+    let port: number
 
-    before(async () => {
+    beforeAll(async () => {
       app = expressify(feathers())
         .configure(rest())
         .use('/:appId/:id/todo', {
@@ -606,10 +619,11 @@ describe('@feathersjs/express/rest provider', () => {
         })
         .use(errorHandler)
 
-      server = await app.listen(6880)
+      port = await getPort()
+      server = await app.listen(port)
     })
 
-    after((done) => server.close(done))
+    afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
     it('adds route params as `params.route` and allows id property (#76, #407)', async () => {
       const expected = {
@@ -620,7 +634,7 @@ describe('@feathersjs/express/rest provider', () => {
         }
       }
 
-      const res = await axios.get<any>(`http://localhost:6880/theApp/myId/todo/${expected.id}`)
+      const res = await axios.get<any>(`http://localhost:${port}/theApp/myId/todo/${expected.id}`)
 
       assert.ok(res.status === 200, 'Got OK status code')
       assert.deepStrictEqual(expected, res.data)
@@ -628,7 +642,7 @@ describe('@feathersjs/express/rest provider', () => {
 
     it('properly serializes error for nested routes (#1096)', async () => {
       try {
-        await axios.get<any>('http://localhost:6880/theApp/myId/todo/test?error=true')
+        await axios.get<any>(`http://localhost:${port}/theApp/myId/todo/test?error=true`)
         assert.fail('Should never het here')
       } catch (error: any) {
         const { response } = error
@@ -647,8 +661,9 @@ describe('@feathersjs/express/rest provider', () => {
   describe('Custom methods', () => {
     let server: Server
     let app: express.Application
+    let port: number
 
-    before(async () => {
+    beforeAll(async () => {
       app = expressify(feathers())
         .use(express.json())
         .configure(rest())
@@ -657,14 +672,15 @@ describe('@feathersjs/express/rest provider', () => {
         })
         .use(errorHandler)
 
-      server = await app.listen(4781)
+      port = await getPort()
+      server = await app.listen(port)
     })
 
-    after((done) => server.close(done))
+    afterAll(() => new Promise<void>((resolve) => server.close(() => resolve())))
 
     it('calls .customMethod with X-Service-Method header', async () => {
       const payload = { text: 'Do dishes' }
-      const res = await axios.post<any>('http://localhost:4781/todo', payload, {
+      const res = await axios.post<any>(`http://localhost:${port}/todo`, payload, {
         headers: {
           'X-Service-Method': 'customMethod'
         }
@@ -680,7 +696,7 @@ describe('@feathersjs/express/rest provider', () => {
     it('throws MethodNotImplement for .setup, non option and default methods', async () => {
       const options: AxiosRequestConfig = {
         method: 'POST',
-        url: 'http://localhost:4781/todo',
+        url: `http://localhost:${port}/todo`,
         data: { text: 'Do dishes' }
       }
       const testMethod = (name: string) => {

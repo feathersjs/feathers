@@ -27,6 +27,7 @@ export const adapterTests = (testNames: AdapterTestName[]) => {
     }
 
     describe(`Adapter tests for '${serviceName}' service with '${idProp}' id property`, () => {
+      // @ts-expect-error TODO: fix this
       after(() => {
         testNames.forEach((name) => {
           if (!allTests.includes(name)) {

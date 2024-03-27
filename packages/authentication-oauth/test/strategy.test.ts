@@ -7,13 +7,13 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
   let authService: AuthenticationService
   let strategy: TestOAuthStrategy
 
-  before(async () => {
+  beforeAll(async () => {
     app = await expressFixture(9778, 5115)
     authService = app.service('authentication')
     strategy = authService.getStrategy('github') as TestOAuthStrategy
   })
 
-  after(async () => {
+  afterAll(async () => {
     await app.teardown()
   })
 

@@ -60,26 +60,28 @@ describe('client', () => {
     )
   })
 
-  it('initializes and emits namespaced events', (done) => {
-    connection.once('todos test', (data: any) => {
-      assert.deepStrictEqual(data, testData)
-      done()
-    })
-    service.emit('test', testData)
-  })
+  it('initializes and emits namespaced events', () =>
+    new Promise<void>((resolve) => {
+      connection.once('todos test', (data: any) => {
+        assert.deepStrictEqual(data, testData)
+        resolve()
+      })
+      service.emit('test', testData)
+    }))
 
   it('has other emitter methods', () => {
     assert.ok(service.eventNames())
   })
 
-  it('can receive pathed events', (done) => {
-    service.once('thing', (data) => {
-      assert.deepStrictEqual(data, testData)
-      done()
-    })
+  it('can receive pathed events', () =>
+    new Promise<void>((resolve) => {
+      service.once('thing', (data) => {
+        assert.deepStrictEqual(data, testData)
+        resolve()
+      })
 
-    connection.emit('todos thing', testData)
-  })
+      connection.emit('todos thing', testData)
+    }))
 
   it('sends all service and custom methods with acknowledgement', async () => {
     const idCb = (_path: any, id: any, _params: any, callback: DummyCallback) => callback(null, { id })
@@ -231,43 +233,45 @@ describe('client', () => {
     })
   })
 
-  it('has all EventEmitter methods', (done) => {
-    const testing = { hello: 'world' }
-    const callback = (data: any) => {
-      assert.deepStrictEqual(data, testing)
-      assert.strictEqual(service.listenerCount('test'), 1)
-      service.removeListener('test', callback)
-      assert.strictEqual(service.listenerCount('test'), 0)
-      done()
-    }
+  it('has all EventEmitter methods', () =>
+    new Promise<void>((resolve) => {
+      const testing = { hello: 'world' }
+      const callback = (data: any) => {
+        assert.deepStrictEqual(data, testing)
+        assert.strictEqual(service.listenerCount('test'), 1)
+        service.removeListener('test', callback)
+        assert.strictEqual(service.listenerCount('test'), 0)
+        resolve()
+      }
 
-    service.addListener('test', callback)
+      service.addListener('test', callback)
 
-    connection.emit('todos test', testing)
-  })
+      connection.emit('todos test', testing)
+    }))
 
-  it('properly handles on/off methods', (done) => {
-    const testing = { hello: 'world' }
+  it('properly handles on/off methods', () =>
+    new Promise<void>((resolve) => {
+      const testing = { hello: 'world' }
 
-    const callback1 = (data: any) => {
-      assert.deepStrictEqual(data, testing)
-      assert.strictEqual(service.listenerCount('test'), 3)
-      service.off('test', callback1)
-      assert.strictEqual(service.listenerCount('test'), 2)
-      service.removeAllListeners('test')
-      assert.strictEqual(service.listenerCount('test'), 0)
-      done()
-    }
-    const callback2 = () => {
-      // noop
-    }
+      const callback1 = (data: any) => {
+        assert.deepStrictEqual(data, testing)
+        assert.strictEqual(service.listenerCount('test'), 3)
+        service.off('test', callback1)
+        assert.strictEqual(service.listenerCount('test'), 2)
+        service.removeAllListeners('test')
+        assert.strictEqual(service.listenerCount('test'), 0)
+        resolve()
+      }
+      const callback2 = () => {
+        // noop
+      }
 
-    service.on('test', callback1)
-    service.on('test', callback2)
-    service.on('test', callback2)
+      service.on('test', callback1)
+      service.on('test', callback2)
+      service.on('test', callback2)
 
-    connection.emit('todos test', testing)
-  })
+      connection.emit('todos test', testing)
+    }))
 
   it('forwards namespaced call to .off, returns service instance', () => {
     // Use it's own connection and service so off method gets detected

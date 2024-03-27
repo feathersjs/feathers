@@ -44,7 +44,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "vitest run"
   },
   "directories": {
     "lib": "lib"
@@ -56,25 +56,25 @@
     "@feathersjs/commons": "^5.0.24",
     "@feathersjs/errors": "^5.0.24",
     "@feathersjs/feathers": "^5.0.24",
-    "@types/superagent": "^8.1.4",
+    "@types/superagent": "^8.1.6",
     "qs": "^6.12.0"
   },
   "devDependencies": {
     "@feathersjs/express": "^5.0.24",
     "@feathersjs/memory": "^5.0.24",
-    "@feathersjs/tests": "^5.0.24",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
+    "@feathersjs/tests-vitest": "^5.0.24",
+    "@types/node": "^20.11.30",
     "@types/node-fetch": "^2.6.11",
-    "@types/qs": "^6.9.12",
-    "axios": "^1.6.7",
-    "mocha": "^10.3.0",
+    "@types/qs": "^6.9.14",
+    "axios": "^1.6.8",
+    "get-port": "^7.1.0",
+    "@feathersjs/tests": "^5.0.24",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.8.1",
     "shx": "^0.3.4",
     "superagent": "^8.1.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

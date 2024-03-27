@@ -1,22 +1,27 @@
 import superagent from 'superagent'
-import { clientTests } from '@feathersjs/tests'
+import { clientTests } from '@feathersjs/tests-vitest'
 import { Server } from 'http'
+import getPort from 'get-port'
 
 import * as feathers from '../dist/feathers'
 import app from './fixture'
 
-describe('Superagent REST connector', function () {
+describe('Superagent REST connector', async function () {
   let server: Server
-  const rest = feathers.rest('http://localhost:8889')
+  const port = await getPort()
+  const rest = feathers.rest(`http://localhost:${port}`)
   const client = feathers.default().configure(rest.superagent(superagent))
 
-  before(async () => {
-    server = await app().listen(8889)
+  beforeAll(async () => {
+    server = await app().listen(port)
   })
 
-  after(function (done) {
-    server.close(done)
-  })
+  afterAll(
+    () =>
+      new Promise<void>((resolve) => {
+        server.close(() => resolve())
+      })
+  )
 
   clientTests(client, 'todos')
 })

@@ -1,22 +1,25 @@
 import { strict as assert } from 'assert'
 import _axios from 'axios'
 import { AuthenticationResult } from '@feathersjs/authentication'
+import getPort from 'get-port'
 
 import app from './app.fixture'
 
-const axios = _axios.create({
-  baseURL: 'http://localhost:9776/'
-})
-
-describe('@feathersjs/koa/authentication', () => {
+describe('@feathersjs/koa/authentication', async () => {
   const email = 'koatest@authentication.com'
   const password = 'superkoa'
+
+  const port = await getPort()
+
+  const axios = _axios.create({
+    baseURL: `http://localhost:${port}/`
+  })
 
   let authResult: AuthenticationResult
   let user: any
 
-  before(async () => {
-    await app.listen(9776)
+  beforeAll(async () => {
+    await app.listen(port)
     user = await app.service('users').create({ email, password })
     authResult = (
       await axios.post<any>('/authentication', {
@@ -27,7 +30,9 @@ describe('@feathersjs/koa/authentication', () => {
     ).data
   })
 
-  after(() => app.teardown())
+  afterAll(() => {
+    app.teardown()
+  })
 
   describe('service authentication', () => {
     it('successful local authentication', () => {

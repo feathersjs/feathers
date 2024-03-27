@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client'
 import assert from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
 import socketioClient from '@feathersjs/socketio-client'
 
@@ -8,17 +8,14 @@ import authClient from '../../src'
 import getApp from './fixture'
 import commonTests from './commons'
 import { AuthenticationResult } from '@feathersjs/authentication/lib'
+import getPort from 'get-port'
 
-describe('@feathersjs/authentication-client Socket.io integration', () => {
-  let app: Application
+describe('@feathersjs/authentication-client Socket.io integration', async () => {
+  const app = getApp(feathers().configure(socketio()))
+  const port = await getPort()
+  await app.listen(port)
 
-  before(async () => {
-    app = getApp(feathers().configure(socketio()))
-
-    await app.listen(9777)
-  })
-
-  after((done) => app.io.close(() => done()))
+  afterAll(() => new Promise<void>((resolve) => app.io.close(() => resolve())))
 
   it('allows to authenticate with handshake headers and sends login event', async () => {
     const user = { email: 'authtest@example.com', password: 'alsosecret' }
@@ -30,7 +27,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
       ...user
     })
 
-    const socket = io('http://localhost:9777', {
+    const socket = io(`http://localhost:${port}`, {
       transports: ['websocket'],
       transportOptions: {
         websocket: {
@@ -55,7 +52,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
 
   it('reconnects after socket disconnection', async () => {
     const user = { email: 'disconnecttest@example.com', password: 'alsosecret' }
-    const socket = io('http://localhost:9777', {
+    const socket = io(`http://localhost:${port}`, {
       timeout: 500,
       reconnection: true,
       reconnectionDelay: 100
@@ -86,7 +83,7 @@ describe('@feathersjs/authentication-client Socket.io integration', () => {
     () => app,
     () => {
       return feathers()
-        .configure(socketioClient(io('http://localhost:9777')))
+        .configure(socketioClient(io(`http://localhost:${port}`)))
         .configure(authClient())
     },
     {

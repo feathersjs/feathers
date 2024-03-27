@@ -11,7 +11,7 @@ export default (
     let client: Application
     let user: any
 
-    before(
+    beforeAll(
       async () =>
         (user = await getApp().service('users').create({
           email,
@@ -23,7 +23,7 @@ export default (
       client = getClient()
     })
 
-    after(async () => {
+    afterAll(async () => {
       await getApp().service('users').remove(user.id)
     })
 
@@ -85,8 +85,8 @@ export default (
         password
       })
 
-      client.authentication.reset()
-      client.authenticate()
+      await client.authentication.reset()
+      await client.authenticate()
       const result = await client.service('dummy').find()
 
       assert.strictEqual(result.provider, provider)
@@ -108,7 +108,7 @@ export default (
       assert.ok(result!.accessToken)
       assert.ok(result!.user)
 
-      assert.rejects(() => client.service('dummy').find(), {
+      await assert.rejects(() => client.service('dummy').find(), {
         name: 'NotAuthenticated',
         code: 401,
         message: 'Not authenticated'

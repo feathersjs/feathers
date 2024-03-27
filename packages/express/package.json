@@ -43,7 +43,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "vitest run"
   },
   "directories": {
     "lib": "lib"
@@ -63,20 +63,19 @@
     "@types/express-serve-static-core": "^4.17.43",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "express": "^4.18.3"
+    "express": "^4.19.1"
   },
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.24",
-    "@feathersjs/tests": "^5.0.24",
+    "@feathersjs/tests-vitest": "^5.0.24",
     "@types/lodash": "^4.17.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
-    "axios": "^1.6.7",
+    "@types/node": "^20.11.30",
+    "axios": "^1.6.8",
+    "get-port": "^7.1.0",
     "lodash": "^4.17.21",
-    "mocha": "^10.3.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

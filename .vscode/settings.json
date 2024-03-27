@@ -1,0 +1,8 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/package-lock.json": true,
+        "**/pnpm-lock.yaml": true,
+        "**/dist": true,
+    }
+}

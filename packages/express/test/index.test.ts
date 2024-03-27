@@ -9,6 +9,7 @@ import { feathers, HookContext, Id } from '@feathersjs/feathers'
 
 import { default as feathersExpress, rest, notFound, errorHandler, original, serveStatic } from '../src'
 import { RequestListener } from 'http'
+import getPort from 'get-port'
 
 describe('@feathersjs/express', () => {
   const service = {
@@ -243,49 +244,52 @@ describe('@feathersjs/express', () => {
     })
   })
 
-  it('Works with HTTPS', (done) => {
-    const todoService = {
-      async get(name: Id) {
-        return {
-          id: name,
-          description: `You have to do ${name}!`
+  it('Works with HTTPS', () =>
+    new Promise<void>(async (resolve, reject) => {
+      const todoService = {
+        async get(name: Id) {
+          return {
+            id: name,
+            description: `You have to do ${name}!`
+          }
         }
       }
-    }
 
-    const app = feathersExpress(feathers()).configure(rest())
+      const app = feathersExpress(feathers()).configure(rest())
 
-    app.use('/secureTodos', todoService)
+      app.use('/secureTodos', todoService)
 
-    const httpsServer = https
-      .createServer(
-        {
-          key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
-          cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
-          rejectUnauthorized: false,
-          requestCert: false
-        },
-        app as unknown as RequestListener
-      )
-      .listen(7889)
+      const port = await getPort()
 
-    app.setup(httpsServer)
+      const httpsServer = https
+        .createServer(
+          {
+            key: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'privatekey.pem')),
+            cert: fs.readFileSync(path.join(__dirname, '..', '..', 'tests', 'resources', 'certificate.pem')),
+            rejectUnauthorized: false,
+            requestCert: false
+          },
+          app as unknown as RequestListener
+        )
+        .listen(port)
 
-    httpsServer.on('listening', function () {
-      const instance = axios.create({
-        httpsAgent: new https.Agent({
-          rejectUnauthorized: false
+      app.setup(httpsServer)
+
+      httpsServer.on('listening', function () {
+        const instance = axios.create({
+          httpsAgent: new https.Agent({
+            rejectUnauthorized: false
+          })
         })
+
+        instance
+          .get<any>(`https://localhost:${port}/secureTodos/dishes`)
+          .then((response) => {
+            assert.ok(response.status === 200, 'Got OK status code')
+            assert.strictEqual(response.data.description, 'You have to do dishes!')
+            httpsServer.close(() => resolve())
+          })
+          .catch(reject)
       })
-
-      instance
-        .get<any>('https://localhost:7889/secureTodos/dishes')
-        .then((response) => {
-          assert.ok(response.status === 200, 'Got OK status code')
-          assert.strictEqual(response.data.description, 'You have to do dishes!')
-          httpsServer.close(() => done())
-        })
-        .catch(done)
-    })
-  })
+    }))
 })

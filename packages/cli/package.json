@@ -46,8 +46,8 @@
   "scripts": {
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "mocha": "mocha --timeout 60000 --config ../../.mocharc.json --require tsx --recursive test/**.test.ts test/**/*.test.ts",
-    "test": "npm run compile && npm run mocha && bin/feathers.js --help"
+    "vitest": "vitest run",
+    "test": "npm run compile && npm run vitest && bin/feathers.js --help"
   },
   "publishConfig": {
     "access": "public"
@@ -75,15 +75,13 @@
     "@feathersjs/socketio": "^5.0.24",
     "@feathersjs/transport-commons": "^5.0.24",
     "@feathersjs/typebox": "^5.0.24",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
+    "@types/node": "^20.11.30",
     "@types/prettier": "^2.7.3",
-    "axios": "^1.6.7",
-    "mocha": "^10.3.0",
+    "axios": "^1.6.8",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "type-fest": "^4.12.0",
-    "typescript": "^5.4.2"
+    "type-fest": "^4.13.1",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

@@ -2,13 +2,15 @@ import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
 import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import { Service, restTests } from '@feathersjs/tests-vitest'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
+import getPort from 'get-port'
 
-describe('@feathersjs/koa', () => {
+describe('@feathersjs/koa', async () => {
   let app: Application
+  const port = await getPort()
 
-  before(async () => {
+  beforeAll(async () => {
     app = koa(feathers())
     app.use(errorHandler())
     app.use(bodyParser())
@@ -56,10 +58,10 @@ describe('@feathersjs/koa', () => {
       ]
     } as ApplicationHookMap<Application>)
 
-    await app.listen(8465)
+    await app.listen(port)
   })
 
-  after(() => app.teardown())
+  afterAll(() => app.teardown())
 
   it('throws an error when initialized with invalid application', () => {
     try {
@@ -99,7 +101,7 @@ describe('@feathersjs/koa', () => {
   })
 
   it('starts as a Koa and Feathers application', async () => {
-    const { data } = await axios.get<any>('http://localhost:8465/middleware')
+    const { data } = await axios.get<any>(`http://localhost:${port}/middleware`)
     const todo = await app.service('todo').get('dishes', {
       query: {}
     })
@@ -117,7 +119,7 @@ describe('@feathersjs/koa', () => {
   })
 
   it('supports custom service middleware', async () => {
-    const { data } = await axios.get<any>('http://localhost:8465/todo/custom-middleware')
+    const { data } = await axios.get<any>(`http://localhost:${port}/todo/custom-middleware`)
 
     assert.deepStrictEqual(data, {
       id: 'custom-middleware',
@@ -127,7 +129,7 @@ describe('@feathersjs/koa', () => {
 
   it('works with custom methods that are allowed', async () => {
     const { data } = await axios.post<any>(
-      'http://localhost:8465/todo',
+      `http://localhost:${port}/todo`,
       {
         message: 'Custom hello'
       },
@@ -147,7 +149,7 @@ describe('@feathersjs/koa', () => {
     await assert.rejects(
       () =>
         axios.post<any>(
-          'http://localhost:8465/todo',
+          `http://localhost:${port}/todo`,
           {},
           {
             headers: {
@@ -170,7 +172,7 @@ describe('@feathersjs/koa', () => {
     await assert.rejects(
       () =>
         axios.post<any>(
-          'http://localhost:8465/no/where',
+          `http://localhost:${port}/no/where`,
           {},
           {
             headers: {
@@ -198,7 +200,7 @@ describe('@feathersjs/koa', () => {
     const app = koa(feathers())
     let called = false
 
-    const server = await app.listen(8787)
+    const server = await app.listen(await getPort())
 
     server.on('close', () => {
       called = true
@@ -214,6 +216,6 @@ describe('@feathersjs/koa', () => {
     await app.teardown()
   })
 
-  restTests('Services', 'todo', 8465)
-  restTests('Root service', '/', 8465)
+  restTests('Services', 'todo', port)
+  restTests('Root service', '/', port)
 })

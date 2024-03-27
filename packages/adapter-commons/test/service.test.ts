@@ -168,7 +168,7 @@ describe('@feathersjs/adapter-commons/service', () => {
   })
 
   it('allowsMulti', () => {
-    context('with true', () => {
+    describe('with true', () => {
       const service = new MethodService({ multi: true })
 
       it('does return true for multiple methodes', () => {
@@ -184,7 +184,7 @@ describe('@feathersjs/adapter-commons/service', () => {
       })
     })
 
-    context('with false', () => {
+    describe('with false', () => {
       const service = new MethodService({ multi: false })
 
       it('does return false for multiple methodes', () => {
@@ -200,7 +200,7 @@ describe('@feathersjs/adapter-commons/service', () => {
       })
     })
 
-    context('with array', () => {
+    describe('with array', () => {
       const service = new MethodService({ multi: ['create', 'get', 'other'] })
 
       it('does return true for specified multiple methodes', () => {

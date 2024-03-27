@@ -171,7 +171,7 @@ describe('@feathersjs/schema/resolver', () => {
       }
     })
 
-    assert.rejects(
+    await assert.rejects(
       () =>
         dummyResolver.resolve(
           {

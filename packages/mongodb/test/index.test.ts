@@ -1,5 +1,5 @@
 import { Db, MongoClient, ObjectId } from 'mongodb'
-import adapterTests from '@feathersjs/adapter-tests'
+import adapterTests from '@feathersjs/adapter-tests-vitest'
 import assert from 'assert'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'
@@ -140,7 +140,7 @@ describe('Feathers MongoDB Service', () => {
   let mongoClient: MongoClient
   let mongod: MongoMemoryServer
 
-  before(async () => {
+  beforeAll(async () => {
     mongod = await MongoMemoryServer.create()
 
     const client = await MongoClient.connect(mongod.getUri())
@@ -177,7 +177,7 @@ describe('Feathers MongoDB Service', () => {
     db.collection('people').createIndex({ name: 1 }, { partialFilterExpression: { team: 'blue' } })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await db.dropDatabase()
     await mongoClient.close()
     await mongod.stop()
@@ -408,7 +408,7 @@ describe('Feathers MongoDB Service', () => {
     let alice: any
     let doug: any
 
-    before(async () => {
+    beforeAll(async () => {
       app.use(
         'todos',
         new MongoDBService({
@@ -427,7 +427,7 @@ describe('Feathers MongoDB Service', () => {
       await app.service('todos').create({ name: 'Doug do dishes', userId: doug._id })
     })
 
-    after(async () => {
+    afterAll(async () => {
       db.collection('people').deleteMany({})
       db.collection('todos').deleteMany({})
     })
@@ -488,7 +488,7 @@ describe('Feathers MongoDB Service', () => {
       })
       assert.deepStrictEqual(result, [dave])
 
-      app.service('people').remove(dave._id)
+      await app.service('people').remove(dave._id)
     })
   })
 

@@ -1,0 +1,61 @@
+{
+  "name": "@feathersjs/tests-vitest",
+  "private": true,
+  "description": "Feathers core module common tests with vitest",
+  "version": "5.0.24",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/",
+  "types": "lib/",
+  "keywords": [
+    "feathers"
+  ],
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/daffl"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git",
+    "directory": "packages/tests-vitest"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "scripts": {
+    "prepublish": "npm run compile",
+    "pack": "echo \"not necessary\"",
+    "test": "echo \"not necessary\"",
+    "compile": "shx rm -rf lib/ && tsc"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.17.0",
+    "axios": "^1.6.8",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@feathersjs/feathers": "^5.0.24",
+    "@types/node": "^20.11.30",
+    "shx": "^0.3.4",
+    "typescript": "^5.4.3",
+    "vitest": "^1.1.1"
+  },
+  "peerDependencies": {
+    "vitest": "^1.4.0"
+  }
+}

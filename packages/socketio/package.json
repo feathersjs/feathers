@@ -44,7 +44,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "vitest run"
   },
   "directories": {
     "lib": "lib"
@@ -56,19 +56,20 @@
     "@feathersjs/commons": "^5.0.24",
     "@feathersjs/feathers": "^5.0.24",
     "@feathersjs/transport-commons": "^5.0.24",
-    "socket.io": "^4.7.4"
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@feathersjs/express": "^5.0.24",
     "@feathersjs/memory": "^5.0.24",
+    "@feathersjs/tests-vitest": "^5.0.24",
+    "@types/node": "^20.11.30",
+    "get-port": "^7.1.0",
     "@feathersjs/tests": "^5.0.24",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
     "lodash": "^4.17.21",
-    "mocha": "^10.3.0",
     "shx": "^0.3.4",
-    "socket.io-client": "^4.7.4",
-    "typescript": "^5.4.2"
+    "socket.io-client": "^4.7.5",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

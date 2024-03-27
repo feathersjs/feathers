@@ -28,7 +28,7 @@ describe('\'users\' service - client', function () {
   let server;
   let client;
 
-  before(async () => {
+  beforeAll(async () => {
     await app.service('users').create({ email, password });
 
     server = app.listen(port);
@@ -40,7 +40,7 @@ describe('\'users\' service - client', function () {
     client = await makeClient(host, port, email, password);
   });
 
-  after(() => {
+  afterAll(() => {
     client.logout();
     server.close();
   });

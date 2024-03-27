@@ -49,7 +49,7 @@
     "publish": "npm run reset-version",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/"
+    "test": "vitest run"
   },
   "engines": {
     "node": ">= 12"
@@ -63,12 +63,10 @@
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
-    "mocha": "^10.3.0",
+    "@types/node": "^20.11.30",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

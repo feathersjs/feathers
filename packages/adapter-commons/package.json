@@ -34,7 +34,7 @@
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "vitest run"
   },
   "directories": {
     "lib": "lib"
@@ -55,14 +55,11 @@
     "@feathersjs/feathers": "^5.0.24"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
-    "@types/mongodb": "^4.0.6",
-    "@types/node": "^20.11.26",
-    "mocha": "^10.3.0",
+    "@types/node": "^20.11.30",
     "mongodb": "^6.5.0",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

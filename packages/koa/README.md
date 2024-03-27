@@ -18,6 +18,6 @@ Refer to the [Feathers Koa API documentation](https://feathersjs.com/api/koa.htm
 
 ## License
 
-Copyright (c) 2023 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2024 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

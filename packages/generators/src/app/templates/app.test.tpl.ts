@@ -16,11 +16,11 @@ const appUrl = \`http://\${app.get('host')}:\${port}\`
 describe('Feathers application tests', () => {
   let server: Server
 
-  before(async () => {
+  beforeAll(async () => {
     server = await app.listen(port)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await app.teardown()
   })
 

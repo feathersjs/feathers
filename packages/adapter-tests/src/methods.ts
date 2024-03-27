@@ -668,6 +668,7 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
     describe("doesn't call public methods internally", () => {
       let throwing: any
 
+      // @ts-expect-error TODO: fix this
       before(() => {
         throwing = Object.assign(Object.create(app.service(serviceName)), {
           get store() {

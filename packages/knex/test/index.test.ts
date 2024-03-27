@@ -1,7 +1,7 @@
 import knex, { Knex } from 'knex'
 import assert from 'assert'
 import { feathers, HookContext, Service } from '@feathersjs/feathers'
-import adapterTests from '@feathersjs/adapter-tests'
+import adapterTests from '@feathersjs/adapter-tests-vitest'
 import { errors } from '@feathersjs/errors'
 import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
@@ -235,14 +235,16 @@ describe('Feathers Knex Service', () => {
       find: [hooks.validateQuery(personQueryValidator)]
     }
   })
-  before(() => {
+  beforeAll(async () => {
     if (TYPE === 'sqlite') {
       // Attach the public database to mimic a "schema"
       db.schema.raw(`attach database '${schemaName}.sqlite' as ${schemaName}`)
     }
+
+    await clean()
   })
-  before(clean)
-  after(clean)
+
+  afterAll(clean)
 
   describe('$like method', () => {
     let charlie: Person
@@ -717,8 +719,8 @@ describe('Feathers Knex Service', () => {
       assert.deepStrictEqual(got, todo)
       assert.deepStrictEqual(found, todo)
 
-      peopleService.remove(dave.id)
-      todoService.remove(todo.id)
+      await todoService.remove(todo.id)
+      await peopleService.remove(dave.id)
     })
   })
 
