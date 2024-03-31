@@ -268,8 +268,8 @@ export class MongoDbAdapter<
     }
 
     const findOptions: FindOptions = {
-      ...params.mongodb,
-      projection: this.getProjection($select)
+      projection: this.getProjection($select),
+      ...params.mongodb
     }
 
     return this.getModel(params)
@@ -331,6 +331,10 @@ export class MongoDbAdapter<
     data: Data | Data[],
     params: ServiceParams = {} as ServiceParams
   ): Promise<Result | Result[]> {
+    if (Array.isArray(data) && !this.allowsMulti('create', params)) {
+      throw new MethodNotAllowed('Can not create multiple entries')
+    }
+
     const model = await this.getModel(params)
     const setId = (item: any) => {
       const entry = Object.assign({}, item)
@@ -344,22 +348,30 @@ export class MongoDbAdapter<
 
       return entry
     }
-    const findOptions: FindOptions = {
-      ...params.mongodb,
-      projection: this.getProjection(params.query?.$select)
+
+    if (Array.isArray(data)) {
+      const created = await model.insertMany(data.map(setId), params.mongodb).catch(errorHandler)
+      return this._find({
+        ...params,
+        paginate: false,
+        query: {
+          _id: { $in: Object.values(created.insertedIds) },
+          $select: params.query?.$select
+        }
+      })
     }
 
-    const promise = Array.isArray(data)
-      ? model
-          .insertMany(data.map(setId), params.mongodb)
-          .then((result) =>
-            model.find({ _id: { $in: Object.values(result.insertedIds) } }, findOptions).toArray()
-          )
-      : model
-          .insertOne(setId(data), params.mongodb)
-          .then((result) => model.findOne({ _id: result.insertedId }, findOptions))
-
-    return promise.catch(errorHandler)
+    const created = await model.insertOne(setId(data), params.mongodb).catch(errorHandler)
+    const result = await this._find({
+      ...params,
+      paginate: false,
+      query: {
+        _id: created.insertedId,
+        $select: params.query?.$select,
+        $limit: 1
+      }
+    })
+    return result[0]
   }
 
   async _patch(id: null, data: PatchData, params?: ServiceParams): Promise<Result[]>
@@ -381,20 +393,25 @@ export class MongoDbAdapter<
       filters: { $sort, $select }
     } = this.filterQuery(id, params)
 
-    const replacement = Object.keys(data).reduce((current, key) => {
-      const value = (data as any)[key]
+    const replacement = Object.keys(data).reduce(
+      (current, key) => {
+        const value = (data as any)[key]
 
-      if (key.charAt(0) !== '$') {
-        current.$set = {
-          ...current.$set,
-          [key]: value
+        if (key.charAt(0) !== '$') {
+          current.$set[key] = value
+        } else if (key === '$set') {
+          current.$set = {
+            ...current.$set,
+            ...value
+          }
+        } else {
+          current[key] = value
         }
-      } else {
-        current[key] = value
-      }
 
-      return current
-    }, {} as any)
+        return current
+      },
+      { $set: {} } as any
+    )
 
     if (id === null) {
       const findParams = {
@@ -444,9 +461,9 @@ export class MongoDbAdapter<
     }
 
     const updateOptions: FindOneAndUpdateOptions = {
+      projection: this.getProjection($select),
       ...(params.mongodb as FindOneAndUpdateOptions),
-      returnDocument: 'after',
-      projection: this.getProjection($select)
+      returnDocument: 'after'
     }
 
     return model
@@ -493,9 +510,9 @@ export class MongoDbAdapter<
     }
 
     const replaceOptions: FindOneAndReplaceOptions = {
+      projection: this.getProjection($select),
       ...(params.mongodb as FindOneAndReplaceOptions),
-      returnDocument: 'after',
-      projection: this.getProjection($select)
+      returnDocument: 'after'
     }
 
     return model

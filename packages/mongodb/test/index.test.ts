@@ -504,6 +504,31 @@ describe('Feathers MongoDB Service', () => {
       app.service('people').remove(dave._id)
     })
 
+    it('can use aggregation in _create', async () => {
+      const dave = (await app.service('people').create(
+        { name: 'Dave' },
+        {
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )) as any
+
+      assert.deepStrictEqual(dave.aggregation, true)
+
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in multi _create', async () => {
+      app.service('people').options.multi = true
+      const dave = (await app.service('people').create([{ name: 'Dave' }], {
+        pipeline: [{ $addFields: { aggregation: true } }]
+      })) as any
+
+      assert.deepStrictEqual(dave[0].aggregation, true)
+
+      app.service('people').options.multi = false
+      app.service('people').remove(dave[0]._id)
+    })
+
     it('can use aggregation in _update', async () => {
       const dave = await app.service('people').create({ name: 'Dave' })
       const result = await app.service('people').update(
@@ -535,6 +560,26 @@ describe('Feathers MongoDB Service', () => {
 
       assert.deepStrictEqual(result, { ...dave, name: 'Marshal', aggregation: true })
 
+      app.service('people').remove(dave._id)
+    })
+
+    it('can use aggregation in multi _patch', async () => {
+      app.service('people').options.multi = true
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').patch(
+        null,
+        {
+          name: 'Marshal'
+        },
+        {
+          query: { _id: dave._id },
+          pipeline: [{ $addFields: { aggregation: true } }]
+        }
+      )
+
+      assert.deepStrictEqual(result[0], { ...dave, name: 'Marshal', aggregation: true })
+
+      app.service('people').options.multi = false
       app.service('people').remove(dave._id)
     })
 
@@ -588,6 +633,20 @@ describe('Feathers MongoDB Service', () => {
       } catch (error: any) {
         assert.strictEqual(error.name, 'NotFound', 'Got a NotFound Feathers error')
       }
+    })
+
+    it('can use aggregation in multi _remove', async () => {
+      app.service('people').options.multi = true
+      const dave = await app.service('people').create({ name: 'Dave' })
+      const result = await app.service('people').remove(null, {
+        query: { _id: dave._id },
+        pipeline: [{ $addFields: { aggregation: true } }]
+      })
+
+      assert.deepStrictEqual(result[0], { ...dave, aggregation: true })
+
+      app.service('people').options.multi = false
+      // app.service('people').remove(dave._id)
     })
   })
 
