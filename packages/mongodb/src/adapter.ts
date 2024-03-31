@@ -424,6 +424,8 @@ export class MongoDbAdapter<
         }
       }
 
+      console.log(findParams, params)
+
       return this._find(findParams)
         .then(async (result) => {
           const idList = (result as Result[]).map((item: any) => item[this.id])

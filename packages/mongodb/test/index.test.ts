@@ -389,6 +389,28 @@ describe('Feathers MongoDB Service', () => {
       assert.strictEqual(patched[0].friends?.length, 2)
     })
 
+    it('can use $limit in patch', async () => {
+      const data = { name: 'ddd' }
+      const query = { $limit: 1 }
+
+      // TODO: Why is $limit not working?
+
+      const result = await peopleService.patch(null, data, {
+        query
+      })
+
+      assert.strictEqual(result.length, 1)
+      assert.strictEqual(result[0].name, 'ddd')
+
+      const pipelineResult = await peopleService.patch(null, data, {
+        pipeline: [],
+        query
+      })
+
+      assert.strictEqual(pipelineResult.length, 1)
+      assert.strictEqual(pipelineResult[0].name, 'ddd')
+    })
+
     it('overrides default index selection using hint param if present', async () => {
       const indexed = await peopleService.create({
         name: 'Indexed',
