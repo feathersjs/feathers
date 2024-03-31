@@ -255,6 +255,7 @@ export class MongoDbAdapter<
           })
         }
       }
+
       return this.aggregateRaw(aggregateParams)
         .then((result) => result.toArray())
         .then(([result]) => {

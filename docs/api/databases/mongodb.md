@@ -66,8 +66,7 @@ MongoDB adapter specific options are:
 
 The [common API options](./common.md#options) are:
 
-- `id {string}` (_optional_, default: `'_id'`) - The name of the id field property. By design, MongoDB will always add an `_id` property.
-- `id {string}` (_optional_) - The name of the id field property (usually set by default to `id` or `_id`).
+- `id {string}` (_optional_, default: `'_id'`) - The name of the id field property. By design, MongoDB will always add an `_id` property. But you can choose to use a different property as your primary key.
 - `paginate {Object}` (_optional_) - A [pagination object](#pagination) containing a `default` and `max` page size
 - `multi {string[]|boolean}` (_optional_, default: `false`) - Allow `create` with arrays and `patch` and `remove` with id `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
 
@@ -79,19 +78,19 @@ There are additionally several legacy options in the [common API options](./comm
 
 ### aggregateRaw(params)
 
-The `find` method has been split into separate utilities for converting params into different types of MongoDB requests. By default, requests are processed by this method and are run through the MongoDB Aggregation Pipeline. This method returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
+The `find` method has been split into separate utilities for converting params into different types of MongoDB requests. When using `params.pipeline`, the `aggregateRaw` method is used to convert the Feathers params into a MongoDB aggregation pipeline with the `model.aggregate` method. This method returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
 
 ### findRaw(params)
 
-`findRaw(params)` is used when `params.mongodb` is set to retrieve data using `params.mongodb` as the `FindOptions` object. This method returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
+`findRaw(params)` This method is used when there is no `params.pipeline` and uses the common `model.find` method. It returns a raw MongoDB Cursor object, which can be used to perform custom pagination or in custom server scripts, if desired.
 
 ### makeFeathersPipeline(params)
 
-`makeFeathersPipeline(params)` takes a set of Feathers params and converts them to a pipeline array, ready to pass to `collection.aggregate`. This utility comprises the bulk of the `aggregateRaw` functionality, but does not use `params.pipeline`.
+`makeFeathersPipeline(params)` takes a set of Feathers params and converts them to a pipeline array, ready to pass to `modal.aggregate`. This utility comprises the bulk of the `aggregateRaw` functionality, but does not use `params.pipeline`.
 
 ### Custom Params
 
-The `@feathersjs/mongodb` adapter utilizes two custom params which control adapter-specific features: `params.pipeline` and `params.mongodb`.
+The `@feathersjs/mongodb` adapter utilizes three custom params which control adapter-specific features: `params.pipeline`, `params.mongodb`, and `params.adapter`.
 
 #### params.adapter
 
@@ -99,11 +98,11 @@ Allows to dynamically set the [adapter options](#options) (like the `Model` coll
 
 #### params.pipeline
 
-Used for [aggregation pipelines](#aggregation-pipeline).
+Used for [aggregation pipelines](#aggregation-pipeline). Whenever this property is set, the adapter will use the `collection.aggregate` method instead of the `collection.find` method. The `pipeline` property should be an array of [aggregation stages](https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/).
 
 #### params.mongodb
 
-When making a [service method](/api/services.md) call, `params` can contain an`mongodb` property (for example, `{upsert: true}`) which allows modifying the options used to run the MongoDB query. The adapter will use the `collection.find` method and not the [aggregation pipeline](#aggregation-pipeline) when you use `params.mongodb`.
+When making a [service method](/api/services.md) call, `params` can contain an`mongodb` property (for example, `{ upsert: true }`) which allows modifying the options used to run the MongoDB query. This param can be used for both find and aggregation queries.
 
 ## Transactions
 
@@ -198,7 +197,7 @@ See the MongoDB documentation for instructions on performing full-text search us
 
 ## Aggregation Pipeline
 
-In Feathers v5 Dove, we added support for the full power of MongoDB's Aggregation Framework and blends it seamlessly with the familiar Feathers Query syntax. All `find` queries now use the Aggregation Framework, by default.
+In Feathers v5 Dove, we added support for the full power of MongoDB's Aggregation Framework and blends it seamlessly with the familiar Feathers Query syntax. The `find` method automatically uses the aggregation pipeline when `params.pipeline` is set.
 
 The Aggregation Framework is accessed through the mongoClient's `collection.aggregate` method, which accepts an array of "stages". Each stage contains an operator which describes an operation to apply to the previous step's data. Each stage applies the operation to the results of the previous step. It’s now possible to perform any of the [Aggregation Stages](https://www.mongodb.com/docs/upcoming/reference/operator/aggregation-pipeline/) like `$lookup` and `$unwind`, integration with the normal Feathers queries.
 
