@@ -1,6 +1,6 @@
 import { Application, FeathersService, RealTimeConnection, getServiceOptions } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
-import { compact, flattenDeep, noop } from 'lodash'
+import flattenDeep from 'lodash/flattenDeep'
 import { Channel } from './channel/base'
 import { CombinedChannel } from './channel/combined'
 import { channelMixin, publishMixin, keys, PublishMixin, Event, Publisher } from './mixins'
@@ -87,7 +87,7 @@ export function channels() {
             // 4. App publisher for all events
             appPublishers[keys.ALL_EVENTS] ||
             // 5. No publisher
-            noop
+            (() => {})
 
           try {
             Promise.resolve(publisher(data, hook))
@@ -96,7 +96,9 @@ export function channels() {
                   return
                 }
 
-                const results = Array.isArray(result) ? compact(flattenDeep(result)) : ([result] as Channel[])
+                const results = Array.isArray(result)
+                  ? flattenDeep(result).filter(Boolean)
+                  : ([result] as Channel[])
                 const channel = new CombinedChannel(results)
 
                 if (channel && channel.length > 0) {

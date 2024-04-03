@@ -11,8 +11,6 @@ import koaCookieSession from 'koa-session'
 import { AuthenticationService } from '@feathersjs/authentication'
 import { GrantConfig } from 'grant'
 
-import { defaultsDeep, each, omit } from 'lodash'
-
 export interface OauthSetupSettings {
   linkStrategy: string
   authService?: string
@@ -38,25 +36,31 @@ export const getGrantConfig = (service: AuthenticationService): GrantConfig => {
     }
   }
 
-  const grant: GrantConfig = defaultsDeep({}, omit(oauth, ['redirect', 'origins']), {
+  // omit 'redirect' and 'origins' from oauth
+  const { redirect, origins, ...oauthConfig } = oauth
+
+  const grant: GrantConfig = {
+    ...oauthConfig,
     defaults: {
+      ...oauthConfig.defaults,
       prefix: '/oauth',
       origin: `${protocol}://${host}`,
       transport: 'state',
       response: ['tokens', 'raw', 'profile']
     }
-  })
+  }
 
   const getUrl = (url: string) => {
     const { defaults } = grant
     return `${defaults.origin}${defaults.prefix}/${url}`
   }
 
-  each(grant, (value, name) => {
+  // iterate over grant object with key and value
+  for (const [name, value] of Object.entries(grant)) {
     if (name !== 'defaults') {
       value.redirect_uri = value.redirect_uri || getUrl(`${name}/callback`)
     }
-  })
+  }
 
   return grant
 }
