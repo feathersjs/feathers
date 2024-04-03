@@ -42,11 +42,11 @@ export const getGrantConfig = (service: AuthenticationService): GrantConfig => {
   const grant: GrantConfig = {
     ...oauthConfig,
     defaults: {
-      ...oauthConfig.defaults,
       prefix: '/oauth',
       origin: `${protocol}://${host}`,
       transport: 'state',
-      response: ['tokens', 'raw', 'profile']
+      response: ['tokens', 'raw', 'profile'],
+      ...oauthConfig.defaults
     }
   }
 
