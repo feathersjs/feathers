@@ -286,46 +286,11 @@ This works well for individual properties, however if you require the complete (
 
 ## Transactions
 
-The Knex adapter comes with three hooks that allows to run service method calls in a transaction. They can be used as application wide hooks or per service like this:
-
-```ts
-import { transaction } from '@feathersjs/knex'
-
-// A configure function that registers the service and its hooks via `app.configure`
-export const message = (app: Application) => {
-  // Register our service on the Feathers application
-  app.use('messages', new MessageService(getOptions(app)), {
-    // A list of all methods this service exposes externally
-    methods: ['find', 'get', 'create', 'patch', 'remove'],
-    // You can add additional custom events to be sent to clients here
-    events: []
-  })
-  // Initialize hooks
-  app.service('messages').hooks({
-    around: {
-      all: []
-    },
-    before: {
-      all: [transaction.start()],
-      find: [],
-      get: [],
-      create: [],
-      patch: [],
-      remove: []
-    },
-    after: {
-      all: [transaction.end()]
-    },
-    error: {
-      all: [transaction.rollback()]
-    }
-  })
-}
-```
+The Knex adapter comes with three hooks that allows to run service method calls in a transaction. They can be used as application wide hooks or per service.
 
 To use the transactions feature, you must ensure that the three hooks (start, end and rollback) are being used.
 
-At the start of any request, a new transaction will be started. All the changes made during the request to the services that are using knex will use the transaction. At the end of the request, if sucessful, the changes will be commited. If an error occurs, the changes will be forfeit, all the `creates`, `patches`, `updates` and `deletes` are not going to be commited.
+At the start of any request, a new transaction will be started. All the changes made during the request to the services that are using knex will use the transaction. At the end of the request, if successful, the changes will be commited. If an error occurs, the changes will be forfeit, all the `creates`, `patches`, `updates` and `deletes` are not going to be commited.
 
 The object that contains `transaction` is stored in the `params.transaction` of each request.
 
@@ -353,7 +318,227 @@ app.service('messages').publish(async (data, context) => {
 })
 ```
 
-This also works with nested service calls and nested transactions. For example, if a service calls `transaction.start()` and passes the transaction param to a nested service call, which also calls `transaction.start()` in it's own hooks, they will share the top most `committed` promise that will resolve once all of the transactions have succesfully committed.
+This also works with nested service calls and nested transactions. For example, if a service calls `transaction.start()` and passes the transaction param to a nested service call, which also calls `transaction.start()` in it's own hooks, they will share the top most `committed` promise that will resolve once all of the transactions have successfully committed.
+
+
+### Example Transaction Setup
+
+We will be using TypeBox schemas throughout, but that is not a requirement.
+
+We will have two services `Order` and `ShippingOrder`
+
+When we create an `Order` we want to automatically create a `ShippingOrder`, but if `Order` or `ShippingOrder` fail to be created we want to roll everything back and not save either.
+
+#### Order Schema
+
+```ts
+export const orderSchema = Type.Object(
+  {
+    id: Type.String({ format: 'uuid' }),
+    item: Type.String(),
+    address: Type.String(),
+    quantity: Type.Number()
+  },
+  { $id: 'Order', additionalProperties: false }
+)
+```
+
+#### Shipping Order Schema
+
+```ts
+export const shippingOrderSchema = Type.Object(
+  {
+    id: Type.String({ format: 'uuid' }),
+    order_id: Type.String({ format: 'uuid', $schema: 'Order' }),
+    expedited: Type.Boolean(),
+    shipped: Type.Boolean()
+  },
+  { $id: 'ShippingOrder', additionalProperties: false }
+)
+```
+
+#### After hook
+
+Let's start by adding our logic to automatically create our `ShippingOrder`.
+
+In our `order.ts` file we can add this hook
+
+```ts
+after: {
+  create: [
+    async (context: HookContext<OrderService>) => {
+      const ourOrder = context.result as Order //Let's not deal with arrays or pagination for now
+
+      await context.app
+        .service(shippingOrderPath)
+        .create({ expedited: true, shipped: false, order_id: ourOrder.id })
+    }
+  ]
+}
+```
+
+#### The problem
+
+Now that we have our logic in, `Order` will automatically create `ShippingOrder`. But what if something goes wrong and the `Order` is created but `ShippingOrder` isn't. This could cause an order to never be shipped.
+
+We can solve this problem in two ways outlined below.
+
+<BlockQuote>
+
+You can emulate an error by throwing an error in the before create hook of your `shipping-order.ts` file
+
+```ts
+create: [
+  async () => {
+    throw new Error('Fail')
+  },
+  schemaHooks.validateData(shippingOrderDataValidator),
+  schemaHooks.resolveData(shippingOrderDataResolver)
+]
+```
+
+</BlockQuote>
+
+#### Application wide wrapping transaction
+
+Using the global hooks in `src/app.ts` we are able to wrap all of our `create`, `update`, and `patch` hooks.
+
+```ts
+const transactionHandler = async (context: HookContext<any>, next: NextFunction) => {
+  try {
+    console.log('Start our work')
+    await transaction.start()(context)
+    await next()
+    await transaction.end()(context)
+    console.log('Work done')
+  } catch (err) {
+    console.log('Rollback')
+    await transaction.rollback()(context)
+    throw err
+  }
+}
+
+// Register hooks that run on all service methods
+app.hooks({
+  around: {
+    create: [transactionHandler],
+    patch: [transactionHandler],
+    update: [transactionHandler],
+    delete: [transactionHandler]
+  }
+})
+```
+
+What this does is for any `create`/`update`/`patch`/`delete` request, we are starting a transaction that will be available in `context.params.transaction`.
+
+Note this does not mean we are done, when a `create` request is made to `Order`, it will have `context.params.transaction` available to it but we have to pass that along to `ShippingOrder` create request.
+
+Let's revisit our hook that automatically creates `ShippingOrder` and modify it to pass our transaction with the request.
+
+```ts
+after: {
+  create: [
+    async (context: HookContext<OrderService>) => {
+      const ourOrder = context.result as Order
+
+      await context.app.service(shippingOrderPath).create(
+        { expedited: true, shipped: false, order_id: ourOrder.id },
+        { transaction: context.params.transaction } // <--
+      )
+    }
+  ]
+}
+```
+
+<BlockQuote>
+We have to use await here otherwise the transaction will close before the creation is finished. For something like sending an email, you can opt to not await.
+
+```ts
+context.params.transaction?.committed.then((success: any) => {
+  if (!success) return
+  //Send Email
+})
+```
+
+</BlockQuote>
+
+### Service wide wrapping transaction
+
+The simplest way of doing this is
+
+- Add `transaction.start()` in the before create hook.
+- Add `transaction.end()` in the after create hook.
+- Add `transaction.rollback()` in the error all hook.
+
+```ts
+app.service(orderPath).hooks({
+  around: {
+    // ...
+  },
+  before: {
+    // ...
+    create: [
+      schemaHooks.validateData(orderDataValidator),
+      schemaHooks.resolveData(orderDataResolver),
+      transaction.start()
+    ]
+  },
+  after: {
+    create: [
+      async (context: HookContext<OrderService>) => {
+        const ourOrder = context.result as Order //Let's not deal with arrays or pagination for now
+
+        await context.app
+          .service(shippingOrderPath)
+          .create(
+            { expedited: true, shipped: false, order_id: ourOrder.id },
+            { transaction: context.params.transaction }
+          )
+      },
+      transaction.end()
+    ]
+  },
+  error: {
+    all: [transaction.rollback()]
+  }
+})
+```
+
+#### Example with around hook
+
+When utilizing the around hook, you must pass the context manually. Remember to handle your errors as well, since `around` hooks will not throw into the `error` hook
+
+```ts
+{
+  around: {
+    create: [
+      async (context: HookContext<OrderService>, next: NextFunction) => {
+        console.log('Start Work')
+        await transaction.start()(context)
+        try {
+          //We can do any work here, similar to a before hook
+          await next()
+          const ourOrder = context.result as Order
+
+          await context.app
+            .service(shippingOrderPath)
+            .create(
+              { expedited: true, shipped: false, order_id: ourOrder.id },
+              { transaction: context.params.transaction }
+            )
+          console.log('End Work')
+          transaction.end()(context)
+        } catch (err) {
+          console.log('Rollback')
+          transaction.rollback()(context)
+          throw err
+        }
+      }
+    ]
+  }
+}
+```
+
 
 ## Error handling
 
