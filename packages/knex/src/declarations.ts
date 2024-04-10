@@ -10,7 +10,7 @@ export interface KnexAdapterOptions extends AdapterServiceOptions {
 export interface KnexAdapterTransaction {
   starting: boolean
   parent?: KnexAdapterTransaction
-  committed?: boolean
+  committed?: Promise<boolean>
   resolve?: any
   trx?: Knex.Transaction
   id?: number
