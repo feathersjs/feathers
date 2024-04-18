@@ -86,7 +86,7 @@ The `find` method has been split into separate utilities for converting params i
 
 ### makeFeathersPipeline(params)
 
-`makeFeathersPipeline(params)` takes a set of Feathers params and converts them to a pipeline array, ready to pass to `modal.aggregate`. This utility comprises the bulk of the `aggregateRaw` functionality, but does not use `params.pipeline`.
+`makeFeathersPipeline(params)` takes a set of Feathers params and converts them to a pipeline array, ready to pass to `model.aggregate`. This utility comprises the bulk of the `aggregateRaw` functionality, but does not use `params.pipeline`.
 
 ### Custom Params
 
@@ -98,7 +98,7 @@ Allows to dynamically set the [adapter options](#options) (like the `Model` coll
 
 #### params.pipeline
 
-Used for [aggregation pipelines](#aggregation-pipeline). Whenever this property is set, the adapter will use the `collection.aggregate` method instead of the `collection.find` method. The `pipeline` property should be an array of [aggregation stages](https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/).
+Used for [aggregation pipelines](#aggregation-pipeline). Whenever this property is set, the adapter will use the `model.aggregate` method instead of the `model.find` method. The `pipeline` property should be an array of [aggregation stages](https://www.mongodb.com/docs/manual/reference/operator/aggregation-pipeline/).
 
 #### params.mongodb
 
@@ -199,7 +199,7 @@ See the MongoDB documentation for instructions on performing full-text search us
 
 In Feathers v5 Dove, we added support for the full power of MongoDB's Aggregation Framework and blends it seamlessly with the familiar Feathers Query syntax. The `find` method automatically uses the aggregation pipeline when `params.pipeline` is set.
 
-The Aggregation Framework is accessed through the mongoClient's `collection.aggregate` method, which accepts an array of "stages". Each stage contains an operator which describes an operation to apply to the previous step's data. Each stage applies the operation to the results of the previous step. It’s now possible to perform any of the [Aggregation Stages](https://www.mongodb.com/docs/upcoming/reference/operator/aggregation-pipeline/) like `$lookup` and `$unwind`, integration with the normal Feathers queries.
+The Aggregation Framework is accessed through the mongoClient's `model.aggregate` method, which accepts an array of "stages". Each stage contains an operator which describes an operation to apply to the previous step's data. Each stage applies the operation to the results of the previous step. It’s now possible to perform any of the [Aggregation Stages](https://www.mongodb.com/docs/upcoming/reference/operator/aggregation-pipeline/) like `$lookup` and `$unwind`, integration with the normal Feathers queries.
 
 Here's how it works with the operators that match the Feathers Query syntax. Let's convert the following Feathers query:
 
