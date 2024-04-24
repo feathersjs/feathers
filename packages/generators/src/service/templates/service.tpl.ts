@@ -41,7 +41,7 @@ ${
     ? `import { ${camelName}Path, ${camelName}Methods } from './${fileName}.shared'`
     : `
 export const ${camelName}Path = '${path}'
-export const ${camelName}Methods = ['find', 'get', 'create', 'patch', 'remove'] as const`
+export const ${camelName}Methods: Array<keyof ${className}> = ['find', 'get', 'create', 'patch', 'remove']`
 }
 
 export * from './${fileName}.class'
