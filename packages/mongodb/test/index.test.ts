@@ -393,22 +393,90 @@ describe('Feathers MongoDB Service', () => {
       const data = { name: 'ddd' }
       const query = { $limit: 1 }
 
-      // TODO: Why is $limit not working?
-
-      const result = await peopleService.patch(null, data, {
+      const result = await peopleService._patch(null, data, {
         query
       })
 
       assert.strictEqual(result.length, 1)
       assert.strictEqual(result[0].name, 'ddd')
 
-      const pipelineResult = await peopleService.patch(null, data, {
+      const pipelineResult = await peopleService._patch(null, data, {
         pipeline: [],
         query
       })
 
       assert.strictEqual(pipelineResult.length, 1)
       assert.strictEqual(pipelineResult[0].name, 'ddd')
+    })
+
+    it('can use $limit in remove', async () => {
+      const query = { $limit: 1 }
+
+      const result = await peopleService._remove(null, {
+        query
+      })
+
+      assert.strictEqual(result.length, 1)
+
+      const pipelineResult = await peopleService._remove(null, {
+        pipeline: [],
+        query
+      })
+
+      assert.strictEqual(pipelineResult.length, 1)
+    })
+
+    it('can use $sort in patch', async () => {
+      const updated = await peopleService._patch(
+        null,
+        { name: 'ddd' },
+        {
+          query: { $limit: 1, $sort: { name: -1 } }
+        }
+      )
+
+      const result = await peopleService.find({
+        paginate: false,
+        query: { $limit: 1, $sort: { name: -1 } }
+      })
+
+      assert.strictEqual(updated.length, 1)
+      assert.strictEqual(result[0].name, 'ddd')
+
+      const pipelineUpdated = await peopleService._patch(
+        null,
+        { name: 'eee' },
+        {
+          pipeline: [],
+          query: { $limit: 1, $sort: { name: -1 } }
+        }
+      )
+
+      const pipelineResult = await peopleService.find({
+        paginate: false,
+        pipeline: [],
+        query: { $limit: 1, $sort: { name: -1 } }
+      })
+
+      assert.strictEqual(pipelineUpdated.length, 1)
+      assert.strictEqual(pipelineResult[0].name, 'eee')
+    })
+
+    it('can use $sort in remove', async () => {
+      const removed = await peopleService._remove(null, {
+        query: { $limit: 1, $sort: { name: -1 } }
+      })
+
+      assert.strictEqual(removed.length, 1)
+      assert.strictEqual(removed[0].name, 'ccc')
+
+      const pipelineRemoved = await peopleService._remove(null, {
+        pipeline: [],
+        query: { $limit: 1, $sort: { name: -1 } }
+      })
+
+      assert.strictEqual(pipelineRemoved.length, 1)
+      assert.strictEqual(pipelineRemoved[0].name, 'aaa')
     })
 
     it('overrides default index selection using hint param if present', async () => {
