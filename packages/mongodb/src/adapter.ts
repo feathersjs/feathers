@@ -190,10 +190,6 @@ export class MongoDbAdapter<
     return select
   }
 
-  async _findOrGet(id: NullableAdapterId, params: ServiceParams) {
-    return id === null ? await this._find(params) : await this._get(id, params)
-  }
-
   normalizeId<D>(id: NullableAdapterId, data: D): D {
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
