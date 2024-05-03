@@ -133,6 +133,18 @@ Only `params.query` is passed between the server and the client, other parts of 
 
 </BlockQuote>
 
+To increase the array limit in query strings, `koa-qs` can be reinitalized with the options for the [qs](https://www.npmjs.com/package/qs) module:
+
+```ts
+// app.ts
+import koaQs from 'koa-qs'
+
+// ...
+koaQs(app, 'extended', {
+  arrayLimit: 200
+})
+```
+
 ### params.provider
 
 For any [service method call](./services.md) made through REST `params.provider` will be set to `rest`.
