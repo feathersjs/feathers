@@ -8,7 +8,7 @@ import { getGrantConfig, authenticationServiceOptions, OauthSetupSettings } from
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 
-export { OauthSetupSettings, OAuthStrategy, OAuthProfile }
+export { OauthSetupSettings, OAuthStrategy, OAuthProfile, OAuthService }
 
 export const oauth =
   (settings: Partial<OauthSetupSettings> = {}) =>
