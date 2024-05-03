@@ -53,11 +53,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@featherscloud/pinion": "^0.5.3",
+    "@featherscloud/pinion": "^0.5.4",
     "chalk": "^5.3.0",
     "lodash": "^4.17.21",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.24",
@@ -78,20 +78,20 @@
     "@feathersjs/transport-commons": "^5.0.24",
     "@feathersjs/typebox": "^5.0.24",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
+    "@types/node": "^20.12.8",
     "@types/prettier": "^2.7.3",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "knex": "^3.1.0",
-    "mocha": "^10.3.0",
+    "mocha": "^10.4.0",
     "mongodb": "^6.5.0",
     "mssql": "^10.0.2",
     "mysql": "^2.18.1",
-    "pg": "^8.11.3",
+    "pg": "^8.11.5",
     "shx": "^0.3.4",
     "sqlite3": "^5.1.7",
-    "tsx": "^4.7.1",
-    "type-fest": "^4.12.0",
-    "typescript": "^5.4.2"
+    "tsx": "^4.9.0",
+    "type-fest": "^4.18.1",
+    "typescript": "^5.4.5"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

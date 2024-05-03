@@ -63,13 +63,13 @@
     "@feathersjs/adapter-tests": "^5.0.24",
     "@feathersjs/schema": "^5.0.24",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.26",
+    "@types/node": "^20.12.8",
     "knex": "^3.1.0",
-    "mocha": "^10.3.0",
-    "pg": "^8.11.3",
+    "mocha": "^10.4.0",
+    "pg": "^8.11.5",
     "shx": "^0.3.4",
     "sqlite3": "^5.1.7",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.5"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

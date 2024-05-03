@@ -29,7 +29,7 @@ export type ${upperName}ClientService = Pick<
 
 export const ${camelName}Path = '${path}'
 
-export const ${camelName}Methods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export const ${camelName}Methods: Array<keyof ${className}> = ['find', 'get', 'create', 'patch', 'remove']
 
 export const ${camelName}Client = (client: ClientApplication) => {
   const connection = client.get('connection')
