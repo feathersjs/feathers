@@ -255,7 +255,7 @@ export class MongoDbAdapter<
       return this.aggregateRaw(aggregateParams)
         .then((result) => result.toArray())
         .then(([result]) => {
-          if (result === undefined) {
+          if (!result) {
             throw new NotFound(`No record found for id '${id}'`)
           }
 
@@ -272,7 +272,7 @@ export class MongoDbAdapter<
     return this.getModel(params)
       .then((model) => model.findOne(query, findOptions))
       .then((result) => {
-        if (result == null) {
+        if (!result) {
           throw new NotFound(`No record found for id '${id}'`)
         }
 
@@ -466,10 +466,10 @@ export class MongoDbAdapter<
     return model
       .findOneAndUpdate(query, replacement, updateOptions)
       .then((result) => {
-        if (result.value === null) {
+        if (!result) {
           throw new NotFound(`No record found for id '${id}'`)
         }
-        return result.value as Result
+        return result as Result
       })
       .catch(errorHandler)
   }
@@ -515,10 +515,10 @@ export class MongoDbAdapter<
     return model
       .findOneAndReplace(query, replacement, replaceOptions)
       .then((result) => {
-        if (result.value === null) {
+        if (!result) {
           throw new NotFound(`No record found for id '${id}'`)
         }
-        return result.value as Result
+        return result as Result
       })
       .catch(errorHandler)
   }
@@ -568,10 +568,10 @@ export class MongoDbAdapter<
     return model
       .findOneAndDelete(query, deleteOptions)
       .then((result) => {
-        if (result.value === null) {
+        if (!result) {
           throw new NotFound(`No record found for id '${id}'`)
         }
-        return result.value as Result
+        return result as Result
       })
       .catch(errorHandler)
   }

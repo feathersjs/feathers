@@ -760,16 +760,79 @@ describe('Feathers MongoDB Service', () => {
   describe('Updates mutated query', () => {
     it('Can re-query mutated data', async () => {
       const dave = await app.service('people').create({ name: 'Dave' })
-      const result = await app
+      const dave2 = await app.service('people').create({ name: 'Dave' })
+      app.service('people').options.multi = true
+
+      const updated = await app
         .service('people')
         .update(dave._id, { name: 'Marshal' }, { query: { name: 'Dave' } })
 
-      assert.deepStrictEqual(result, {
+      assert.deepStrictEqual(updated, {
         ...dave,
         name: 'Marshal'
       })
 
+      const patched = await app
+        .service('people')
+        .patch(dave._id, { name: 'Dave' }, { query: { name: 'Marshal' } })
+
+      assert.deepStrictEqual(patched, {
+        ...dave,
+        name: 'Dave'
+      })
+
+      const updatedPipeline = await app
+        .service('people')
+        .update(dave._id, { name: 'Marshal' }, { query: { name: 'Dave' }, pipeline: [] })
+
+      assert.deepStrictEqual(updatedPipeline, {
+        ...dave,
+        name: 'Marshal'
+      })
+
+      const patchedPipeline = await app
+        .service('people')
+        .patch(dave._id, { name: 'Dave' }, { query: { name: 'Marshal' }, pipeline: [] })
+
+      assert.deepStrictEqual(patchedPipeline, {
+        ...dave,
+        name: 'Dave'
+      })
+
+      const multiPatch = await app
+        .service('people')
+        .patch(null, { name: 'Marshal' }, { query: { name: 'Dave' } })
+
+      assert.deepStrictEqual(multiPatch, [
+        {
+          ...dave,
+          name: 'Marshal'
+        },
+        {
+          ...dave2,
+          name: 'Marshal'
+        }
+      ])
+
+      const multiPatchPipeline = await app
+        .service('people')
+        .patch(null, { name: 'Dave' }, { query: { name: 'Marshal' }, pipeline: [] })
+
+      assert.deepStrictEqual(multiPatchPipeline, [
+        {
+          ...dave,
+          name: 'Dave'
+        },
+        {
+          ...dave2,
+          name: 'Dave'
+        }
+      ])
+
+      app.service('people').options.multi = false
+
       app.service('people').remove(dave._id)
+      app.service('people').remove(dave2._id)
     })
   })
 
