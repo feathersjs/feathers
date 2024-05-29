@@ -115,3 +115,46 @@ app.service('messages').hooks({
   }
 })
 ```
+
+### Using validators with custom methods
+
+You can optionally create validators for your custom methods. For example we will create a custom method in our `user` service that simply says "Hello ${name}" to the requestor.
+
+For the example we can use this TypeBox schema
+
+```ts
+//Our request object, we expect something like {name: "Bob"}
+export const sayHelloRequest = Type.Object(
+  {
+    name: Type.String({
+      description: "Who are we saying hello to!",
+      examples: ["Bob"],
+      minLength: 2,
+    }),
+  },
+  { $id: "sayHelloRequest", additionalProperties: false },
+);
+
+//We intend on returning an object with a string response property
+export const sayHelloResponse = Type.Object(
+  { response: Type.String() },
+  { $id: "sayHelloResponse", additionalProperties: false },
+);
+
+export const sayHelloValidator = getValidator(sayHelloRequest, dataValidator);
+```
+
+In our user class file, we can define our custom method
+
+```ts
+async sayHello(data: Static<typeof sayHelloRequest>): Promise<Static<typeof sayHelloResponse>> {  
+  const { name } = data  
+  return { response: `Hello ${name}` }  
+}
+```
+
+Finally, we can add our validator in our service hooks
+
+```ts
+sayHello: [schemaHooks.validateData(sayHelloValidator)]
+```
