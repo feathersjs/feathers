@@ -404,6 +404,8 @@ create: [
 Using the global hooks in `src/app.ts` we are able to wrap all of our `create`, `update`, and `patch` hooks.
 
 ```ts
+import { transaction } from '@feathersjs/knex'
+
 const transactionHandler = async (context: HookContext<any>, next: NextFunction) => {
   try {
     console.log('Start our work')
