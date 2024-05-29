@@ -8,7 +8,7 @@ Services are the heart of every Feathers application. Services are objects or in
 
 ## Service methods
 
-Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custommethod-data-params) that your service provides or that have already been implemented by one of the [database adapters](./databases/common.md). Below is an example of a Feathers service as a class or object.
+Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) and [custom methods](#custom-methods) that your service provides or that have already been implemented by one of the [database adapters](./databases/common.md). Below is an example of a Feathers service as a class or object.
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
