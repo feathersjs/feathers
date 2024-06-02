@@ -1,17 +1,15 @@
 // Sorting algorithm taken from NeDB (https://github.com/louischatriot/nedb)
 // See https://github.com/louischatriot/nedb/blob/e3f0078499aa1005a59d0c2372e425ab789145c1/lib/model.js#L189
 
-export function compareNSB(a: any, b: any) {
-  if (a < b) {
-    return -1
+export function compareNSB(a: number | string | boolean, b: number | string | boolean): 0 | 1 | -1 {
+  if (a === b) {
+    return 0
   }
-  if (a > b) {
-    return 1
-  }
-  return 0
+
+  return a < b ? -1 : 1
 }
 
-export function compareArrays(a: any[], b: any[]) {
+export function compareArrays(a: any[], b: any[]): 0 | 1 | -1 {
   for (let i = 0, l = Math.min(a.length, b.length); i < l; i++) {
     const comparison = compare(a[i], b[i])
 
@@ -24,48 +22,48 @@ export function compareArrays(a: any[], b: any[]) {
   return compareNSB(a.length, b.length)
 }
 
-export function compare(a: any, b: any, compareStrings: any = compareNSB): 0 | 1 | -1 {
+export function compare(
+  a: any,
+  b: any,
+  compareStrings: (a: any, b: any) => 0 | 1 | -1 = compareNSB
+): 0 | 1 | -1 {
   if (a === b) {
     return 0
   }
 
-  // undefined
-  if (a === undefined) {
+  // null or undefined
+  if (a == null) {
     return -1
   }
-  if (b === undefined) {
+  if (b == null) {
     return 1
   }
 
-  // null
-  if (a === null) {
-    return -1
-  }
-  if (b === null) {
-    return 1
-  }
+  // detect typeof once
+  const typeofA = typeof a
+  const typeofB = typeof b
 
   // Numbers
-  if (typeof a === 'number') {
-    return typeof b === 'number' ? compareNSB(a, b) : -1
+  if (typeofA === 'number') {
+    return typeofB === 'number' ? compareNSB(a, b) : -1
   }
-  if (typeof b === 'number') {
+  if (typeofB === 'number') {
     return 1
   }
 
   // Strings
-  if (typeof a === 'string') {
-    return typeof b === 'string' ? compareStrings(a, b) : -1
+  if (typeofA === 'string') {
+    return typeofB === 'string' ? compareStrings(a, b) : -1
   }
-  if (typeof b === 'string') {
+  if (typeofB === 'string') {
     return 1
   }
 
   // Booleans
-  if (typeof a === 'boolean') {
-    return typeof b === 'boolean' ? compareNSB(a, b) : -1
+  if (typeofA === 'boolean') {
+    return typeofB === 'boolean' ? compareNSB(a, b) : -1
   }
-  if (typeof b === 'boolean') {
+  if (typeofB === 'boolean') {
     return 1
   }
 
@@ -100,28 +98,29 @@ export function compare(a: any, b: any, compareStrings: any = compareNSB): 0 | 1
   return compareNSB(aKeys.length, bKeys.length)
 }
 
+// lodash-y get - probably want to use lodash get instead
+const get = (value: any, path: string[]) => path.reduce((value, key) => value[key], value)
+
 // An in-memory sorting function according to the
 // $sort special query parameter
 export function sorter($sort: { [key: string]: -1 | 1 }) {
-  const get = (value: any, path: string[]) => path.reduce((value, key) => value[key], value)
-
   const compares = Object.keys($sort).map((key) => {
     const direction = $sort[key]
-    const path = key.split('.')
 
-    if (path.length === 1) {
+    if (!key.includes('.')) {
       return (a: any, b: any) => direction * compare(a[key], b[key])
     } else {
+      const path = key.split('.')
       return (a: any, b: any) => direction * compare(get(a, path), get(b, path))
     }
   })
 
   return function (a: any, b: any) {
     for (const compare of compares) {
-      const comparasion = compare(a, b)
+      const comparison = compare(a, b)
 
-      if (comparasion !== 0) {
-        return comparasion
+      if (comparison !== 0) {
+        return comparison
       }
     }
 
