@@ -35,22 +35,22 @@ export const oauth =
     const serviceOptions = authenticationServiceOptions(authService, oauthOptions)
     const servicePath = `${grantConfig.defaults.prefix || 'oauth'}/:provider`
     const callbackServicePath = `${servicePath}/callback`
+    const oauthService = new OAuthService(authService, oauthOptions)
 
-    app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)
-
-    const oauthService = app.service(servicePath)
-
-    oauthService.hooks({
+    app.use(servicePath, oauthService, serviceOptions)
+    app.use(callbackServicePath, new OAuthCallbackService(oauthService), serviceOptions)
+    app.service(servicePath).hooks({
+      around: { all: [resolveDispatch(), redirectHook()] }
+    })
+    app.service(callbackServicePath).hooks({
       around: { all: [resolveDispatch(), redirectHook()] }
     })
 
-    app.use(
-      callbackServicePath,
-      new OAuthCallbackService(app.service(servicePath) as unknown as OAuthService),
-      serviceOptions
-    )
-
-    if (typeof oauthService.publish === 'function') {
+    if (typeof app.service(servicePath).publish === 'function') {
       app.service(servicePath).publish(() => null)
+    }
+
+    if (typeof app.service(callbackServicePath).publish === 'function') {
+      app.service(callbackServicePath).publish(() => null)
     }
   }
