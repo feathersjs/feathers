@@ -178,14 +178,26 @@ export class OAuthService {
   async get(override: string, params: OAuthParams) {
     const result = await this.handler('GET', params, {}, override)
 
-    if (override === 'callback') {
-      return this.authenticate(params, result)
-    }
-
     return result
   }
 
   async create(data: any, params: OAuthParams) {
     return this.handler('POST', params, data)
+  }
+}
+
+export class OAuthCallbackService {
+  constructor(public service: OAuthService) {}
+
+  async find(params: OAuthParams) {
+    const result = await this.service.handler('GET', params, {}, 'callback')
+
+    return this.service.authenticate(params, result)
+  }
+
+  async create(data: any, params: OAuthParams) {
+    const result = await this.service.handler('POST', params, data, 'callback')
+
+    return this.service.authenticate(params, result)
   }
 }
