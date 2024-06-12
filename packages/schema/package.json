@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs/feathers.git",
+    "url": "git://github.com/feathersjs/ecosystem.git",
     "directory": "packages/schema"
   },
   "author": {
