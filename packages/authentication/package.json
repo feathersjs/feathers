@@ -63,13 +63,13 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
-    "uuid": "^9.0.1"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.26",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.5",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.8",
+    "@types/node": "^20.14.4",
     "@types/uuid": "^9.0.8",
     "mocha": "^10.4.0",
     "shx": "^0.3.4",
