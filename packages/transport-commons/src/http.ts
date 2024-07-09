@@ -62,16 +62,16 @@ export function getStatusCode(context: HookContext, body: any, location: string 
     return http.status
   }
 
-  if (context.method === 'create') {
-    return statusCodes.created
-  }
-
   if (location !== undefined) {
     return statusCodes.seeOther
   }
 
   if (!body) {
     return statusCodes.noContent
+  }
+
+  if (context.method === 'create') {
+    return statusCodes.created
   }
 
   return statusCodes.success
