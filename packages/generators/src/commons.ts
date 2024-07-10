@@ -180,6 +180,11 @@ export const getJavaScript = (typescript: string, options: ts.TranspileOptions =
       ...options.compilerOptions
     }
   })
+  const { outputText } = transpiled
+
+  if (outputText.startsWith('export {}') && typescript.startsWith('import')) {
+    return fixLocalImports(typescript)
+  }
 
   return fixLocalImports(restoreNewLines(transpiled.outputText))
 }
