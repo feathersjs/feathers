@@ -1,6 +1,6 @@
 import { sep, dirname } from 'path'
 import chalk from 'chalk'
-import { prompt, runGenerators, fromFile, copyFiles, toFile } from '@featherscloud/pinion'
+import { prompt, runGenerators } from '@featherscloud/pinion'
 import { fileURLToPath } from 'url'
 import {
   FeathersBaseContext,
@@ -141,7 +141,6 @@ export const generate = (ctx: AppGeneratorArguments) =>
       ])
     )
     .then(runGenerators(__dirname, 'templates'))
-    .then(copyFiles(fromFile(__dirname, 'static'), toFile('.')))
     .then(initializeBaseContext())
     .then(async (ctx) => {
       const { dependencies } = await connectionGenerator(ctx)

@@ -37,13 +37,12 @@
     "LICENSE",
     "README.md",
     "lib/**",
-    "lib/app/static/.gitignore",
     "*.d.ts",
     "*.js"
   ],
   "scripts": {
     "prepublish": "npm run compile",
-    "compile": "shx rm -rf lib/ && tsc && shx cp -r src/. lib/",
+    "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && mocha --config ../../.mocharc.json --require tsx --recursive test/**.test.ts test/**/*.test.ts"
   },
   "directories": {
