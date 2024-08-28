@@ -239,8 +239,8 @@ export class KnexAdapter<
       return Promise.all(data.map((current) => this._create(current, params)))
     }
 
-    const { client } = this.db(params).client.config
-    const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
+    const { client } = this.db(params)
+    const returning = RETURNING_CLIENTS.includes(client.driverName) ? [this.id] : []
     const rows: any = await this.db(params)
       .insert(data, returning, { includeTriggerModifications: true })
       .catch(errorHandler)
