@@ -44,17 +44,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/lodash": "^4.17.6",
-    "axios": "^1.7.2",
+    "@types/lodash": "^4.17.7",
+    "axios": "^1.7.7",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.29",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.10",
-    "mocha": "^10.6.0",
+    "@types/node": "^22.5.1",
+    "mocha": "^10.7.3",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }

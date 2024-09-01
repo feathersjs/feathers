@@ -68,15 +68,15 @@
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.29",
     "@feathersjs/tests": "^5.0.29",
-    "@types/lodash": "^4.17.6",
+    "@types/lodash": "^4.17.7",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.10",
-    "axios": "^1.7.2",
+    "@types/node": "^22.5.1",
+    "axios": "^1.7.7",
     "lodash": "^4.17.21",
-    "mocha": "^10.6.0",
+    "mocha": "^10.7.3",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

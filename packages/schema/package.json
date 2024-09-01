@@ -60,18 +60,18 @@
     "@feathersjs/feathers": "^5.0.29",
     "@feathersjs/hooks": "^0.9.0",
     "@types/json-schema": "^7.0.15",
-    "ajv": "^8.16.0",
+    "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
-    "json-schema-to-ts": "^3.1.0"
+    "json-schema-to-ts": "^3.1.1"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.29",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.10",
+    "@types/node": "^22.5.1",
     "ajv-formats": "^3.0.1",
-    "mocha": "^10.6.0",
+    "mocha": "^10.7.3",
     "shx": "^0.3.4",
-    "typescript": "^5.4.3"
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "typescript": ">=5.5"
