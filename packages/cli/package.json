@@ -75,15 +75,15 @@
     "@feathersjs/socketio": "^5.0.30",
     "@feathersjs/transport-commons": "^5.0.30",
     "@feathersjs/typebox": "^5.0.30",
-    "@types/mocha": "^10.0.7",
-    "@types/node": "^22.5.1",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "^22.7.4",
     "@types/prettier": "^2.7.3",
     "axios": "^1.7.7",
     "mocha": "^10.7.3",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",
-    "type-fest": "^4.26.0",
-    "typescript": "^5.5.4"
+    "type-fest": "^4.26.1",
+    "typescript": "^5.6.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

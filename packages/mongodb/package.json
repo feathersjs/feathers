@@ -57,17 +57,17 @@
     "@feathersjs/feathers": "^5.0.30"
   },
   "peerDependencies": {
-    "mongodb": "^6.8.0"
+    "mongodb": "^6.9.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.30",
     "@feathersjs/schema": "^5.0.30",
-    "@types/mocha": "^10.0.7",
-    "@types/node": "^22.5.1",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "^22.7.4",
     "mocha": "^10.7.3",
-    "mongodb-memory-server": "^10.0.0",
+    "mongodb-memory-server": "^10.0.1",
     "shx": "^0.3.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
