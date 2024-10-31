@@ -38,7 +38,7 @@
     "lint": "npm run prettier && npm run eslint",
     "compile": "lerna run compile",
     "build:docs": "npm run build --workspace docs",
-    "update-dependencies": "npm exec --workspaces --include-workspace-root -- ncu -u --dep prod,dev,optional,peer -x node-fetch,\"@sinclair/typebox\"",
+    "update-dependencies": "npm exec --workspaces --include-workspace-root -- ncu -u --dep prod,dev,optional,peer -x node-fetch,\"@sinclair/typebox\",\"@types/express\",\"@types/express-serve-static-core\"",
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",

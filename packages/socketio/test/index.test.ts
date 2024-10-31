@@ -66,13 +66,13 @@ describe('@feathersjs/socketio', () => {
       .configure(
         socketio((io) => {
           io.use(function (socket: FeathersSocket, next: NextFunction) {
-            socket.feathers.user = { name: 'David' }
-            socketParams.headers = socket.feathers.headers
+            socket.feathers!.user = { name: 'David' }
+            socketParams.headers = socket.feathers!.headers
 
             const { channel } = socket.handshake.query as any
 
             if (channel) {
-              socket.feathers.channel = channel
+              socket.feathers!.channel = channel
             }
 
             next()
