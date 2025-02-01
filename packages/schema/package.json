@@ -66,12 +66,12 @@
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.31",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.8.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.0",
     "ajv-formats": "^3.0.1",
-    "mocha": "^10.8.2",
+    "mocha": "^11.1.0",
     "shx": "^0.3.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
     "typescript": ">=5.6"
