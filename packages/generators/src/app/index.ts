@@ -50,8 +50,8 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(initializeBaseContext())
     .then((ctx) => ({
       ...ctx,
-      dependencies: [],
-      devDependencies: []
+      dependencies: [] as string[],
+      devDependencies: [] as string[]
     }))
     .then(
       prompt((ctx) => [
