@@ -57,7 +57,7 @@
     "@feathersjs/commons": "^5.0.32",
     "@feathersjs/errors": "^5.0.32",
     "@feathersjs/feathers": "^5.0.32",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
@@ -66,7 +66,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.17.15",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.13.5",
     "mocha": "^11.1.0",
     "shx": "^0.3.4",
     "ts-node": "^10.9.2",

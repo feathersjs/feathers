@@ -61,7 +61,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-serve-static-core": "^4.19.5",
-    "compression": "^1.7.5",
+    "compression": "^1.8.0",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   },
@@ -70,7 +70,7 @@
     "@feathersjs/tests": "^5.0.32",
     "@types/lodash": "^4.17.15",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.13.5",
     "axios": "^1.7.9",
     "lodash": "^4.17.21",
     "mocha": "^11.1.0",

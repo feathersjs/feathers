@@ -59,17 +59,17 @@
     "@feathersjs/hooks": "^0.9.0",
     "@feathersjs/schema": "^5.0.32",
     "@feathersjs/transport-commons": "^5.0.32",
-    "@types/jsonwebtoken": "^9.0.8",
+    "@types/jsonwebtoken": "^9.0.9",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
-    "uuid": "^11.0.5"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.32",
     "@types/lodash": "^4.17.15",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.13.5",
     "@types/uuid": "^10.0.0",
     "mocha": "^11.1.0",
     "shx": "^0.3.4",
