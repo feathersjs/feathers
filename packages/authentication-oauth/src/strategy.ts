@@ -166,7 +166,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     const authEntity = !existingEntity
       ? await this.createEntity(profile, params)
-      : await this.updateEntity(existingEntity, profile, params)
+      : (await this.updateEntity(existingEntity, profile, params)).value
 
     return {
       authentication: { strategy: this.name },
