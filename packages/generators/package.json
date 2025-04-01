@@ -55,8 +55,8 @@
     "@featherscloud/pinion": "^0.5.5",
     "chalk": "^5.4.1",
     "lodash": "^4.17.21",
-    "prettier": "^3.5.2",
-    "typescript": "^5.7.3"
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   },
   "devDependencies": {
     "@feathersjs/adapter-commons": "^5.0.33",
@@ -77,20 +77,20 @@
     "@feathersjs/transport-commons": "^5.0.33",
     "@feathersjs/typebox": "^5.0.33",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.14",
     "@types/prettier": "^2.7.3",
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "knex": "^3.1.0",
     "mocha": "^11.1.0",
-    "mongodb": "^6.13.1",
+    "mongodb": "^6.15.0",
     "mssql": "^11.0.1",
     "mysql": "^2.18.1",
-    "pg": "^8.13.3",
-    "shx": "^0.3.4",
+    "pg": "^8.14.1",
+    "shx": "^0.4.0",
     "sqlite3": "^5.1.7",
     "tsx": "^4.19.3",
-    "type-fest": "^4.35.0",
-    "typescript": "^5.7.3"
+    "type-fest": "^4.38.0",
+    "typescript": "^5.8.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

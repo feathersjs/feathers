@@ -58,11 +58,11 @@
     "@feathersjs/adapter-tests": "^5.0.33",
     "@feathersjs/feathers": "^5.0.33",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.14",
     "mocha": "^11.1.0",
-    "shx": "^0.3.4",
+    "shx": "^0.4.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

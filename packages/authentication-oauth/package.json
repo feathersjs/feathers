@@ -72,14 +72,14 @@
     "@types/express": "^4.17.21",
     "@types/koa-session": "^6.4.5",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.14",
     "@types/tough-cookie": "^4.0.5",
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "mocha": "^11.1.0",
-    "shx": "^0.3.4",
-    "tough-cookie": "^5.1.1",
+    "shx": "^0.4.0",
+    "tough-cookie": "^5.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
