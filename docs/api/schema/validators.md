@@ -63,7 +63,7 @@ The following hooks take a [validation function](#validation-functions) and vali
 `schemaHooks.validateData` takes a [validation function](#validation-functions) and allows to validate the `data` in a `create`, `update` and `patch` request as well as [custom service methods](../services.md#custom-methods). It can be used as an `around` or `before` hook.
 
 ```ts
-import { Ajv, schemaHooks } from '@feathersjs/schema'
+import { Ajv, hooks as schemaHooks } from '@feathersjs/schema'
 import { Type, getValidator } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
 import { dataValidator } from '../validators'

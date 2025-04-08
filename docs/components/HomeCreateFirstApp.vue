@@ -6,8 +6,7 @@
     </div>
     <p class="vp-doc pb-2"><a href="/guides/">Check out the docs</a> to learn more about Feathers.</p>
     <p class="vp-doc">
-      Feel free say hello on <a href="https://discord.gg/qa8kez8QBx" target="_blank">Discord</a>, or show us
-      some love on <a href="https://twitter.com/feathersjs" target="_blank">Twitter</a>.
+      Feel free say hello on <a href="https://discord.gg/qa8kez8QBx" target="_blank">Discord</a>.
     </p>
   </div>
 </template>

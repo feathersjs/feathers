@@ -107,8 +107,11 @@ export interface FeathersBaseContext extends PinionContext {
  * @param versions The dependency version list
  * @returns A list of dependencies with their versions
  */
-export const addVersions = (dependencies: string[], versions: DependencyVersions) =>
-  dependencies.map((dep) => `${dep}@${versions[dep] ? versions[dep] : 'latest'}`)
+export const addVersions = (
+  dependencies: string[],
+  versions: DependencyVersions,
+  defaultVersion = 'latest'
+): string[] => dependencies.map((dep) => `${dep}@${versions[dep] || defaultVersion}`)
 
 /**
  * Loads the application package.json and populates information like the library and test directory
@@ -139,6 +142,30 @@ export const initializeBaseContext =
       }))
 
 /**
+ * A special error that can be thrown by generators. It contains additional
+ * information about the error that can be used to display a more helpful
+ * error message to the user.
+ */
+export class FeathersGeneratorError extends Error {
+  /**
+   * Additional information about the error. This can include things like
+   * the reason for the error and suggested actions to take.
+   */
+  context?: Record<string, unknown>
+
+  /**
+   * Creates a new FeathersGeneratorError
+   * @param message The error message
+   * @param context Additional information about the error
+   */
+  constructor(message: string, context?: Record<string, unknown>) {
+    super(message)
+    this.name = 'FeathersGeneratorError'
+    this.context = context
+  }
+}
+
+/**
  * Checks if the current context contains a valid generated application. This is necesary for most
  * generators (besides the app generator).
  *
@@ -149,11 +176,11 @@ export const checkPreconditions =
   () =>
   async <T extends FeathersBaseContext>(ctx: T) => {
     if (!ctx.feathers) {
-      throw new Error(`Can not run generator since the current folder does not appear to be a Feathers application.
-Either your package.json is missing or it does not have \`feathers\` property.
-`)
+      throw new FeathersGeneratorError('Invalid Feathers application context', {
+        reason: 'Missing Feathers configuration',
+        suggestedAction: 'Verify package.json contains Feathers metadata'
+      })
     }
-
     return ctx
   }
 
@@ -203,7 +230,12 @@ export const PRETTIERRC: PrettierOptions = {
   printWidth: 110,
   semi: false,
   trailingComma: 'none',
-  singleQuote: true
+  singleQuote: true,
+  arrowParens: 'avoid',
+  bracketSpacing: true,
+  endOfLine: 'auto',
+  jsxSingleQuote: false,
+  quoteProps: 'as-needed'
 }
 
 /*

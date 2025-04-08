@@ -5,6 +5,9 @@ export interface KnexAdapterOptions extends AdapterServiceOptions {
   Model: Knex
   name: string
   schema?: string
+  tableOptions?: {
+    only?: boolean
+  }
 }
 
 export interface KnexAdapterTransaction {

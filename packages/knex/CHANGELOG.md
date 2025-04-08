@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+### Bug Fixes
+
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+- **knex:** Add tableOptions parameter for inheritance on knex adapter options to pass on knex builder ([#3539](https://github.com/feathersjs/feathers/issues/3539)) ([ba5621b](https://github.com/feathersjs/feathers/commit/ba5621bfe5e7ab01189b6b7bccb00891bc2b14c7))
+
+## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
+
+**Note:** Version bump only for package @feathersjs/knex
+
 ## [5.0.31](https://github.com/feathersjs/feathers/compare/v5.0.30...v5.0.31) (2024-10-31)
 
 ### Bug Fixes

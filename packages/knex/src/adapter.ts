@@ -69,7 +69,7 @@ export class KnexAdapter<
   }
 
   db(params?: ServiceParams) {
-    const { Model, name, schema } = this.getOptions(params)
+    const { Model, name, schema, tableOptions } = this.getOptions(params)
 
     if (params && params.transaction && params.transaction.trx) {
       const { trx } = params.transaction
@@ -77,7 +77,7 @@ export class KnexAdapter<
       return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name)
     }
 
-    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name)
+    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name, tableOptions)
   }
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {

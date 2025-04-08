@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+### Bug Fixes
+
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+- **knex:** Add tableOptions parameter for inheritance on knex adapter options to pass on knex builder ([#3539](https://github.com/feathersjs/feathers/issues/3539)) ([ba5621b](https://github.com/feathersjs/feathers/commit/ba5621bfe5e7ab01189b6b7bccb00891bc2b14c7))
+
+## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
+
+### Bug Fixes
+
+- **generators:** Add FeathersGeneratorError ([#3556](https://github.com/feathersjs/feathers/issues/3556)) ([2a81a20](https://github.com/feathersjs/feathers/commit/2a81a204eb55c95d20fc45bf091c0131eff5a25d))
+
 ## [5.0.31](https://github.com/feathersjs/feathers/compare/v5.0.30...v5.0.31) (2024-10-31)
 
 ### Bug Fixes
@@ -52,7 +65,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - **generators:** better types for enabled methods ([#3474](https://github.com/feathersjs/feathers/issues/3474)) ([bdb3d3a](https://github.com/feathersjs/feathers/commit/bdb3d3a308322bfed3caa4214e4b6a72f1a84944))
-- **knex:** Update commited to boolean type ([#3458](https://github.com/feathersjs/feathers/issues/3458)) ([5fa4dbc](https://github.com/feathersjs/feathers/commit/5fa4dbc06d0126ac18f5643562d0b74f03502caa))
+- **knex:** Update committed to boolean type ([#3458](https://github.com/feathersjs/feathers/issues/3458)) ([5fa4dbc](https://github.com/feathersjs/feathers/commit/5fa4dbc06d0126ac18f5643562d0b74f03502caa))
 - **oauth:** Export OAuthService type ([#3479](https://github.com/feathersjs/feathers/issues/3479)) ([e7185cd](https://github.com/feathersjs/feathers/commit/e7185cde63990a0d24a7180c63b61dbc8ef6cd5b))
 - Reduce usage of lodash ([#3455](https://github.com/feathersjs/feathers/issues/3455)) ([8ce807a](https://github.com/feathersjs/feathers/commit/8ce807a5ca53ff5b8d5107a0656c6329404e6e6c))
 
@@ -457,7 +470,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **authentication-oauth:** Fix bug and properly set Grant defaults ([#2659](https://github.com/feathersjs/feathers/issues/2659)) ([cb93bb9](https://github.com/feathersjs/feathers/commit/cb93bb911fd92282424da2db805cd685b7e4a45b))
 - **authentication:** Add safe dispatch data for authentication requests ([#2662](https://github.com/feathersjs/feathers/issues/2662)) ([d8104a1](https://github.com/feathersjs/feathers/commit/d8104a19ee9181e6a5ea81014af29ff9a3c28a8a))
-- **schema:** Fix dispatch resovler hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
+- **schema:** Fix dispatch resolver hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
 
 ### Features
 
@@ -961,7 +974,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - check for undefined access token ([#1571](https://github.com/feathersjs/feathers/issues/1571)) ([976369d](https://github.com/feathersjs/feathers/commit/976369d))
-- Small improvements in dependencies and code sturcture ([#1562](https://github.com/feathersjs/feathers/issues/1562)) ([42c13e2](https://github.com/feathersjs/feathers/commit/42c13e2))
+- Small improvements in dependencies and code structure ([#1562](https://github.com/feathersjs/feathers/issues/1562)) ([42c13e2](https://github.com/feathersjs/feathers/commit/42c13e2))
 
 ## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
 

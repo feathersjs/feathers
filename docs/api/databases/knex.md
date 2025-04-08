@@ -62,6 +62,8 @@ The Knex specific adapter options are:
 - `Model {Knex}` (**required**) - The KnexJS database instance
 - `name {string}` (**required**) - The name of the table
 - `schema {string}` (_optional_) - The name of the schema table prefix (example: `schema.table`)
+- `tableOptions {only: boolean` (_optional_) - For PostgreSQL only. Argument for passing options to knex db builder. ONLY keyword is used before the tableName to discard inheriting tables' data. (https://knexjs.org/guide/query-builder.html#common)
+
 
 The [common API options](./common.md#options) are:
 

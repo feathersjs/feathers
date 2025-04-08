@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/schema",
   "description": "A common data schema definition format",
-  "version": "5.0.31",
+  "version": "5.0.33",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -54,10 +54,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.31",
-    "@feathersjs/commons": "^5.0.31",
-    "@feathersjs/errors": "^5.0.31",
-    "@feathersjs/feathers": "^5.0.31",
+    "@feathersjs/adapter-commons": "^5.0.33",
+    "@feathersjs/commons": "^5.0.33",
+    "@feathersjs/errors": "^5.0.33",
+    "@feathersjs/feathers": "^5.0.33",
     "@feathersjs/hooks": "^0.9.0",
     "@types/json-schema": "^7.0.15",
     "ajv": "^8.17.1",
@@ -65,16 +65,16 @@
     "json-schema-to-ts": "^3.1.1"
   },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.31",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.8.4",
+    "@feathersjs/memory": "^5.0.33",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.5",
     "ajv-formats": "^3.0.1",
-    "mocha": "^10.8.2",
+    "mocha": "^11.1.0",
     "shx": "^0.3.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "typescript": ">=5.6"
+    "typescript": ">=5.7"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
