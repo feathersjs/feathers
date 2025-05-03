@@ -90,7 +90,7 @@ The `find` method has been split into separate utilities for converting params i
 
 ### Custom Params
 
-The `@feathersjs/mongodb` adapter utilizes three custom params which control adapter-specific features: `params.pipeline`, `params.mongodb`, and `params.adapter`.
+The `@feathersjs/mongodb` adapter utilizes three custom params which control adapter-specific features: `params.pipeline`, `params.mongodb`, and `params.adapter`. As mentioned [here](/api/services#params), these custom params are not intended to be used directly from the client. Directly exposing `params.pipeline` or `params.mongodb` to the client directly would expose the entire database to the client through powerful pipeline queries.
 
 #### params.adapter
 
