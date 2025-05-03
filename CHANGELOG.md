@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
+
+### Bug Fixes
+
+- **knex:** Add support for extended operators in query builder ([#3578](https://github.com/feathersjs/feathers/issues/3578)) ([c355ae3](https://github.com/feathersjs/feathers/commit/c355ae3184f07b15b4a313aa64fb9e7fdd0524d5))
+- Update dependencies ([#3584](https://github.com/feathersjs/feathers/issues/3584)) ([119fa4e](https://github.com/feathersjs/feathers/commit/119fa4e1ade8b0078aa235083d566e2538b3a084))
+
 ## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
 
 ### Bug Fixes
