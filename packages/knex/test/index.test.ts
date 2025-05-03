@@ -117,7 +117,15 @@ const clean = async () => {
     table.boolean('created')
     return table
   })
-
+  await db.schema.dropTableIfExists(peopleExtendedOps.fullName)
+  await db.schema.createTable(peopleExtendedOps.fullName, (table) => {
+    table.increments('id')
+    table.string('name')
+    table.integer('age')
+    table.integer('time')
+    table.boolean('created')
+    return table
+  })
   await db.schema.dropTableIfExists(users.fullName)
   await db.schema.createTable(users.fullName, (table) => {
     table.increments('id')
@@ -181,6 +189,7 @@ type ServiceTypes = {
   'people-customid': KnexService<Person>
   users: KnexService<Person>
   todos: KnexService<Todo>
+  'people-extended-ops': KnexService<Person>
 }
 
 class TodoService extends KnexService<Todo> {
@@ -217,6 +226,16 @@ const todos = new TodoService({
   name: 'todos'
 })
 
+const peopleExtendedOps = new KnexService({
+  Model: db,
+  name: 'people-extended-ops',
+  events: ['testing'],
+  extendedOperators: {
+    $neq: '<>', // Not equal (alternative syntax)
+    $startsWith: 'like' // Same as $like but with a different name
+  }
+})
+
 describe('Feathers Knex Service', () => {
   const app = feathers<ServiceTypes>()
     .hooks({
@@ -228,6 +247,7 @@ describe('Feathers Knex Service', () => {
     .use('people-customid', peopleId)
     .use('users', users)
     .use('todos', todos)
+    .use('people-extended-ops', peopleExtendedOps)
   const peopleService = app.service('people')
 
   peopleService.hooks({
@@ -722,7 +742,64 @@ describe('Feathers Knex Service', () => {
     })
   })
 
+  describe('extendedOperators', () => {
+    const extendedService = app.service('people-extended-ops')
+    let testData: Person[]
+
+    beforeEach(async () => {
+      testData = await Promise.all([
+        extendedService.create({
+          name: 'StartWithA',
+          age: 25
+        }),
+        extendedService.create({
+          name: 'MiddleAMiddle',
+          age: 30
+        }),
+        extendedService.create({
+          name: 'EndWithA',
+          age: 35
+        })
+      ])
+    })
+
+    afterEach(async () => {
+      try {
+        for (const item of testData) {
+          await extendedService.remove(item.id)
+        }
+      } catch (error: unknown) {}
+    })
+
+    it('supports custom operators through extendedOperators option', async () => {
+      // Test the $startsWith custom operator
+      const startsWithResults = await extendedService.find({
+        paginate: false,
+        query: {
+          name: {
+            $startsWith: 'Start%' // LIKE operator with % wildcard
+          }
+        }
+      })
+
+      assert.strictEqual(startsWithResults.length, 1)
+      assert.strictEqual(startsWithResults[0].name, 'StartWithA')
+
+      // Test that regular operators still work alongside extended ones
+      const combinedResults = await extendedService.find({
+        paginate: false,
+        query: {
+          $and: [{ name: { $neq: 'EndWithA' } }, { age: { $gt: 26 } }]
+        }
+      })
+
+      assert.strictEqual(combinedResults.length, 1)
+      assert.strictEqual(combinedResults[0].name, 'MiddleAMiddle')
+    })
+  })
+
   testSuite(app, errors, 'users')
   testSuite(app, errors, 'people')
   testSuite(app, errors, 'people-customid', 'customid')
+  testSuite(app, errors, 'people-extended-ops')
 })

@@ -50,7 +50,13 @@ export class KnexAdapter<
         ...options.filters,
         $and: (value: any) => value
       },
-      operators: [...(options.operators || []), '$like', '$notlike', '$ilike']
+      operators: [
+        ...(options.operators || []),
+        ...Object.keys(options.extendedOperators || {}),
+        '$like',
+        '$notlike',
+        '$ilike'
+      ]
     })
   }
 
@@ -82,6 +88,11 @@ export class KnexAdapter<
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {
     const knexify = this.knexify.bind(this)
+    const { extendedOperators = {} } = this.getOptions({} as ServiceParams)
+    const operatorsMap = {
+      ...OPERATORS,
+      ...extendedOperators
+    }
 
     return Object.keys(query || {}).reduce((currentQuery, key) => {
       const value = query[key]
@@ -110,7 +121,7 @@ export class KnexAdapter<
         return (currentQuery as any)[method](column, value)
       }
 
-      const operator = OPERATORS[key as keyof typeof OPERATORS] || '='
+      const operator = operatorsMap[key as keyof typeof operatorsMap] || '='
 
       return operator === '='
         ? currentQuery.where(column, value)
