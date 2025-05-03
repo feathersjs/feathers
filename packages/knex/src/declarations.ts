@@ -8,6 +8,9 @@ export interface KnexAdapterOptions extends AdapterServiceOptions {
   tableOptions?: {
     only?: boolean
   }
+  extendedOperators?: {
+    [key: string]: string
+  }
 }
 
 export interface KnexAdapterTransaction {
