@@ -1,11 +1,14 @@
-import version from './version'
 import { EventEmitter } from 'events'
-import { stripSlashes, createDebug } from '@feathersjs/commons'
-import { HOOKS, hooks, middleware } from '@feathersjs/hooks'
-import { eventHook, eventMixin } from './events'
-import { hookMixin } from './hooks'
-import { wrapService, getServiceOptions, protectedMethods } from './service'
-import {
+import { HOOKS, hooks, middleware } from './hooks/index.js'
+
+import { stripSlashes } from './commons.js'
+import { createDebug } from './debug.js'
+
+import version from './version.js'
+import { eventHook, eventMixin } from './events.js'
+import { hookMixin } from './hooks.js'
+import { wrapService, getServiceOptions, protectedMethods } from './service.js'
+import type {
   FeathersApplication,
   ServiceMixin,
   Service,
@@ -14,8 +17,8 @@ import {
   Application,
   FeathersService,
   ApplicationHookOptions
-} from './declarations'
-import { enableHooks } from './hooks'
+} from './declarations.js'
+import { enableHooks } from './hooks.js'
 
 const debug = createDebug('@feathersjs/feathers')
 

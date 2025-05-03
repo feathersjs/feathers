@@ -40,6 +40,7 @@
     "vitepress": "^1.6.3",
     "vitepress-plugin-google-analytics": "^1.0.2",
     "vitepress-plugin-search": "^1.0.4-alpha.22",
+    "vitest": "^3.0.5",
     "workbox-window": "^7.3.0"
   }
 }

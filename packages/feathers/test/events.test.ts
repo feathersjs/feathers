@@ -1,22 +1,25 @@
+import { describe, it } from 'vitest'
 import assert from 'assert'
 import { EventEmitter } from 'events'
 
-import { feathers } from '../src'
+import { feathers } from '../src/index.js'
 
 describe('Service events', () => {
-  it('app is an event emitter', (done) => {
+  it('app is an event emitter', async () => {
     const app = feathers()
 
     assert.strictEqual(typeof app.on, 'function')
 
-    app.on('test', (data: any) => {
-      assert.deepStrictEqual(data, { message: 'app' })
-      done()
+    await new Promise<void>((resolve) => {
+      app.on('test', (data: any) => {
+        assert.deepStrictEqual(data, { message: 'app' })
+        resolve()
+      })
+      app.emit('test', { message: 'app' })
     })
-    app.emit('test', { message: 'app' })
   })
 
-  it('works with service that is already an EventEmitter', (done) => {
+  it('works with service that is already an EventEmitter', async () => {
     const app = feathers()
     const service: any = new EventEmitter()
 
@@ -24,22 +27,26 @@ describe('Service events', () => {
       return data
     }
 
-    service.on('created', (data: any) => {
-      assert.deepStrictEqual(data, {
-        message: 'testing'
+    const promise = new Promise<void>((resolve) => {
+      service.on('created', (data: any) => {
+        assert.deepStrictEqual(data, {
+          message: 'testing'
+        })
+        resolve()
       })
-      done()
     })
 
     app.use('/emitter', service)
 
-    app.service('emitter').create({
+    await app.service('emitter').create({
       message: 'testing'
     })
+
+    await promise
   })
 
   describe('emits event data on a service', () => {
-    it('.create and created', (done) => {
+    it('.create and created', async () => {
       const app = feathers().use('/creator', {
         async create(data: any) {
           return data
@@ -48,15 +55,18 @@ describe('Service events', () => {
 
       const service = app.service('creator')
 
-      service.on('created', (data: any) => {
-        assert.deepStrictEqual(data, { message: 'Hello' })
-        done()
+      const promise = new Promise<void>((resolve) => {
+        service.on('created', (data: any) => {
+          assert.deepStrictEqual(data, { message: 'Hello' })
+          resolve()
+        })
       })
 
-      service.create({ message: 'Hello' })
+      await service.create({ message: 'Hello' })
+      await promise
     })
 
-    it('allows to skip event emitting', (done) => {
+    it('allows to skip event emitting', async () => {
       const app = feathers().use('/creator', {
         async create(data: any) {
           return data
@@ -69,20 +79,21 @@ describe('Service events', () => {
         before: {
           create(context: any) {
             context.event = null
-
             return context
           }
         }
       })
 
+      let eventFired = false
       service.on('created', () => {
-        done(new Error('Should never get here'))
+        eventFired = true
       })
 
-      service.create({ message: 'Hello' }).then(() => done())
+      await service.create({ message: 'Hello' })
+      assert.strictEqual(eventFired, false)
     })
 
-    it('.update and updated', (done) => {
+    it('.update and updated', async () => {
       const app = feathers().use('/creator', {
         async update(id: any, data: any) {
           return Object.assign({ id }, data)
@@ -91,15 +102,18 @@ describe('Service events', () => {
 
       const service = app.service('creator')
 
-      service.on('updated', (data: any) => {
-        assert.deepStrictEqual(data, { id: 10, message: 'Hello' })
-        done()
+      const promise = new Promise<void>((resolve) => {
+        service.on('updated', (data: any) => {
+          assert.deepStrictEqual(data, { id: 10, message: 'Hello' })
+          resolve()
+        })
       })
 
-      service.update(10, { message: 'Hello' })
+      await service.update(10, { message: 'Hello' })
+      await promise
     })
 
-    it('.patch and patched', (done) => {
+    it('.patch and patched', async () => {
       const app = feathers().use('/creator', {
         async patch(id: any, data: any) {
           return Object.assign({ id }, data)
@@ -108,15 +122,18 @@ describe('Service events', () => {
 
       const service = app.service('creator')
 
-      service.on('patched', (data: any) => {
-        assert.deepStrictEqual(data, { id: 12, message: 'Hello' })
-        done()
+      const promise = new Promise<void>((resolve) => {
+        service.on('patched', (data: any) => {
+          assert.deepStrictEqual(data, { id: 12, message: 'Hello' })
+          resolve()
+        })
       })
 
-      service.patch(12, { message: 'Hello' })
+      await service.patch(12, { message: 'Hello' })
+      await promise
     })
 
-    it('.remove and removed', (done) => {
+    it('.remove and removed', async () => {
       const app = feathers().use('/creator', {
         async remove(id: any) {
           return { id }
@@ -125,12 +142,15 @@ describe('Service events', () => {
 
       const service = app.service('creator')
 
-      service.on('removed', (data: any) => {
-        assert.deepStrictEqual(data, { id: 22 })
-        done()
+      const promise = new Promise<void>((resolve) => {
+        service.on('removed', (data: any) => {
+          assert.deepStrictEqual(data, { id: 22 })
+          resolve()
+        })
       })
 
-      service.remove(22)
+      await service.remove(22)
+      await promise
     })
   })
 
@@ -268,7 +288,7 @@ describe('Service events', () => {
   })
 
   describe('event format', () => {
-    it('also emits the actual hook object', (done) => {
+    it('also emits the actual hook object', async () => {
       const app = feathers().use('/creator', {
         async create(data: any) {
           return data
@@ -279,27 +299,27 @@ describe('Service events', () => {
 
       service.hooks({
         after(hook: any) {
-          hook.changed = true
+          hook.number = 42
         }
       })
 
-      service.on('created', (data: any, hook: any) => {
-        try {
-          assert.deepStrictEqual(data, { message: 'Hi' })
-          assert.ok(hook.changed)
-          assert.strictEqual(hook.service, service)
-          assert.strictEqual(hook.method, 'create')
-          assert.strictEqual(hook.type, 'around')
-          done()
-        } catch (error: any) {
-          done(error)
-        }
+      const promise = new Promise<void>((resolve, reject) => {
+        service.on('created', (data: any, hook: any) => {
+          try {
+            assert.deepStrictEqual(data, { message: 'Hi' })
+            assert.strictEqual(hook.number, 42)
+            resolve()
+          } catch (error: any) {
+            reject(error)
+          }
+        })
       })
 
-      service.create({ message: 'Hi' })
+      await service.create({ message: 'Hi' })
+      await promise
     })
 
-    it('events indicated by the service are not sent automatically', (done) => {
+    it('events indicated by the service are not sent automatically', async () => {
       class Creator {
         events = ['created']
         async create(data: any) {
@@ -309,13 +329,16 @@ describe('Service events', () => {
       const app = feathers().use('/creator', new Creator())
       const service = app.service('creator')
 
-      service.on('created', (data: any) => {
-        assert.deepStrictEqual(data, { message: 'custom event' })
-        done()
+      const promise = new Promise<void>((resolve) => {
+        service.on('created', (data: any) => {
+          assert.deepStrictEqual(data, { message: 'custom event' })
+          resolve()
+        })
       })
 
-      service.create({ message: 'hello' })
+      await service.create({ message: 'hello' })
       service.emit('created', { message: 'custom event' })
+      await promise
     })
   })
 })

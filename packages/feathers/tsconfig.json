@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig",
+  "rootDir": "src",
   "include": [
     "src/**/*.ts"
   ],

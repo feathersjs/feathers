@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
+import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
