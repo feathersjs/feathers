@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { describe, it } from 'vitest'
-import { Router } from '../../src/routing/index.js'
+import { Router } from '../../src/router.js'
 
 describe('router', () => {
   it('can lookup and insert a simple path and returns null for invalid path', () => {

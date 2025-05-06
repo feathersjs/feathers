@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest'
 import { strict as assert } from 'assert'
 
 export interface Todo {
@@ -55,56 +56,62 @@ export function clientTests(app: any, name: string) {
       })
     })
 
-    it('.create and created event', (done) => {
-      getService().once('created', (data: Todo) => {
-        assert.strictEqual(data.text, 'created todo')
-        assert.ok(data.complete)
-        done()
-      })
-
-      getService().create({ text: 'created todo', complete: true })
-    })
-
-    it('.update and updated event', (done) => {
-      getService().once('updated', (data: Todo) => {
-        assert.strictEqual(data.text, 'updated todo')
-        assert.ok(data.complete)
-        done()
-      })
-
-      getService()
-        .create({ text: 'todo to update', complete: false })
-        .then((todo: Todo) => {
-          getService().update(todo.id, {
-            text: 'updated todo',
-            complete: true
-          })
+    it('.create and created event', async () => {
+      const createPromise = new Promise((resolve) => {
+        getService().once('created', (data: Todo) => {
+          assert.strictEqual(data.text, 'created todo')
+          assert.ok(data.complete)
+          resolve(data)
         })
-    })
-
-    it('.patch and patched event', (done) => {
-      getService().once('patched', (data: Todo) => {
-        assert.strictEqual(data.text, 'todo to patch')
-        assert.ok(data.complete)
-        done()
       })
 
-      getService()
-        .create({ text: 'todo to patch', complete: false })
-        .then((todo: Todo) => getService().patch(todo.id, { complete: true }))
+      await getService().create({ text: 'created todo', complete: true })
+      await createPromise
     })
 
-    it('.remove and removed event', (done) => {
-      getService().once('removed', (data: Todo) => {
-        assert.strictEqual(data.text, 'todo to remove')
-        assert.strictEqual(data.complete, false)
-        done()
+    it('.update and updated event', async () => {
+      const updatePromise = new Promise((resolve) => {
+        getService().once('updated', (data: Todo) => {
+          assert.strictEqual(data.text, 'updated todo')
+          assert.ok(data.complete)
+          resolve(data)
+        })
       })
 
-      getService()
-        .create({ text: 'todo to remove', complete: false })
-        .then((todo: Todo) => getService().remove(todo.id))
-        .catch(done)
+      const todo = await getService().create({ text: 'todo to update', complete: false })
+      await getService().update(todo.id, {
+        text: 'updated todo',
+        complete: true
+      })
+      await updatePromise
+    })
+
+    it('.patch and patched event', async () => {
+      const patchPromise = new Promise((resolve) => {
+        getService().once('patched', (data: Todo) => {
+          assert.strictEqual(data.text, 'todo to patch')
+          assert.ok(data.complete)
+          resolve(data)
+        })
+      })
+
+      const todo = await getService().create({ text: 'todo to patch', complete: false })
+      await getService().patch(todo.id, { complete: true })
+      await patchPromise
+    })
+
+    it('.remove and removed event', async () => {
+      const removePromise = new Promise((resolve) => {
+        getService().once('removed', (data: Todo) => {
+          assert.strictEqual(data.text, 'todo to remove')
+          assert.strictEqual(data.complete, false)
+          resolve(data)
+        })
+      })
+
+      const todo = await getService().create({ text: 'todo to remove', complete: false })
+      await getService().remove(todo.id)
+      await removePromise
     })
 
     it('.get with error', async () => {

@@ -2,23 +2,18 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
 import { feathers, Application } from '../../src/index.js'
-import { routing } from '../../src/routing/index.js'
 
 describe('app.routes', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(routing())
+    app = feathers()
 
     app.use('/my/service', {
       get(id: string | number) {
         return Promise.resolve({ id })
       }
     })
-  })
-
-  it('does nothing when configured twice', () => {
-    feathers().configure(routing()).configure(routing())
   })
 
   it('has app.lookup and app.routes', () => {

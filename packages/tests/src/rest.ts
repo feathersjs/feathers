@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest'
 import assert from 'assert'
 import axios from 'axios'
 

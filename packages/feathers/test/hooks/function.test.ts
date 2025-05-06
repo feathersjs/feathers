@@ -1,4 +1,4 @@
-import { it, describe } from 'vitest'
+import { it, describe, expect } from 'vitest'
 import assert from 'assert'
 import {
   BaseHookContext,
@@ -440,7 +440,7 @@ describe('feathers/hooks function', () => {
     assert.strictEqual((sayHi as any)[TEST], (hello as any)[TEST])
   })
 
-  it.only('context has own properties', async () => {
+  it('context has own properties', async () => {
     const fn = hooks(hello, middleware([]).params('name'))
 
     const customContext = fn.createContext({ message: 'Hi !' })

@@ -1,4 +1,4 @@
-import { stripSlashes } from '../commons.js'
+import { stripSlashes } from './commons.js'
 
 export interface LookupData {
   params: { [key: string]: string }

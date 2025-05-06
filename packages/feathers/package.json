@@ -12,8 +12,8 @@
     "feathers",
     "REST",
     "realtime",
-    "API",
-    "framework"
+    "framework",
+    "API"
   ],
   "type": "module",
   "main": "lib/index.js",
@@ -22,7 +22,9 @@
     ".": "./lib/index.js",
     "./hooks": "./lib/hooks/index.js",
     "./commons": "./lib/commons.js",
-    "./errors": "./lib/errors.js"
+    "./errors": "./lib/errors.js",
+    "./client": "./lib/client.js",
+    "./http": "./lib/http/index.js"
   },
   "author": {
     "name": "Feathers contributors",
@@ -57,7 +59,7 @@
     "publish": "npm run reset-version",
     "compile": "shx rm -rf lib/ && tsc",
     "dev": "vitest",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
   },
   "engines": {
     "node": ">= 20"
@@ -69,7 +71,10 @@
     "events": "^3.3.0"
   },
   "devDependencies": {
+    "@feathersjs/tests": "^5.0.32",
     "@types/node": "^22.13.0",
+    "@vitest/coverage-v8": "^3.1.2",
+    "@whatwg-node/server": "^0.10.5",
     "shx": "^0.3.4",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
