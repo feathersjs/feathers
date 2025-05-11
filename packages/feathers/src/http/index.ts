@@ -32,6 +32,55 @@ export const CORS_HEADERS = [
   utils.METHOD_HEADER
 ]
 
+function handleResponse(request: Request, context: HookContext) {
+  const { status, headers: responseHeaders, body } = utils.getResponse(context)
+
+  return Response.json(body, {
+    status,
+    headers: {
+      'access-control-allow-origin': request.headers.get('Origin') || '*',
+      ...(responseHeaders as Record<string, string>)
+    }
+  })
+}
+
+function handleAsyncIterable(request: Request, context: HookContext) {
+  const { readable, writable } = new TransformStream()
+  const writer = writable.getWriter()
+
+  const abortSignal = request.signal
+
+  abortSignal.addEventListener('abort', () => {
+    writer.close()
+  })
+
+  const handleStream = async () => {
+    try {
+      for await (const item of context.result) {
+        // Check if the writer is closed by seeing if the closed promise is already resolved
+        if (writer.closed.state === 'fulfilled') {
+          break
+        }
+        await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
+      }
+    } catch (error) {
+      console.error('Error processing stream:', error)
+    } finally {
+      writer.close()
+    }
+  }
+
+  handleStream()
+
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive'
+    }
+  })
+}
+
 export function createHandler(
   app: Application,
   mw: Middleware[] = [errorHandler(), queryParser(), bodyParser()]
@@ -110,20 +159,11 @@ export function createHandler(
 
     if (context.result instanceof Response) {
       return context.result
+    } else if (context.result?.[Symbol.asyncIterator]) {
+      return handleAsyncIterable(request, context)
+    } else {
+      return handleResponse(request, context)
     }
-
-    // Get the response status, headers, and body.
-    const { status, headers: responseHeaders, body } = utils.getResponse(context)
-
-    const response = Response.json(body, {
-      status,
-      headers: {
-        'access-control-allow-origin': request.headers.get('Origin') || '*',
-        ...(responseHeaders as Record<string, string>)
-      }
-    })
-
-    return response
   }
 
   return hooks(handler, middleware(mw).params('request', 'params', 'data'))

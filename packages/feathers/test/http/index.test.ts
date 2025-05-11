@@ -17,6 +17,12 @@ class ResponseTestService {
     })
   }
 
+  async *get(id: string) {
+    for (let i = 1; i <= 5; i++) {
+      yield { message: `Hello ${id} ${i}` }
+    }
+  }
+
   async options(_params: Params) {
     return new Response(null, {
       status: 200,
@@ -149,6 +155,46 @@ describe('http test', () => {
       assert.equal(res.headers.get('access-control-allow-origin'), 'https://example.com')
       assert.equal(res.headers.get('access-control-allow-headers'), CORS_HEADERS.join(', '))
       assert.equal(res.headers.get('access-control-allow-methods'), 'GET, OPTIONS')
+    })
+  })
+
+  describe('streams async iterables', () => {
+    it('returns a stream', async () => {
+      const res = await fetch('http://localhost:4000/test/world')
+
+      assert.equal(res.status, 200, 'Got OK status code')
+      assert.equal(res.headers.get('content-type'), 'text/event-stream')
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      const messages = []
+
+      let done = false
+      while (!done) {
+        const { value, done: readerDone } = await reader.read()
+        done = readerDone
+
+        if (value) {
+          const text = decoder.decode(value)
+          const eventChunks = text.split('\n\n').filter(Boolean)
+
+          for (const chunk of eventChunks) {
+            const lines = chunk.split('\n')
+            const dataLine = lines.find((line) => line.startsWith('data: '))
+
+            if (dataLine) {
+              const jsonData = JSON.parse(dataLine.substring(6))
+              messages.push(jsonData)
+            }
+          }
+        }
+      }
+
+      assert.equal(messages.length, 5, 'Should receive 5 messages')
+
+      for (let i = 1; i <= 5; i++) {
+        assert.deepEqual(messages[i - 1], { message: `Hello world ${i}` })
+      }
     })
   })
 
