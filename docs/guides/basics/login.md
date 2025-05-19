@@ -220,7 +220,7 @@ class GitHubStrategy extends OAuthStrategy {
       // The GitHub profile image
       avatar: profile.avatar_url,
       // The user email address (if available)
-      email: profile.email
+      email: profile.email || profile.login
     }
   }
 }
