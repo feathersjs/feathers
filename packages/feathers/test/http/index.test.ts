@@ -1,60 +1,16 @@
 import { strict as assert } from 'node:assert'
-import { createServer } from 'node:http'
 import { beforeAll, describe, it } from 'vitest'
-import { restTests, Service, verify } from '@feathersjs/tests'
-import { createServerAdapter } from '@whatwg-node/server'
-
-import { feathers } from '../../src/index.js'
-import { CORS_HEADERS, createHandler } from '../../src/http/index.js'
-
-class ResponseTestService {
-  async find() {
-    return new Response('Plain text', {
-      headers: {
-        'Content-Type': 'text/plain',
-        'X-Custom-Header': 'test'
-      }
-    })
-  }
-
-  async *get(id: string) {
-    for (let i = 1; i <= 5; i++) {
-      yield { message: `Hello ${id} ${i}` }
-    }
-  }
-
-  async options(_params: Params) {
-    return new Response(null, {
-      status: 200,
-      headers: {
-        'X-Feathers': 'true',
-        'Access-Control-Allow-Origin': 'https://example.com',
-        'Access-Control-Allow-Headers': 'Authorization, X-Service-Method'
-      }
-    })
-  }
-}
+import { restTests, verify } from '@feathersjs/tests'
+import { CORS_HEADERS } from '../../src/http/index.js'
+import { createTestServer } from '../fixture.js'
 
 describe('http test', () => {
-  const app = feathers<{ todos: Service; test: ResponseTestService }>()
-  const handler = createHandler(app)
-
-  app.use('todos', new Service())
-  app.use('test', new ResponseTestService())
-
-  // You can create your Node server instance by using our adapter
-  const nodeServer = createServer(createServerAdapter(handler))
-
-  beforeAll(
-    async () =>
-      new Promise((resolve) => {
-        // Then start listening on some port
-        nodeServer.listen(4000, () => resolve())
-      })
-  )
+  beforeAll(async () => {
+    await createTestServer(4444)
+  })
 
   it('throws 404 for not found pages', async () => {
-    const res = await fetch('http://localhost:4000/fdshjkl')
+    const res = await fetch('http://localhost:4444/fdshjkl')
 
     assert.equal(res.status, 404, 'Got NOT FOUND status code')
 
@@ -66,7 +22,7 @@ describe('http test', () => {
   })
 
   it('works with form encoded body', async () => {
-    const res = await fetch('http://localhost:4000/todos', {
+    const res = await fetch('http://localhost:4444/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -79,7 +35,7 @@ describe('http test', () => {
   })
 
   it('handles CORS', async () => {
-    let res = await fetch('http://localhost:4000/todos', {
+    let res = await fetch('http://localhost:4444/todos', {
       method: 'OPTIONS',
       headers: {
         'Access-Control-Request-Method': 'GET',
@@ -90,15 +46,15 @@ describe('http test', () => {
     assert.equal(res.status, 204, 'Got NO CONTENT status code')
     assert.equal(res.headers.get('access-control-allow-origin'), 'http://localhost:3000')
 
-    res = await fetch('http://localhost:4000/fdshjkl')
+    res = await fetch('http://localhost:4444/fdshjkl')
     assert.ok(res.headers.get('access-control-allow-origin'))
 
-    res = await fetch('http://localhost:4000/todos')
+    res = await fetch('http://localhost:4444/todos')
     assert.ok(res.headers.get('access-control-allow-origin'))
   })
 
   it('throws error on invalid request body', async () => {
-    const res = await fetch('http://localhost:4000/todos', {
+    const res = await fetch('http://localhost:4444/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -114,7 +70,7 @@ describe('http test', () => {
   })
 
   it('errors when method is not allowed', async () => {
-    const res = await fetch('http://localhost:4000/todos', {
+    const res = await fetch('http://localhost:4444/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -133,7 +89,7 @@ describe('http test', () => {
 
   describe('CORS and returning reponses', () => {
     it('returns a custom response', async () => {
-      const res = await fetch('http://localhost:4000/test')
+      const res = await fetch('http://localhost:4444/test')
       const body = await res.text()
 
       assert.equal(body, 'Plain text')
@@ -143,7 +99,7 @@ describe('http test', () => {
     })
 
     it('supports OPTIONS method', async () => {
-      const res = await fetch('http://localhost:4000/test', {
+      const res = await fetch('http://localhost:4444/test', {
         method: 'OPTIONS',
         headers: {
           'Access-Control-Request-Method': 'POST',
@@ -160,7 +116,7 @@ describe('http test', () => {
 
   describe('streams async iterables', () => {
     it('returns a stream', async () => {
-      const res = await fetch('http://localhost:4000/test/world')
+      const res = await fetch('http://localhost:4444/test/world')
 
       assert.equal(res.status, 200, 'Got OK status code')
       assert.equal(res.headers.get('content-type'), 'text/event-stream')
@@ -198,5 +154,5 @@ describe('http test', () => {
     })
   })
 
-  restTests('http', 'todos', 4000)
+  restTests('http', 'todos', 4444)
 })

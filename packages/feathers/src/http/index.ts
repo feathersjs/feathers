@@ -1,4 +1,4 @@
-import type { Application, Params } from '../index.js'
+import type { Application, HookContext, Params } from '../index.js'
 import type { Middleware } from './middleware.js'
 import { BadRequest, MethodNotAllowed, NotFound } from '../errors.js'
 import { hooks, middleware } from '../hooks/index.js'
@@ -10,7 +10,6 @@ export type HttpParams<Q> = Params<Q> & {
   request?: Request
 }
 
-export * from '../client.js'
 export * from './middleware.js'
 
 export const serviceToHttpMethod = {
@@ -57,8 +56,7 @@ function handleAsyncIterable(request: Request, context: HookContext) {
   const handleStream = async () => {
     try {
       for await (const item of context.result) {
-        // Check if the writer is closed by seeing if the closed promise is already resolved
-        if (writer.closed.state === 'fulfilled') {
+        if (await Promise.race([writer.closed.then(() => true), Promise.resolve(false)])) {
           break
         }
         await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
@@ -74,9 +72,10 @@ function handleAsyncIterable(request: Request, context: HookContext) {
 
   return new Response(readable, {
     headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive'
+      'access-control-allow-origin': request.headers.get('Origin') || '*',
+      'content-type': 'text/event-stream',
+      'cache-control': 'no-cache',
+      connection: 'keep-alive'
     }
   })
 }
@@ -85,11 +84,8 @@ export function createHandler(
   app: Application,
   mw: Middleware[] = [errorHandler(), queryParser(), bodyParser()]
 ) {
-  const handler = async (
-    request: Request,
-    params: Params = {},
-    data: Record<string, unknown> | null = null
-  ) => {
+  const handler = async (request: Request, ...rest: unknown[]) => {
+    const [params = {}, data] = rest as [Params, Record<string, unknown> | null]
     const url = new URL(request.url)
     const lookup = app.lookup(url.pathname)
     const headers = params.headers || Object.fromEntries(request.headers)

@@ -29,7 +29,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
   "scripts": {
     "prepublish": "npm run compile",
@@ -43,11 +43,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@types/lodash": "^4.17.15",
-    "axios": "^1.7.9",
-    "lodash": "^4.17.21"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.13.0",
     "shx": "^0.3.4",

@@ -1,23 +1,24 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import axios from 'axios'
 
 import { verify } from './fixture'
 
 export function restTests(description: string, name: string, port: number) {
   describe(description, () => {
     it('GET .find', async () => {
-      const res = await axios.get<any>(`http://localhost:${port}/${name}`)
+      const response = await fetch(`http://localhost:${port}/${name}`)
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.find(res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.find(data)
     })
 
     it('GET .get', async () => {
-      const res = await axios.get<any>(`http://localhost:${port}/${name}/dishes`)
+      const response = await fetch(`http://localhost:${port}/${name}/dishes`)
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.get('dishes', res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.get('dishes', data)
     })
 
     it('POST .create', async () => {
@@ -25,10 +26,17 @@ export function restTests(description: string, name: string, port: number) {
         description: 'POST .create'
       }
 
-      const res = await axios.post<any>(`http://localhost:${port}/${name}`, original)
+      const response = await fetch(`http://localhost:${port}/${name}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(original)
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 201, 'Got CREATED status code')
-      verify.create(original, res.data)
+      assert.ok(response.status === 201, 'Got CREATED status code')
+      verify.create(original, data)
     })
 
     it('PUT .update', async () => {
@@ -36,10 +44,17 @@ export function restTests(description: string, name: string, port: number) {
         description: 'PUT .update'
       }
 
-      const res = await axios.put(`http://localhost:${port}/${name}/544`, original)
+      const response = await fetch(`http://localhost:${port}/${name}/544`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(original)
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.update('544', original, res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.update('544', original, data)
     })
 
     it('PUT .update many', async () => {
@@ -48,10 +63,16 @@ export function restTests(description: string, name: string, port: number) {
         many: true
       }
 
-      const res = await axios.put(`http://localhost:${port}/${name}`, original)
-      const { data } = res
+      const response = await fetch(`http://localhost:${port}/${name}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(original)
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
+      assert.ok(response.status === 200, 'Got OK status code')
       verify.update(null, original, data)
     })
 
@@ -60,10 +81,17 @@ export function restTests(description: string, name: string, port: number) {
         description: 'PATCH .patch'
       }
 
-      const res = await axios.patch(`http://localhost:${port}/${name}/544`, original)
+      const response = await fetch(`http://localhost:${port}/${name}/544`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(original)
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.patch('544', original, res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.patch('544', original, data)
     })
 
     it('PATCH .patch many', async () => {
@@ -72,24 +100,37 @@ export function restTests(description: string, name: string, port: number) {
         many: true
       }
 
-      const res = await axios.patch(`http://localhost:${port}/${name}`, original)
+      const response = await fetch(`http://localhost:${port}/${name}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(original)
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.patch(null, original, res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.patch(null, original, data)
     })
 
     it('DELETE .remove', async () => {
-      const res = await axios.delete(`http://localhost:${port}/${name}/233`)
+      const response = await fetch(`http://localhost:${port}/${name}/233`, {
+        method: 'DELETE'
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.remove('233', res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.remove('233', data)
     })
 
     it('DELETE .remove many', async () => {
-      const res = await axios.delete(`http://localhost:${port}/${name}`)
+      const response = await fetch(`http://localhost:${port}/${name}`, {
+        method: 'DELETE'
+      })
+      const data = await response.json()
 
-      assert.ok(res.status === 200, 'Got OK status code')
-      verify.remove(null, res.data)
+      assert.ok(response.status === 200, 'Got OK status code')
+      verify.remove(null, data)
     })
   })
 }

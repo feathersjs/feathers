@@ -13,7 +13,7 @@ const findAllData = [
   }
 ]
 
-export class Service {
+export class TestService {
   events = ['log']
 
   async find() {
