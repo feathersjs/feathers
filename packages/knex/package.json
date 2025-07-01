@@ -63,10 +63,10 @@
     "@feathersjs/adapter-tests": "^5.0.34",
     "@feathersjs/schema": "^5.0.34",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
+    "@types/node": "^24.0.8",
     "knex": "^3.1.0",
-    "mocha": "^11.2.2",
-    "pg": "^8.15.6",
+    "mocha": "^11.7.1",
+    "pg": "^8.16.3",
     "shx": "^0.4.0",
     "sqlite3": "^5.1.7",
     "typescript": "^5.8.3"

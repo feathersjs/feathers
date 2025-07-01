@@ -67,11 +67,11 @@
   "devDependencies": {
     "@feathersjs/memory": "^5.0.34",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
+    "@types/node": "^24.0.8",
     "ajv-formats": "^3.0.1",
-    "mocha": "^11.2.2",
+    "mocha": "^11.7.1",
     "shx": "^0.4.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "typescript": ">=5.8"

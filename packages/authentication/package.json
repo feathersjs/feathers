@@ -59,7 +59,7 @@
     "@feathersjs/hooks": "^0.9.0",
     "@feathersjs/schema": "^5.0.34",
     "@feathersjs/transport-commons": "^5.0.34",
-    "@types/jsonwebtoken": "^9.0.9",
+    "@types/jsonwebtoken": "^9.0.10",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
@@ -67,11 +67,11 @@
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.34",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.19",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
+    "@types/node": "^24.0.8",
     "@types/uuid": "^10.0.0",
-    "mocha": "^11.2.2",
+    "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

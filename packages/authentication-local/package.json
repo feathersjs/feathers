@@ -64,10 +64,10 @@
     "@feathersjs/memory": "^5.0.34",
     "@feathersjs/schema": "^5.0.34",
     "@types/bcryptjs": "^2.4.6",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.19",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
-    "mocha": "^11.2.2",
+    "@types/node": "^24.0.8",
+    "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
