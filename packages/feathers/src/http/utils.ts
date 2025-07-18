@@ -1,5 +1,5 @@
 import { MethodNotAllowed } from '../errors.js'
-import { HookContext, NullableId, Params } from '../declarations.js'
+import type { HookContext, NullableId, Params, Query } from '../declarations.js'
 
 export const METHOD_HEADER = 'x-service-method'
 
@@ -91,4 +91,49 @@ export function getResponse(context: HookContext) {
   const status = getStatusCode(context, body, location)
 
   return { status, headers, body }
+}
+
+export type QueryStringify = (query: Query) => string
+
+export function stringifyQuery(query: Query = {}) {
+  const searchParams = new URLSearchParams()
+
+  // Add each query parameter to URLSearchParams
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined) {
+      if (Array.isArray(value)) {
+        // Handle array values
+        value.forEach((item) => searchParams.append(key, String(item)))
+      } else if (typeof value === 'object' && value !== null) {
+        // Handle object values by stringifying them
+        searchParams.append(key, JSON.stringify(value))
+      } else {
+        // Handle primitive values
+        searchParams.append(key, String(value))
+      }
+    }
+  })
+
+  return searchParams.toString()
+}
+
+export type QueryParser = (queryString: string) => Query
+
+export function parseQuery(queryString: string): Query {
+  const searchParams = new URLSearchParams(queryString)
+  const query: Query = {}
+
+  for (const [key, value] of searchParams.entries()) {
+    if (query[key] !== undefined) {
+      // Handle multiple values for the same key (arrays)
+      if (!Array.isArray(query[key])) {
+        query[key] = [query[key]]
+      }
+      ;(query[key] as any[]).push(value)
+    } else {
+      query[key] = value
+    }
+  }
+
+  return query
 }

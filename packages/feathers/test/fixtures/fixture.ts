@@ -1,4 +1,5 @@
-import assert from 'assert'
+import assert from 'node:assert'
+import { NotAcceptable, NotFound } from '../../src/errors'
 
 const clone = (data: any) => JSON.parse(JSON.stringify(data))
 
@@ -21,19 +22,37 @@ export class TestService {
   }
 
   async get(name: string, params: any) {
-    if (params.query.error) {
+    const { query = {}, headers } = params
+
+    if (query.error) {
       throw new Error(`Something for ${name} went wrong`)
     }
 
-    if (params.query.runtimeError) {
+    if (query.runtimeError) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       thingThatDoesNotExist() // eslint-disable-line
     }
 
+    if (query.nocontent) {
+      return null
+    }
+
+    if (name === 'notfound') {
+      throw new NotFound('Not found')
+    }
+
+    if (name === 'notacceptable') {
+      throw new NotAcceptable('This is a Feathers error', {
+        testData: true
+      })
+    }
+
     return Promise.resolve({
       id: name,
-      description: `You have to do ${name}!`
+      description: `You have to do ${name}!`,
+      ...(query.returnquery ? { query } : {}),
+      ...(query.returnheaders ? { headers } : {})
     })
   }
 

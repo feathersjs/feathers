@@ -33,14 +33,19 @@ export const CORS_HEADERS = [
 
 function handleResponse(request: Request, context: HookContext) {
   const { status, headers: responseHeaders, body } = utils.getResponse(context)
-
-  return Response.json(body, {
+  const init = {
     status,
     headers: {
       'access-control-allow-origin': request.headers.get('Origin') || '*',
       ...(responseHeaders as Record<string, string>)
     }
-  })
+  }
+
+  if (!body) {
+    return new Response(null, init)
+  }
+
+  return Response.json(body, init)
 }
 
 function handleAsyncIterable(request: Request, context: HookContext) {

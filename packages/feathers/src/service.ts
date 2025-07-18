@@ -27,6 +27,8 @@ export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
   .concat(['all', 'around', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
 
+export const protectedProperties = protectedMethods.concat(['service', 'events', 'id'])
+
 export function getHookMethods(service: any, options: ServiceOptions) {
   const { methods } = options
 

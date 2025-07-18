@@ -1,9 +1,13 @@
 import { createServerAdapter } from '@whatwg-node/server'
 import { createServer } from 'node:http'
-import { TestService } from '@feathersjs/tests'
+import { TestService } from './fixture.js'
 
-import { feathers, Application, Params } from '../src/index.js'
-import { createHandler } from '../src/http/index.js'
+import { feathers, Application, Params } from '../../src/index.js'
+import { createHandler } from '../../src/http/index.js'
+
+export * from './client.js'
+export * from './rest.js'
+export * from './fixture.js'
 
 export class ResponseTestService {
   async find() {
@@ -39,7 +43,9 @@ export type TestApplication = Application<TestServiceTypes>
 
 export const app: TestApplication = feathers()
 
-app.use('todos', new TestService())
+app.use('todos', new TestService(), {
+  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
+})
 app.use('test', new ResponseTestService())
 
 export function createTestServer(port: number) {

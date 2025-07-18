@@ -255,12 +255,12 @@ export const errors = {
   503: Unavailable
 }
 
-export function convert(error: any) {
+export function convert(error: any, status?: number) {
   if (!error) {
     return error
   }
 
-  const FeathersError = (errors as any)[error.name]
+  const FeathersError = (errors as any)[status || error.name]
   const result = FeathersError
     ? new FeathersError(error.message, error.data)
     : new Error(error.message || error)

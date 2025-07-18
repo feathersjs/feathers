@@ -1,28 +1,28 @@
-import { strict as assert } from 'node:assert'
-import { beforeAll, describe, it } from 'vitest'
-import { restTests, verify } from '@feathersjs/tests'
+import { beforeAll, describe, it, expect } from 'vitest'
+import { restTests, verify, createTestServer } from '../fixtures/index.js'
 import { CORS_HEADERS } from '../../src/http/index.js'
-import { createTestServer } from '../fixture.js'
+
+const TEST_PORT = 4444
 
 describe('http test', () => {
   beforeAll(async () => {
-    await createTestServer(4444)
+    await createTestServer(TEST_PORT)
   })
 
   it('throws 404 for not found pages', async () => {
-    const res = await fetch('http://localhost:4444/fdshjkl')
+    const res = await fetch(`http://localhost:${TEST_PORT}/fdshjkl`)
 
-    assert.equal(res.status, 404, 'Got NOT FOUND status code')
+    expect(res.status).toBe(404)
 
     const error = await res.json()
 
-    assert.ok(res.headers.get('Access-Control-Allow-Origin'))
-    assert.equal(error.message, 'Path /fdshjkl not found')
-    assert.equal(error.name, 'NotFound')
+    expect(res.headers.get('Access-Control-Allow-Origin')).toBeTruthy()
+    expect(error.message).toBe('Path /fdshjkl not found')
+    expect(error.name).toBe('NotFound')
   })
 
   it('works with form encoded body', async () => {
-    const res = await fetch('http://localhost:4444/todos', {
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -30,12 +30,12 @@ describe('http test', () => {
       body: new URLSearchParams({ description: 'Form encoded' }).toString()
     })
 
-    assert.equal(res.status, 201, 'Got CREATED status code')
+    expect(res.status).toBe(201)
     verify.create({ description: 'Form encoded' }, await res.json())
   })
 
   it('handles CORS', async () => {
-    let res = await fetch('http://localhost:4444/todos', {
+    let res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
       method: 'OPTIONS',
       headers: {
         'Access-Control-Request-Method': 'GET',
@@ -43,18 +43,18 @@ describe('http test', () => {
       }
     })
 
-    assert.equal(res.status, 204, 'Got NO CONTENT status code')
-    assert.equal(res.headers.get('access-control-allow-origin'), 'http://localhost:3000')
+    expect(res.status).toBe(204)
+    expect(res.headers.get('access-control-allow-origin')).toBe('http://localhost:3000')
 
-    res = await fetch('http://localhost:4444/fdshjkl')
-    assert.ok(res.headers.get('access-control-allow-origin'))
+    res = await fetch(`http://localhost:${TEST_PORT}/fdshjkl`)
+    expect(res.headers.get('access-control-allow-origin')).toBeTruthy()
 
-    res = await fetch('http://localhost:4444/todos')
-    assert.ok(res.headers.get('access-control-allow-origin'))
+    res = await fetch(`http://localhost:${TEST_PORT}/todos`)
+    expect(res.headers.get('access-control-allow-origin')).toBeTruthy()
   })
 
   it('throws error on invalid request body', async () => {
-    const res = await fetch('http://localhost:4444/todos', {
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -62,15 +62,15 @@ describe('http test', () => {
       body: 'invalid'
     })
 
-    assert.equal(res.status, 400, 'Got BAD REQUEST status code')
+    expect(res.status).toBe(400)
 
     const error = await res.json()
-    assert.strictEqual(error.message, 'Invalid request body')
-    assert.strictEqual(error.name, 'BadRequest')
+    expect(error.message).toBe('Invalid request body')
+    expect(error.name).toBe('BadRequest')
   })
 
   it('errors when method is not allowed', async () => {
-    const res = await fetch('http://localhost:4444/todos', {
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,27 +79,27 @@ describe('http test', () => {
       body: JSON.stringify({ description: 'Not allowed' })
     })
 
-    assert.equal(res.status, 405, 'Got METHOD NOT ALLOWED status code')
-    assert.equal(res.headers.get('content-type'), 'application/json')
+    expect(res.status).toBe(405)
+    expect(res.headers.get('content-type')).toBe('application/json')
 
     const error = await res.json()
-    assert.strictEqual(error.message, 'Method `notAllowed` is not supported by this endpoint.')
-    assert.strictEqual(error.name, 'MethodNotAllowed')
+    expect(error.message).toBe('Method `notAllowed` is not supported by this endpoint.')
+    expect(error.name).toBe('MethodNotAllowed')
   })
 
   describe('CORS and returning reponses', () => {
     it('returns a custom response', async () => {
-      const res = await fetch('http://localhost:4444/test')
+      const res = await fetch(`http://localhost:${TEST_PORT}/test`)
       const body = await res.text()
 
-      assert.equal(body, 'Plain text')
-      assert.equal(res.status, 200, 'Got OK status code')
-      assert.equal(res.headers.get('content-type'), 'text/plain')
-      assert.equal(res.headers.get('x-custom-header'), 'test')
+      expect(body).toBe('Plain text')
+      expect(res.status).toBe(200)
+      expect(res.headers.get('content-type')).toBe('text/plain')
+      expect(res.headers.get('x-custom-header')).toBe('test')
     })
 
     it('supports OPTIONS method', async () => {
-      const res = await fetch('http://localhost:4444/test', {
+      const res = await fetch(`http://localhost:${TEST_PORT}/test`, {
         method: 'OPTIONS',
         headers: {
           'Access-Control-Request-Method': 'POST',
@@ -107,19 +107,19 @@ describe('http test', () => {
         }
       })
 
-      assert.equal(res.status, 204, 'Got 204 status code')
-      assert.equal(res.headers.get('access-control-allow-origin'), 'https://example.com')
-      assert.equal(res.headers.get('access-control-allow-headers'), CORS_HEADERS.join(', '))
-      assert.equal(res.headers.get('access-control-allow-methods'), 'GET, OPTIONS')
+      expect(res.status).toBe(204)
+      expect(res.headers.get('access-control-allow-origin')).toBe('https://example.com')
+      expect(res.headers.get('access-control-allow-headers')).toBe(CORS_HEADERS.join(', '))
+      expect(res.headers.get('access-control-allow-methods')).toBe('GET, OPTIONS')
     })
   })
 
   describe('streams async iterables', () => {
     it('returns a stream', async () => {
-      const res = await fetch('http://localhost:4444/test/world')
+      const res = await fetch(`http://localhost:${TEST_PORT}/test/world`)
 
-      assert.equal(res.status, 200, 'Got OK status code')
-      assert.equal(res.headers.get('content-type'), 'text/event-stream')
+      expect(res.status).toBe(200)
+      expect(res.headers.get('content-type')).toBe('text/event-stream')
 
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
@@ -139,20 +139,20 @@ describe('http test', () => {
             const dataLine = lines.find((line) => line.startsWith('data: '))
 
             if (dataLine) {
-              const jsonData = JSON.parse(dataLine.substring(6))
+              const jsonData = JSON.parse(dataLine.substring('data: '.length))
               messages.push(jsonData)
             }
           }
         }
       }
 
-      assert.equal(messages.length, 5, 'Should receive 5 messages')
+      expect(messages.length).toBe(5)
 
       for (let i = 1; i <= 5; i++) {
-        assert.deepEqual(messages[i - 1], { message: `Hello world ${i}` })
+        expect(messages[i - 1]).toEqual({ message: `Hello world ${i}` })
       }
     })
   })
 
-  restTests('http', 'todos', 4444)
+  restTests('http', 'todos', TEST_PORT)
 })

@@ -1,9 +1,24 @@
-import { Application } from '../declarations'
-import { FetchClient } from './fetch.js'
+import qs from 'qs'
+import type { Application, Query } from '../declarations'
+import { FetchClient, ProxiedFetchClient } from './fetch.js'
 
-export function fetchClient(connection: typeof fetch, base = '') {
+export * from './fetch.js'
+export * from './types.js'
+
+export type ClientOptions = {
+  base?: string
+  Service?: typeof FetchClient
+  stringify?: (query: Query) => string
+}
+
+export function fetchClient(connection: typeof fetch, options: ClientOptions | string = '') {
+  const {
+    stringify = qs.stringify,
+    base = '',
+    Service = ProxiedFetchClient
+  } = typeof options === 'string' ? { base: options } : options
   const defaultService = function (name: string) {
-    return new FetchClient({ base, name, connection, options: {} })
+    return new Service({ base, name, connection, stringify })
   }
 
   const initialize = (_app: Application) => {
@@ -17,7 +32,7 @@ export function fetchClient(connection: typeof fetch, base = '') {
     app.defaultService = defaultService
   }
 
-  initialize.Service = FetchClient
+  initialize.Service = Service
   initialize.service = defaultService
 
   return initialize
