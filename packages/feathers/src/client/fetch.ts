@@ -46,13 +46,11 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
       })
     }
 
-    query = query || {}
-
     if (typeof id !== 'undefined' && id !== null) {
       url += `/${encodeURIComponent(id)}`
     }
 
-    return url + this.getQuery(query)
+    return url + this.getQuery(query || {})
   }
 
   getQuery(query: Query) {
@@ -263,7 +261,11 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   }
 }
 
-export class ProxiedFetchClient extends FetchClient {
+export class ProxiedFetchClient<
+  T = any,
+  D = Partial<T>,
+  P extends Params = FetchClientParams
+> extends FetchClient<T, D, P> {
   constructor(settings: FetchClientSettings) {
     super(settings)
 

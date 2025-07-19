@@ -89,9 +89,7 @@ describe('fetch REST connector', function () {
   })
 
   it('returns null for 204 responses', async () => {
-    const response = await service.get('taxes', {
-      query: { nocontent: true }
-    })
+    const response = await service.get('nocontent', {})
     expect(response).toBeNull()
   })
 
@@ -112,10 +110,20 @@ describe('fetch REST connector', function () {
     await expect(() => service.internalMethod({})).rejects.toThrow(MethodNotAllowed)
   })
 
-  it.skip('supports event streams', async () => {
-    for await (const data of app.service('test').get('test')) {
-      console.log(data)
+  it('supports event streams', async () => {
+    const messages: any[] = []
+
+    // TODO investigate need for additional await
+    for await (const data of await app.service('test').get('test')) {
+      messages.push(data)
     }
+
+    expect(messages).toHaveLength(5)
+    expect(messages[0]).toEqual({ message: 'Hello test 1' })
+    expect(messages[1]).toEqual({ message: 'Hello test 2' })
+    expect(messages[2]).toEqual({ message: 'Hello test 3' })
+    expect(messages[3]).toEqual({ message: 'Hello test 4' })
+    expect(messages[4]).toEqual({ message: 'Hello test 5' })
   })
 
   clientTests(app, 'todos')

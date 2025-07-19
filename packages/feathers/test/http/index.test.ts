@@ -112,6 +112,17 @@ describe('http test', () => {
       expect(res.headers.get('access-control-allow-headers')).toBe(CORS_HEADERS.join(', '))
       expect(res.headers.get('access-control-allow-methods')).toBe('GET, OPTIONS')
     })
+
+    it('returns 204 for no content', async () => {
+      const res = await fetch(`http://localhost:${TEST_PORT}/todos/nocontent`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      expect(res.status).toBe(204)
+    })
   })
 
   describe('streams async iterables', () => {

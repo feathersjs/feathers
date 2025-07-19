@@ -34,7 +34,7 @@ export class TestService {
       thingThatDoesNotExist() // eslint-disable-line
     }
 
-    if (query.nocontent) {
+    if (name === 'nocontent') {
       return null
     }
 
