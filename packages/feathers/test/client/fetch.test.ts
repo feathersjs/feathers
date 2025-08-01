@@ -104,9 +104,9 @@ describe('fetch REST connector', function () {
   })
 
   it('errors for non existing custom and existing internal method', async () => {
-    //@ts-expect-error
+    //@ts-expect-error Testing non existent method
     await expect(() => service.wrongCustomMethod({})).rejects.toThrow(MethodNotAllowed)
-    //@ts-expect-error
+    //@ts-expect-error Testing method with parameters
     await expect(() => service.internalMethod({})).rejects.toThrow(MethodNotAllowed)
   })
 
