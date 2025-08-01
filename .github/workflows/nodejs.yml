@@ -32,16 +32,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm i npm -g
-      - run: npm install -g codeclimate-test-reporter
       - run: npm install
       - run: npm test
         env:
           CI: true
           TEST_DB: postgres
-      - run: |
-          if [ "$CODECLIMATE_REPO_TOKEN" != "" ]; then
-            codeclimate-test-reporter < coverage/lcov.info
-          fi
-        env:
-          CODECLIMATE_REPO_TOKEN: ${{ secrets.codeclimate }}
