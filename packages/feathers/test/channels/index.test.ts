@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { describe, it } from 'vitest'
 import assert from 'assert'
 import { feathers } from '../../src/index.js'

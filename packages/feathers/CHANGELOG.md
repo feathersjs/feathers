@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
+
+### Bug Fixes
+
+- Update dependencies ([#3584](https://github.com/feathersjs/feathers/issues/3584)) ([119fa4e](https://github.com/feathersjs/feathers/commit/119fa4e1ade8b0078aa235083d566e2538b3a084))
+
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+### Bug Fixes
+
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+
 ## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
 
 **Note:** Version bump only for package @feathersjs/feathers

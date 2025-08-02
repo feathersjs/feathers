@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
 import { feathers, Application, RealTimeConnection } from '../../src/index.js'

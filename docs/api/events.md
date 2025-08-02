@@ -151,7 +151,7 @@ messages.remove(1)
 
 ## Custom events
 
-By default, real-time clients will only receive the [standard events](#service-events). However, it is possible to define a list of custom events that should also be sent to the client when registering the service with [app.use](./application.md##use-path-service-options) when `service.emit('customevent', data)` is called on the server. The `context` for custom events won't be a full hook context but just an object containing `{ app, service, path, result }`.
+By default, real-time clients will only receive the [standard events](#service-events). However, it is possible to define a list of custom events that should also be sent to the client when registering the service with [app.use](./application.md##use-path-service-options), when `service.emit('customevent', data)` is called on the server. The `context` for custom events won't be a full hook context but just an object containing `{ app, service, path, result }`.
 
 <BlockQuote type="warning" label="important">
 

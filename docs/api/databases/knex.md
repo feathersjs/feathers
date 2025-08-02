@@ -62,6 +62,8 @@ The Knex specific adapter options are:
 - `Model {Knex}` (**required**) - The KnexJS database instance
 - `name {string}` (**required**) - The name of the table
 - `schema {string}` (_optional_) - The name of the schema table prefix (example: `schema.table`)
+- `tableOptions {only: boolean` (_optional_) - For PostgreSQL only. Argument for passing options to knex db builder. ONLY keyword is used before the tableName to discard inheriting tables' data. (https://knexjs.org/guide/query-builder.html#common)
+- `extendedOperators {[string]: string}` (_optional_) - A map defining additional operators for the query builder. Example: `{ $fulltext: '@@' }` for PostgreSQL full text search. See [Knex source](https://github.com/knex/knex/blob/master/lib/formatter/wrappingFormatter.js#L10) for operators supported by Knex.
 
 The [common API options](./common.md#options) are:
 

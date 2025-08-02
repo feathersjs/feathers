@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { describe, it } from 'vitest'
 import assert from 'assert'
 import { feathers, Feathers, getServiceOptions, Id, version } from '../src/index.js'

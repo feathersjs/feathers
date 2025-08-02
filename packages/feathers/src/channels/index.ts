@@ -18,7 +18,6 @@ function flattenDeep<T>(arr: Array<T | T[]>): T[] {
 
 declare module '../declarations.js' {
   interface ServiceAddons<A, S> extends EventEmitter {
-    // eslint-disable-line
     publish(publisher: Publisher<ServiceGenericType<S>, A, this>): this
     publish(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
 
@@ -28,7 +27,6 @@ declare module '../declarations.js' {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Application<Services, Settings> {
-    // eslint-disable-line
     channels: string[]
 
     channel(name: string | string[]): Channel

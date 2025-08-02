@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Application, HookContext } from '../declarations.js'
 import { getServiceOptions, defaultServiceEvents } from '../service.js'
 import { createDebug } from '../debug.js'

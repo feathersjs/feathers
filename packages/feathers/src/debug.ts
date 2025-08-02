@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 export type DebugFunction = (...args: any[]) => void
 export type DebugInitializer = (name: string) => DebugFunction
 
