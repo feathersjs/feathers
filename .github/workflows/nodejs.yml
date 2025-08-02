@@ -16,7 +16,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
+      - run: npm i -g npm
+      # Removing node_modules and package-lock.json is a workaround for some Rollup on Linux bug
+      - run: |
+          rm -rf node_modules package-lock.json
+          npm install
       - run: npm test
         env:
           CI: true
