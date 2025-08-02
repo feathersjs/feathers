@@ -1,6 +1,7 @@
+import { describe, it } from 'vitest'
 import assert from 'assert'
-import { hooks } from '@feathersjs/hooks'
-import { feathers, ServiceInterface, Application, HookContext, NextFunction } from '../src'
+import { hooks } from '../src/hooks/index.js'
+import { feathers, ServiceInterface, Application, HookContext, NextFunction } from '../src/index.js'
 
 interface Todo {
   id: number

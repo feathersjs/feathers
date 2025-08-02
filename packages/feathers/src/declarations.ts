@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events'
-import { NextFunction, HookContext as BaseHookContext } from '@feathersjs/hooks'
+import type { Router } from './router.js'
+import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>
@@ -196,6 +197,11 @@ export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : an
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any
 export type ServiceGenericParams<S> = S extends ServiceInterface<infer _T, infer _D, infer P> ? P : any
 
+export interface RouteLookup {
+  service: Service
+  params: { [key: string]: any }
+}
+
 export interface FeathersApplication<Services = any, Settings = any> {
   /**
    * The Feathers application version
@@ -225,6 +231,19 @@ export interface FeathersApplication<Services = any, Settings = any> {
    * A private-ish indicator if `app.setup()` has been called already
    */
   _isSetup: boolean
+
+  /**
+   * The application routing mechanism
+   */
+  routes: Router<{
+    service: Service
+    params?: { [key: string]: any }
+  }>
+
+  /**
+   * Lookup a route by path
+   */
+  lookup(path: string): RouteLookup
 
   /**
    * Retrieve an application setting by name

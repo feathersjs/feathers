@@ -6,7 +6,7 @@ import {
   hooks,
   Middleware,
   collect
-} from '@feathersjs/hooks'
+} from './hooks/index.js'
 import {
   Service,
   ServiceOptions,
@@ -16,8 +16,8 @@ import {
   AroundHookFunction,
   HookFunction,
   HookType
-} from './declarations'
-import { defaultServiceArguments, getHookMethods } from './service'
+} from './declarations.js'
+import { defaultServiceArguments, getHookMethods } from './service.js'
 
 type ConvertedMap = { [type in HookType]: ReturnType<typeof convertHookData> }
 

@@ -1,11 +1,14 @@
-import version from './version'
 import { EventEmitter } from 'events'
-import { stripSlashes, createDebug } from '@feathersjs/commons'
-import { HOOKS, hooks, middleware } from '@feathersjs/hooks'
-import { eventHook, eventMixin } from './events'
-import { hookMixin } from './hooks'
-import { wrapService, getServiceOptions, protectedMethods } from './service'
-import {
+import { HOOKS, hooks, middleware } from './hooks/index.js'
+
+import { stripSlashes } from './commons.js'
+import { createDebug } from './debug.js'
+
+import version from './version.js'
+import { eventHook, eventMixin } from './events.js'
+import { hookMixin } from './hooks.js'
+import { wrapService, getServiceOptions, protectedMethods } from './service.js'
+import type {
   FeathersApplication,
   ServiceMixin,
   Service,
@@ -14,8 +17,9 @@ import {
   Application,
   FeathersService,
   ApplicationHookOptions
-} from './declarations'
-import { enableHooks } from './hooks'
+} from './declarations.js'
+import { enableHooks } from './hooks.js'
+import { Router } from './router.js'
 
 const debug = createDebug('@feathersjs/feathers')
 
@@ -27,6 +31,7 @@ export class Feathers<Services, Settings>
   settings: Settings = {} as Settings
   mixins: ServiceMixin<Application<Services, Settings>>[] = [hookMixin, eventMixin]
   version: string = version
+  routes: Router = new Router()
   _isSetup = false
 
   protected registerHooks: (this: any, allHooks: any) => any
@@ -70,6 +75,23 @@ export class Feathers<Services, Settings>
     }
 
     return current as any
+  }
+
+  lookup(path: string) {
+    const result = this.routes.lookup(path)
+
+    if (result === null) {
+      return null
+    }
+
+    const {
+      params: colonParams,
+      data: { service, params: dataParams }
+    } = result
+
+    const params = dataParams ? { ...dataParams, ...colonParams } : colonParams
+
+    return { service, params }
   }
 
   protected _setup() {
@@ -165,6 +187,10 @@ export class Feathers<Services, Settings>
 
     const protoService = wrapService(location, service, options as ServiceOptions)
     const serviceOptions = getServiceOptions(protoService)
+    const routerParams = {
+      service: protoService,
+      params: serviceOptions.routeParams || {}
+    }
 
     for (const name of protectedMethods) {
       if (serviceOptions.methods.includes(name)) {
@@ -176,7 +202,8 @@ export class Feathers<Services, Settings>
 
     // Add all the mixins
     this.mixins.forEach((fn) => fn.call(this, protoService, location, serviceOptions))
-
+    this.routes.insert(path, routerParams)
+    this.routes.insert(`${path}/:__id`, routerParams)
     this.services[location] = protoService
 
     // If we ran setup already, set this service up explicitly, this will not `await`
@@ -199,6 +226,9 @@ export class Feathers<Services, Settings>
     }
 
     delete this.services[path]
+
+    this.routes.remove(path)
+    this.routes.remove(`${path}/:__id`)
 
     return service as any
   }
