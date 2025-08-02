@@ -1,5 +1,5 @@
 {
-  "name": "@feathersjs/feathers",
+  "name": "feathers",
   "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
   "version": "5.0.32",
   "homepage": "http://feathersjs.com",
