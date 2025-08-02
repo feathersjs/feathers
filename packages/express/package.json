@@ -57,26 +57,26 @@
     "@feathersjs/errors": "^5.0.34",
     "@feathersjs/feathers": "^5.0.34",
     "@feathersjs/transport-commons": "^5.0.34",
-    "@types/compression": "^1.7.5",
-    "@types/cors": "^2.8.17",
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
     "@types/express-serve-static-core": "^4.19.5",
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "express": "^4.21.2"
   },
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.34",
     "@feathersjs/tests": "^5.0.34",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
-    "axios": "^1.9.0",
+    "@types/node": "^24.1.0",
+    "axios": "^1.11.0",
     "lodash": "^4.17.21",
-    "mocha": "^11.2.2",
+    "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

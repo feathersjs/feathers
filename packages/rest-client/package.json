@@ -64,17 +64,17 @@
     "@feathersjs/memory": "^5.0.34",
     "@feathersjs/tests": "^5.0.34",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.3",
-    "@types/node-fetch": "^2.6.12",
-    "@types/qs": "^6.9.18",
-    "axios": "^1.9.0",
-    "mocha": "^11.2.2",
+    "@types/node": "^24.1.0",
+    "@types/node-fetch": "^2.6.13",
+    "@types/qs": "^6.14.0",
+    "axios": "^1.11.0",
+    "mocha": "^11.7.1",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.8.2",
     "shx": "^0.4.0",
-    "superagent": "^10.2.0",
+    "superagent": "^10.2.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
