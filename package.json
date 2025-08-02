@@ -20,7 +20,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 22"
   },
   "workspaces": [
     "docs",
