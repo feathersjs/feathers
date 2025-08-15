@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
-import { feathers, Application } from '../../src/index.js'
+import { feathers, Application } from '../index.js'
 
 describe('app.routes', () => {
   let app: Application

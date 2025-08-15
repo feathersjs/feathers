@@ -1,9 +1,9 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
-import { feathers, Application, HookContext } from '../../src/index.js'
-import { channels } from '../../src/channels/index.js'
-import { Channel } from '../../src/channels/channel/base.js'
-import { CombinedChannel } from '../../src/channels/channel/combined.js'
+import { feathers, Application, HookContext } from '../index.js'
+import { channels } from './index.js'
+import { Channel } from './channel/base.js'
+import { CombinedChannel } from './channel/combined.js'
 
 class TestService {
   events = ['foo']

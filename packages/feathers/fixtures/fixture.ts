@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import { NotAcceptable, NotFound } from '../../src/errors'
+import { NotAcceptable, NotFound } from '../src/errors'
 
 const clone = (data: any) => JSON.parse(JSON.stringify(data))
 

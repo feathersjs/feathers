@@ -1,6 +1,6 @@
 import { describe, it, afterEach, beforeEach } from 'vitest'
 import assert from 'assert'
-import { feathers, Application, FeathersService } from '../../../src/index.js'
+import { feathers, Application, FeathersService } from '../../index.js'
 
 describe('`error` hooks', () => {
   describe('on direct service method errors', () => {

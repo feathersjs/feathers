@@ -1,6 +1,6 @@
 import { beforeAll, describe, it, expect } from 'vitest'
-import { restTests, verify, createTestServer } from '../fixtures/index.js'
-import { CORS_HEADERS } from '../../src/http/index.js'
+import { restTests, verify, createTestServer } from '../../fixtures/index.js'
+import { CORS_HEADERS } from './index.js'
 
 const TEST_PORT = 4444
 

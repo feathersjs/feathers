@@ -1,6 +1,6 @@
 import { it, describe } from 'vitest'
 import assert from 'assert'
-import { HookContext, hooks, middleware, NextFunction } from '../../src/hooks/index.js'
+import { HookContext, hooks, middleware, NextFunction } from './index.js'
 
 interface HookableObject {
   test: string

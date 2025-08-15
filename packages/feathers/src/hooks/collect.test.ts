@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import assert from 'assert'
-import { collect, HookContext, hooks, middleware, NextFunction } from '../../src/hooks/index.js'
+import { collect, HookContext, hooks, middleware, NextFunction } from './index.js'
 
 describe('feathers/hooks collect', () => {
   it('collect: hooks run in order', async () => {

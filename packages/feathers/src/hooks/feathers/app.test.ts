@@ -1,7 +1,7 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
 
-import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../../src/index.js'
+import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../index.js'
 
 type Todo = {
   id?: string

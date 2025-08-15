@@ -1,10 +1,10 @@
 import { beforeAll, describe, it, expect } from 'vitest'
-import { feathers } from '../../src/index.js'
-import { clientTests } from '../fixtures/client.js'
-import { NotAcceptable, NotFound, MethodNotAllowed } from '../../src/errors.js'
+import { feathers } from '../index.js'
+import { clientTests } from '../../fixtures/client.js'
+import { NotAcceptable, NotFound, MethodNotAllowed } from '../errors.js'
 
-import { createTestServer, TestServiceTypes, verify } from '../fixtures/index.js'
-import { fetchClient } from '../../src/client/index.js'
+import { createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
+import { fetchClient } from './index.js'
 
 describe('fetch REST connector', function () {
   const port = 8888

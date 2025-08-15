@@ -9,7 +9,7 @@ import {
   middleware,
   NextFunction,
   setMiddleware
-} from '../../src/hooks/index.js'
+} from './index.js'
 
 const hello = (name?: string, _params: any = {}) => {
   return Promise.resolve(`Hello ${name}`)
