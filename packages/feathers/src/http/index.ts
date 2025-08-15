@@ -70,7 +70,9 @@ function handleAsyncIterable(request: Request, context: HookContext) {
     } catch (error) {
       console.error('Error processing stream:', error)
     } finally {
-      writer.close()
+      try {
+        await writer.close()
+      } catch (error) {}
     }
   }
 

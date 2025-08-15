@@ -41,9 +41,30 @@ describe('SseService', () => {
       expect(typeof generator[Symbol.asyncIterator]).toBe('function')
     })
 
+    it('yields initial connected event', async () => {
+      const generator = await app.service('sse').find(connection)
+      const iterator = generator[Symbol.asyncIterator]()
+
+      const result = await iterator.next()
+
+      expect(result.done).toBe(false)
+      expect(result.value).toEqual({
+        event: 'connected',
+        data: { name: 'feathers' },
+        path: 'sse'
+      })
+
+      // Clean up
+      await iterator.return()
+    })
+
     it('yields events when connection is included in channel', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
+
+      // Consume the initial connected event
+      const connectedResult = await iterator.next()
+      expect((connectedResult.value as SsePayload).event).toBe('connected')
 
       // Join connection to a channel and register publisher
       app.channel('test-channel').join(connection)
@@ -70,6 +91,10 @@ describe('SseService', () => {
     it('only publishes to joined channels', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
+
+      // Consume the initial connected event
+      const connectedResult = await iterator.next()
+      expect((connectedResult.value as SsePayload).event).toBe('connected')
 
       // Join connection to a channel and register publisher
       app.channel('test-channel').join(connection)
@@ -110,6 +135,10 @@ describe('SseService', () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
 
+      // Consume the initial connected event
+      const connectedResult = await iterator.next()
+      expect((connectedResult.value as SsePayload).event).toBe('connected')
+
       const customData = { customized: true, id: 1 }
       const channel = app.channel('test-channel').join(connection).send(customData)
 
@@ -134,6 +163,10 @@ describe('SseService', () => {
     it('queues multiple events correctly', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
+
+      // Consume the initial connected event
+      const connectedResult = await iterator.next()
+      expect((connectedResult.value as SsePayload).event).toBe('connected')
 
       const channel = app.channel('test-channel').join(connection)
 
@@ -182,6 +215,12 @@ describe('SseService', () => {
 
       const iterator1 = generator1[Symbol.asyncIterator]()
       const iterator2 = generator2[Symbol.asyncIterator]()
+
+      // Consume the initial connected events
+      const connectedResult1 = await iterator1.next()
+      expect((connectedResult1.value as SsePayload).event).toBe('connected')
+      const connectedResult2 = await iterator2.next()
+      expect((connectedResult2.value as SsePayload).event).toBe('connected')
 
       const channel = app.channel('broadcast-channel').join(connection1, connection2)
       app.service('test').registerPublisher('created', () => channel)

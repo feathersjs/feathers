@@ -4,6 +4,7 @@ import { TestService } from './fixture.js'
 
 import { feathers, Application, Params } from '../src/index.js'
 import { createHandler, SseService } from '../src/http/index.js'
+import { channels } from '../src/channels/index.js'
 
 export * from './client.js'
 export * from './rest.js'
@@ -50,13 +51,24 @@ export type TestServiceTypes = {
 
 export type TestApplication = Application<TestServiceTypes>
 
-export const app: TestApplication = feathers()
+export const app: TestApplication = feathers().configure(channels())
 
 app.use('todos', new TestService(), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
 })
 app.use('test', new ResponseTestService())
 app.use('sse', new SseService())
+
+// Set up channels and publishers for SSE
+app.on('connection', (connection: any) => {
+  // Join all connections to a general channel
+  app.channel('general').join(connection)
+})
+
+// Publish all service events to the general channel
+app.publish((data: any, hook: any) => {
+  return app.channel('general')
+})
 
 export async function createTestServer(port: number) {
   const handler = createHandler(app)

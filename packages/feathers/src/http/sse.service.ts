@@ -9,12 +9,13 @@ export type SsePayload = {
 
 export class SseService {
   app?: Application
+  path?: string
 
   async find(connection: Params) {
     const eventBuffer: SsePayload[] = []
-    const app = this.app
+    const { app, path } = this
 
-    if (!app) {
+    if (!app || !path) {
       throw new Error('Can not initialize SSE. Did you call app.listen() or app.setup()?')
     }
 
@@ -45,6 +46,12 @@ export class SseService {
 
     const stream = async function* () {
       try {
+        yield {
+          event: 'connected',
+          data: connection.query || {},
+          path
+        }
+
         while (isActive) {
           // Yield all buffered events immediately
           while (eventBuffer.length > 0) {
@@ -65,7 +72,8 @@ export class SseService {
     return stream()
   }
 
-  async setup(app: Application) {
+  async setup(app: Application, path: string) {
     this.app = app
+    this.path = path
   }
 }

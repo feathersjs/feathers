@@ -1,6 +1,6 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest'
 import { Application, feathers } from '../index.js'
-import { createTestServer, TestServiceTypes } from '../../fixtures/index.js'
+import { app, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
 import { sse } from './sse.js'
 
@@ -22,66 +22,72 @@ describe('SSE client', function () {
     server.close()
   })
 
-  it.only('should stream SSE events from different client connection', async () => {
-    const controller = await sse(client1, 'sse')
+  it('should stream basic SSE between clients, can abort sse', async () => {
+    const events: Todo[] = []
+    const controller = sse(client1, 'sse')
 
-    const todo = await client2.service('todos').create({
-      text: 'sse test todo',
-      complete: true
+    await new Promise((resolve) => client1.service('sse').once('connected', resolve))
+
+    // Listen for events on the todos service
+    client1.service('todos').on('created', (data: Todo) => {
+      events.push(data)
     })
 
-    expect(controller).toBeDefined()
-    console.log(todo)
-  })
+    await client2.service('todos').create({ text: 'todo 1', complete: true })
+    await Promise.all([
+      client2.service('todos').create({ text: 'todo 2', complete: false }),
+      client2.service('todos').create({ text: 'todo 3', complete: true }),
+      app.service('todos').create({ text: 'server todo', complete: false })
+    ])
 
-  it.skip('should handle connection abortion gracefully', async () => {
-    const events: any[] = []
-
-    // Start SSE connection
-    const controller = await sse(app1, 'todos')
-
-    // Listen for events
-    app1.service('todos').on('created', (data: any) => {
-      events.push({ event: 'created', data })
-    })
-
-    // Create one item
-    await app1.service('todos').create({ text: 'Test before abort', complete: false })
-
-    // Wait a bit for the event to be processed
-    await new Promise((resolve) => setTimeout(resolve, 50))
-
-    // Abort the connection
+    // Wait for all events to publish
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
     controller.abort()
 
-    // Try to create another item - this should not be received
-    await app1.service('todos').create({ text: 'Test after abort', complete: false })
+    // Ensure that events do no longer get published after abort
+    await client2.service('todos').create({ text: 'todo x', complete: true })
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
 
-    // Wait a bit more to ensure no additional events are processed
-    await new Promise((resolve) => setTimeout(resolve, 50))
-
-    // Should only have received the first event
-    expect(events).toHaveLength(1)
-    expect(events[0].data.text).toBe('Test before abort')
+    expect(events.length).toBe(4)
   })
 
-  it.skip('should pass connection parameters correctly', async () => {
+  it('should pass connection parameters correctly', async () => {
     const connectionParams = {
-      headers: {
-        Authorization: 'Bearer test-token'
-      }
+      query: { message: 'testing' }
     }
+    const controller = sse(client1, 'sse', connectionParams)
+    const connectedEvent = new Promise<typeof connectionParams>((resolve) => {
+      client1.service('sse').once('connected', (data: typeof connectionParams) => resolve(data))
+    })
 
-    // Start SSE connection with custom parameters
-    const controller = await sse(app1, 'todos', { connection: connectionParams })
-
-    // The connection should be established successfully
-    expect(controller).toBeDefined()
-    expect(controller.signal).toBeDefined()
-    expect(controller.signal.aborted).toBe(false)
+    expect(await connectedEvent).toEqual(connectionParams.query)
 
     // Abort the connection
     controller.abort()
     expect(controller.signal.aborted).toBe(true)
+  })
+
+  it.skip('only receive events for their channels', async () => {
+    const events1: Todo[] = []
+    const events2: Todo[] = []
+
+    const controller1 = sse(client1, 'sse', { query: { channel: 'client' } })
+    const controller2 = sse(client2, 'sse', { query: { channel: 'client' } })
+
+    await Promise.all([
+      new Promise((resolve) => client1.service('sse').once('connected', resolve)),
+      new Promise((resolve) => client2.service('sse').once('connected', resolve))
+    ])
+
+    await app.service('todos').create({
+      text: 'todo x',
+      complete: true,
+      channel: 'client'
+    })
+
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500))
+
+    controller1.abort()
+    controller2.abort()
   })
 })

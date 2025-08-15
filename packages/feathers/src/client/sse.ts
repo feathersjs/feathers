@@ -1,17 +1,19 @@
 import { Application, Params } from '../declarations'
 import type { SseService } from '../http'
 
-export async function sse(client: Application, path: string, params: Params = {}) {
+export function sse(client: Application, path: string, params: Params = {}) {
   const abortController = new AbortController()
   const sseService = client.service(path) as unknown as SseService
-  const stream = await sseService.find({
+  const sseParams = {
     ...params,
     connection: {
       ...params.connection,
       signal: abortController.signal
     }
-  })
-  const handleStream = async () => {
+  }
+
+  // Do not await the request since the promise won't resolve until an event happens
+  sseService.find(sseParams).then(async (stream) => {
     try {
       for await (const payload of stream) {
         // Check if aborted before processing each payload
@@ -32,10 +34,7 @@ export async function sse(client: Application, path: string, params: Params = {}
         console.error(error)
       }
     }
-  }
-
-  // Start processing the stream in the background without awaiting
-  handleStream()
+  })
 
   return abortController
 }
