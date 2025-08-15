@@ -8,10 +8,15 @@ export type SseEventEntry = {
 }
 
 export class SseService {
-  constructor(public app: Application) {}
+  app?: Application
 
-  async *find(connection: Params) {
+  async find(connection: Params) {
     const eventBuffer: SseEventEntry[] = []
+    const app = this.app
+
+    if (!app) {
+      throw new Error('Can not initialize SSE. Did you call app.listen() or app.setup()?')
+    }
 
     let isActive = true
     let pendingResolve: (() => void) | null = null
@@ -35,24 +40,32 @@ export class SseService {
       }
     }
 
-    this.app.emit('connection', connection)
-    this.app.addListener('publish', publishHandler)
+    app.emit('connection', connection)
+    app.addListener('publish', publishHandler)
 
-    try {
-      while (isActive) {
-        // Yield all buffered events immediately
-        while (eventBuffer.length > 0) {
-          yield eventBuffer.shift()!
+    const stream = async function* () {
+      try {
+        while (isActive) {
+          // Yield all buffered events immediately
+          while (eventBuffer.length > 0) {
+            yield eventBuffer.shift()!
+          }
+
+          // Wait for next event(s) to arrive
+          await new Promise<void>((resolve) => {
+            pendingResolve = resolve
+          })
         }
-
-        // Wait for next event(s) to arrive
-        await new Promise<void>((resolve) => {
-          pendingResolve = resolve
-        })
+      } finally {
+        isActive = false
+        app.removeListener('publish', publishHandler)
       }
-    } finally {
-      isActive = false
-      this.app.removeListener('publish', publishHandler)
     }
+
+    return stream()
+  }
+
+  async setup(app: Application) {
+    this.app = app
   }
 }
