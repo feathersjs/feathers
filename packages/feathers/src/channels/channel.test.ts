@@ -1,9 +1,9 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
-import { feathers, Application, RealTimeConnection } from '../../src/index.js'
-import { channels, keys } from '../../src/channels/index.js'
-import { Channel } from '../../src/channels/channel/base.js'
-import { CombinedChannel } from '../../src/channels/channel/combined.js'
+import { feathers, Application, RealTimeConnection } from '../index.js'
+import { channels, keys } from './index.js'
+import { Channel } from './channel/base.js'
+import { CombinedChannel } from './channel/combined.js'
 
 const { CHANNELS } = keys
 

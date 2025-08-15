@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import { HookContext } from '../../src/index.js'
-import * as http from '../../src/http/utils.js'
+import { HookContext } from '../index.js'
+import * as http from './utils.js'
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {
   it('getResponse body', () => {

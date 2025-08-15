@@ -1,7 +1,7 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import { feathers } from '../../src/index.js'
-import { channels, keys } from '../../src/channels/index.js'
+import { feathers } from '../index.js'
+import { channels, keys } from './index.js'
 
 describe('feathers-channels', () => {
   it('has app.channel', () => {

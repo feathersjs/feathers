@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import { HookContext, hooks, middleware, NextFunction } from '../../src/hooks/index.js'
+import { HookContext, hooks, middleware, NextFunction } from './index.js'
 
 const CYCLES = 100000
 const getRuntime = async (callback: () => Promise<any>) => {

@@ -47,9 +47,7 @@
     "LICENSE",
     "README.md",
     "src/**",
-    "lib/**",
-    "*.d.ts",
-    "*.js"
+    "lib/**"
   ],
   "scripts": {
     "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\'')\" > src/version.ts",
