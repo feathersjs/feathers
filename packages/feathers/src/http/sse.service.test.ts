@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { feathers, Application } from '../index.js'
-import { channels } from '../channels/index.js'
 import { SseService, SsePayload } from './sse.service.js'
 
 class TestService {
@@ -24,7 +23,7 @@ describe('SseService', () => {
   let connection: any
 
   beforeEach(async () => {
-    app = feathers().configure(channels())
+    app = feathers()
     app.use('sse', new SseService())
     app.use('test', new TestService())
 

@@ -72,7 +72,7 @@ function handleAsyncIterable(request: Request, context: HookContext) {
     } finally {
       try {
         await writer.close()
-      } catch (error) {}
+      } catch (_error) {}
     }
   }
 

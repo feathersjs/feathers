@@ -1,17 +1,15 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
 import { feathers, Application, RealTimeConnection } from '../index.js'
-import { channels, keys } from './index.js'
-import { Channel } from './channel/base.js'
-import { CombinedChannel } from './channel/combined.js'
-
-const { CHANNELS } = keys
+import { Channel } from './base.js'
+import { CombinedChannel } from './combined.js'
+import { CHANNELS } from './mixin.js'
 
 describe('app.channel', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(channels())
+    app = feathers()
   })
 
   describe('base channels', () => {

@@ -7,7 +7,7 @@ import { createDebug } from './debug.js'
 import version from './version.js'
 import { eventHook, eventMixin } from './events.js'
 import { hookMixin } from './hooks.js'
-import { wrapService, getServiceOptions, protectedMethods } from './service.js'
+import { wrapService, getServiceOptions, protectedMethods, defaultServiceEvents } from './service.js'
 import type {
   FeathersApplication,
   ServiceMixin,
@@ -20,8 +20,12 @@ import type {
 } from './declarations.js'
 import { enableHooks } from './hooks.js'
 import { Router } from './router.js'
+import { Channel } from './channel/base.js'
+import { CombinedChannel } from './channel/combined.js'
+import { channelServiceMixin, Event, Publisher, PUBLISHERS, ALL_EVENTS, CHANNELS } from './channel/mixin.js'
 
 const debug = createDebug('@feathersjs/feathers')
+const channelDebug = createDebug('@feathersjs/transport-commons/channels')
 
 export class Feathers<Services, Settings>
   extends EventEmitter
@@ -36,12 +40,77 @@ export class Feathers<Services, Settings>
 
   protected registerHooks: (this: any, allHooks: any) => any
 
+  // Channel-related properties
+  public [CHANNELS]: { [key: string]: Channel } = {}
+  public [PUBLISHERS]: { [ALL_EVENTS]?: Publisher; [key: string]: Publisher } = {}
+
   constructor() {
     super()
     this.registerHooks = enableHooks(this)
     this.registerHooks({
       around: [eventHook]
     })
+  }
+
+  get channels(): string[] {
+    return Object.keys(this[CHANNELS])
+  }
+
+  channel(...names: string[]): Channel {
+    channelDebug('Returning channels', names)
+
+    if (names.length === 0) {
+      throw new Error('app.channel needs at least one channel name')
+    }
+
+    if (names.length === 1) {
+      const [name] = names
+
+      if (Array.isArray(name)) {
+        return this.channel(...name)
+      }
+
+      if (!this[CHANNELS][name]) {
+        const channel = new Channel()
+
+        channel.once('empty', () => {
+          channel.removeAllListeners()
+          delete this[CHANNELS][name]
+        })
+
+        this[CHANNELS][name] = channel
+      }
+
+      return this[CHANNELS][name]
+    }
+
+    const channels = names.map((name) => this.channel(name))
+
+    return new CombinedChannel(channels)
+  }
+
+  publish(event: Event | Publisher, publisher?: Publisher): this {
+    return this.registerPublisher(event, publisher)
+  }
+
+  registerPublisher(event: Event | Publisher, publisher?: Publisher): this {
+    channelDebug('Registering publisher', event)
+
+    if (!publisher && typeof event === 'function') {
+      publisher = event
+      event = ALL_EVENTS
+    }
+
+    const { serviceEvents = defaultServiceEvents } = getServiceOptions(this) || {}
+
+    if (event !== ALL_EVENTS && !serviceEvents.includes(event as string)) {
+      throw new Error(`'${event.toString()}' is not a valid service event`)
+    }
+
+    const publishers = this[PUBLISHERS]
+    publishers[event as string] = publisher!
+
+    return this
   }
 
   get<L extends keyof Settings & string>(name: L): Settings[L] {
@@ -202,6 +271,10 @@ export class Feathers<Services, Settings>
 
     // Add all the mixins
     this.mixins.forEach((fn) => fn.call(this, protoService, location, serviceOptions))
+
+    // Add channel publishing functionality to the service
+    channelServiceMixin(this as any)(protoService, location, serviceOptions)
+
     this.routes.insert(path, routerParams)
     this.routes.insert(`${path}/:__id`, routerParams)
     this.services[location] = protoService

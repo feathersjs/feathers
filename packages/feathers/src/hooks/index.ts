@@ -70,7 +70,7 @@ export function hooks<O>(obj: O | (new (...args: any[]) => O), hookMap: HookMap<
  * Decorate a class method with hooks.
  * @param manager The hooks settings
  */
-export function hooks<T = any>(manager?: HookOptions): any
+export function hooks<_T = any>(manager?: HookOptions): any
 
 // Fallthrough to actual implementation
 export function hooks(...args: any[]) {

@@ -1,9 +1,8 @@
 import { describe, it, beforeEach } from 'vitest'
 import assert from 'assert'
 import { feathers, Application, HookContext } from '../index.js'
-import { channels } from './index.js'
-import { Channel } from './channel/base.js'
-import { CombinedChannel } from './channel/combined.js'
+import { Channel } from './base.js'
+import { CombinedChannel } from './combined.js'
 
 class TestService {
   events = ['foo']
@@ -17,7 +16,7 @@ describe('app.publish', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(channels())
+    app = feathers()
   })
 
   it('throws an error if service does not send the event', () => {
@@ -52,7 +51,7 @@ describe('app.publish', () => {
 
       try {
         await app.service('test').create({ message: 'something' })
-      } catch (error: any) {
+      } catch (_error: any) {
         assert.fail('Should never get here')
       }
     })

@@ -1,4 +1,4 @@
-import { RealTimeConnection } from '../../declarations.js'
+import { RealTimeConnection } from '../declarations.js'
 import { Channel } from './base'
 
 function collectConnections(children: Channel[]) {

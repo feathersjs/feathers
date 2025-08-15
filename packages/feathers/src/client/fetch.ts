@@ -149,7 +149,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
       const data = await response.json()
 
       error = await toError(data, response.status)
-    } catch (error) {}
+    } catch (_error) {}
 
     error.response = response
 

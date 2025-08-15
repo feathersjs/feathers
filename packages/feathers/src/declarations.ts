@@ -139,6 +139,12 @@ export type ServiceInterface<
 export interface ServiceAddons<A = Application, S = Service> extends EventEmitter {
   id?: string
   hooks(options: HookOptions<A, S>): this
+
+  publish(publisher: Publisher<ServiceGenericType<S>, A, this>): this
+  publish(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
+
+  registerPublisher(publisher: Publisher<ServiceGenericType<S>, A, this>): this
+  registerPublisher(event: Event, publisher: Publisher<ServiceGenericType<S>, A, this>): this
 }
 
 export interface ServiceHookOverloads<S, P = Params> {
@@ -338,7 +344,18 @@ export interface FeathersApplication<Services = any, Settings = any> {
 // so that the declaration can be extended by other modules
 export interface Application<Services = any, Settings = any>
   extends FeathersApplication<Services, Settings>,
-    EventEmitter {}
+    EventEmitter {
+  channels: string[]
+
+  channel(name: string | string[]): Channel
+  channel(...names: string[]): Channel
+
+  publish<T>(publisher: Publisher<T, this>): this
+  publish<T>(event: Event, publisher: Publisher<T, this>): this
+
+  registerPublisher<T>(publisher: Publisher<T, this>): this
+  registerPublisher<T>(event: Event, publisher: Publisher<T, this>): this
+}
 
 export type Id = number | string
 export type NullableId = Id | null
@@ -352,6 +369,7 @@ export interface Params<Q = Query> {
   provider?: string
   route?: { [key: string]: any }
   headers?: { [key: string]: any }
+  connection?: RealTimeConnection
 }
 
 export interface PaginationOptions {
@@ -512,3 +530,20 @@ export type ApplicationHookMap<A> = {
 }
 
 export type ApplicationHookOptions<A> = HookOptions<A, any> | ApplicationHookMap<A>
+
+// Channel types
+export type Event = string | symbol
+export type Publisher<T = any, A = Application, S = any> = (
+  data: T,
+  context: HookContext<A, S>
+) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>
+
+export interface Channel {
+  connections: RealTimeConnection[]
+  data: any
+  length: number
+  leave(...connections: RealTimeConnection[]): this
+  join(...connections: RealTimeConnection[]): this
+  filter(fn: (connection: RealTimeConnection) => boolean): Channel
+  send(data: any): Channel
+}
