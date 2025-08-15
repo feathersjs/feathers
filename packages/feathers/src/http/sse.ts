@@ -12,6 +12,7 @@ export class SseService {
 
   async *find(connection: Params) {
     const eventBuffer: SseEventEntry[] = []
+
     let isActive = true
     let pendingResolve: (() => void) | null = null
 
@@ -19,7 +20,7 @@ export class SseService {
       if (!isActive) return
 
       if (channel.connections.includes(connection)) {
-        const eventData = channel.dataFor ? channel.dataFor(connection) : data
+        const eventData = channel.dataFor ? (channel.dataFor(connection) ?? data) : data
         eventBuffer.push({
           event,
           data: eventData,
@@ -34,6 +35,7 @@ export class SseService {
       }
     }
 
+    this.app.emit('connection', connection)
     this.app.addListener('publish', publishHandler)
 
     try {
