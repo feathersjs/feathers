@@ -3,7 +3,7 @@ import { createServer } from 'node:http'
 import { TestService } from './fixture.js'
 
 import { feathers, Application, Params } from '../src/index.js'
-import { createHandler } from '../src/http/index.js'
+import { createHandler, SseService } from '../src/http/index.js'
 
 export * from './client.js'
 export * from './rest.js'
@@ -23,6 +23,7 @@ export class ResponseTestService {
     const generator = async function* () {
       for (let i = 1; i <= 5; i++) {
         yield { message: `Hello ${id} ${i}` }
+        await new Promise((resolve) => setTimeout(resolve, 50))
       }
     }
 
@@ -41,7 +42,11 @@ export class ResponseTestService {
   }
 }
 
-export type TestServiceTypes = { todos: TestService; test: ResponseTestService }
+export type TestServiceTypes = {
+  todos: TestService
+  test: ResponseTestService
+  sse: SseService
+}
 
 export type TestApplication = Application<TestServiceTypes>
 
@@ -51,16 +56,19 @@ app.use('todos', new TestService(), {
   methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
 })
 app.use('test', new ResponseTestService())
+app.use('sse', new SseService())
 
-export function createTestServer(port: number) {
+export async function createTestServer(port: number) {
   const handler = createHandler(app)
   // You can create your Node server instance by using our adapter
   const nodeServer = createServer(createServerAdapter(handler))
 
-  new Promise<void>((resolve) => {
+  await new Promise<void>((resolve) => {
     // Then start listening on some port
     nodeServer.listen(port, () => resolve())
   })
+
+  await app.setup(nodeServer)
 
   return nodeServer
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { feathers, Application } from '../index.js'
 import { channels } from '../channels/index.js'
-import { SseService, SseEventEntry } from './sse.js'
+import { SseService, SsePayload } from './sse.service.js'
 
 class TestService {
   events = ['foo', 'bar']
@@ -152,17 +152,17 @@ describe('SseService', () => {
         })
       })
 
-      const events: SseEventEntry[] = []
+      const events: SsePayload[] = []
 
       // Read events
       const result1 = await iterator.next()
-      events.push(result1.value as SseEventEntry)
+      events.push(result1.value as SsePayload)
 
       const result2 = await iterator.next()
-      events.push(result2.value as SseEventEntry)
+      events.push(result2.value as SsePayload)
 
       const result3 = await iterator.next()
-      events.push(result3.value as SseEventEntry)
+      events.push(result3.value as SsePayload)
 
       expect(events).toHaveLength(3)
       expect(events[0].event).toBe('created')

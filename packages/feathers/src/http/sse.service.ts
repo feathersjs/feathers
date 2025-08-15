@@ -1,7 +1,7 @@
 import { Application, HookContext, Params } from '../declarations'
 import { CombinedChannel } from '../channels/channel/combined'
 
-export type SseEventEntry = {
+export type SsePayload = {
   event: string
   data: unknown
   path?: string
@@ -11,7 +11,7 @@ export class SseService {
   app?: Application
 
   async find(connection: Params) {
-    const eventBuffer: SseEventEntry[] = []
+    const eventBuffer: SsePayload[] = []
     const app = this.app
 
     if (!app) {
