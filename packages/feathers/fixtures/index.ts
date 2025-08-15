@@ -19,10 +19,14 @@ export class ResponseTestService {
     })
   }
 
-  async *get(id: string) {
-    for (let i = 1; i <= 5; i++) {
-      yield { message: `Hello ${id} ${i}` }
+  async get(id: string) {
+    const generator = async function* () {
+      for (let i = 1; i <= 5; i++) {
+        yield { message: `Hello ${id} ${i}` }
+      }
     }
+
+    return generator()
   }
 
   async options(_params: Params) {

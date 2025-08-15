@@ -110,11 +110,11 @@ describe('fetch REST connector', function () {
     await expect(() => service.internalMethod({})).rejects.toThrow(MethodNotAllowed)
   })
 
-  it('supports event streams', async () => {
+  it('supports async iterable streams', async () => {
     const messages: any[] = []
+    const stream = await app.service('test').get('test')
 
-    // TODO investigate need for additional await
-    for await (const data of await app.service('test').get('test')) {
+    for await (const data of stream) {
       messages.push(data)
     }
 

@@ -43,7 +43,15 @@ export function functionHooks<F>(fn: F, managerOrMiddleware: HookOptions) {
     // Runs the actual original method if `ctx.result` is not already set
     hookChain.push((ctx, next) => {
       if (!Object.prototype.hasOwnProperty.call(context, 'result')) {
-        return Promise.resolve(original.apply(this, ctx.arguments)).then((result) => {
+        const returnValue = original.apply(this, ctx.arguments)
+
+        if (returnValue[Symbol.asyncIterator]) {
+          throw new Error(
+            'Function must return a Promise that resolves to an async iterable, not the iterable directly'
+          )
+        }
+
+        return Promise.resolve(returnValue).then((result) => {
           ctx.result = result
 
           return next()

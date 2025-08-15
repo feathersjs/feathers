@@ -485,4 +485,17 @@ describe('feathers/hooks function', () => {
     assert.strictEqual(await fn('Dave'), 'Hello Dave')
     assert.strictEqual(await fn(), 'Hello Bertho')
   })
+
+  it('returning an async iterator directly errors', () => {
+    const iterable = async function* () {
+      yield 'Hello'
+      yield 'World'
+    }
+
+    const fn = hooks(iterable, [])
+
+    expect(() => fn()).rejects.toThrow(
+      'Function must return a Promise that resolves to an async iterable, not the iterable directly'
+    )
+  })
 })
