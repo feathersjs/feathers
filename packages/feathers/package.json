@@ -23,7 +23,7 @@
     "./hooks": "./lib/hooks/index.js",
     "./commons": "./lib/commons.js",
     "./errors": "./lib/errors.js",
-    "./client": "./lib/client.js",
+    "./client": "./lib/client/index.js",
     "./http": "./lib/http/index.js"
   },
   "author": {

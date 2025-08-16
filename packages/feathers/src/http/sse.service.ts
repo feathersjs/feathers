@@ -1,5 +1,5 @@
-import { CombinedChannel } from '../channel/combined'
-import { Application, HookContext, Params } from '../declarations'
+import { CombinedChannel } from '../channel/combined.js'
+import { Application, HookContext, Params } from '../declarations.js'
 
 export type SsePayload = {
   event: string

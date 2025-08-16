@@ -1,5 +1,5 @@
-import { Application, Params } from '../declarations'
-import type { SseService } from '../http'
+import { Application, Params } from '../declarations.js'
+import type { SseService } from '../http/index.js'
 
 export function sse(client: Application, path: string, params: Params = {}) {
   const abortController = new AbortController()

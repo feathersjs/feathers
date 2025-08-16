@@ -99,4 +99,4 @@ export function createSymbol(name: string) {
   return typeof Symbol !== 'undefined' ? Symbol.for(name) : name
 }
 
-export * from './debug'
+export * from './debug.js'

@@ -1,9 +1,10 @@
 import qs from 'qs'
-import type { Application, Query } from '../declarations'
+import type { Application, Query } from '../declarations.js'
 import { FetchClient, ProxiedFetchClient } from './fetch.js'
 
 export * from './fetch.js'
 export * from './types.js'
+export * from './sse.js'
 
 export type ClientOptions = {
   base?: string
