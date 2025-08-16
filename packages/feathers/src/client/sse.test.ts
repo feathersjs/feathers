@@ -1,6 +1,6 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest'
 import { Application, feathers } from '../index.js'
-import { app, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
+import { getApp, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
 import { sse } from './sse.js'
 
@@ -9,13 +9,15 @@ describe('SSE client', function () {
   const url = `http://localhost:${port}`
 
   let server: any
+  let app: Application<TestServiceTypes>
   let client1: Application<TestServiceTypes>
   let client2: Application<TestServiceTypes>
 
   beforeAll(async () => {
-    server = await createTestServer(port)
-    client1 = feathers<TestServiceTypes>().configure(fetchClient(fetch, url))
-    client2 = feathers<TestServiceTypes>().configure(fetchClient(fetch, url))
+    app = getApp()
+    server = await createTestServer(port, app)
+    client1 = feathers<TestServiceTypes>().configure(fetchClient(fetch, { baseUrl: url }))
+    client2 = feathers<TestServiceTypes>().configure(fetchClient(fetch, { baseUrl: url }))
   })
 
   afterAll(async () => {

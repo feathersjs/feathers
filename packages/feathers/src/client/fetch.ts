@@ -17,7 +17,7 @@ export interface FetchClientParams extends Params {
 
 interface FetchClientSettings {
   name: string
-  base: string
+  baseUrl: string
   connection: typeof fetch
   stringify: (query: Query) => string
 }
@@ -33,7 +33,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   constructor(settings: FetchClientSettings) {
     this.name = stripSlashes(settings.name)
     this.connection = settings.connection
-    this.base = `${settings.base}/${this.name}`
+    this.base = `${settings.baseUrl}/${this.name}`
     this.stringify = settings.stringify
   }
 

@@ -50,26 +50,30 @@ export type TestServiceTypes = {
 
 export type TestApplication = Application<TestServiceTypes>
 
-export const app: TestApplication = feathers()
+export function getApp(): TestApplication {
+  const app: TestApplication = feathers()
 
-app.use('todos', new TestService(), {
-  methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
-})
-app.use('test', new ResponseTestService())
-app.use('sse', new SseService())
+  app.use('todos', new TestService(), {
+    methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
+  })
+  app.use('test', new ResponseTestService())
+  app.use('sse', new SseService())
 
-// Set up channels and publishers for SSE
-app.on('connection', (connection: any) => {
-  // Join all connections to a general channel
-  app.channel('general').join(connection)
-})
+  // Set up channels and publishers for SSE
+  app.on('connection', (connection: any) => {
+    // Join all connections to a general channel
+    app.channel('general').join(connection)
+  })
 
-// Publish all service events to the general channel
-app.publish((_data: any, _hook: any) => {
-  return app.channel('general')
-})
+  // Publish all service events to the general channel
+  app.publish((_data: any, _hook: any) => {
+    return app.channel('general')
+  })
 
-export async function createTestServer(port: number) {
+  return app
+}
+
+export async function createTestServer(port: number, app: TestApplication) {
   const handler = createHandler(app)
   // You can create your Node server instance by using our adapter
   const nodeServer = createServer(createServerAdapter(handler))

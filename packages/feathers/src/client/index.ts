@@ -7,19 +7,15 @@ export * from './types.js'
 export * from './sse.js'
 
 export type ClientOptions = {
-  base?: string
+  baseUrl?: string
   Service?: typeof FetchClient
   stringify?: (query: Query) => string
 }
 
-export function fetchClient(connection: typeof fetch, options: ClientOptions | string = '') {
-  const {
-    stringify = qs.stringify,
-    base = '',
-    Service = ProxiedFetchClient
-  } = typeof options === 'string' ? { base: options } : options
+export function fetchClient(connection: typeof fetch, options: ClientOptions = {}) {
+  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient } = options
   const defaultService = function (name: string) {
-    return new Service({ base, name, connection, stringify })
+    return new Service({ baseUrl, name, connection, stringify })
   }
 
   const initialize = (_app: Application) => {
