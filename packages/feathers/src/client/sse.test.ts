@@ -2,7 +2,6 @@ import { beforeAll, afterAll, describe, it, expect } from 'vitest'
 import { Application, feathers, Params } from '../index.js'
 import { getApp, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
-import { sse } from './sse.js'
 
 describe('SSE client', function () {
   const port = 8890
@@ -40,13 +39,13 @@ describe('SSE client', function () {
     client1 = feathers<TestServiceTypes>().configure(
       fetchClient(fetch, {
         baseUrl: url,
-        sse: true
+        sse: 'sse'
       })
     )
     client2 = feathers<TestServiceTypes>().configure(
       fetchClient(fetch, {
         baseUrl: url,
-        sse: true
+        sse: 'sse'
       })
     )
   })
@@ -57,9 +56,12 @@ describe('SSE client', function () {
 
   it('should stream basic SSE between clients, can abort sse', async () => {
     const events: Todo[] = []
-    const controller = sse(client1, 'sse')
 
-    await new Promise((resolve) => client1.service('sse').once('connected', resolve))
+    client1.service('sse').emit('start')
+
+    const controller = await new Promise<AbortController>((resolve) => {
+      client1.service('sse').once('connected', (data: AbortController) => resolve(data))
+    })
 
     // Listen for events on the todos service
     client1.service('todos').on('created', (data: Todo) => {
@@ -73,9 +75,10 @@ describe('SSE client', function () {
       app.service('todos').create({ text: 'server todo', complete: false })
     ])
 
+    controller.abort()
+
     // Wait for all events to publish
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
-    controller.abort()
 
     // Ensure that events do no longer get published after abort
     await client2.service('todos').create({ text: 'todo x', complete: true })
@@ -84,26 +87,26 @@ describe('SSE client', function () {
     expect(events.length).toBe(4)
   })
 
-  it('should pass connection parameters correctly', async () => {
-    const connectionParams = {
+  it('emits AbortController on successful connection', async () => {
+    const params = {
       query: { message: 'testing' }
     }
-    const controller = sse(client1, 'sse', connectionParams)
-    const connectedEvent = new Promise<typeof connectionParams>((resolve) => {
-      client1.service('sse').once('connected', (data: typeof connectionParams) => resolve(data))
+
+    client1.service('sse').emit('start', params)
+
+    const controller = await new Promise<AbortController>((resolve) => {
+      client1.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
 
-    expect(await connectedEvent).toEqual(connectionParams.query)
-
-    // Abort the connection
     controller.abort()
     expect(controller.signal.aborted).toBe(true)
   })
 
   it('only receive events for their channels', async () => {
-    const controller1 = sse(client1, 'sse', { query: { channel: 'client' } })
-    const controller2 = sse(client2, 'sse', { query: { channel: 'client' } })
     const events: Todo[] = []
+
+    client1.service('sse').emit('start', { query: { channel: 'client' } })
+    client2.service('sse').emit('start', { query: { channel: 'client' } })
 
     await Promise.all([
       new Promise((resolve) => client1.service('sse').once('connected', resolve)),
@@ -133,7 +136,7 @@ describe('SSE client', function () {
 
     expect(events.length).toBe(2)
 
-    controller1.abort()
-    controller2.abort()
+    // controller1.abort()
+    // controller2.abort()
   })
 })
