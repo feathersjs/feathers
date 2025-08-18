@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest'
-import { Application, feathers } from '../index.js'
+import { Application, feathers, Params } from '../index.js'
 import { getApp, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
 import { sse } from './sse.js'
@@ -15,9 +15,40 @@ describe('SSE client', function () {
 
   beforeAll(async () => {
     app = getApp()
+
+    // Set up channels and publishers for SSE
+    app.on('connection', (connection: Params) => {
+      app.channel('general').join(connection)
+
+      const { channel } = connection.query
+
+      if (channel) {
+        app.channel(channel).join(connection)
+      }
+    })
+
+    // Publish all service events to the general channel
+    app.publish((data: any) => {
+      if (typeof data.channel !== 'string') {
+        return app.channel('general')
+      } else {
+        return app.channel(data.channel)
+      }
+    })
+
     server = await createTestServer(port, app)
-    client1 = feathers<TestServiceTypes>().configure(fetchClient(fetch, { baseUrl: url }))
-    client2 = feathers<TestServiceTypes>().configure(fetchClient(fetch, { baseUrl: url }))
+    client1 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: true
+      })
+    )
+    client2 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: true
+      })
+    )
   })
 
   afterAll(async () => {
@@ -69,25 +100,38 @@ describe('SSE client', function () {
     expect(controller.signal.aborted).toBe(true)
   })
 
-  it.skip('only receive events for their channels', async () => {
-    const events1: Todo[] = []
-    const events2: Todo[] = []
-
+  it('only receive events for their channels', async () => {
     const controller1 = sse(client1, 'sse', { query: { channel: 'client' } })
     const controller2 = sse(client2, 'sse', { query: { channel: 'client' } })
+    const events: Todo[] = []
 
     await Promise.all([
       new Promise((resolve) => client1.service('sse').once('connected', resolve)),
       new Promise((resolve) => client2.service('sse').once('connected', resolve))
     ])
 
-    await app.service('todos').create({
+    client1.service('todos').on('created', (todo: Todo) => events.push(todo))
+    client2.service('todos').on('created', (todo: Todo) => events.push(todo))
+
+    await client2.service('todos').create({
       text: 'todo x',
       complete: true,
       channel: 'client'
     })
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500))
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+
+    expect(events.length).toBe(2)
+
+    await client2.service('todos').create({
+      text: 'todo x',
+      complete: true,
+      channel: 'notclient'
+    })
+
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+
+    expect(events.length).toBe(2)
 
     controller1.abort()
     controller2.abort()

@@ -59,17 +59,6 @@ export function getApp(): TestApplication {
   app.use('test', new ResponseTestService())
   app.use('sse', new SseService())
 
-  // Set up channels and publishers for SSE
-  app.on('connection', (connection: any) => {
-    // Join all connections to a general channel
-    app.channel('general').join(connection)
-  })
-
-  // Publish all service events to the general channel
-  app.publish((_data: any, _hook: any) => {
-    return app.channel('general')
-  })
-
   return app
 }
 

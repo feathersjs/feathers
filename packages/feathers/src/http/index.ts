@@ -62,13 +62,16 @@ function handleAsyncIterable(request: Request, context: HookContext) {
   const handleStream = async () => {
     try {
       for await (const item of context.result) {
-        if (await Promise.race([writer.closed.then(() => true), Promise.resolve(false)])) {
-          break
+        try {
+          await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
+        } catch (error) {
+          // Handle invalid state errors gracefully
+          if ((error as { code?: string }).code === 'ERR_INVALID_STATE') {
+            break
+          }
+          throw error
         }
-        await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
       }
-    } catch (error) {
-      console.error('Error processing stream:', error)
     } finally {
       try {
         await writer.close()

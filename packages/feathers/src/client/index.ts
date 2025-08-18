@@ -10,12 +10,13 @@ export type ClientOptions = {
   baseUrl?: string
   Service?: typeof FetchClient
   stringify?: (query: Query) => string
+  sse?: boolean
 }
 
 export function fetchClient(connection: typeof fetch, options: ClientOptions = {}) {
-  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient } = options
+  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient, sse = false } = options
   const defaultService = function (name: string) {
-    return new Service({ baseUrl, name, connection, stringify })
+    return new Service({ baseUrl, name, connection, stringify, sse })
   }
 
   const initialize = (_app: Application) => {

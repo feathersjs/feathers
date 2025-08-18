@@ -20,6 +20,7 @@ interface FetchClientSettings {
   baseUrl: string
   connection: typeof fetch
   stringify: (query: Query) => string
+  sse: boolean
 }
 
 export type RequestOptions = Omit<RequestInit, 'body'> & { url: string; body?: unknown }
@@ -29,12 +30,17 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   base: string
   connection: typeof fetch
   stringify: (query: Query) => string
+  events?: string[]
 
   constructor(settings: FetchClientSettings) {
     this.name = stripSlashes(settings.name)
     this.connection = settings.connection
     this.base = `${settings.baseUrl}/${this.name}`
     this.stringify = settings.stringify
+
+    if (settings.sse) {
+      this.events = ['created', 'updated', 'patched', 'removed']
+    }
   }
 
   makeUrl(query: Query, id?: string | number | null, route?: { [key: string]: string }) {
