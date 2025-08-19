@@ -12,27 +12,31 @@ export interface ReconnectingEvent {
   timeout: number | null
 }
 
+function getDelay(attempt: number, reconnectionDelay: number, reconnectionDelayMax: number, jitter = 0.3) {
+  const baseDelay = Math.min(reconnectionDelay * Math.pow(2, attempt - 1), reconnectionDelayMax)
+  // Add +/- jitter percent for randomization
+  const jit = (Math.random() - 0.5) * (jitter * 2)
+
+  return Math.round(baseDelay * (1 + jit))
+}
+
 export function sseClient(options: SseClientOptions) {
   return (client: Application) => {
-    const { path, reconnectionDelay = 1000, reconnectionDelayMax = 10000 } = options
+    const { path, reconnectionDelay = 1000, reconnectionDelayMax = 5000 } = options
     const sseService = client.service(path)
 
     let attempt = 0
     let timeout: number | null = null
-    let reconnecting = false
 
     const reconnect = (params: Params) => {
-      if (reconnecting) {
+      if (timeout !== null) {
         return
       }
 
-      attempt++
-      const baseDelay = Math.min(reconnectionDelay * Math.pow(2, attempt - 1), reconnectionDelayMax)
-      const jitter = (Math.random() - 0.5) * 0.6 // ±30% jitter
-      const delay = Math.round(baseDelay * (1 + jitter))
+      const delay = getDelay(++attempt, reconnectionDelay, reconnectionDelayMax)
 
-      reconnecting = true
       timeout = setTimeout(() => {
+        timeout = null
         connect(params)
       }, delay) as unknown as number
       sseService.emit('reconnecting', {
@@ -57,9 +61,8 @@ export function sseClient(options: SseClientOptions) {
         .find(sseParams)
         .then(async (stream) => {
           try {
-            // Reset reconnection state on successful connection
+            // Reset attempts on successful connection
             attempt = 0
-            reconnecting = false
 
             for await (const payload of stream) {
               // Check if aborted before processing each payload
@@ -90,8 +93,8 @@ export function sseClient(options: SseClientOptions) {
 
           // Only attempt reconnection if not manually aborted
           if ((error as Error).name !== 'AbortError') {
-            // Reset reconnecting flag so subsequent attempts can happen
-            reconnecting = false
+            // Clear timeout so subsequent attempts can happen
+            timeout = null
             reconnect(params)
           }
         })
