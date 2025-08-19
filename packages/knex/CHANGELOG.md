@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
+
+### Bug Fixes
+
+- **knex:** Add support for extended operators in query builder ([#3578](https://github.com/feathersjs/feathers/issues/3578)) ([c355ae3](https://github.com/feathersjs/feathers/commit/c355ae3184f07b15b4a313aa64fb9e7fdd0524d5))
+- Update dependencies ([#3584](https://github.com/feathersjs/feathers/issues/3584)) ([119fa4e](https://github.com/feathersjs/feathers/commit/119fa4e1ade8b0078aa235083d566e2538b3a084))
+
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+### Bug Fixes
+
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+- **knex:** Add tableOptions parameter for inheritance on knex adapter options to pass on knex builder ([#3539](https://github.com/feathersjs/feathers/issues/3539)) ([ba5621b](https://github.com/feathersjs/feathers/commit/ba5621bfe5e7ab01189b6b7bccb00891bc2b14c7))
+
+## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.31](https://github.com/feathersjs/feathers/compare/v5.0.30...v5.0.31) (2024-10-31)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3545](https://github.com/feathersjs/feathers/issues/3545)) ([221b92b](https://github.com/feathersjs/feathers/commit/221b92bb0ee5d54fb1036742968797cb02e56da2))
+
+## [5.0.30](https://github.com/feathersjs/feathers/compare/v5.0.29...v5.0.30) (2024-09-02)
+
+### Bug Fixes
+
+- **knex:** use driver name to identify client ([#3527](https://github.com/feathersjs/feathers/issues/3527)) ([bb075ec](https://github.com/feathersjs/feathers/commit/bb075ec8beb3ac9b0a1a8aebc3c3756d970cc6a4))
+
+## [5.0.29](https://github.com/feathersjs/feathers/compare/v5.0.28...v5.0.29) (2024-07-10)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.28](https://github.com/feathersjs/feathers/compare/v5.0.27...v5.0.28) (2024-07-10)
+
+**Note:** Version bump only for package @feathersjs/knex
+
+## [5.0.27](https://github.com/feathersjs/feathers/compare/v5.0.26...v5.0.27) (2024-06-18)
+
+**Note:** Version bump only for package @feathersjs/knex
+
 ## [5.0.26](https://github.com/feathersjs/feathers/compare/v5.0.25...v5.0.26) (2024-06-09)
 
 **Note:** Version bump only for package @feathersjs/knex

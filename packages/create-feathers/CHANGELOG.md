@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.31](https://github.com/feathersjs/feathers/compare/v5.0.30...v5.0.31) (2024-10-31)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.30](https://github.com/feathersjs/feathers/compare/v5.0.29...v5.0.30) (2024-09-02)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.29](https://github.com/feathersjs/feathers/compare/v5.0.28...v5.0.29) (2024-07-10)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.28](https://github.com/feathersjs/feathers/compare/v5.0.27...v5.0.28) (2024-07-10)
+
+**Note:** Version bump only for package create-feathers
+
+## [5.0.27](https://github.com/feathersjs/feathers/compare/v5.0.26...v5.0.27) (2024-06-18)
+
+**Note:** Version bump only for package create-feathers
+
 ## [5.0.26](https://github.com/feathersjs/feathers/compare/v5.0.25...v5.0.26) (2024-06-09)
 
 **Note:** Version bump only for package create-feathers

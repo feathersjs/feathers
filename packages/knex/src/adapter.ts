@@ -50,7 +50,13 @@ export class KnexAdapter<
         ...options.filters,
         $and: (value: any) => value
       },
-      operators: [...(options.operators || []), '$like', '$notlike', '$ilike']
+      operators: [
+        ...(options.operators || []),
+        ...Object.keys(options.extendedOperators || {}),
+        '$like',
+        '$notlike',
+        '$ilike'
+      ]
     })
   }
 
@@ -69,7 +75,7 @@ export class KnexAdapter<
   }
 
   db(params?: ServiceParams) {
-    const { Model, name, schema } = this.getOptions(params)
+    const { Model, name, schema, tableOptions } = this.getOptions(params)
 
     if (params && params.transaction && params.transaction.trx) {
       const { trx } = params.transaction
@@ -77,11 +83,16 @@ export class KnexAdapter<
       return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name)
     }
 
-    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name)
+    return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name, tableOptions)
   }
 
   knexify(knexQuery: Knex.QueryBuilder, query: Query = {}, parentKey?: string): Knex.QueryBuilder {
     const knexify = this.knexify.bind(this)
+    const { extendedOperators = {} } = this.getOptions({} as ServiceParams)
+    const operatorsMap = {
+      ...OPERATORS,
+      ...extendedOperators
+    }
 
     return Object.keys(query || {}).reduce((currentQuery, key) => {
       const value = query[key]
@@ -110,7 +121,7 @@ export class KnexAdapter<
         return (currentQuery as any)[method](column, value)
       }
 
-      const operator = OPERATORS[key as keyof typeof OPERATORS] || '='
+      const operator = operatorsMap[key as keyof typeof operatorsMap] || '='
 
       return operator === '='
         ? currentQuery.where(column, value)
@@ -239,8 +250,8 @@ export class KnexAdapter<
       return Promise.all(data.map((current) => this._create(current, params)))
     }
 
-    const { client } = this.db(params).client.config
-    const returning = RETURNING_CLIENTS.includes(client as string) ? [this.id] : []
+    const { client } = this.db(params)
+    const returning = RETURNING_CLIENTS.includes(client.driverName) ? [this.id] : []
     const rows: any = await this.db(params)
       .insert(data, returning, { includeTriggerModifications: true })
       .catch(errorHandler)

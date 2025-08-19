@@ -60,7 +60,6 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'twitter', link: twitter },
       { icon: 'discord', link: discord },
       { icon: 'github', link: github }
     ],

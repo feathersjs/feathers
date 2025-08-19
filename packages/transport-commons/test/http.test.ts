@@ -22,16 +22,29 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
       http: { status: 202 }
     }
     const createContext = {
+      method: 'create',
+      result: {}
+    }
+    const createEmptyContext = {
       method: 'create'
     }
     const redirectContext = {
+      http: { location: '/' }
+    }
+    const redirectCreateContext = {
+      method: 'create',
       http: { location: '/' }
     }
 
     assert.strictEqual(http.getResponse(statusContext as HookContext).status, 202)
     assert.strictEqual(http.getResponse(createContext as HookContext).status, http.statusCodes.created)
     assert.strictEqual(http.getResponse(redirectContext as HookContext).status, http.statusCodes.seeOther)
+    assert.strictEqual(
+      http.getResponse(redirectCreateContext as HookContext).status,
+      http.statusCodes.seeOther
+    )
     assert.strictEqual(http.getResponse({} as HookContext).status, http.statusCodes.noContent)
+    assert.strictEqual(http.getResponse(createEmptyContext as HookContext).status, http.statusCodes.noContent)
     assert.strictEqual(http.getResponse({ result: true } as HookContext).status, http.statusCodes.success)
   })
 

@@ -29,6 +29,7 @@ const testSuite = adapterTests([
   '.remove + multi',
   '.remove + multi no pagination',
   '.remove + id + query id',
+  '.remove + NotFound',
   '.update',
   '.update + $select',
   '.update + id + query',
@@ -82,11 +83,6 @@ const testSuite = adapterTests([
   'params.adapter + paginate',
   'params.adapter + multi'
 ])
-
-const defaultPaginate = {
-  default: 10,
-  max: 50
-}
 
 describe('Feathers MongoDB Service', () => {
   const personSchema = {
@@ -573,12 +569,19 @@ describe('Feathers MongoDB Service', () => {
     it('can count documents with aggregation', async () => {
       const service = app.service('people')
       const paginateBefore = service.options.paginate
-      service.options.paginate = defaultPaginate
-      const query = { age: { $gte: 25 } }
-      const findResult = await app.service('people').find({ query })
-      const aggregationResult = await app.service('people').find({ query, pipeline: [] })
 
-      assert.deepStrictEqual(findResult.total, aggregationResult.total)
+      const test = async (paginate: any) => {
+        service.options.paginate = paginate
+        const query = { age: { $gte: 25 } }
+        const findResult = await app.service('people').find({ query })
+        const aggregationResult = await app.service('people').find({ query, pipeline: [] })
+        assert.deepStrictEqual(findResult.total, aggregationResult.total)
+      }
+
+      await test({ default: 10, max: 50 })
+      // There are 2 people with age >= 25.
+      // Test that aggregation works when results are less than default
+      await test({ default: 1, max: 50 })
 
       service.options.paginate = paginateBefore
     })

@@ -3,7 +3,7 @@ import { createDebug } from '@feathersjs/commons'
 import { resolveDispatch } from '@feathersjs/schema'
 
 import { OAuthStrategy, OAuthProfile } from './strategy'
-import { redirectHook, OAuthService } from './service'
+import { redirectHook, OAuthService, OAuthCallbackService } from './service'
 import { getGrantConfig, authenticationServiceOptions, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
@@ -34,16 +34,23 @@ export const oauth =
     const grantConfig = getGrantConfig(authService)
     const serviceOptions = authenticationServiceOptions(authService, oauthOptions)
     const servicePath = `${grantConfig.defaults.prefix || 'oauth'}/:provider`
+    const callbackServicePath = `${servicePath}/callback`
+    const oauthService = new OAuthService(authService, oauthOptions)
 
-    app.use(servicePath, new OAuthService(authService, oauthOptions), serviceOptions)
-
-    const oauthService = app.service(servicePath)
-
-    oauthService.hooks({
+    app.use(servicePath, oauthService, serviceOptions)
+    app.use(callbackServicePath, new OAuthCallbackService(oauthService), serviceOptions)
+    app.service(servicePath).hooks({
+      around: { all: [resolveDispatch(), redirectHook()] }
+    })
+    app.service(callbackServicePath).hooks({
       around: { all: [resolveDispatch(), redirectHook()] }
     })
 
-    if (typeof oauthService.publish === 'function') {
+    if (typeof app.service(servicePath).publish === 'function') {
       app.service(servicePath).publish(() => null)
+    }
+
+    if (typeof app.service(callbackServicePath).publish === 'function') {
+      app.service(callbackServicePath).publish(() => null)
     }
   }

@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
+
+### Bug Fixes
+
+- **knex:** Add support for extended operators in query builder ([#3578](https://github.com/feathersjs/feathers/issues/3578)) ([c355ae3](https://github.com/feathersjs/feathers/commit/c355ae3184f07b15b4a313aa64fb9e7fdd0524d5))
+- Update dependencies ([#3584](https://github.com/feathersjs/feathers/issues/3584)) ([119fa4e](https://github.com/feathersjs/feathers/commit/119fa4e1ade8b0078aa235083d566e2538b3a084))
+
+## [5.0.33](https://github.com/feathersjs/feathers/compare/v5.0.32...v5.0.33) (2025-02-24)
+
+### Bug Fixes
+
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+- **knex:** Add tableOptions parameter for inheritance on knex adapter options to pass on knex builder ([#3539](https://github.com/feathersjs/feathers/issues/3539)) ([ba5621b](https://github.com/feathersjs/feathers/commit/ba5621bfe5e7ab01189b6b7bccb00891bc2b14c7))
+
+## [5.0.32](https://github.com/feathersjs/feathers/compare/v5.0.31...v5.0.32) (2025-02-01)
+
+### Bug Fixes
+
+- **generators:** Add FeathersGeneratorError ([#3556](https://github.com/feathersjs/feathers/issues/3556)) ([2a81a20](https://github.com/feathersjs/feathers/commit/2a81a204eb55c95d20fc45bf091c0131eff5a25d))
+
+## [5.0.31](https://github.com/feathersjs/feathers/compare/v5.0.30...v5.0.31) (2024-10-31)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3545](https://github.com/feathersjs/feathers/issues/3545)) ([221b92b](https://github.com/feathersjs/feathers/commit/221b92bb0ee5d54fb1036742968797cb02e56da2))
+- **express:** Update express to version 4.21.1 ([#3543](https://github.com/feathersjs/feathers/issues/3543)) ([56d6151](https://github.com/feathersjs/feathers/commit/56d6151624f083d6604e76746cf555ed846b6d40))
+- **mongodb:** Fix mongo count ([#3541](https://github.com/feathersjs/feathers/issues/3541)) ([3e95c7d](https://github.com/feathersjs/feathers/commit/3e95c7df6ae7de6a3a406dfb61dd044ea905456f))
+
+## [5.0.30](https://github.com/feathersjs/feathers/compare/v5.0.29...v5.0.30) (2024-09-02)
+
+### Bug Fixes
+
+- **knex:** use driver name to identify client ([#3527](https://github.com/feathersjs/feathers/issues/3527)) ([bb075ec](https://github.com/feathersjs/feathers/commit/bb075ec8beb3ac9b0a1a8aebc3c3756d970cc6a4))
+
+## [5.0.29](https://github.com/feathersjs/feathers/compare/v5.0.28...v5.0.29) (2024-07-10)
+
+### Bug Fixes
+
+- **generators:** Fix generating of gitignore ([#3514](https://github.com/feathersjs/feathers/issues/3514)) ([cabc397](https://github.com/feathersjs/feathers/commit/cabc397d2e4378c4bce79a60f2d196713cce4d8c))
+
+## [5.0.28](https://github.com/feathersjs/feathers/compare/v5.0.27...v5.0.28) (2024-07-10)
+
+### Bug Fixes
+
+- Fix update-dependencies task ([49b9f70](https://github.com/feathersjs/feathers/commit/49b9f70aba1084aa184d9b83c5a8249b793e6a1a))
+- **transport-commons:** Fix HTTP status precedence ([#3511](https://github.com/feathersjs/feathers/issues/3511)) ([5d999a0](https://github.com/feathersjs/feathers/commit/5d999a0acddc0cb7692058209dfbc62673ab5a69))
+
+## [5.0.27](https://github.com/feathersjs/feathers/compare/v5.0.26...v5.0.27) (2024-06-18)
+
+### Bug Fixes
+
+- **authentication-oauth:** Allow POST oauth callbacks ([#3497](https://github.com/feathersjs/feathers/issues/3497)) ([ffcc90b](https://github.com/feathersjs/feathers/commit/ffcc90bb95329cbb4b8f310e37024d417c216d8c))
+
 ## [5.0.26](https://github.com/feathersjs/feathers/compare/v5.0.25...v5.0.26) (2024-06-09)
 
 ### Bug Fixes
@@ -19,7 +72,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - **generators:** better types for enabled methods ([#3474](https://github.com/feathersjs/feathers/issues/3474)) ([bdb3d3a](https://github.com/feathersjs/feathers/commit/bdb3d3a308322bfed3caa4214e4b6a72f1a84944))
-- **knex:** Update commited to boolean type ([#3458](https://github.com/feathersjs/feathers/issues/3458)) ([5fa4dbc](https://github.com/feathersjs/feathers/commit/5fa4dbc06d0126ac18f5643562d0b74f03502caa))
+- **knex:** Update committed to boolean type ([#3458](https://github.com/feathersjs/feathers/issues/3458)) ([5fa4dbc](https://github.com/feathersjs/feathers/commit/5fa4dbc06d0126ac18f5643562d0b74f03502caa))
 - **oauth:** Export OAuthService type ([#3479](https://github.com/feathersjs/feathers/issues/3479)) ([e7185cd](https://github.com/feathersjs/feathers/commit/e7185cde63990a0d24a7180c63b61dbc8ef6cd5b))
 - Reduce usage of lodash ([#3455](https://github.com/feathersjs/feathers/issues/3455)) ([8ce807a](https://github.com/feathersjs/feathers/commit/8ce807a5ca53ff5b8d5107a0656c6329404e6e6c))
 
@@ -424,7 +477,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - **authentication-oauth:** Fix bug and properly set Grant defaults ([#2659](https://github.com/feathersjs/feathers/issues/2659)) ([cb93bb9](https://github.com/feathersjs/feathers/commit/cb93bb911fd92282424da2db805cd685b7e4a45b))
 - **authentication:** Add safe dispatch data for authentication requests ([#2662](https://github.com/feathersjs/feathers/issues/2662)) ([d8104a1](https://github.com/feathersjs/feathers/commit/d8104a19ee9181e6a5ea81014af29ff9a3c28a8a))
-- **schema:** Fix dispatch resovler hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
+- **schema:** Fix dispatch resolver hook to convert actually resolved data ([#2663](https://github.com/feathersjs/feathers/issues/2663)) ([f7e87db](https://github.com/feathersjs/feathers/commit/f7e87dbb9a0bc8d89aee47318dddbaa4d6ba5b91))
 
 ### Features
 
@@ -928,7 +981,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - check for undefined access token ([#1571](https://github.com/feathersjs/feathers/issues/1571)) ([976369d](https://github.com/feathersjs/feathers/commit/976369d))
-- Small improvements in dependencies and code sturcture ([#1562](https://github.com/feathersjs/feathers/issues/1562)) ([42c13e2](https://github.com/feathersjs/feathers/commit/42c13e2))
+- Small improvements in dependencies and code structure ([#1562](https://github.com/feathersjs/feathers/issues/1562)) ([42c13e2](https://github.com/feathersjs/feathers/commit/42c13e2))
 
 ## [4.3.2](https://github.com/feathersjs/feathers/compare/v4.3.1...v4.3.2) (2019-09-16)
 

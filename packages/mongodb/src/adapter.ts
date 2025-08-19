@@ -148,16 +148,16 @@ export class MongoDbAdapter<
       pipeline.push({ $sort: filters.$sort })
     }
 
-    if (filters.$select !== undefined) {
-      pipeline.push({ $project: this.getProjection(filters.$select) })
-    }
-
     if (filters.$skip !== undefined) {
       pipeline.push({ $skip: filters.$skip })
     }
 
     if (filters.$limit !== undefined) {
       pipeline.push({ $limit: filters.$limit })
+    }
+
+    if (filters.$select !== undefined) {
+      pipeline.push({ $project: this.getProjection(filters.$select) })
     }
 
     return pipeline
@@ -167,6 +167,7 @@ export class MongoDbAdapter<
     if (!select) {
       return undefined
     }
+
     if (Array.isArray(select)) {
       if (!select.includes(this.id)) {
         select = [this.id, ...select]
@@ -213,6 +214,8 @@ export class MongoDbAdapter<
     if (params.pipeline) {
       const aggregateParams = {
         ...params,
+        paginate: false,
+        pipeline: [...params.pipeline, { $count: 'total' }],
         query: {
           ...params.query,
           $select: [this.id],
@@ -221,8 +224,11 @@ export class MongoDbAdapter<
           $limit: undefined
         }
       }
-      const result = await this.aggregateRaw(aggregateParams).then((result) => result.toArray())
-      return result.length
+      const [result] = await this.aggregateRaw(aggregateParams).then((result) => result.toArray())
+      if (!result) {
+        return 0
+      }
+      return result.total
     }
 
     const model = await this.getModel(params)

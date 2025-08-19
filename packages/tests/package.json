@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "5.0.26",
+  "version": "5.0.34",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -44,17 +44,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/lodash": "^4.17.0",
-    "axios": "^1.6.8",
+    "@types/lodash": "^4.17.20",
+    "axios": "^1.11.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^5.0.26",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.8",
-    "mocha": "^10.4.0",
-    "shx": "^0.3.4",
+    "@feathersjs/feathers": "^5.0.34",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.1.0",
+    "mocha": "^11.7.1",
+    "shx": "^0.4.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.2"
   }
 }

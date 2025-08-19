@@ -1,4 +1,7 @@
-# Logs
+import { renderTemplate, toFile } from '@featherscloud/pinion'
+import { AppGeneratorContext } from '..'
+
+const template = `# Logs
 logs
 *.log
 npm-debug.log*
@@ -119,3 +122,7 @@ dist
 .sqlite
 
 lib/
+`
+
+export const generate = (ctx: AppGeneratorContext) =>
+  Promise.resolve(ctx).then(renderTemplate(template, toFile('.gitignore')))

@@ -19,7 +19,7 @@ export const github = 'https://github.com/feathersjs/feathers'
 export const releases = 'https://github.com/feathersjs/feathers/releases'
 export const contributing = 'https://github.com/feathersjs/feathers/blob/master/.github/contributing.md'
 export const discord = 'https://discord.gg/qa8kez8QBx'
-export const twitter = 'https://twitter.com/feathersjs'
+export const twitter = null;
 
 /* Avatar/Image/Sponsors servers */
 export const preconnectLinks = [googleapis, gstatic]

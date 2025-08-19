@@ -31,5 +31,10 @@ import something from './file.js';
 const otherThing = "Hello";
 `
     )
+
+    strictEqual(
+      getJavaScript(`import { authentication } from './authentication'`),
+      `import { authentication } from './authentication.js'`
+    )
   })
 })

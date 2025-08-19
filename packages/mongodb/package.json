@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/mongodb",
   "description": "Feathers MongoDB service adapter",
-  "version": "5.0.26",
+  "version": "5.0.34",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -51,23 +51,23 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.26",
-    "@feathersjs/commons": "^5.0.26",
-    "@feathersjs/errors": "^5.0.26",
-    "@feathersjs/feathers": "^5.0.26"
+    "@feathersjs/adapter-commons": "^5.0.34",
+    "@feathersjs/commons": "^5.0.34",
+    "@feathersjs/errors": "^5.0.34",
+    "@feathersjs/feathers": "^5.0.34"
   },
   "peerDependencies": {
-    "mongodb": "^6.5.0"
+    "mongodb": "^6.18.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.26",
-    "@feathersjs/schema": "^5.0.26",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.8",
-    "mocha": "^10.4.0",
-    "mongodb-memory-server": "^9.2.0",
-    "shx": "^0.3.4",
-    "typescript": "^5.4.5"
+    "@feathersjs/adapter-tests": "^5.0.34",
+    "@feathersjs/schema": "^5.0.34",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.1.0",
+    "mocha": "^11.7.1",
+    "mongodb-memory-server": "^10.1.4",
+    "shx": "^0.4.0",
+    "typescript": "^5.9.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

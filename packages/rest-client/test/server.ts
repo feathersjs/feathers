@@ -46,6 +46,7 @@ class TodoService extends MemoryService {
     }
 
     return super.get(id).then((data) => {
+      console.log('!', params.query)
       const result = Object.assign({ query: params.query }, data)
 
       if (params.authorization) {
