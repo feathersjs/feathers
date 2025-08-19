@@ -1,7 +1,7 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest'
 import { Application, feathers, Params } from '../index.js'
 import { getApp, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
-import { fetchClient } from './index.js'
+import { fetchClient, ReconnectingEvent } from './index.js'
 
 describe('SSE client', function () {
   const port = 8890
@@ -134,5 +134,56 @@ describe('SSE client', function () {
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
 
     expect(events.length).toBe(2)
+  })
+
+  it('initiates reconnection when server is shut down', async () => {
+    const reconnectPort = 8946
+    let server = await createTestServer(reconnectPort, app)
+    const reconnectClient = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: `http://localhost:${reconnectPort}`,
+        sse: {
+          path: 'sse',
+          reconnectionDelay: 50,
+          reconnectionDelayMax: 500
+        }
+      })
+    )
+    reconnectClient.service('sse').emit('start')
+
+    await new Promise<AbortController>((resolve) => {
+      reconnectClient.service('sse').once('connected', (data: AbortController) => resolve(data))
+    })
+
+    const disconnectEvent = new Promise<Error>((resolve) => {
+      reconnectClient.service('sse').once('disconnected', (error: Error) => resolve(error))
+    })
+    const reconnectingEvents = new Promise<ReconnectingEvent[]>((resolve) => {
+      const retries: ReconnectingEvent[] = []
+
+      reconnectClient.service('sse').on('reconnecting', (info: ReconnectingEvent) => {
+        retries.push(info)
+        if (retries.length === 2) {
+          resolve(retries)
+        }
+      })
+    })
+
+    server.closeAllConnections()
+    server.close()
+
+    const reconnections = await reconnectingEvents
+
+    expect(reconnections).toHaveLength(2)
+    expect(reconnections[0]).toHaveProperty('delay')
+    expect(reconnections[0].attempt).toEqual(1)
+    expect(reconnections[1].attempt).toEqual(2)
+
+    expect(await disconnectEvent).toBeInstanceOf(Error)
+
+    server = await createTestServer(reconnectPort, app)
+    await new Promise<AbortController>((resolve) => {
+      reconnectClient.service('sse').once('connected', (data: AbortController) => resolve(data))
+    })
   })
 })

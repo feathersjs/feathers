@@ -6,6 +6,12 @@ export interface SseClientOptions {
   reconnectionDelayMax?: number
 }
 
+export interface ReconnectingEvent {
+  delay: number
+  attempt: number
+  timeout: number | null
+}
+
 export function sseClient(options: SseClientOptions) {
   return (client: Application) => {
     const { path, reconnectionDelay = 1000, reconnectionDelayMax = 10000 } = options
@@ -20,16 +26,18 @@ export function sseClient(options: SseClientOptions) {
         return
       }
 
-      const delay = Math.min(reconnectionDelay * Math.pow(2, attempt), reconnectionDelayMax)
+      attempt++
+      const baseDelay = Math.min(reconnectionDelay * Math.pow(2, attempt - 1), reconnectionDelayMax)
+      const jitter = (Math.random() - 0.5) * 0.6 // ±30% jitter
+      const delay = Math.round(baseDelay * (1 + jitter))
 
       reconnecting = true
       timeout = setTimeout(() => {
-        attempt++
         connect(params)
       }, delay) as unknown as number
       sseService.emit('reconnecting', {
         delay,
-        attempt: attempt + 1,
+        attempt,
         timeout: timeout
       })
     }
@@ -82,6 +90,8 @@ export function sseClient(options: SseClientOptions) {
 
           // Only attempt reconnection if not manually aborted
           if ((error as Error).name !== 'AbortError') {
+            // Reset reconnecting flag so subsequent attempts can happen
+            reconnecting = false
             reconnect(params)
           }
         })
@@ -89,15 +99,6 @@ export function sseClient(options: SseClientOptions) {
 
     sseService.on('start', (params: Params = {}) => {
       connect(params)
-    })
-
-    sseService.on('disconnected', () => {
-      reconnecting = false
-      attempt = 0
-      if (timeout) {
-        clearTimeout(timeout)
-        timeout = null
-      }
     })
   }
 }
