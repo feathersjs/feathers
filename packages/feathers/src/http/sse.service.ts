@@ -16,16 +16,14 @@ export class SseService {
     const { app, path } = this
 
     if (!app || !path) {
-      throw new Error('Can not initialize SSE. Did you call app.listen() or app.setup()?')
+      throw new Error('Can not initialize SSE. Did you call app.setup()?')
     }
 
     let isActive = true
     let pendingResolve: (() => void) | null = null
 
     const publishHandler = (event: string, channel: CombinedChannel, hook: HookContext, data: unknown) => {
-      if (!isActive) return
-
-      if (channel.connections.includes(connection)) {
+      if (isActive && channel.connections.includes(connection)) {
         const eventData = channel.dataFor ? (channel.dataFor(connection) ?? data) : data
         eventBuffer.push({
           event,

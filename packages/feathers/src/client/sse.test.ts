@@ -136,7 +136,7 @@ describe('SSE client', function () {
     expect(events.length).toBe(2)
   })
 
-  it('initiates reconnection when server is shut down', async () => {
+  it('initiates reconnection when server is unavailable', async () => {
     const reconnectPort = 8946
     let server = await createTestServer(reconnectPort, app)
     const reconnectClient = feathers<TestServiceTypes>().configure(
@@ -182,8 +182,12 @@ describe('SSE client', function () {
     expect(await disconnectEvent).toBeInstanceOf(Error)
 
     server = await createTestServer(reconnectPort, app)
+
     await new Promise<AbortController>((resolve) => {
       reconnectClient.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
+
+    server.closeAllConnections()
+    server.close()
   })
 })
