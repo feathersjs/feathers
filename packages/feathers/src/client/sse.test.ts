@@ -26,7 +26,6 @@ describe('SSE client', function () {
       }
     })
 
-    // Publish all service events to the general channel
     app.publish((data: any) => {
       if (typeof data.channel !== 'string') {
         return app.channel('general')
@@ -75,10 +74,10 @@ describe('SSE client', function () {
       app.service('todos').create({ text: 'server todo', complete: false })
     ])
 
-    controller.abort()
-
     // Wait for all events to publish
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+
+    controller.abort()
 
     // Ensure that events do no longer get published after abort
     await client2.service('todos').create({ text: 'todo x', complete: true })
@@ -135,8 +134,5 @@ describe('SSE client', function () {
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
 
     expect(events.length).toBe(2)
-
-    // controller1.abort()
-    // controller2.abort()
   })
 })

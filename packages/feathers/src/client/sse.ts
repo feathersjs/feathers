@@ -8,7 +8,32 @@ export interface SseClientOptions {
 
 export function sseClient(options: SseClientOptions) {
   return (client: Application) => {
-    const sseService = client.service(options.path)
+    const { path, reconnectionDelay = 1000, reconnectionDelayMax = 10000 } = options
+    const sseService = client.service(path)
+
+    let attempt = 0
+    let timeout: number | null = null
+    let reconnecting = false
+
+    const reconnect = (params: Params) => {
+      if (reconnecting) {
+        return
+      }
+
+      const delay = Math.min(reconnectionDelay * Math.pow(2, attempt), reconnectionDelayMax)
+
+      reconnecting = true
+      timeout = setTimeout(() => {
+        attempt++
+        connect(params)
+      }, delay) as unknown as number
+      sseService.emit('reconnecting', {
+        delay,
+        attempt: attempt + 1,
+        timeout: timeout
+      })
+    }
+
     const connect = (params: Params) => {
       const abortController = new AbortController()
       const sseParams = {
@@ -24,6 +49,10 @@ export function sseClient(options: SseClientOptions) {
         .find(sseParams)
         .then(async (stream) => {
           try {
+            // Reset reconnection state on successful connection
+            attempt = 0
+            reconnecting = false
+
             for await (const payload of stream) {
               // Check if aborted before processing each payload
               if (abortController.signal.aborted) {
@@ -50,11 +79,25 @@ export function sseClient(options: SseClientOptions) {
         .catch((error) => {
           abortController.abort()
           sseService.emit('disconnected', error)
+
+          // Only attempt reconnection if not manually aborted
+          if ((error as Error).name !== 'AbortError') {
+            reconnect(params)
+          }
         })
     }
 
     sseService.on('start', (params: Params = {}) => {
       connect(params)
+    })
+
+    sseService.on('disconnected', () => {
+      reconnecting = false
+      attempt = 0
+      if (timeout) {
+        clearTimeout(timeout)
+        timeout = null
+      }
     })
   }
 }
