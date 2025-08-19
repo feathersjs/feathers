@@ -14,8 +14,6 @@ describe('SSE client', function () {
 
   beforeAll(async () => {
     app = getApp()
-
-    // Set up channels and publishers for SSE
     app.on('connection', (connection: Params) => {
       app.channel('general').join(connection)
 
@@ -25,7 +23,6 @@ describe('SSE client', function () {
         app.channel(channel).join(connection)
       }
     })
-
     app.publish((data: any) => {
       if (typeof data.channel !== 'string') {
         return app.channel('general')
@@ -35,6 +32,7 @@ describe('SSE client', function () {
     })
 
     server = await createTestServer(port, app)
+
     client1 = feathers<TestServiceTypes>().configure(
       fetchClient(fetch, {
         baseUrl: url,
@@ -62,7 +60,6 @@ describe('SSE client', function () {
       client1.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
 
-    // Listen for events on the todos service
     client1.service('todos').on('created', (data: Todo) => {
       events.push(data)
     })
@@ -74,12 +71,10 @@ describe('SSE client', function () {
       app.service('todos').create({ text: 'server todo', complete: false })
     ])
 
-    // Wait for all events to publish
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
 
     controller.abort()
 
-    // Ensure that events do no longer get published after abort
     await client2.service('todos').create({ text: 'todo x', complete: true })
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
 

@@ -31,7 +31,6 @@ export class SseService {
           path: hook.path
         })
 
-        // Immediately wake up the generator if it's waiting
         if (pendingResolve) {
           pendingResolve()
           pendingResolve = null
@@ -51,12 +50,10 @@ export class SseService {
         }
 
         while (isActive) {
-          // Yield all buffered events immediately
           while (eventBuffer.length > 0) {
             yield eventBuffer.shift()!
           }
 
-          // Wait for next event(s) to arrive
           await new Promise<void>((resolve) => {
             pendingResolve = resolve
           })

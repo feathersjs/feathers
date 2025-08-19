@@ -43,7 +43,6 @@ describe('SseService', () => {
     it('yields initial connected event', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
-
       const result = await iterator.next()
 
       expect(result.done).toBe(false)
@@ -53,23 +52,18 @@ describe('SseService', () => {
         path: 'sse'
       })
 
-      // Clean up
       await iterator.return()
     })
 
     it('yields events when connection is included in channel', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
-
-      // Consume the initial connected event
       const connectedResult = await iterator.next()
       expect((connectedResult.value as SsePayload).event).toBe('connected')
 
-      // Join connection to a channel and register publisher
       app.channel('test-channel').join(connection)
       app.publish('created', () => app.channel('test-channel'))
 
-      // Trigger a service event in the next tick
       setImmediate(async () => {
         await app.service('test').create({ id: 1, text: 'Test todo' })
       })
@@ -83,23 +77,18 @@ describe('SseService', () => {
         path: 'test'
       })
 
-      // Clean up
       await iterator.return()
     })
 
     it('only publishes to joined channels', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
-
-      // Consume the initial connected event
       const connectedResult = await iterator.next()
       expect((connectedResult.value as SsePayload).event).toBe('connected')
 
-      // Join connection to a channel and register publisher
       app.channel('test-channel').join(connection)
       app.publish((data: { name: string }) => app.channel(`${data.name}-channel`))
 
-      // Trigger a service event in the next tick
       setImmediate(async () => {
         await app.service('test').create({
           id: 1,
@@ -126,16 +115,14 @@ describe('SseService', () => {
         path: 'test'
       })
 
-      // Clean up
       await iterator.return()
     })
 
     it('uses channel.dataFor when available', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
-
-      // Consume the initial connected event
       const connectedResult = await iterator.next()
+
       expect((connectedResult.value as SsePayload).event).toBe('connected')
 
       const customData = { customized: true, id: 1 }
@@ -155,15 +142,12 @@ describe('SseService', () => {
         path: 'test'
       })
 
-      // Clean up
       await iterator.return()
     })
 
     it('queues multiple events correctly', async () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
-
-      // Consume the initial connected event
       const connectedResult = await iterator.next()
       expect((connectedResult.value as SsePayload).event).toBe('connected')
 
@@ -173,7 +157,6 @@ describe('SseService', () => {
       app.service('test').registerPublisher('updated', () => channel)
       app.service('test').registerPublisher('removed', () => channel)
 
-      // Trigger service events with delays to ensure proper queueing
       setImmediate(async () => {
         await app.service('test').create({ id: 1, text: 'First' })
         setImmediate(async () => {
@@ -185,8 +168,6 @@ describe('SseService', () => {
       })
 
       const events: SsePayload[] = []
-
-      // Read events
       const result1 = await iterator.next()
       events.push(result1.value as SsePayload)
 
@@ -201,7 +182,6 @@ describe('SseService', () => {
       expect(events[1].event).toBe('updated')
       expect(events[2].event).toBe('removed')
 
-      // Clean up
       await iterator.return()
     })
 
@@ -215,7 +195,6 @@ describe('SseService', () => {
       const iterator1 = generator1[Symbol.asyncIterator]()
       const iterator2 = generator2[Symbol.asyncIterator]()
 
-      // Consume the initial connected events
       const connectedResult1 = await iterator1.next()
       expect((connectedResult1.value as SsePayload).event).toBe('connected')
       const connectedResult2 = await iterator2.next()
@@ -242,7 +221,6 @@ describe('SseService', () => {
         path: 'test'
       })
 
-      // Clean up
       await Promise.all([iterator1.return(), iterator2.return()])
     })
 
@@ -250,7 +228,6 @@ describe('SseService', () => {
       const generator = await app.service('sse').find(connection)
       const iterator = generator[Symbol.asyncIterator]()
 
-      // Immediately close the generator
       await iterator.return()
 
       const result = await iterator.next()

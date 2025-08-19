@@ -14,7 +14,6 @@ export interface ReconnectingEvent {
 
 function getDelay(attempt: number, reconnectionDelay: number, reconnectionDelayMax: number, jitter = 0.3) {
   const baseDelay = Math.min(reconnectionDelay * Math.pow(2, attempt - 1), reconnectionDelayMax)
-  // Add +/- jitter percent for randomization
   const jit = (Math.random() - 0.5) * (jitter * 2)
 
   return Math.round(baseDelay * (1 + jit))
@@ -61,11 +60,9 @@ export function sseClient(options: SseClientOptions) {
         .find(sseParams)
         .then(async (stream) => {
           try {
-            // Reset attempts on successful connection
             attempt = 0
 
             for await (const payload of stream) {
-              // Check if aborted before processing each payload
               if (abortController.signal.aborted) {
                 break
               }
@@ -81,7 +78,6 @@ export function sseClient(options: SseClientOptions) {
               }
             }
           } catch (error: unknown) {
-            // Handle abort errors gracefully
             if ((error as Error).name !== 'AbortError') {
               throw error
             }
@@ -91,9 +87,7 @@ export function sseClient(options: SseClientOptions) {
           abortController.abort()
           sseService.emit('disconnected', error)
 
-          // Only attempt reconnection if not manually aborted
           if ((error as Error).name !== 'AbortError') {
-            // Clear timeout so subsequent attempts can happen
             timeout = null
             reconnect(params)
           }
