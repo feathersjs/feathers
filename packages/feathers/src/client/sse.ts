@@ -74,7 +74,7 @@ export function sseClient(options: SseClientOptions) {
                   client.service(payload.path).emit(payload.event, payload.data)
                 }
               } catch (error) {
-                console.error(error)
+                sseService.emit('error', error)
               }
             }
           } catch (error: unknown) {
