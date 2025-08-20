@@ -1,12 +1,13 @@
 import { beforeAll, describe, it, expect } from 'vitest'
-import { restTests, verify, createTestServer } from '../../fixtures/index.js'
+import { restTests, verify, getApp, createTestServer } from '../../fixtures/index.js'
 import { CORS_HEADERS } from './index.js'
 
 const TEST_PORT = 4444
 
 describe('http test', () => {
   beforeAll(async () => {
-    await createTestServer(TEST_PORT)
+    const app = getApp()
+    await createTestServer(TEST_PORT, app)
   })
 
   it('throws 404 for not found pages', async () => {

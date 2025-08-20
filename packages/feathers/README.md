@@ -8,7 +8,7 @@
 
 Feathers is a lightweight web-framework for creating APIs and real-time applications using TypeScript or JavaScript.
 
-Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
+Feathers supports Node, Deno, Bun and Cloudflareworkers and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
 
 ## Getting started
 
@@ -26,6 +26,6 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 ## License
 
-Copyright (c) 2024 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2025 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).

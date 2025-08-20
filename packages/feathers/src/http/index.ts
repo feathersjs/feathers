@@ -11,6 +11,7 @@ export type HttpParams<Q> = Params<Q> & {
 }
 
 export * from './middleware.js'
+export * from './sse.service.js'
 
 export const serviceToHttpMethod = {
   find: 'GET',
@@ -61,15 +62,20 @@ function handleAsyncIterable(request: Request, context: HookContext) {
   const handleStream = async () => {
     try {
       for await (const item of context.result) {
-        if (await Promise.race([writer.closed.then(() => true), Promise.resolve(false)])) {
-          break
+        try {
+          await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
+        } catch (error) {
+          // Handle invalid state errors gracefully
+          if ((error as { code?: string }).code === 'ERR_INVALID_STATE') {
+            break
+          }
+          throw error
         }
-        await writer.write(new TextEncoder().encode(`data: ${JSON.stringify(item)}\n\n`))
       }
-    } catch (error) {
-      console.error('Error processing stream:', error)
     } finally {
-      writer.close()
+      try {
+        await writer.close()
+      } catch (_error) {}
     }
   }
 

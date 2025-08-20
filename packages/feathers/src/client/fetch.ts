@@ -17,9 +17,10 @@ export interface FetchClientParams extends Params {
 
 interface FetchClientSettings {
   name: string
-  base: string
+  baseUrl: string
   connection: typeof fetch
   stringify: (query: Query) => string
+  events?: string[]
 }
 
 export type RequestOptions = Omit<RequestInit, 'body'> & { url: string; body?: unknown }
@@ -29,12 +30,14 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   base: string
   connection: typeof fetch
   stringify: (query: Query) => string
+  events?: string[]
 
   constructor(settings: FetchClientSettings) {
     this.name = stripSlashes(settings.name)
     this.connection = settings.connection
-    this.base = `${settings.base}/${this.name}`
+    this.base = `${settings.baseUrl}/${this.name}`
     this.stringify = settings.stringify
+    this.events = settings.events
   }
 
   makeUrl(query: Query, id?: string | number | null, route?: { [key: string]: string }) {
@@ -149,7 +152,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
       const data = await response.json()
 
       error = await toError(data, response.status)
-    } catch (error) {}
+    } catch (_error) {}
 
     error.response = response
 

@@ -1,5 +1,5 @@
-import { RealTimeConnection } from '../../declarations.js'
-import { Channel } from './base'
+import { RealTimeConnection } from '../declarations.js'
+import { Channel } from './base.js'
 
 function collectConnections(children: Channel[]) {
   const mappings = new WeakMap<RealTimeConnection, any>()

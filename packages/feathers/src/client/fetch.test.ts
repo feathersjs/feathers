@@ -3,17 +3,20 @@ import { feathers } from '../index.js'
 import { clientTests } from '../../fixtures/client.js'
 import { NotAcceptable, NotFound, MethodNotAllowed } from '../errors.js'
 
-import { createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
+import { getApp, createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
 
 describe('fetch REST connector', function () {
   const port = 8888
-  const url = `http://localhost:${port}`
-  const connection = fetchClient(fetch, url)
+  const baseUrl = `http://localhost:${port}`
+  const connection = fetchClient(fetch, { baseUrl })
   const app = feathers<TestServiceTypes>().configure(connection)
   const service = app.service('todos')
 
-  beforeAll(async () => createTestServer(port))
+  beforeAll(async () => {
+    const testApp = getApp()
+    await createTestServer(port, testApp)
+  })
 
   it('supports custom headers', async () => {
     const headers = {
@@ -59,7 +62,9 @@ describe('fetch REST connector', function () {
   })
 
   it('can initialize a client instance', async () => {
-    const init = fetchClient(fetch, url)
+    const init = fetchClient(fetch, {
+      baseUrl: baseUrl
+    })
     const todoService = init.service('todos')
 
     expect(todoService).toBeInstanceOf(init.Service)

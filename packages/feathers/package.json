@@ -1,8 +1,8 @@
 {
   "name": "feathers",
-  "description": "A framework for real-time applications and REST API with JavaScript and TypeScript",
+  "description": "The API and real-time application framework",
   "version": "5.0.34",
-  "homepage": "http://feathersjs.com",
+  "homepage": "https://feathersjs.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git",
@@ -23,7 +23,7 @@
     "./hooks": "./lib/hooks/index.js",
     "./commons": "./lib/commons.js",
     "./errors": "./lib/errors.js",
-    "./client": "./lib/client.js",
+    "./client": "./lib/client/index.js",
     "./http": "./lib/http/index.js"
   },
   "author": {

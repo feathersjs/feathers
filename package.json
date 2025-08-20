@@ -1,7 +1,8 @@
 {
-  "name": "@feathersjs/feathers",
+  "name": "feathers",
   "private": true,
-  "homepage": "http://feathersjs.com",
+  "description": "The API and real-time application framework",
+  "homepage": "https://feathersjs.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git"
@@ -42,6 +43,7 @@
     "clean": "find . -name node_modules -exec rm -rf '{}' + && find . -name package-lock.json -exec rm -rf '{}' +",
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && npm run compile && vitest run --coverage",
+    "vitest": "vitest run --coverage",
     "dev": "vitest"
   },
   "devDependencies": {
