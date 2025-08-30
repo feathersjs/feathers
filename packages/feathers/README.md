@@ -1,4 +1,4 @@
-<img style="width: 100%; max-width: 400px;" src="http://feathersjs.com/img/feathers-logo-wide.png" alt="Feathers logo">
+<img style="width: 100%;" src="http://feathersjs.com/og.svg" alt="Feathers logo">
 
 ## The API and real-time application framework
 
@@ -6,9 +6,9 @@
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-Feathers is a lightweight web-framework for creating APIs and real-time applications using TypeScript or JavaScript.
+Feathers is a full-stack framework for creating web APIs and real-time applications with TypeScript or JavaScript.
 
-Feathers supports Node, Deno, Bun and Cloudflareworkers and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.
+Feathers works with Node.js, Deno, Bun, Cloudflare Workers and standalone in the browser and can interact with any backend technology, supports many databases out of the box and works with any frontend like React, VueJS, Angular, React Native, Android or iOS.
 
 ## Getting started
 

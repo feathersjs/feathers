@@ -1,5 +1,5 @@
 <a href="https://feathersjs.com" title="FeathersJS">
-  <img src="https://feathersjs.com/og.png" alt="Feathers - The API and real-time application framework">
+  <img src="https://feathersjs.com/og.svg" alt="Feathers - The API and real-time application framework">
 </a>
 
 ---
@@ -10,7 +10,7 @@
 
 Feathers is a full-stack framework for creating web APIs and real-time applications with TypeScript or JavaScript.
 
-Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend like React, VueJS, Angular, React Native, Android or iOS.
+Feathers works with Node.js, Deno, Bun, Cloudflare Workers and standalone in the browser and can interact with any backend technology, supports many databases out of the box and works with any frontend like React, VueJS, Angular, React Native, Android or iOS.
 
 # Getting started
 
@@ -48,6 +48,6 @@ npm test
 
 # License
 
-Copyright (c) 2024 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2025 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
