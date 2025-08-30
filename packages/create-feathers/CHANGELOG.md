@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v5.0.34...v6.0.0-pre.0) (2025-08-30)
+
+### Features
+
+- V6 packages refactor ([#3596](https://github.com/feathersjs/feathers/issues/3596)) ([364aab5](https://github.com/feathersjs/feathers/commit/364aab563542fc9d6dd96c1f5f48b146727d7d1e))
+
 ## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
 
 **Note:** Version bump only for package create-feathers

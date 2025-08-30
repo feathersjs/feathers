@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v5.0.34...v6.0.0-pre.0) (2025-08-30)
+
+### Bug Fixes
+
+- Make handling of async iterables consistent ([#3602](https://github.com/feathersjs/feathers/issues/3602)) ([a29ea3c](https://github.com/feathersjs/feathers/commit/a29ea3c89bf0fe07f0aec823ef3f3e33941f1aa3))
+
+### Features
+
+- SSE real-time events ([#3601](https://github.com/feathersjs/feathers/issues/3601)) ([fbfb75c](https://github.com/feathersjs/feathers/commit/fbfb75c5a2fde7ff785a71e787e746952b7a47b3))
+- V6 packages refactor ([#3596](https://github.com/feathersjs/feathers/issues/3596)) ([364aab5](https://github.com/feathersjs/feathers/commit/364aab563542fc9d6dd96c1f5f48b146727d7d1e))
+
 ## [5.0.34](https://github.com/feathersjs/feathers/compare/v5.0.33...v5.0.34) (2025-05-03)
 
 ### Bug Fixes
