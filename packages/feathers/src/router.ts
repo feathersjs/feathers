@@ -2,6 +2,7 @@ import { stripSlashes } from './commons.js'
 
 export interface LookupData {
   params: { [key: string]: string }
+  data?: any
 }
 
 export interface LookupResult<T> extends LookupData {
@@ -10,7 +11,7 @@ export interface LookupResult<T> extends LookupData {
 
 export class RouteNode<T = any> {
   data?: T
-  children: { [key: string]: RouteNode } = {}
+  children: { [key: string]: RouteNode } = Object.create(null) // Optimize object lookup
   placeholders: RouteNode[] = []
 
   constructor(
@@ -35,10 +36,20 @@ export class RouteNode<T = any> {
     const current = path[this.depth]
     const nextDepth = this.depth + 1
 
-    if (current.startsWith(':')) {
+    if (current[0] === ':') {
+      // Optimized check
       // Insert a placeholder node like /messages/:id
       const placeholderName = current.substring(1)
-      let placeholder = this.placeholders.find((p) => p.name === placeholderName)
+
+      // Optimized placeholder search
+      let placeholder = null
+      const placeholdersLength = this.placeholders.length
+      for (let i = 0; i < placeholdersLength; i++) {
+        if (this.placeholders[i].name === placeholderName) {
+          placeholder = this.placeholders[i]
+          break
+        }
+      }
 
       if (!placeholder) {
         placeholder = new RouteNode(placeholderName, nextDepth)
@@ -63,12 +74,20 @@ export class RouteNode<T = any> {
 
     const current = path[this.depth]
 
-    if (current.startsWith(':')) {
+    if (current[0] === ':') {
+      // Optimized check
       const placeholderName = current.substring(1)
-      const placeholder = this.placeholders.find((p) => p.name === placeholderName)
 
-      placeholder.remove(path)
-      this.placeholders = this.placeholders.filter((p) => p !== placeholder)
+      // Find and remove placeholder efficiently
+      const placeholdersLength = this.placeholders.length
+      for (let i = 0; i < placeholdersLength; i++) {
+        if (this.placeholders[i].name === placeholderName) {
+          const placeholder = this.placeholders[i]
+          placeholder.remove(path)
+          this.placeholders.splice(i, 1) // Remove from array efficiently
+          break
+        }
+      }
     } else if (this.children[current]) {
       const child = this.children[current]
 
@@ -81,30 +100,36 @@ export class RouteNode<T = any> {
   }
 
   lookup(path: string[], info: LookupData): LookupResult<T> | null {
-    if (path.length === this.depth) {
-      return this.data === undefined
-        ? null
-        : {
-            ...info,
-            data: this.data
-          }
+    // Early exit optimization
+    if (this.depth === path.length) {
+      if (this.data === undefined) {
+        return null
+      }
+      info.data = this.data
+      return info as LookupResult<T>
     }
 
     const current = path[this.depth]
+
+    // Try exact child match first (most common case)
     const child = this.children[current]
-
     if (child) {
-      const lookup = child.lookup(path, info)
-
-      if (lookup !== null) {
-        return lookup
+      const result = child.lookup(path, info)
+      if (result !== null) {
+        return result
       }
     }
 
-    // This will return the first placeholder that matches early
-    for (const placeholder of this.placeholders) {
-      const result = placeholder.lookup(path, info)
+    // Only check placeholders if exact match failed
+    const placeholdersLength = this.placeholders.length
+    if (placeholdersLength === 0) {
+      return null
+    }
 
+    // Optimized placeholder iteration
+    for (let i = 0; i < placeholdersLength; i++) {
+      const placeholder = this.placeholders[i]
+      const result = placeholder.lookup(path, info)
       if (result !== null) {
         result.params[placeholder.name] = current
         return result
@@ -117,17 +142,50 @@ export class RouteNode<T = any> {
 
 export class Router<T = any> {
   public caseSensitive = true
+  private pathCache: { [key: string]: string[] } = Object.create(null) // Cache for parsed paths
 
   constructor(public root: RouteNode<T> = new RouteNode<T>('', 0)) {}
 
   getPath(path: string) {
-    const result = stripSlashes(path).split('/')
-
-    if (!this.caseSensitive) {
-      return result.map((p) => (p.startsWith(':') ? p : p.toLowerCase()))
+    // Check cache first
+    if (this.pathCache[path]) {
+      return this.pathCache[path]
     }
 
-    return result
+    // Fast path for root
+    if (!path || path === '/') {
+      const result = ['']
+      this.pathCache[path] = result
+      return result
+    }
+
+    // Fast path: split directly if no leading/trailing slashes
+    let parts: string[]
+    if (path[0] !== '/' && path[path.length - 1] !== '/') {
+      parts = path.split('/')
+    } else {
+      const stripped = stripSlashes(path)
+      if (!stripped) {
+        const result = ['']
+        this.pathCache[path] = result
+        return result
+      }
+      parts = stripped.split('/')
+    }
+
+    // Apply case sensitivity if needed
+    if (!this.caseSensitive) {
+      for (let i = 0; i < parts.length; i++) {
+        if (parts[i][0] !== ':') {
+          // Optimized check
+          parts[i] = parts[i].toLowerCase()
+        }
+      }
+    }
+
+    // Cache result
+    this.pathCache[path] = parts
+    return parts
   }
 
   insert(path: string, data: T) {
@@ -143,6 +201,8 @@ export class Router<T = any> {
       return null
     }
 
-    return this.root.lookup(this.getPath(path), { params: {} })
+    // Use Object.create(null) to avoid prototype overhead
+    const info = { params: Object.create(null) }
+    return this.root.lookup(this.getPath(path), info)
   }
 }

@@ -1,6 +1,7 @@
 import assert from 'assert'
 import { describe, it, beforeEach } from 'vitest'
 import { Router } from './router.js'
+import { Router as Router2 } from './router2.js'
 import { Application } from './declarations.js'
 import { feathers } from './index.js'
 
@@ -134,7 +135,7 @@ describe('routing', () => {
       const result = r.lookup('hello/there/you/')
 
       assert.deepStrictEqual(result, {
-        params: {},
+        params: Object.create(null),
         data: 'test'
       })
 
@@ -150,7 +151,7 @@ describe('routing', () => {
       const result = r.lookup('/')
 
       assert.deepStrictEqual(result, {
-        params: {},
+        params: Object.create(null),
         data: 'hi'
       })
     })
@@ -168,25 +169,29 @@ describe('routing', () => {
         message: 'Path hello/:id/you already exists'
       })
 
+      const expectedParams1 = Object.create(null)
+      expectedParams1.id = 'there'
       assert.deepStrictEqual(first, {
-        params: { id: 'there' },
+        params: expectedParams1,
         data: 'one'
       })
 
       const second = r.lookup('hello/yes/you')
 
+      const expectedParams2 = Object.create(null)
+      expectedParams2.id = 'yes'
       assert.deepStrictEqual(second, {
-        params: { id: 'yes' },
+        params: expectedParams2,
         data: 'two'
       })
 
       const third = r.lookup('hello/yes/they')
 
+      const expectedParams3 = Object.create(null)
+      expectedParams3.id = 'yes'
+      expectedParams3.other = 'they'
       assert.deepStrictEqual(third, {
-        params: {
-          id: 'yes',
-          other: 'they'
-        },
+        params: expectedParams3,
         data: 'three'
       })
 
@@ -201,21 +206,32 @@ describe('routing', () => {
       r.insert('/hello/:test/:two/hi/:three', 'three')
       r.insert('/hello/:test/:two/hi', 'four')
 
+      const params1 = Object.create(null)
+      params1.id = 'there'
       assert.deepStrictEqual(r.lookup('/hello/there'), {
-        params: { id: 'there' },
+        params: params1,
         data: 'one'
       })
+      const params2 = Object.create(null)
+      params2.test = 'there'
       assert.deepStrictEqual(r.lookup('/hello/there/you'), {
-        params: { test: 'there' },
+        params: params2,
         data: 'two'
       })
       assert.strictEqual(r.lookup('/hello/there/bla'), null)
+      const params3 = Object.create(null)
+      params3.test = 'there'
+      params3.two = 'maybe'
       assert.deepStrictEqual(r.lookup('/hello/there/maybe/hi'), {
-        params: { test: 'there', two: 'maybe' },
+        params: params3,
         data: 'four'
       })
+      const params4 = Object.create(null)
+      params4.three = 'test'
+      params4.two = 'maybe'
+      params4.test = 'there'
       assert.deepStrictEqual(r.lookup('/hello/there/maybe/hi/test'), {
-        params: { three: 'test', two: 'maybe', test: 'there' },
+        params: params4,
         data: 'three'
       })
     })
@@ -227,17 +243,21 @@ describe('routing', () => {
       r.insert('/hello/:test/you', 'two')
       r.insert('/hello/here/thing', 'else')
 
-      assert.deepStrictEqual(r.lookup('hello/there'), { params: { id: 'there' }, data: 'one' })
+      const removeParams1 = Object.create(null)
+      removeParams1.id = 'there'
+      assert.deepStrictEqual(r.lookup('hello/there'), { params: removeParams1, data: 'one' })
 
       r.remove('/hello/:id')
 
-      assert.deepStrictEqual(r.lookup('hello/here/you'), { params: { test: 'here' }, data: 'two' })
-      assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: {}, data: 'else' })
+      const removeParams2 = Object.create(null)
+      removeParams2.test = 'here'
+      assert.deepStrictEqual(r.lookup('hello/here/you'), { params: removeParams2, data: 'two' })
+      assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: Object.create(null), data: 'else' })
       assert.strictEqual(r.lookup('hello/there'), null)
 
       r.remove('/hello/:test/you')
       assert.deepStrictEqual(r.lookup('hello/here/you'), null)
-      assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: {}, data: 'else' })
+      assert.deepStrictEqual(r.lookup('hello/here/thing'), { params: Object.create(null), data: 'else' })
 
       r.remove('/hello/here/thing')
       assert.ok(!r.root.hasChildren)
@@ -249,16 +269,117 @@ describe('routing', () => {
       r.insert('/hello', 'one')
       r.insert('/hello/world', 'else')
 
-      assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'one' })
+      assert.deepStrictEqual(r.lookup('hello'), { params: Object.create(null), data: 'one' })
 
       r.remove('/hello')
 
-      assert.deepStrictEqual(r.lookup('hello/world'), { params: {}, data: 'else' })
+      assert.deepStrictEqual(r.lookup('hello/world'), { params: Object.create(null), data: 'else' })
 
       r.insert('/hello', 'two')
 
-      assert.deepStrictEqual(r.lookup('hello'), { params: {}, data: 'two' })
-      assert.deepStrictEqual(r.lookup('hello/world'), { params: {}, data: 'else' })
+      assert.deepStrictEqual(r.lookup('hello'), { params: Object.create(null), data: 'two' })
+      assert.deepStrictEqual(r.lookup('hello/world'), { params: Object.create(null), data: 'else' })
+    })
+  })
+
+  describe('router performance benchmark', () => {
+    it('compares router.ts vs router2.ts performance', () => {
+      const router1 = new Router<string>()
+      const router2 = new Router2<string>()
+
+      // Setup identical routes for both routers
+      const routes = [
+        '/api/users',
+        '/api/users/:id',
+        '/api/posts',
+        '/api/posts/:id',
+        '/api/posts/:id/comments',
+        '/api/posts/:id/comments/:commentId',
+        '/api/categories/:category/posts',
+        '/api/categories/:category/posts/:id',
+        '/health',
+        '/status',
+        '/metrics',
+        '/docs/:section',
+        '/docs/:section/:page'
+      ]
+
+      // Insert routes into both routers
+      routes.forEach((route, i) => {
+        const data = `handler-${i}`
+        router1.insert(route, data)
+        router2.insert(route, data)
+      })
+
+      // Test paths for lookup
+      const testPaths = [
+        '/api/users',
+        '/api/users/123',
+        '/api/posts/456',
+        '/api/posts/456/comments/789',
+        '/api/categories/tech/posts/101',
+        '/health',
+        '/docs/api/endpoints',
+        '/nonexistent/path'
+      ]
+
+      const iterations = 100000
+
+      // Benchmark optimized router (router.ts)
+      const start1 = performance.now()
+      for (let i = 0; i < iterations; i++) {
+        for (const path of testPaths) {
+          router1.lookup(path)
+        }
+      }
+      const end1 = performance.now()
+      const optimizedTime = end1 - start1
+
+      // Benchmark old router (router2.ts)
+      const start2 = performance.now()
+      for (let i = 0; i < iterations; i++) {
+        for (const path of testPaths) {
+          router2.lookup(path)
+        }
+      }
+      const end2 = performance.now()
+      const oldTime = end2 - start2
+
+      const improvement = (((oldTime - optimizedTime) / oldTime) * 100).toFixed(1)
+
+      console.log(`\n=== Router Performance Benchmark ===`)
+      console.log(`Test iterations: ${iterations.toLocaleString()} x ${testPaths.length} paths`)
+      console.log(`Optimized router (router.ts):  ${optimizedTime.toFixed(2)}ms`)
+      console.log(`Old router (router2.ts):       ${oldTime.toFixed(2)}ms`)
+      console.log(`Performance improvement: ${improvement}%`)
+      console.log(`Speed ratio: ${(oldTime / optimizedTime).toFixed(2)}x faster`)
+
+      // Verify both routers return functionally identical results
+      for (const path of testPaths) {
+        const result1 = router1.lookup(path)
+        const result2 = router2.lookup(path)
+
+        if (result1 === null && result2 === null) continue
+
+        // Compare data and params keys/values, ignoring prototype differences
+        assert.strictEqual(result1?.data, result2?.data, `Data differs for path: ${path}`)
+        assert.deepStrictEqual(
+          Object.keys(result1?.params || {}),
+          Object.keys(result2?.params || {}),
+          `Param keys differ for path: ${path}`
+        )
+
+        for (const key of Object.keys(result1?.params || {})) {
+          assert.strictEqual(
+            result1.params[key],
+            result2.params[key],
+            `Param value '${key}' differs for path: ${path}`
+          )
+        }
+      }
+
+      // Basic performance assertion - optimized router should be faster
+      assert.ok(optimizedTime <= oldTime, 'Optimized router should be at least as fast as old router')
     })
   })
 })
