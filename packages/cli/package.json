@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@feathersjs/generators": "^5.0.34",
-    "chalk": "^5.4.1",
+    "chalk": "^5.6.0",
     "commander": "^13.1.0"
   },
   "devDependencies": {
@@ -76,7 +76,7 @@
     "@feathersjs/transport-commons": "^5.0.34",
     "@feathersjs/typebox": "^5.0.34",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.3.0",
     "@types/prettier": "^2.7.3",
     "axios": "^1.11.0",
     "mocha": "^11.7.1",

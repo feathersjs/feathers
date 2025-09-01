@@ -66,7 +66,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.3.0",
     "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",

@@ -62,11 +62,11 @@
     "@feathersjs/feathers": "^5.0.34",
     "@feathersjs/schema": "^5.0.34",
     "@types/config": "^3.3.5",
-    "config": "^4.1.0"
+    "config": "^4.1.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.3.0",
     "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
