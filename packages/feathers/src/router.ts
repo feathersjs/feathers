@@ -1,7 +1,7 @@
 import { stripSlashes } from './commons.js'
 
 export interface LookupData {
-  params: { [key: string]: string }
+  params: { [key: string]: string | string[] }
   data?: any
 }
 
@@ -13,6 +13,7 @@ export class RouteNode<T = any> {
   data?: T
   children: { [key: string]: RouteNode } = Object.create(null) // Optimize object lookup
   placeholders: RouteNode[] = []
+  catchAll?: RouteNode<T>
 
   constructor(
     public name: string,
@@ -20,7 +21,9 @@ export class RouteNode<T = any> {
   ) {}
 
   get hasChildren() {
-    return Object.keys(this.children).length !== 0 || this.placeholders.length !== 0
+    return (
+      Object.keys(this.children).length !== 0 || this.placeholders.length !== 0 || this.catchAll !== undefined
+    )
   }
 
   insert(path: string[], data: T): RouteNode<T> {
@@ -37,26 +40,43 @@ export class RouteNode<T = any> {
     const nextDepth = this.depth + 1
 
     if (current[0] === ':') {
-      // Optimized check
-      // Insert a placeholder node like /messages/:id
-      const placeholderName = current.substring(1)
+      if (current[1] === ':') {
+        // Catch-all route like ::path
+        const catchAllName = current.substring(2)
 
-      // Optimized placeholder search
-      let placeholder = null
-      const placeholdersLength = this.placeholders.length
-      for (let i = 0; i < placeholdersLength; i++) {
-        if (this.placeholders[i].name === placeholderName) {
-          placeholder = this.placeholders[i]
-          break
+        // Validate catch-all is at the end
+        if (this.depth !== path.length - 1) {
+          throw new Error(`Catch-all parameter ::${catchAllName} must be at the end of the path`)
         }
-      }
 
-      if (!placeholder) {
-        placeholder = new RouteNode(placeholderName, nextDepth)
-        this.placeholders.push(placeholder)
-      }
+        if (this.catchAll) {
+          throw new Error(`Path ${path.join('/')} already exists`)
+        }
 
-      return placeholder.insert(path, data)
+        this.catchAll = new RouteNode(catchAllName, nextDepth)
+        this.catchAll.data = data
+        return this.catchAll
+      } else {
+        // Regular placeholder node like /messages/:id
+        const placeholderName = current.substring(1)
+
+        // Optimized placeholder search
+        let placeholder = null
+        const placeholdersLength = this.placeholders.length
+        for (let i = 0; i < placeholdersLength; i++) {
+          if (this.placeholders[i].name === placeholderName) {
+            placeholder = this.placeholders[i]
+            break
+          }
+        }
+
+        if (!placeholder) {
+          placeholder = new RouteNode(placeholderName, nextDepth)
+          this.placeholders.push(placeholder)
+        }
+
+        return placeholder.insert(path, data)
+      }
     }
 
     const child = this.children[current] || new RouteNode(current, nextDepth)
@@ -75,17 +95,29 @@ export class RouteNode<T = any> {
     const current = path[this.depth]
 
     if (current[0] === ':') {
-      // Optimized check
-      const placeholderName = current.substring(1)
+      if (current[1] === ':') {
+        // Remove catch-all route
+        const catchAllName = current.substring(2)
+        if (this.catchAll && this.catchAll.name === catchAllName) {
+          this.catchAll = undefined
+        }
+      } else {
+        // Regular placeholder removal
+        const placeholderName = current.substring(1)
 
-      // Find and remove placeholder efficiently
-      const placeholdersLength = this.placeholders.length
-      for (let i = 0; i < placeholdersLength; i++) {
-        if (this.placeholders[i].name === placeholderName) {
-          const placeholder = this.placeholders[i]
-          placeholder.remove(path)
-          this.placeholders.splice(i, 1) // Remove from array efficiently
-          break
+        // Find and remove placeholder efficiently
+        const placeholdersLength = this.placeholders.length
+        for (let i = 0; i < placeholdersLength; i++) {
+          if (this.placeholders[i].name === placeholderName) {
+            const placeholder = this.placeholders[i]
+            placeholder.remove(path)
+
+            // Only remove from array if node has no children or data
+            if (!placeholder.hasChildren && placeholder.data === undefined) {
+              this.placeholders.splice(i, 1)
+            }
+            break
+          }
         }
       }
     } else if (this.children[current]) {
@@ -93,20 +125,28 @@ export class RouteNode<T = any> {
 
       child.remove(path)
 
-      if (!child.hasChildren) {
+      if (!child.hasChildren && child.data === undefined) {
         delete this.children[current]
       }
     }
   }
 
   lookup(path: string[], info: LookupData): LookupResult<T> | null {
-    // Early exit optimization
+    // Early exit optimization - check for exact match at current depth
     if (this.depth === path.length) {
-      if (this.data === undefined) {
-        return null
+      if (this.data !== undefined) {
+        info.data = this.data
+        return info as LookupResult<T>
       }
-      info.data = this.data
-      return info as LookupResult<T>
+
+      // Check for catch-all at this level (handles empty catch-all)
+      if (this.catchAll) {
+        info.data = this.catchAll.data
+        info.params[this.catchAll.name] = []
+        return info as LookupResult<T>
+      }
+
+      return null
     }
 
     const current = path[this.depth]
@@ -122,11 +162,6 @@ export class RouteNode<T = any> {
 
     // Only check placeholders if exact match failed
     const placeholdersLength = this.placeholders.length
-    if (placeholdersLength === 0) {
-      return null
-    }
-
-    // Optimized placeholder iteration
     for (let i = 0; i < placeholdersLength; i++) {
       const placeholder = this.placeholders[i]
       const result = placeholder.lookup(path, info)
@@ -134,6 +169,14 @@ export class RouteNode<T = any> {
         result.params[placeholder.name] = current
         return result
       }
+    }
+
+    // Check catch-all as final fallback
+    if (this.catchAll) {
+      const remaining = path.slice(this.depth)
+      info.data = this.catchAll.data
+      info.params[this.catchAll.name] = remaining
+      return info as LookupResult<T>
     }
 
     return null

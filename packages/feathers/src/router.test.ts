@@ -68,13 +68,13 @@ describe('routing', () => {
         }
       })
 
-      const result = app.lookup('/test/me/my/::special/testing')
+      const result = app.lookup('/test/me/my/@special/testing')
 
       assert.strictEqual(result.service, app.service(path))
       assert.deepStrictEqual(result.params, {
         __id: 'testing',
         first: 'me',
-        second: '::special'
+        second: '@special'
       })
     })
 
@@ -279,6 +279,285 @@ describe('routing', () => {
 
       assert.deepStrictEqual(r.lookup('hello'), { params: Object.create(null), data: 'two' })
       assert.deepStrictEqual(r.lookup('hello/world'), { params: Object.create(null), data: 'else' })
+    })
+  })
+
+  describe('catch-all routes', () => {
+    it('can insert and lookup catch-all routes with ::param syntax', () => {
+      const r = new Router<string>()
+
+      r.insert('/docs/::path', 'docs-handler')
+      r.insert('/static/::files', 'static-handler')
+
+      const docsResult = r.lookup('/docs/api/users/create')
+      const expectedParams = Object.create(null)
+      expectedParams.path = ['api', 'users', 'create']
+      assert.deepStrictEqual(docsResult, {
+        params: expectedParams,
+        data: 'docs-handler'
+      })
+
+      const staticResult = r.lookup('/static/css/main.css')
+      const expectedStaticParams = Object.create(null)
+      expectedStaticParams.files = ['css', 'main.css']
+      assert.deepStrictEqual(staticResult, {
+        params: expectedStaticParams,
+        data: 'static-handler'
+      })
+    })
+
+    it('catch-all routes handle empty paths', () => {
+      const r = new Router<string>()
+
+      r.insert('/docs/::path', 'docs-handler')
+
+      const result = r.lookup('/docs/')
+      const expectedEmptyParams = Object.create(null)
+      expectedEmptyParams.path = []
+      assert.deepStrictEqual(result, {
+        params: expectedEmptyParams,
+        data: 'docs-handler'
+      })
+
+      const resultNoSlash = r.lookup('/docs')
+      const expectedNoSlashParams = Object.create(null)
+      expectedNoSlashParams.path = []
+      assert.deepStrictEqual(resultNoSlash, {
+        params: expectedNoSlashParams,
+        data: 'docs-handler'
+      })
+    })
+
+    it('catch-all routes have lower priority than exact and param routes', () => {
+      const r = new Router<string>()
+
+      r.insert('/api/::rest', 'catch-all')
+      r.insert('/api/users', 'exact-users')
+      r.insert('/api/:service', 'param-service')
+      r.insert('/api/:service/:id', 'param-service-id')
+
+      // Exact match takes priority
+      const exactResult = r.lookup('/api/users')
+      assert.deepStrictEqual(exactResult, {
+        params: Object.create(null),
+        data: 'exact-users'
+      })
+
+      // Param match takes priority over catch-all
+      const paramResult = r.lookup('/api/posts')
+      const expectedParams = Object.create(null)
+      expectedParams.service = 'posts'
+      assert.deepStrictEqual(paramResult, {
+        params: expectedParams,
+        data: 'param-service'
+      })
+
+      // Nested param match takes priority
+      const nestedParamResult = r.lookup('/api/posts/123')
+      const expectedNestedParams = Object.create(null)
+      expectedNestedParams.service = 'posts'
+      expectedNestedParams.id = '123'
+      assert.deepStrictEqual(nestedParamResult, {
+        params: expectedNestedParams,
+        data: 'param-service-id'
+      })
+
+      // Catch-all only matches when no other routes match
+      const catchAllResult = r.lookup('/api/some/deep/path/here')
+      const expectedCatchAllParams = Object.create(null)
+      expectedCatchAllParams.rest = ['some', 'deep', 'path', 'here']
+      assert.deepStrictEqual(catchAllResult, {
+        params: expectedCatchAllParams,
+        data: 'catch-all'
+      })
+    })
+
+    it('catch-all routes work with different parameter names', () => {
+      const r = new Router<string>()
+
+      r.insert('/files/::filepath', 'file-handler')
+      r.insert('/proxy/::endpoint', 'proxy-handler')
+      r.insert('/app/::route', 'spa-handler')
+
+      const fileResult = r.lookup('/files/documents/report.pdf')
+      const expectedFileParams = Object.create(null)
+      expectedFileParams.filepath = ['documents', 'report.pdf']
+      assert.deepStrictEqual(fileResult, {
+        params: expectedFileParams,
+        data: 'file-handler'
+      })
+
+      const proxyResult = r.lookup('/proxy/api/v1/users/123')
+      const expectedProxyParams = Object.create(null)
+      expectedProxyParams.endpoint = ['api', 'v1', 'users', '123']
+      assert.deepStrictEqual(proxyResult, {
+        params: expectedProxyParams,
+        data: 'proxy-handler'
+      })
+
+      const spaResult = r.lookup('/app/dashboard/settings')
+      const expectedSpaParams = Object.create(null)
+      expectedSpaParams.route = ['dashboard', 'settings']
+      assert.deepStrictEqual(spaResult, {
+        params: expectedSpaParams,
+        data: 'spa-handler'
+      })
+    })
+
+    it('catch-all routes can be combined with regular params', () => {
+      const r = new Router<string>()
+
+      r.insert('/api/:version/docs/::path', 'versioned-docs')
+      r.insert('/users/:userId/files/::filepath', 'user-files')
+
+      const docsResult = r.lookup('/api/v1/docs/authentication/oauth')
+      const expectedDocsParams = Object.create(null)
+      expectedDocsParams.version = 'v1'
+      expectedDocsParams.path = ['authentication', 'oauth']
+      assert.deepStrictEqual(docsResult, {
+        params: expectedDocsParams,
+        data: 'versioned-docs'
+      })
+
+      const filesResult = r.lookup('/users/123/files/images/avatar.jpg')
+      const expectedFilesParams = Object.create(null)
+      expectedFilesParams.userId = '123'
+      expectedFilesParams.filepath = ['images', 'avatar.jpg']
+      assert.deepStrictEqual(filesResult, {
+        params: expectedFilesParams,
+        data: 'user-files'
+      })
+    })
+
+    it('throws error when catch-all is not at the end', () => {
+      const r = new Router<string>()
+
+      assert.throws(() => r.insert('/api/::rest/users', 'invalid'), {
+        message: 'Catch-all parameter ::rest must be at the end of the path'
+      })
+
+      assert.throws(() => r.insert('/::root/api/users', 'invalid'), {
+        message: 'Catch-all parameter ::root must be at the end of the path'
+      })
+    })
+
+    it('throws error for duplicate catch-all routes', () => {
+      const r = new Router<string>()
+
+      r.insert('/docs/::path', 'first')
+
+      assert.throws(() => r.insert('/docs/::path', 'second'), {
+        message: 'Path docs/::path already exists'
+      })
+
+      assert.throws(() => r.insert('/docs/::different', 'second'), {
+        message: 'Path docs/::different already exists'
+      })
+    })
+
+    it('can remove catch-all routes', () => {
+      const r = new Router<string>()
+
+      r.insert('/docs/::path', 'docs-handler')
+      r.insert('/docs/api', 'exact-api')
+
+      // Verify both routes work
+      const catchAllResult = r.lookup('/docs/guide/intro')
+      const expectedGuideParams = Object.create(null)
+      expectedGuideParams.path = ['guide', 'intro']
+      assert.deepStrictEqual(catchAllResult, {
+        params: expectedGuideParams,
+        data: 'docs-handler'
+      })
+
+      const exactResult = r.lookup('/docs/api')
+      assert.deepStrictEqual(exactResult, {
+        params: Object.create(null),
+        data: 'exact-api'
+      })
+
+      // Remove catch-all route
+      r.remove('/docs/::path')
+
+      // Catch-all should no longer match
+      assert.strictEqual(r.lookup('/docs/guide/intro'), null)
+
+      // Exact route should still work
+      const stillExactResult = r.lookup('/docs/api')
+      assert.deepStrictEqual(stillExactResult, {
+        params: Object.create(null),
+        data: 'exact-api'
+      })
+    })
+
+    it('catch-all routes handle special characters and encoding', () => {
+      const r = new Router<string>()
+
+      r.insert('/files/::path', 'file-handler')
+
+      const result = r.lookup('/files/documents/file%20with%20spaces.txt')
+      const expectedSpacesParams = Object.create(null)
+      expectedSpacesParams.path = ['documents', 'file%20with%20spaces.txt']
+      assert.deepStrictEqual(result, {
+        params: expectedSpacesParams,
+        data: 'file-handler'
+      })
+
+      const specialResult = r.lookup('/files/path/with/::colons/and-dashes')
+      const expectedSpecialParams = Object.create(null)
+      expectedSpecialParams.path = ['path', 'with', '::colons', 'and-dashes']
+      assert.deepStrictEqual(specialResult, {
+        params: expectedSpecialParams,
+        data: 'file-handler'
+      })
+    })
+
+    it('catch-all routes return null for non-matching paths', () => {
+      const r = new Router<string>()
+
+      r.insert('/docs/::path', 'docs-handler')
+
+      // Different prefix should not match
+      assert.strictEqual(r.lookup('/api/users'), null)
+      assert.strictEqual(r.lookup('/documentation/guide'), null)
+
+      // Shorter path should not match catch-all
+      assert.strictEqual(r.lookup('/doc'), null)
+    })
+
+    it('exact route takes priority over catch-all at same level', () => {
+      const r = new Router<string>()
+
+      // Insert catch-all first
+      r.insert('/docs/::path', 'catch-all-handler')
+
+      // Then insert exact match - should take priority
+      r.insert('/docs', 'exact-docs-handler')
+
+      // Exact match should win
+      const exactResult = r.lookup('/docs')
+      assert.deepStrictEqual(exactResult, {
+        params: Object.create(null),
+        data: 'exact-docs-handler'
+      })
+
+      // Catch-all should still work for subpaths
+      const subpathResult = r.lookup('/docs/api/guide')
+      const expectedSubpathParams = Object.create(null)
+      expectedSubpathParams.path = ['api', 'guide']
+      assert.deepStrictEqual(subpathResult, {
+        params: expectedSubpathParams,
+        data: 'catch-all-handler'
+      })
+
+      // Also test with trailing slash
+      const trailingSlashResult = r.lookup('/docs/getting-started')
+      const expectedTrailingParams = Object.create(null)
+      expectedTrailingParams.path = ['getting-started']
+      assert.deepStrictEqual(trailingSlashResult, {
+        params: expectedTrailingParams,
+        data: 'catch-all-handler'
+      })
     })
   })
 
