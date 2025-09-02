@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { hooks, NextFunction } from '@feathersjs/hooks'
+import { hooks, NextFunction } from 'feathers/hooks'
 import { HookContext, createContext, feathers, Id, Params, ServiceInterface } from '../../src'
 
 describe('hooks basics', () => {

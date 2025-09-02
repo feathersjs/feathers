@@ -308,7 +308,6 @@ describe('authentication/service', () => {
 
     it('passes when entity service exists and `entityId` property is set', () => {
       app.get('authentication').entityId = 'id'
-      app.use('users', memory())
 
       app.setup()
     })

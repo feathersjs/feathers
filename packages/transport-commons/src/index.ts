@@ -1,7 +1,3 @@
-import { socket } from './socket'
-import { routing } from './routing'
-import { channels, Channel, CombinedChannel } from './channels'
-import { RealTimeConnection } from '@feathersjs/feathers'
-
-export * as http from './http'
-export { socket, routing, channels, Channel, CombinedChannel, RealTimeConnection }
+export * as http from 'feathers/http'
+export { Channel, CombinedChannel } from '@feathersjs/feathers'
+export * from './socket/index'

@@ -42,11 +42,7 @@
     "*.js"
   ],
   "scripts": {
-    "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\'')\" > src/version.ts",
-    "reset-version": "node -e \"console.log('export default \\'development\\'')\" > src/version.ts",
     "prepublish": "npm run compile",
-    "version": "npm run write-version",
-    "publish": "npm run reset-version",
     "pack": "npm pack --pack-destination ../generators/test/build",
     "compile": "shx rm -rf lib/ && tsc && npm run pack",
     "test": "mocha --config ../../.mocharc.json --recursive test/"
@@ -58,9 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/commons": "^5.0.34",
-    "@feathersjs/hooks": "^0.9.0",
-    "events": "^3.3.0"
+    "feathers": "^6.0.0-pre.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",

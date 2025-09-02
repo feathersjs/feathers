@@ -4,7 +4,6 @@ import { feathers, Application, Params, RealTimeConnection } from '@feathersjs/f
 import { NotAuthenticated } from '@feathersjs/errors'
 import isPlainObject from 'lodash/isPlainObject'
 
-import { routing } from '../../src/routing'
 import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils'
 
 describe('socket commons utils', () => {
@@ -201,7 +200,7 @@ describe('socket commons utils', () => {
     let app: Application
 
     beforeEach(() => {
-      app = feathers().configure(routing())
+      app = feathers()
       app.use('/myservice', {
         async get(id: number | string, params: Params) {
           if (params.query.error) {

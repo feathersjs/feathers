@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import assert from 'assert'
-import { feathers, Application, RealTimeConnection } from '@feathersjs/feathers'
-import { channels, keys } from '../../src/channels'
-import { Channel } from '../../src/channels/channel/base'
-import { CombinedChannel } from '../../src/channels/channel/combined'
-
-const { CHANNELS } = keys
+import {
+  feathers,
+  channelUtils,
+  Channel,
+  CombinedChannel,
+  Application,
+  RealTimeConnection
+} from '@feathersjs/feathers'
 
 describe('app.channel', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(channels())
+    app = feathers()
   })
 
   describe('base channels', () => {
@@ -103,7 +104,7 @@ describe('app.channel', () => {
 
     describe('empty channels', () => {
       it('is an EventEmitter', () => {
-        const channel = app.channel('emitchannel')
+        const channel = app.channel('emitchannel') as Channel
 
         return new Promise<void>((resolve) => {
           channel.once('message', (data) => {
@@ -116,7 +117,7 @@ describe('app.channel', () => {
       })
 
       it('empty', (done) => {
-        const channel = app.channel('test')
+        const channel = app.channel('test') as Channel
         const c1 = { id: 1 }
         const c2 = { id: 2 }
 
@@ -129,7 +130,7 @@ describe('app.channel', () => {
 
       it('removes an empty channel', () => {
         const channel = app.channel('test')
-        const appChannels = (app as any)[CHANNELS]
+        const appChannels = (app as any)[channelUtils.CHANNELS]
         const c1 = { id: 1 }
 
         channel.join(c1)
@@ -138,12 +139,12 @@ describe('app.channel', () => {
         assert.strictEqual(Object.keys(appChannels).length, 1)
         channel.leave(c1)
 
-        assert.ok((app as any)[CHANNELS].test === undefined)
+        assert.ok((app as any)[channelUtils.CHANNELS].test === undefined)
         assert.strictEqual(Object.keys(appChannels).length, 0)
       })
 
       it('removes all event listeners from an empty channel', () => {
-        const channel = app.channel('testing')
+        const channel = app.channel('testing') as Channel
         const connection = { id: 1 }
 
         channel.on('something', () => {})
@@ -152,7 +153,7 @@ describe('app.channel', () => {
 
         channel.join(connection).leave(connection)
 
-        assert.ok((app as any)[CHANNELS].testing === undefined)
+        assert.ok((app as any)[channelUtils.CHANNELS].testing === undefined)
 
         assert.strictEqual(channel.listenerCount('something'), 0)
         assert.strictEqual(channel.listenerCount('empty'), 0)

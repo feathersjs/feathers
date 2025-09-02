@@ -13,7 +13,7 @@ import { RealTimeConnection } from '@feathersjs/feathers'
 
 const debug = createDebug('@feathersjs/authentication/service')
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface FeathersApplication<Services, Settings> {
     // eslint-disable-line

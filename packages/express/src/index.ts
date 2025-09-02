@@ -1,6 +1,5 @@
 import express, { Express } from 'express'
 import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers'
-import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import cors from 'cors'
 import compression from 'compression'
@@ -125,12 +124,16 @@ export default function feathersExpress<S = any, C = any>(
     ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(feathersApp)),
     ...Object.getOwnPropertyDescriptors(feathersApp)
   }
+  const keys = [
+    ...Object.getOwnPropertyNames(newDescriptors),
+    ...Object.getOwnPropertySymbols(newDescriptors)
+  ]
 
   // Copy all non-existing properties (including non-enumerables)
   // that don't already exist on the Express app
-  Object.keys(newDescriptors).forEach((prop) => {
-    const appProp = appDescriptors[prop]
-    const newProp = newDescriptors[prop]
+  keys.forEach((prop) => {
+    const appProp = appDescriptors[prop as string]
+    const newProp = newDescriptors[prop as string]
 
     if (appProp === undefined && newProp !== undefined) {
       Object.defineProperty(expressApp, prop, newProp)
@@ -152,7 +155,6 @@ export default function feathersExpress<S = any, C = any>(
     )
   }
 
-  app.configure(routing() as any)
   app.use((req, _res, next) => {
     req.feathers = { ...req.feathers, provider: 'rest' }
     return next()

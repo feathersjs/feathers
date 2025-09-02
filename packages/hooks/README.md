@@ -1,20 +1,20 @@
-# create-feathers
+# @feathersjs/errors
 
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
-[![Download Status](https://img.shields.io/npm/dm/@feathersjs/configuration.svg?style=flat-square)](https://www.npmjs.com/package/create-feathers)
+[![Download Status](https://img.shields.io/npm/dm/@feathersjs/errors.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/errors)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
 
-> Generate a Feathers application through the CLI
+> Common error types for feathers apps
 
-## Usage
+## Installation
 
 ```
-npm create feathers my-app
+npm install @feathersjs/errors --save
 ```
 
 ## Documentation
 
-Refer to the [Feathers guides](https://feathersjs.com/guides/) for more details.
+Refer to the [Feathers errors API documentation](https://feathersjs.com/api/errors.html) for more details.
 
 ## License
 

@@ -18,7 +18,7 @@ export type FeathersKoaContext<A = Application> = Koa.Context & {
 
 export type Middleware<A = Application> = (context: FeathersKoaContext<A>, next: Next) => any
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface ServiceOptions {
     koa?: {
       before?: Middleware[]

@@ -1,6 +1,4 @@
 import { Application, getServiceOptions, Params, RealTimeConnection } from '@feathersjs/feathers'
-import { channels } from '../channels'
-import { routing } from '../routing'
 import { getDispatcher, runMethod } from './utils'
 
 export interface SocketOptions {
@@ -20,9 +18,6 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
         app.channel(app.channels).leave(connection)
       }
     }
-
-    app.configure(channels())
-    app.configure(routing())
 
     app.on('publish', getDispatcher(emit, socketMap, socketKey))
     app.on('disconnect', leaveChannels)

@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
 import { feathers, Application } from '@feathersjs/feathers'
-import { routing } from '../../src/routing'
 
 describe('app.routes', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(routing())
+    app = feathers()
 
     app.use('/my/service', {
       get(id: string | number) {
         return Promise.resolve({ id })
       }
     })
-  })
-
-  it('does nothing when configured twice', () => {
-    feathers().configure(routing()).configure(routing())
   })
 
   it('has app.lookup and app.routes', () => {

@@ -1,7 +1,6 @@
 import Koa from 'koa'
 import koaQs from 'koa-qs'
 import { Application as FeathersApplication } from '@feathersjs/feathers'
-import { routing } from '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
 import { koaBody as bodyParser } from 'koa-body'
 import cors from '@koa/cors'
@@ -99,7 +98,6 @@ export function koa<S = any, C = any>(
   app.setup = feathersApp.setup as any
   app.teardown = feathersApp.teardown as any
 
-  app.configure(routing() as any)
   app.use((ctx, next) => {
     ctx.feathers = { ...ctx.feathers, provider: 'rest' }
     return next()

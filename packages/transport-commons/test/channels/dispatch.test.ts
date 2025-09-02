@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import assert from 'assert'
-import { feathers, Application, HookContext } from '@feathersjs/feathers'
-import { channels } from '../../src/channels'
-import { Channel } from '../../src/channels/channel/base'
-import { CombinedChannel } from '../../src/channels/channel/combined'
+import { feathers, Application, HookContext, Channel, CombinedChannel } from '@feathersjs/feathers'
 
 class TestService {
   events = ['foo']
@@ -17,7 +13,7 @@ describe('app.publish', () => {
   let app: Application
 
   beforeEach(() => {
-    app = feathers().configure(channels())
+    app = feathers()
   })
 
   it('throws an error if service does not send the event', () => {

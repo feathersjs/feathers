@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Router } from '../../src/routing'
+import { Router } from '@feathersjs/feathers'
 
 describe('router', () => {
   it('can lookup and insert a simple path and returns null for invalid path', () => {

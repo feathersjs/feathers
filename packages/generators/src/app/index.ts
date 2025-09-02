@@ -157,6 +157,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
 
           dependencies.push(
             '@feathersjs/feathers',
+            '@feathersjs/hooks',
             '@feathersjs/errors',
             '@feathersjs/schema',
             '@feathersjs/configuration',

@@ -1,28 +1,44 @@
 {
-  "name": "@feathersjs/authentication",
-  "description": "Add Authentication to your FeathersJS app.",
+  "name": "@feathersjs/hooks",
+  "description": "Async middleware for JavaScript and TypeScript",
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
   "keywords": [
     "feathers",
-    "feathers-plugin"
+    "feathers-plugin",
+    "feathers-hooks"
   ],
   "license": "MIT",
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/daffl"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/feathersjs/feathers.git",
-    "directory": "packages/authentication"
+    "directory": "packages/hooks"
   },
   "author": {
     "name": "Feathers contributors",
     "email": "hello@feathersjs.com",
     "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "prepublish": "npm run compile",
+    "pack": "npm pack --pack-destination ../generators/test/build",
+    "compile": "shx rm -rf lib/ && tsc && npm run pack",
+    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "CHANGELOG.md",
@@ -33,48 +49,16 @@
     "*.d.ts",
     "*.js"
   ],
-  "contributors": [],
-  "bugs": {
-    "url": "https://github.com/feathersjs/feathers/issues"
-  },
-  "engines": {
-    "node": ">= 12"
-  },
-  "scripts": {
-    "prepublish": "npm run compile",
-    "pack": "npm pack --pack-destination ../generators/test/build",
-    "compile": "shx rm -rf lib/ && tsc && npm run pack",
-    "test": "mocha --config ../../.mocharc.json --recursive test/**.test.ts test/**/*.test.ts"
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@feathersjs/commons": "^5.0.34",
-    "@feathersjs/errors": "^5.0.34",
-    "@feathersjs/feathers": "^5.0.34",
-    "@feathersjs/hooks": "^5.0.34",
-    "@feathersjs/schema": "^5.0.34",
-    "@feathersjs/transport-commons": "^5.0.34",
-    "@types/jsonwebtoken": "^9.0.10",
-    "jsonwebtoken": "^9.0.2",
-    "lodash": "^4.17.21",
-    "long-timeout": "^0.1.1",
-    "uuid": "^11.1.0"
-  },
   "devDependencies": {
-    "@feathersjs/memory": "^5.0.34",
-    "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.1.0",
-    "@types/uuid": "^10.0.0",
     "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
-  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5",
+  "dependencies": {
+    "feathers": "^6.0.0-pre.1"
+  }
 }

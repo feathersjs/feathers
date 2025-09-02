@@ -12,7 +12,7 @@ export const generate = (ctx: AppGeneratorContext) =>
           },
           compilerOptions: {
             target: 'es2020',
-            module: 'commonjs',
+            module: 'NodeNext',
             outDir: './lib',
             rootDir: `./${lib}`,
             declaration: true,

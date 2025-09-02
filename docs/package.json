@@ -28,7 +28,7 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "esno": "^4.8.0",
     "fast-glob": "^3.3.3",
-    "flexsearch": "^0.8.205",
+    "flexsearch": "^0.7.31",
     "https-localhost": "^4.7.1",
     "markdown-it": "^14.1.0",
     "sass": "^1.89.2",

@@ -37,7 +37,7 @@ export type Application<Services = any, Settings = any> = Omit<Express, 'listen'
   FeathersApplication<Services, Settings> &
   ExpressOverrides<Services>
 
-declare module '@feathersjs/feathers/lib/declarations' {
+declare module '@feathersjs/feathers' {
   interface ServiceOptions {
     express?: {
       before?: express.RequestHandler[]

@@ -59,5 +59,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
-  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5",
+  "dependencies": {
+    "feathers": "^6.0.0-pre.1"
+  }
 }

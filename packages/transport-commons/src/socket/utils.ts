@@ -3,12 +3,12 @@ import {
   Application,
   RealTimeConnection,
   createContext,
-  getServiceOptions
+  getServiceOptions,
+  CombinedChannel
 } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import isEqual from 'lodash/isEqual'
-import { CombinedChannel } from '../channels/channel/combined'
 
 const debug = createDebug('@feathersjs/transport-commons')
 
