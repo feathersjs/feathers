@@ -98,12 +98,12 @@ describe('KoaRouter', () => {
     it('supports * wildcard syntax', () => {
       const router = new KoaRouter<string>()
 
-      router.insert('/docs/*', 'docs-handler')
-      router.insert('/static/*', 'static-handler')
+      router.insert('/docs/*path', 'docs-handler')
+      router.insert('/static/*path', 'static-handler')
 
       const docsResult = router.lookup('/docs/api/users/guide')
       const expectedDocsParams = Object.create(null)
-      expectedDocsParams['*'] = ['api', 'users', 'guide']
+      expectedDocsParams['path'] = ['api', 'users', 'guide']
       assert.deepStrictEqual(docsResult, {
         data: 'docs-handler',
         params: expectedDocsParams
@@ -111,7 +111,7 @@ describe('KoaRouter', () => {
 
       const staticResult = router.lookup('/static/css/main.css')
       const expectedStaticParams = Object.create(null)
-      expectedStaticParams['*'] = ['css', 'main.css']
+      expectedStaticParams['path'] = ['css', 'main.css']
       assert.deepStrictEqual(staticResult, {
         data: 'static-handler',
         params: expectedStaticParams
@@ -121,7 +121,7 @@ describe('KoaRouter', () => {
     it('handles empty wildcard matches', () => {
       const router = new KoaRouter<string>()
 
-      router.insert('/docs/*', 'docs-handler')
+      router.insert('/docs/*path', 'docs-handler')
 
       const result = router.lookup('/docs/something')
       assert.ok(result, 'Should match /docs/something')
@@ -248,10 +248,10 @@ describe('KoaRouter', () => {
           get(id: string): Promise<{ id: string; type: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new KoaRouter()
-      
+
       app.use('api/posts/:postId/comments/:commentId', {
         async get(id: string) {
           return { id, type: 'comment' }
@@ -263,22 +263,21 @@ describe('KoaRouter', () => {
       assert.ok(result.service)
       assert.deepStrictEqual(result.params, {
         postId: '456',
-        commentId: '789',
-        __id: '789'
+        commentId: '789'
       })
     })
 
     it('supports wildcard routes with services', () => {
       interface Services {
-        'static/*': {
+        'static/*path': {
           find(): Promise<{ type: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new KoaRouter()
-      
-      app.use('static/*', {
+
+      app.use('static/*path', {
         async find() {
           return { type: 'static-file' }
         }
@@ -288,7 +287,7 @@ describe('KoaRouter', () => {
       assert.ok(result)
       assert.ok(result.service)
       assert.deepStrictEqual(result.params, {
-        '*': ['images', 'logo.png']
+        path: ['images', 'logo.png']
       })
     })
 
@@ -298,10 +297,10 @@ describe('KoaRouter', () => {
           get(id: string): Promise<{ id: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new KoaRouter()
-      
+
       app.use('temp/:id', {
         async get(id: string) {
           return { id }
@@ -310,7 +309,7 @@ describe('KoaRouter', () => {
 
       let result = app.lookup('/temp/123')
       assert.ok(result)
-      assert.deepStrictEqual(result.params, { id: '123', __id: '123' })
+      assert.deepStrictEqual(result.params, { id: '123' })
 
       await app.unuse('temp/:id')
       result = app.lookup('/temp/123')
@@ -323,12 +322,12 @@ describe('KoaRouter', () => {
           get(id: string): Promise<{ id: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       const router = new KoaRouter()
       router.caseSensitive = false
       app.routes = router
-      
+
       app.use('Users/:id', {
         async get(id: string) {
           return { id }
@@ -338,11 +337,11 @@ describe('KoaRouter', () => {
       // Should match regardless of case
       const result1 = app.lookup('/users/123')
       const result2 = app.lookup('/USERS/123')
-      
+
       assert.ok(result1)
       assert.ok(result2)
-      assert.deepStrictEqual(result1.params, { id: '123', __id: '123' })
-      assert.deepStrictEqual(result2.params, { id: '123', __id: '123' })
+      assert.deepStrictEqual(result1.params, { id: '123' })
+      assert.deepStrictEqual(result2.params, { id: '123' })
     })
   })
 })

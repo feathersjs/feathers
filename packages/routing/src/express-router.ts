@@ -1,13 +1,4 @@
-import { pathToRegexp, Keys } from 'path-to-regexp'
-import { RouterInterface, LookupResult } from 'feathers'
-import { stripSlashes } from 'feathers/commons'
-
-function normalizePath(path: string): string {
-  if (!path || path === '/') {
-    return ''
-  }
-  return stripSlashes(path)
-}
+import { BaseRouter } from './base-router.js'
 
 /**
  * Express-compatible router implementation
@@ -22,86 +13,14 @@ function normalizePath(path: string): string {
  * - Regex constraints: /users/:id(\\d+)
  * - Repeating parameters: /files/:path+
  * - Case sensitivity control
+ *
+ * Defaults to case insensitive routing (Express behavior)
  */
-export class ExpressRouter<T = any> implements RouterInterface<T> {
-  public caseSensitive = true
-
-  private routes: Array<{
-    regexp: RegExp
-    keys: Keys
-    data: T
-    originalPath: string
-  }> = []
-
-  lookup(path: string): LookupResult<T> | null {
-    const normalizedPath = normalizePath(path)
-
-    for (const route of this.routes) {
-      // Apply case sensitivity dynamically by creating regex with appropriate flags
-      const flags = this.caseSensitive ? '' : 'i'
-      const testRegex = new RegExp(route.regexp.source, flags)
-
-      const match = testRegex.exec(normalizedPath)
-
-      if (match) {
-        const params: { [key: string]: string | string[] } = Object.create(null)
-
-        // Extract parameters using path-to-regexp's Key system
-        for (let i = 0; i < route.keys.length; i++) {
-          const key = route.keys[i]
-          const value = match[i + 1]
-
-          if (value !== undefined) {
-            if (key.type === 'wildcard') {
-              // Handle wildcard parameters
-              params[key.name] = value ? value.split('/').filter(Boolean) : []
-            } else if (key.type === 'param') {
-              // Regular named parameter
-              params[key.name] = value
-            }
-          }
-        }
-
-        return {
-          data: route.data,
-          params
-        }
-      }
-    }
-
-    return null
-  }
-
-  insert(path: string, data: T): void {
-    const normalizedPath = normalizePath(path)
-
-    // Check for existing route
-    if (this.routes.find((route) => route.originalPath === normalizedPath)) {
-      throw new Error(`Path ${normalizedPath} already exists`)
-    }
-
-    // Use path-to-regexp with Express-compatible options
-    const { regexp, keys } = pathToRegexp(normalizedPath, {
-      sensitive: this.caseSensitive,
-      trailing: true, // Allow trailing slash
-      end: true, // Exact match required
-      delimiter: '/' // Path delimiter
+export class ExpressRouter<T = any> extends BaseRouter<T> {
+  constructor() {
+    super({
+      caseSensitive: false, // Express default
+      trailing: false // Express default
     })
-
-    this.routes.push({
-      regexp,
-      keys,
-      data,
-      originalPath: normalizedPath
-    })
-  }
-
-  remove(path: string): void {
-    const normalizedPath = normalizePath(path)
-    const index = this.routes.findIndex((route) => route.originalPath === normalizedPath)
-
-    if (index !== -1) {
-      this.routes.splice(index, 1)
-    }
   }
 }

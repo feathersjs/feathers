@@ -98,12 +98,12 @@ describe('ExpressRouter', () => {
     it('supports * wildcard syntax', () => {
       const router = new ExpressRouter<string>()
 
-      router.insert('/docs/*', 'docs-handler')
-      router.insert('/static/*', 'static-handler')
+      router.insert('/docs/*path', 'docs-handler')
+      router.insert('/static/*path', 'static-handler')
 
       const docsResult = router.lookup('/docs/api/users/guide')
       const expectedDocsParams = Object.create(null)
-      expectedDocsParams['*'] = ['api', 'users', 'guide']
+      expectedDocsParams['path'] = ['api', 'users', 'guide']
       assert.deepStrictEqual(docsResult, {
         data: 'docs-handler',
         params: expectedDocsParams
@@ -111,7 +111,7 @@ describe('ExpressRouter', () => {
 
       const staticResult = router.lookup('/static/css/main.css')
       const expectedStaticParams = Object.create(null)
-      expectedStaticParams['*'] = ['css', 'main.css']
+      expectedStaticParams['path'] = ['css', 'main.css']
       assert.deepStrictEqual(staticResult, {
         data: 'static-handler',
         params: expectedStaticParams
@@ -121,7 +121,7 @@ describe('ExpressRouter', () => {
     it('handles empty wildcard matches', () => {
       const router = new ExpressRouter<string>()
 
-      router.insert('/docs/*', 'docs-handler')
+      router.insert('/docs/*path', 'docs-handler')
 
       const result = router.lookup('/docs/something')
       assert.ok(result, 'Should match /docs/something')
@@ -134,21 +134,21 @@ describe('ExpressRouter', () => {
 
       router.insert('/Users', 'users-handler')
 
-      // Case sensitive by default
-      router.caseSensitive = true
-      assert.strictEqual(router.lookup('/users'), null)
-      assert.deepStrictEqual(router.lookup('/Users'), {
-        data: 'users-handler',
-        params: Object.create(null)
-      })
-
-      // Case insensitive
-      router.caseSensitive = false
+      // Case insensitive by default (Express behavior)
       assert.deepStrictEqual(router.lookup('/users'), {
         data: 'users-handler',
         params: Object.create(null)
       })
       assert.deepStrictEqual(router.lookup('/USERS'), {
+        data: 'users-handler',
+        params: Object.create(null)
+      })
+
+      // Case sensitive
+      router.caseSensitive = true
+      assert.strictEqual(router.lookup('/users'), null)
+      assert.strictEqual(router.lookup('/USERS'), null)
+      assert.deepStrictEqual(router.lookup('/Users'), {
         data: 'users-handler',
         params: Object.create(null)
       })
@@ -248,10 +248,10 @@ describe('ExpressRouter', () => {
           get(id: string): Promise<{ id: string; type: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new ExpressRouter()
-      
+
       app.use('api/posts/:postId/comments/:commentId', {
         async get(id: string) {
           return { id, type: 'comment' }
@@ -263,22 +263,21 @@ describe('ExpressRouter', () => {
       assert.ok(result.service)
       assert.deepStrictEqual(result.params, {
         postId: '456',
-        commentId: '789',
-        __id: '789'
+        commentId: '789'
       })
     })
 
     it('supports wildcard routes with services', () => {
       interface Services {
-        'static/*': {
+        'static/*path': {
           find(): Promise<{ type: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new ExpressRouter()
-      
-      app.use('static/*', {
+
+      app.use('static/*path', {
         async find() {
           return { type: 'static-file' }
         }
@@ -288,7 +287,7 @@ describe('ExpressRouter', () => {
       assert.ok(result)
       assert.ok(result.service)
       assert.deepStrictEqual(result.params, {
-        '*': ['images', 'logo.png']
+        path: ['images', 'logo.png']
       })
     })
 
@@ -298,10 +297,10 @@ describe('ExpressRouter', () => {
           get(id: string): Promise<{ id: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       app.routes = new ExpressRouter()
-      
+
       app.use('temp/:id', {
         async get(id: string) {
           return { id }
@@ -310,7 +309,7 @@ describe('ExpressRouter', () => {
 
       let result = app.lookup('/temp/123')
       assert.ok(result)
-      assert.deepStrictEqual(result.params, { id: '123', __id: '123' })
+      assert.deepStrictEqual(result.params, { id: '123' })
 
       await app.unuse('temp/:id')
       result = app.lookup('/temp/123')
@@ -323,12 +322,12 @@ describe('ExpressRouter', () => {
           get(id: string): Promise<{ id: string }>
         }
       }
-      
+
       const app = feathers<Services>()
       const router = new ExpressRouter()
       router.caseSensitive = false
       app.routes = router
-      
+
       app.use('Users/:id', {
         async get(id: string) {
           return { id }
@@ -338,11 +337,11 @@ describe('ExpressRouter', () => {
       // Should match regardless of case
       const result1 = app.lookup('/users/123')
       const result2 = app.lookup('/USERS/123')
-      
+
       assert.ok(result1)
       assert.ok(result2)
-      assert.deepStrictEqual(result1.params, { id: '123', __id: '123' })
-      assert.deepStrictEqual(result2.params, { id: '123', __id: '123' })
+      assert.deepStrictEqual(result1.params, { id: '123' })
+      assert.deepStrictEqual(result2.params, { id: '123' })
     })
   })
 })

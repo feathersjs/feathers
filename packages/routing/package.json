@@ -28,7 +28,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "feathers": "workspace:*",
+    "feathers": "^6.0.0-pre.0",
     "path-to-regexp": "^8.2.0"
   },
   "devDependencies": {
