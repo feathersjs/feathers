@@ -170,6 +170,15 @@ describe('Feathers application', () => {
           message: "'teardown' on service 'dummy' is not allowed as a custom method name"
         }
       )
+      assert.throws(
+        () =>
+          feathers().use('/dummy', dummyService, {
+            methods: ['create', 'registerPublisher']
+          }),
+        {
+          message: "'registerPublisher' on service 'dummy' is not allowed as a custom method name"
+        }
+      )
     })
 
     it('can register service with no external methods', async () => {

@@ -25,7 +25,18 @@ export const defaultServiceEvents = Object.values(defaultEventMap)
 
 export const protectedMethods = Object.keys(Object.prototype)
   .concat(Object.keys(EventEmitter.prototype))
-  .concat(['all', 'around', 'before', 'after', 'error', 'hooks', 'setup', 'teardown', 'publish'])
+  .concat([
+    'all',
+    'around',
+    'before',
+    'after',
+    'error',
+    'hooks',
+    'setup',
+    'teardown',
+    'publish',
+    'registerPublisher'
+  ])
 
 export const protectedProperties = protectedMethods.concat(['service', 'events', 'id'])
 
