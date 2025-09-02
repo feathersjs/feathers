@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { describe, it } from 'vitest'
-import { ExpressRouter } from './express-router.js'
+import { ExpressRouter } from './index.js'
 import { feathers } from 'feathers'
 
 describe('ExpressRouter', () => {

@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { describe, it } from 'vitest'
-import { KoaRouter } from './koa-router.js'
+import { KoaRouter } from './index.js'
 import { feathers } from 'feathers'
 
 describe('KoaRouter', () => {
