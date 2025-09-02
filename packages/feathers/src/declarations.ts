@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import type { Router } from './router.js'
+import type { RouterInterface } from './router.js'
 import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
 type SelfOrArray<S> = S | S[]
@@ -241,7 +241,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
   /**
    * The application routing mechanism
    */
-  routes: Router<{
+  routes: RouterInterface<{
     service: Service
     params?: { [key: string]: any }
   }>

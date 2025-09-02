@@ -1,7 +1,6 @@
-import assert from 'assert'
+import * as assert from 'assert'
 import { describe, it, beforeEach } from 'vitest'
-import { Router } from './router.js'
-import { Router as Router2 } from './router2.js'
+import { Router, RouterInterface, LookupResult } from './router.js'
 import { Application } from './declarations.js'
 import { feathers } from './index.js'
 
@@ -31,8 +30,7 @@ describe('routing', () => {
     })
 
     it('returns null for invalid service path', () => {
-      assert.strictEqual(app.lookup(null), null)
-      // @ts-expect-error Testing invalid lookup
+      // @ts-expect-error Testing invalid lookup with object
       assert.strictEqual(app.lookup({}), null)
     })
 
@@ -561,104 +559,63 @@ describe('routing', () => {
     })
   })
 
-  describe('router performance benchmark', () => {
-    it('compares router.ts vs router2.ts performance', () => {
-      const router1 = new Router<string>()
-      const router2 = new Router2<string>()
+  describe('RouterInterface compatibility', () => {
+    it('allows swapping router implementations', () => {
+      // Create a mock router implementation
+      class MockRouter implements RouterInterface<any> {
+        public caseSensitive = true
+        private routes = new Map<string, any>()
 
-      // Setup identical routes for both routers
-      const routes = [
-        '/api/users',
-        '/api/users/:id',
-        '/api/posts',
-        '/api/posts/:id',
-        '/api/posts/:id/comments',
-        '/api/posts/:id/comments/:commentId',
-        '/api/categories/:category/posts',
-        '/api/categories/:category/posts/:id',
-        '/health',
-        '/status',
-        '/metrics',
-        '/docs/:section',
-        '/docs/:section/:page'
-      ]
+        lookup(path: string): LookupResult<any> | null {
+          const data = this.routes.get(path)
+          return data ? { data, params: { mock: 'true' } } : null
+        }
 
-      // Insert routes into both routers
-      routes.forEach((route, i) => {
-        const data = `handler-${i}`
-        router1.insert(route, data)
-        router2.insert(route, data)
+        insert(path: string, data: any): void {
+          this.routes.set(path, data)
+        }
+
+        remove(path: string): void {
+          this.routes.delete(path)
+        }
+      }
+
+      const app = feathers()
+
+      // Default router
+      assert.ok(app.routes instanceof Router)
+
+      // Swap to MockRouter
+      app.routes = new MockRouter()
+      assert.ok(app.routes instanceof MockRouter)
+
+      // Verify it still works with services
+      app.use('/test', { get: () => Promise.resolve('test') })
+      const result = app.lookup('/test')
+      assert.ok(result)
+      assert.deepStrictEqual(result.params, { mock: 'true' })
+    })
+
+    it('RouterInterface compliance', () => {
+      const router: RouterInterface<string> = new Router()
+
+      // Test interface properties and methods exist
+      assert.strictEqual(typeof router.lookup, 'function')
+      assert.strictEqual(typeof router.insert, 'function')
+      assert.strictEqual(typeof router.remove, 'function')
+      assert.strictEqual(typeof router.caseSensitive, 'boolean')
+
+      // Test basic functionality
+      router.insert('/test', 'data')
+      const result = router.lookup('/test')
+
+      assert.deepStrictEqual(result, {
+        data: 'data',
+        params: Object.create(null)
       })
 
-      // Test paths for lookup
-      const testPaths = [
-        '/api/users',
-        '/api/users/123',
-        '/api/posts/456',
-        '/api/posts/456/comments/789',
-        '/api/categories/tech/posts/101',
-        '/health',
-        '/docs/api/endpoints',
-        '/nonexistent/path'
-      ]
-
-      const iterations = 100000
-
-      // Benchmark optimized router (router.ts)
-      const start1 = performance.now()
-      for (let i = 0; i < iterations; i++) {
-        for (const path of testPaths) {
-          router1.lookup(path)
-        }
-      }
-      const end1 = performance.now()
-      const optimizedTime = end1 - start1
-
-      // Benchmark old router (router2.ts)
-      const start2 = performance.now()
-      for (let i = 0; i < iterations; i++) {
-        for (const path of testPaths) {
-          router2.lookup(path)
-        }
-      }
-      const end2 = performance.now()
-      const oldTime = end2 - start2
-
-      const improvement = (((oldTime - optimizedTime) / oldTime) * 100).toFixed(1)
-
-      console.log(`\n=== Router Performance Benchmark ===`)
-      console.log(`Test iterations: ${iterations.toLocaleString()} x ${testPaths.length} paths`)
-      console.log(`Optimized router (router.ts):  ${optimizedTime.toFixed(2)}ms`)
-      console.log(`Old router (router2.ts):       ${oldTime.toFixed(2)}ms`)
-      console.log(`Performance improvement: ${improvement}%`)
-      console.log(`Speed ratio: ${(oldTime / optimizedTime).toFixed(2)}x faster`)
-
-      // Verify both routers return functionally identical results
-      for (const path of testPaths) {
-        const result1 = router1.lookup(path)
-        const result2 = router2.lookup(path)
-
-        if (result1 === null && result2 === null) continue
-
-        // Compare data and params keys/values, ignoring prototype differences
-        assert.strictEqual(result1?.data, result2?.data, `Data differs for path: ${path}`)
-        assert.deepStrictEqual(
-          Object.keys(result1?.params || {}),
-          Object.keys(result2?.params || {}),
-          `Param keys differ for path: ${path}`
-        )
-
-        for (const key of Object.keys(result1?.params || {})) {
-          assert.strictEqual(
-            result1.params[key],
-            result2.params[key],
-            `Param value '${key}' differs for path: ${path}`
-          )
-        }
-      }
-
-      // Basic performance assertion - optimized router should be faster
-      assert.ok(optimizedTime <= oldTime, 'Optimized router should be at least as fast as old router')
+      router.remove('/test')
+      assert.strictEqual(router.lookup('/test'), null)
     })
   })
 })

@@ -9,6 +9,28 @@ export interface LookupResult<T> extends LookupData {
   data?: T
 }
 
+export interface RouterInterface<T = any> {
+  /**
+   * Look up a route by path and return the matched data and parameters
+   */
+  lookup(path: string): LookupResult<T> | null
+
+  /**
+   * Insert a new route with associated data
+   */
+  insert(path: string, data: T): void
+
+  /**
+   * Remove a route by path
+   */
+  remove(path: string): void
+
+  /**
+   * Whether route matching is case sensitive
+   */
+  caseSensitive: boolean
+}
+
 export class RouteNode<T = any> {
   data?: T
   children: { [key: string]: RouteNode } = Object.create(null) // Optimize object lookup
@@ -183,7 +205,7 @@ export class RouteNode<T = any> {
   }
 }
 
-export class Router<T = any> {
+export class Router<T = any> implements RouterInterface<T> {
   public caseSensitive = true
   private pathCache: { [key: string]: string[] } = Object.create(null) // Cache for parsed paths
 

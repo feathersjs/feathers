@@ -19,7 +19,7 @@ import type {
   ApplicationHookOptions
 } from './declarations.js'
 import { enableHooks } from './hooks.js'
-import { Router } from './router.js'
+import { Router, RouterInterface } from './router.js'
 import { Channel } from './channel/base.js'
 import { CombinedChannel } from './channel/combined.js'
 import { channelServiceMixin, Event, Publisher, PUBLISHERS, ALL_EVENTS, CHANNELS } from './channel/mixin.js'
@@ -35,7 +35,7 @@ export class Feathers<Services, Settings>
   settings: Settings = {} as Settings
   mixins: ServiceMixin<Application<Services, Settings>>[] = [hookMixin, eventMixin]
   version: string = version
-  routes: Router = new Router()
+  routes: RouterInterface = new Router()
   _isSetup = false
 
   protected registerHooks: (this: any, allHooks: any) => any
