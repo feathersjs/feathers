@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.0...v6.0.0-pre.1) (2025-09-03)
+
+### Bug Fixes
+
+- Add compatibility exports ([#3605](https://github.com/feathersjs/feathers/issues/3605)) ([3aed869](https://github.com/feathersjs/feathers/commit/3aed8696ca95fe4a4351c2d7e7f274ab66b50c09))
+- Add registerPublisher method to protected method list ([2c0664a](https://github.com/feathersjs/feathers/commit/2c0664acf97dca3bf7a2efaf3564f04c3de5842e))
+
 # [6.0.0-pre.0](https://github.com/feathersjs/feathers/compare/v5.0.34...v6.0.0-pre.0) (2025-08-30)
 
 ### Bug Fixes
