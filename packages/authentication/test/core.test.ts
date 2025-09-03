@@ -4,9 +4,9 @@ import { feathers, Application } from '@feathersjs/feathers'
 import jwt from 'jsonwebtoken'
 import { Infer, schema } from '@feathersjs/schema'
 
-import { AuthenticationBase, AuthenticationRequest } from '../src/core'
-import { authenticationSettingsSchema } from '../src/options'
-import { Strategy1, Strategy2, MockRequest } from './fixtures'
+import { AuthenticationBase, AuthenticationRequest } from '../src/core.js'
+import { authenticationSettingsSchema } from '../src/options.js'
+import { Strategy1, Strategy2, MockRequest } from './fixtures.js'
 import { ServerResponse } from 'http'
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/

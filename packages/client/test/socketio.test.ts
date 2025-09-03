@@ -3,7 +3,7 @@ import socketio from '@feathersjs/socketio'
 import { Server } from 'http'
 import { clientTests } from '@feathersjs/tests'
 
-import * as feathers from '../dist/feathers'
+import * as feathers from '../dist/feathers.js'
 import app from './fixture.js'
 
 describe('Socket.io connector', function () {

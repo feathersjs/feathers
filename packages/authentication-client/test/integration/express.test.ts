@@ -4,7 +4,7 @@ import { feathers, Application as FeathersApplication } from '@feathersjs/feathe
 import * as express from '@feathersjs/express'
 import rest from '@feathersjs/rest-client'
 
-import authClient from '../../src'
+import authClient from '../../src/index.js'
 import getApp from './fixture.js'
 import commonTests from './commons.js'
 

@@ -3,9 +3,9 @@ import { omit } from 'lodash-es'
 import { strict as assert } from 'assert'
 import { default as _axios } from 'axios'
 import { feathers } from '@feathersjs/feathers'
-import { createApplication } from '@feathersjs/authentication-local/test/fixture'
 import { authenticate, AuthenticationResult } from '@feathersjs/authentication'
-import * as express from '../src'
+import { createApplication } from './fixture.js'
+import * as express from '../src/index.js'
 
 const expressify = express.default
 const axios = _axios.create({

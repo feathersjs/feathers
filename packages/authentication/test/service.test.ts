@@ -5,10 +5,10 @@ import jwt from 'jsonwebtoken'
 import { feathers, Application } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 
-import { defaultOptions } from '../src/options'
-import { AuthenticationService } from '../src'
+import { defaultOptions } from '../src/options.js'
+import { AuthenticationService } from '../src/index.js'
 
-import { Strategy1 } from './fixtures'
+import { Strategy1 } from './fixtures.js'
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
 

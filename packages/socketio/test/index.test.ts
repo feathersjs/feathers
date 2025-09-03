@@ -19,7 +19,7 @@ import { Socket } from 'socket.io-client'
 
 import methodTests from './methods.js'
 import eventTests from './events.js'
-import socketio from '../src'
+import socketio from '../src/index.js'
 import { FeathersSocket, NextFunction } from '../src/middleware.js'
 
 class VerifierService {

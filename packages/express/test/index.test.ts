@@ -6,9 +6,20 @@ import fs from 'fs'
 import path from 'path'
 import https from 'https'
 import { feathers, HookContext, Id } from '@feathersjs/feathers'
-
-import { default as feathersExpress, rest, notFound, errorHandler, original, serveStatic } from '../src'
 import { RequestListener } from 'http'
+import { fileURLToPath } from 'url'
+
+import {
+  default as feathersExpress,
+  rest,
+  notFound,
+  errorHandler,
+  original,
+  serveStatic
+} from '../src/index.js'
+
+// Set __dirname in es module
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 describe('@feathersjs/express', () => {
   const service = {

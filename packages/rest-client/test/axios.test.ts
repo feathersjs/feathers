@@ -7,7 +7,7 @@ import { clientTests } from '@feathersjs/tests'
 import { NotAcceptable } from '@feathersjs/errors'
 
 import createServer from './server.js'
-import rest from '../src'
+import rest from '../src/index.js'
 import { ServiceTypes } from './declarations.js'
 
 describe('Axios REST connector', function () {

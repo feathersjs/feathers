@@ -6,7 +6,7 @@ import { io, Socket } from 'socket.io-client'
 import { clientTests } from '@feathersjs/tests'
 
 import { createServer } from './server.js'
-import socketio, { SocketService } from '../src'
+import socketio, { SocketService } from '../src/index.js'
 
 type ServiceTypes = {
   '/': SocketService

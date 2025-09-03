@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import { Server } from 'http'
 import { clientTests } from '@feathersjs/tests'
 
-import * as feathers from '../dist/feathers'
+import * as feathers from '../dist/feathers.js'
 import app from './fixture.js'
 
 describe('fetch REST connector', function () {

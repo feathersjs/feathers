@@ -3,7 +3,7 @@ import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
 import { FeathersError, GeneralError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-import Grant from 'grant/lib/grant'
+import Grant from 'grant/lib/grant.js'
 import { AuthenticationService } from '@feathersjs/authentication'
 import { OAuthStrategy } from './strategy.js'
 import { getGrantConfig, OauthSetupSettings } from './utils.js'

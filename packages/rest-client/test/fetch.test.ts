@@ -5,7 +5,7 @@ import { clientTests } from '@feathersjs/tests'
 import { NotAcceptable } from '@feathersjs/errors'
 import { Server } from 'http'
 
-import rest from '../src'
+import rest from '../src/index.js'
 import createServer from './server.js'
 import { ServiceTypes } from './declarations.js'
 

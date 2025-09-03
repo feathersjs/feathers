@@ -6,8 +6,8 @@ import { errors } from '@feathersjs/errors'
 import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
 import connection from './connection.js'
-import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index'
-import { AdapterQuery } from '@feathersjs/adapter-commons/lib'
+import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index.js'
+import { AdapterQuery } from '@feathersjs/adapter-commons'
 
 const testSuite = adapterTests([
   '.options',
