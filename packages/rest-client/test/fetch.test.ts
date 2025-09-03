@@ -6,8 +6,8 @@ import { NotAcceptable } from '@feathersjs/errors'
 import { Server } from 'http'
 
 import rest from '../src'
-import createServer from './server'
-import { ServiceTypes } from './declarations'
+import createServer from './server.js'
+import { ServiceTypes } from './declarations.js'
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889'

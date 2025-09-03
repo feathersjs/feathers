@@ -1,7 +1,7 @@
 import { HookContext } from '@feathersjs/feathers'
-import hashPassword from './hooks/hash-password'
-import protect from './hooks/protect'
-import { LocalStrategy } from './strategy'
+import hashPassword from './hooks/hash-password.js'
+import protect from './hooks/protect.js'
+import { LocalStrategy } from './strategy.js'
 
 export const hooks = { hashPassword, protect }
 export { LocalStrategy }

@@ -1,11 +1,11 @@
-import merge from 'lodash/merge'
+import { merge } from 'lodash-es'
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions, Algorithm } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import { Application, Params } from '@feathersjs/feathers'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AuthenticationConfiguration, defaultOptions } from './options'
+import { AuthenticationConfiguration, defaultOptions } from './options.js'
 
 const debug = createDebug('@feathersjs/authentication/base')
 

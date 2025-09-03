@@ -78,8 +78,4 @@ describe('Feathers Memory Service', () => {
   it('loads the test suite', () => {
     assert.ok(typeof testSuite === 'function')
   })
-
-  it('exports as CommonJS', () => {
-    assert.equal(typeof require('../lib'), 'function')
-  })
 })

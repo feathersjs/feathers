@@ -5,7 +5,7 @@ import { Server } from 'http'
 import { clientTests } from '@feathersjs/tests'
 
 import * as feathers from '../dist/feathers'
-import app from './fixture'
+import app from './fixture.js'
 
 describe('fetch REST connector', function () {
   let server: Server

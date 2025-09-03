@@ -4,8 +4,8 @@ import { AdapterBase, PaginationOptions, AdapterQuery, getLimit } from '@feather
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
-import { errorHandler } from './error-handler'
-import { KnexAdapterOptions, KnexAdapterParams } from './declarations'
+import { errorHandler } from './error-handler.js'
+import { KnexAdapterOptions, KnexAdapterParams } from './declarations.js'
 const METHODS = {
   $ne: 'whereNot',
   $in: 'whereIn',

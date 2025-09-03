@@ -6,8 +6,8 @@ import { createDebug } from '@feathersjs/commons'
 // @ts-ignore
 import lt from 'long-timeout'
 
-import { AuthenticationBaseStrategy } from './strategy'
-import { AuthenticationParams, AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core'
+import { AuthenticationBaseStrategy } from './strategy.js'
+import { AuthenticationParams, AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core.js'
 
 const debug = createDebug('@feathersjs/authentication/jwt')
 const SPLIT_HEADER = /(\S+)\s+(\S+)/

@@ -1,4 +1,4 @@
-import { AuthenticationStrategy, AuthenticationBase } from './core'
+import { AuthenticationStrategy, AuthenticationBase } from './core.js'
 import { Application, Service } from '@feathersjs/feathers'
 
 export class AuthenticationBaseStrategy implements AuthenticationStrategy {

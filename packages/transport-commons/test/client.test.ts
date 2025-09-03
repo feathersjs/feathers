@@ -3,7 +3,7 @@ import assert from 'assert'
 import { EventEmitter } from 'events'
 import { CustomMethods } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { Service, SocketService } from '../src/client'
+import { Service, SocketService } from '../src/client.js'
 
 declare type DummyCallback = (err: any, data?: any) => void
 

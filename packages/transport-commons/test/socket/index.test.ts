@@ -2,7 +2,7 @@ import assert from 'assert'
 import { EventEmitter } from 'events'
 import { feathers, Application, Id, Params } from '@feathersjs/feathers'
 
-import { socket as commons, SocketOptions } from '../../src/socket'
+import { socket as commons, SocketOptions } from '../../src/socket/index.js'
 
 class DummyService {
   async get(id: Id, params: Params) {

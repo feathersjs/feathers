@@ -1,5 +1,5 @@
 import { dirname } from 'path'
-import _ from 'lodash'
+import { camelCase, kebabCase, upperFirst, last } from 'lodash-es'
 import { runGenerator, runGenerators, prompt } from '@featherscloud/pinion'
 import { fileURLToPath } from 'url'
 import chalk from 'chalk'
@@ -117,7 +117,7 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
             type: 'input',
             when: !path,
             message: 'Which path should the service be registered on?',
-            default: (answers: ServiceGeneratorArguments) => `${_.kebabCase(answers.name)}`,
+            default: (answers: ServiceGeneratorArguments) => `${kebabCase(answers.name)}`,
             validate: (input: any) => {
               if (!input || input === 'authentication') {
                 return 'Invalid service path'
@@ -184,15 +184,15 @@ export const generate = (ctx: ServiceGeneratorArguments) =>
     )
     .then(async (ctx): Promise<ServiceGeneratorContext> => {
       const { name, path, type, authStrategies = [] } = ctx as any as ServiceGeneratorContext
-      const kebabName = _.kebabCase(name)
-      const camelName = _.camelCase(name)
-      const upperName = _.upperFirst(camelName)
+      const kebabName = kebabCase(name)
+      const camelName = camelCase(name)
+      const upperName = upperFirst(camelName)
       const className = `${upperName}Service`
 
       const folder = path.split('/').filter((el) => el !== '')
       const relative = ['', ...folder].map(() => '..').join('/')
-      const fileName = _.last(folder)
-      const kebabPath = _.kebabCase(path)
+      const fileName = last(folder)
+      const kebabPath = kebabCase(path)
 
       return {
         name,

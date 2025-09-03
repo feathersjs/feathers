@@ -3,7 +3,7 @@ import { HookContext } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { authenticate as AuthenticateHook } from '@feathersjs/authentication'
 
-import { Application } from './declarations'
+import { Application } from './declarations.js'
 
 const debug = createDebug('@feathersjs/express/authentication')
 

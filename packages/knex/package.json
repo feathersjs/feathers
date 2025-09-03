@@ -4,6 +4,7 @@
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
+  "type": "module",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -27,7 +28,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 20"
   },
   "files": [
     "CHANGELOG.md",

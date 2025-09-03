@@ -2,8 +2,8 @@
 import assert from 'assert'
 import { Application } from '@feathersjs/feathers'
 
-import { hooks } from '../../src'
-import { createApplication, ServiceTypes } from '../fixture'
+import { hooks } from '../../src/index.js'
+import { createApplication, ServiceTypes } from '../fixture.js'
 
 const { hashPassword } = hooks
 

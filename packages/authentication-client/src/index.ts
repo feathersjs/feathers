@@ -1,7 +1,7 @@
-import { AuthenticationClient, AuthenticationClientOptions } from './core'
-import * as hooks from './hooks'
+import { AuthenticationClient, AuthenticationClientOptions } from './core.js'
+import * as hooks from './hooks/index.js'
 import { Application } from '@feathersjs/feathers'
-import { Storage, MemoryStorage, StorageWrapper } from './storage'
+import { Storage, MemoryStorage, StorageWrapper } from './storage.js'
 
 declare module '@feathersjs/feathers' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

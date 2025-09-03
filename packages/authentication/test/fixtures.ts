@@ -1,9 +1,9 @@
 import { NotAuthenticated } from '@feathersjs/errors'
 import { Params } from '@feathersjs/feathers'
 
-import { AuthenticationRequest } from '../src/core'
+import { AuthenticationRequest } from '../src/core.js'
 import { IncomingMessage } from 'http'
-import { AuthenticationBaseStrategy } from '../src/strategy'
+import { AuthenticationBaseStrategy } from '../src/strategy.js'
 
 export interface MockRequest extends IncomingMessage {
   isDave?: boolean

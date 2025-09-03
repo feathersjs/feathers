@@ -5,8 +5,8 @@ import { FeathersError, GeneralError } from '@feathersjs/errors'
 //@ts-ignore
 import Grant from 'grant/lib/grant'
 import { AuthenticationService } from '@feathersjs/authentication'
-import { OAuthStrategy } from './strategy'
-import { getGrantConfig, OauthSetupSettings } from './utils'
+import { OAuthStrategy } from './strategy.js'
+import { getGrantConfig, OauthSetupSettings } from './utils.js'
 
 const debug = createDebug('@feathersjs/authentication-oauth/services')
 

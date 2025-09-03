@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import { feathers, Application } from '@feathersjs/feathers'
 import { Ajv, schema } from '@feathersjs/schema'
-import configuration from '../src'
+import configuration from '../src/index.js'
 
 describe('@feathersjs/configuration', () => {
   const app: Application = feathers().configure(configuration())

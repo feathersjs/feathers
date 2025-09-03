@@ -1,5 +1,5 @@
 import { FeathersError, NotFound } from '@feathersjs/errors'
-import { FeathersKoaContext } from './declarations'
+import { FeathersKoaContext } from './declarations.js'
 
 export const errorHandler = () => async (ctx: FeathersKoaContext, next: () => Promise<any>) => {
   try {

@@ -9,7 +9,7 @@ import { AppGeneratorContext } from '../src/app'
 import { FeathersBaseContext } from '../src/commons'
 import { ConnectionGeneratorArguments } from '../src/connection'
 import { ServiceGeneratorArguments } from '../src/service'
-import { combinate, dependencyVersions } from './utils'
+import { combinate, dependencyVersions } from './utils.js'
 
 import { generate as generateApp } from '../lib/app'
 import { generate as generateConnection } from '../lib/connection'

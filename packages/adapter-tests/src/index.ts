@@ -48,7 +48,7 @@ export const adapterTests = (testNames: AdapterTestName[]) => {
   }
 }
 
-export * from './declarations'
+export * from './declarations.js'
 
 export default adapterTests
 

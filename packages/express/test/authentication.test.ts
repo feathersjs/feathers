@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import omit from 'lodash/omit'
+import { omit } from 'lodash-es'
 import { strict as assert } from 'assert'
 import { default as _axios } from 'axios'
 import { feathers } from '@feathersjs/feathers'

@@ -2,7 +2,7 @@ import { strict as assert } from 'assert'
 import _axios from 'axios'
 import { AuthenticationResult } from '@feathersjs/authentication'
 
-import app from './app.fixture'
+import app from './app.fixture.js'
 
 const axios = _axios.create({
   baseURL: 'http://localhost:9776/'

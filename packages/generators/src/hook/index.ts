@@ -1,7 +1,7 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { prompt, runGenerators } from '@featherscloud/pinion'
-import _ from 'lodash'
+import { kebabCase, camelCase } from 'lodash-es'
 import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons.js'
 
 // Set __dirname in es module
@@ -40,8 +40,8 @@ export const generate = (ctx: HookGeneratorContext) =>
     )
     .then((ctx) => {
       const { name } = ctx
-      const kebabName = _.kebabCase(name)
-      const camelName = _.camelCase(name)
+      const kebabName = kebabCase(name)
+      const camelName = camelCase(name)
 
       return {
         ...ctx,

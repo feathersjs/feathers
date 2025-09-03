@@ -1,3 +1,3 @@
-export * from './client'
-export * from './rest'
-export * from './fixture'
+export * from './client.js'
+export * from './rest.js'
+export * from './fixture.js'

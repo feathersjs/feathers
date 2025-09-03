@@ -12,7 +12,7 @@ import {
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
 export * from '@sinclair/typebox'
-export * from './default-schemas'
+export * from './default-schemas.js'
 
 export type TDataSchemaMap = {
   create: TObject
