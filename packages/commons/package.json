@@ -6,6 +6,7 @@
   "keywords": [
     "feathers"
   ],
+  "type": "module",
   "license": "MIT",
   "funding": {
     "type": "github",

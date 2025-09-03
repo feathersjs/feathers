@@ -1,5 +1,5 @@
 import { BadRequest } from '@feathersjs/errors'
-import { Schema } from './schema'
+import { Schema } from './schema.js'
 
 type PromiseOrLiteral<V> = Promise<V> | V
 

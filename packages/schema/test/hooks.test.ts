@@ -1,6 +1,6 @@
 import { createContext } from '@feathersjs/feathers'
 import assert from 'assert'
-import { app, Message, User } from './fixture'
+import { app, Message, User } from './fixture.js'
 
 describe('@feathersjs/schema/hooks', () => {
   const text = 'Hi there'

@@ -10,6 +10,7 @@
     "feathers-plugin",
     "feathers-hooks"
   ],
+  "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",

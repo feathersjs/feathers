@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import basicTests from './basic'
-import { AdapterTestName } from './declarations'
-import methodTests from './methods'
-import syntaxTests from './syntax'
+import basicTests from './basic.js'
+import { AdapterTestName } from './declarations.js'
+import methodTests from './methods.js'
+import syntaxTests from './syntax.js'
 
 export const adapterTests = (testNames: AdapterTestName[]) => {
   return (app: any, errors: any, serviceName: any, idProp = 'id') => {

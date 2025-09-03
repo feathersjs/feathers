@@ -8,7 +8,7 @@ import {
   middleware,
   NextFunction,
   setMiddleware
-} from '../src'
+} from '../src/index.js'
 
 const hello = (name?: string, _params: any = {}) => {
   return Promise.resolve(`Hello ${name}`)

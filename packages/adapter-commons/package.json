@@ -7,6 +7,7 @@
     "feathers"
   ],
   "license": "MIT",
+  "type": "module",
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/feathers"

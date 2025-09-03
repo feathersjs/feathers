@@ -1,16 +1,7 @@
 import { strict as assert } from 'assert'
-import { _ } from '../src'
+import { _ } from '../src/index.js'
 
 describe('module', () => {
-  it('is commonjs compatible', () => {
-    // eslint-disable-next-line
-    const commons = require('../lib')
-
-    assert.equal(typeof commons, 'object')
-    assert.equal(typeof commons.stripSlashes, 'function')
-    assert.equal(typeof commons._, 'object')
-  })
-
   it('exposes lodash methods under _', () => {
     assert.equal(typeof _.each, 'function')
     assert.equal(typeof _.some, 'function')

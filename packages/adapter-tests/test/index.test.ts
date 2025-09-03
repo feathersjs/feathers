@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import adapterTests from '../src'
+import adapterTests from '../src/index.js'
 
 const testSuite = adapterTests([
   '.events',

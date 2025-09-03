@@ -1,10 +1,10 @@
 import { _ } from '@feathersjs/commons'
 import { Params } from '@feathersjs/feathers'
 
-export * from './declarations'
-export * from './service'
-export * from './query'
-export * from './sort'
+export * from './declarations.js'
+export * from './service.js'
+export * from './query.js'
+export * from './sort.js'
 
 // Return a function that filters a result object or array
 // and picks only the fields passed as `params.query.$select`
