@@ -12,6 +12,7 @@ export type HttpParams<Q> = Params<Q> & {
 
 export * from './middleware.js'
 export * from './sse.service.js'
+export * from './utils.js'
 
 export const serviceToHttpMethod = {
   find: 'GET',

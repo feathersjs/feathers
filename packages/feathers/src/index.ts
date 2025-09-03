@@ -10,7 +10,12 @@ export function feathers<T = any, S = any>() {
 feathers.setDebug = setDebug
 
 export { version, Feathers }
+export { Channel } from './channel/base.js'
+export { CombinedChannel } from './channel/combined.js'
+export * as channelUtils from './channel/mixin.js'
+
 export * from './hooks.js'
 export * from './declarations.js'
 export * from './service.js'
 export * from './debug.js'
+export * from './router.js'
