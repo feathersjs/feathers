@@ -11,7 +11,7 @@ const debug = createDebug('@feathersjs/koa/rest')
 
 const serviceMiddleware = (): Middleware => {
   return async (ctx, next) => {
-    const { query, headers, path, body: data, method: httpMethod } = ctx.request
+    const { query, headers, path, body: data, method: httpMethod } = ctx.request as any
     const methodOverride = ctx.request.headers[http.METHOD_HEADER] as string | undefined
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -26,6 +26,6 @@ To learn more about Feathers visit the website at [feathersjs.com](http://feathe
 
 ## License
 
-Copyright (c) 2024 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
+Copyright (c) 2025 [Feathers contributors](https://github.com/feathersjs/feathers/graphs/contributors)
 
 Licensed under the [MIT license](LICENSE).
