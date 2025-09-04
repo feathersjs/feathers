@@ -12,7 +12,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '18.x'
+          node-version: '22.x'
       - run: npm ci
       - run: |
           git config user.name "GitHub Actions Bot"

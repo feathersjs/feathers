@@ -7,11 +7,11 @@ import {
   ObjectOptions,
   TIntersect,
   TUnion,
+  Static,
   type TRecord
 } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
-export * from '@sinclair/typebox'
 export * from './default-schemas.js'
 
 export type TDataSchemaMap = {
@@ -20,182 +20,192 @@ export type TDataSchemaMap = {
   patch?: TObject
 }
 
-/**
- * Returns a compiled validation function for a TypeBox object and AJV validator instance.
- *
- * @param schema The JSON schema definition
- * @param validator The AJV validation instance
- * @returns A compiled validation function
- */
-export const getValidator = <T = any, R = T>(
-  schema: TObject | TIntersect | TUnion<TObject[]> | TRecord,
-  validator: Ajv
-): Validator<T, R> => jsonSchema.getValidator(schema as any, validator)
-
-/**
- * Returns compiled validation functions to validate data for the `create`, `update` and `patch`
- * service methods. If not passed explicitly, the `update` validator will be the same as the `create`
- * and `patch` will be the `create` validator with no required fields.
- *
- * @param def Either general TypeBox object definition or a mapping of `create`, `update` and `patch`
- * to their respective type object
- * @param validator The Ajv instance to use as the validator
- * @returns A map of validator functions
- */
-export const getDataValidator = (def: TObject | TDataSchemaMap, validator: Ajv): DataValidatorMap =>
-  jsonSchema.getDataValidator(def as any, validator)
-
-/**
- * A TypeBox utility that converts an array of provided strings into a string enum.
- * @param allowedValues array of strings for the enum
- * @returns TypeBox.Type
- */
-export function StringEnum<T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) {
-  return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
-}
-
-const arrayOfKeys = <T extends TObject>(type: T) => {
-  const keys = Object.keys(type.properties)
-  return Type.Unsafe<(keyof T['properties'])[]>({
-    type: 'array',
-    maxItems: keys.length,
-    items: {
-      type: 'string',
-      ...(keys.length > 0 ? { enum: keys } : {})
-    }
-  })
+// Type definitions for TypeBox compatibility
+export interface TypeBoxModule {
+  Type: {
+    Object: typeof Type.Object
+    Array: typeof Type.Array
+    String: typeof Type.String
+    Number: typeof Type.Number
+    Integer: typeof Type.Integer
+    Boolean: typeof Type.Boolean
+    Union: typeof Type.Union
+    Intersect: typeof Type.Intersect
+    Optional: typeof Type.Optional
+    Partial: typeof Type.Partial
+    Unsafe: typeof Type.Unsafe
+    Null: typeof Type.Null
+  }
 }
 
 /**
- * Creates the `$sort` Feathers query syntax schema for an object schema
- *
- * @param schema The TypeBox object schema
- * @returns The `$sort` syntax schema
+ * Creates a TypeBox adapter that works with any compatible TypeBox version
+ * @param typeBoxModule The TypeBox module to use
+ * @returns An adapter object with all TypeBox integration functions
  */
-export function sortDefinition<T extends TObject>(schema: T) {
-  const properties = Object.keys(schema.properties).reduce(
-    (res, key) => {
-      const result = res as any
+export function createTypeBoxAdapter(typeBoxModule: TypeBoxModule) {
+  const { Type: T } = typeBoxModule
 
-      result[key] = Type.Optional(Type.Integer({ minimum: -1, maximum: 1 }))
+  const arrayOfKeys = <T extends TObject>(type: T) => {
+    const keys = Object.keys(type.properties)
+    return T.Unsafe<(keyof T['properties'])[]>({
+      type: 'array',
+      maxItems: keys.length,
+      items: {
+        type: 'string',
+        ...(keys.length > 0 ? { enum: keys } : {})
+      }
+    })
+  }
 
-      return result
-    },
-    {} as { [K in keyof T['properties']]: TOptional<TInteger> }
-  )
-
-  return Type.Object(properties, { additionalProperties: false })
-}
-
-/**
- * Returns the standard Feathers query syntax for a property schema,
- * including operators like `$gt`, `$lt` etc. for a single property
- *
- * @param def The property definition
- * @param extension Additional properties to add to the property query
- * @returns The Feathers query syntax schema
- */
-export const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
-  def: T,
-  extension: X = {} as X
-) =>
-  Type.Optional(
-    Type.Union([
-      def,
-      Type.Partial(
-        Type.Intersect(
-          [
-            Type.Object({
-              $gt: def,
-              $gte: def,
-              $lt: def,
-              $lte: def,
-              $ne: def,
-              $in: def.type === 'array' ? def : Type.Array(def),
-              $nin: def.type === 'array' ? def : Type.Array(def)
-            }),
-            Type.Object(extension)
-          ],
-          { additionalProperties: false }
+  const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
+    def: T,
+    extension: X = {} as X
+  ) =>
+    T.Optional(
+      T.Union([
+        def,
+        T.Partial(
+          T.Intersect(
+            [
+              T.Object({
+                $gt: def,
+                $gte: def,
+                $lt: def,
+                $lte: def,
+                $ne: def,
+                $in: def.type === 'array' ? def : T.Array(def),
+                $nin: def.type === 'array' ? def : T.Array(def)
+              }),
+              T.Object(extension)
+            ],
+            { additionalProperties: false }
+          )
         )
-      )
-    ])
-  )
+      ])
+    )
 
-type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = ReturnType<
-  typeof queryProperty<T, X>
->
+  const sortDefinition = <T extends TObject>(schema: T) => {
+    const properties = Object.keys(schema.properties).reduce(
+      (res, key) => {
+        const result = res as any
+        result[key] = T.Optional(T.Integer({ minimum: -1, maximum: 1 }))
+        return result
+      },
+      {} as { [K in keyof T['properties']]: TOptional<TInteger> }
+    )
+    return T.Object(properties, { additionalProperties: false })
+  }
 
-/**
- * Creates a Feathers query syntax schema for the properties defined in `definition`.
- *
- * @param definition The properties to create the Feathers query syntax schema for
- * @param extensions Additional properties to add to a property query
- * @returns The Feathers query syntax schema
- */
-export const queryProperties = <
-  T extends TObject,
-  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
->(
-  definition: T,
-  extensions: X = {} as X
-) => {
-  const properties = Object.keys(definition.properties).reduce(
-    (res, key) => {
+  const queryProperties = <
+    T extends TObject,
+    X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
+  >(
+    definition: T,
+    extensions: X = {} as X
+  ) => {
+    const properties = Object.keys(definition.properties).reduce((res, key) => {
       const result = res as any
       const value = definition.properties[key]
-
       result[key] = queryProperty(value, extensions[key])
-
       return result
+    }, {} as any)
+
+    return T.Optional(T.Object(properties, { additionalProperties: false }))
+  }
+
+  return {
+    Type: T,
+
+    /**
+     * Returns a compiled validation function for a TypeBox object and AJV validator instance.
+     */
+    getValidator: <T = any, R = T>(
+      schema: TObject | TIntersect | TUnion<TObject[]> | TRecord,
+      validator: Ajv
+    ): Validator<T, R> => jsonSchema.getValidator(schema as any, validator),
+
+    /**
+     * Returns compiled validation functions to validate data for service methods.
+     */
+    getDataValidator: (def: TObject | TDataSchemaMap, validator: Ajv): DataValidatorMap =>
+      jsonSchema.getDataValidator(def as any, validator),
+
+    /**
+     * A TypeBox utility that converts an array of provided strings into a string enum.
+     */
+    StringEnum: <T extends string[]>(allowedValues: [...T], options?: { default: T[number] }) => {
+      return T.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
     },
-    {} as { [K in keyof T['properties']]: QueryProperty<T['properties'][K], X[K]> }
-  )
 
-  return Type.Optional(Type.Object(properties, { additionalProperties: false }))
+    /**
+     * Creates the `$sort` Feathers query syntax schema for an object schema
+     */
+    sortDefinition,
+
+    /**
+     * Returns the standard Feathers query syntax for a property schema
+     */
+    queryProperty,
+
+    /**
+     * Creates a Feathers query syntax schema for the properties defined in `definition`.
+     */
+    queryProperties,
+
+    /**
+     * Creates a TypeBox schema for the complete Feathers query syntax
+     */
+    querySyntax: <T extends TObject, X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }>(
+      type: T,
+      extensions: X = {} as X,
+      options: ObjectOptions = { additionalProperties: false }
+    ) => {
+      const propertySchema = queryProperties(type, extensions)
+      const $or = T.Array(propertySchema)
+      const $and = T.Array(T.Union([propertySchema, T.Object({ $or })]))
+
+      return T.Intersect(
+        [
+          T.Partial(
+            T.Object(
+              {
+                $limit: T.Number({ minimum: 0 }),
+                $skip: T.Number({ minimum: 0 }),
+                $sort: sortDefinition(type),
+                $select: arrayOfKeys(type),
+                $and,
+                $or
+              },
+              { additionalProperties: false }
+            )
+          ),
+          propertySchema
+        ],
+        options
+      )
+    },
+
+    ObjectIdSchema: () =>
+      T.Union([T.String({ objectid: true }), T.Object({}, { additionalProperties: true })])
+  }
 }
 
-/**
- * Creates a TypeBox schema for the complete Feathers query syntax including `$limit`, $skip`, `$or`
- * and `$sort` and `$select` for the allowed properties.
- *
- * @param type The properties to create the query syntax for
- * @param extensions Additional properties to add to the query syntax
- * @param options Options for the TypeBox object schema
- * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
- */
-export const querySyntax = <
-  T extends TObject,
-  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
->(
-  type: T,
-  extensions: X = {} as X,
-  options: ObjectOptions = { additionalProperties: false }
-) => {
-  const propertySchema = queryProperties(type, extensions)
-  const $or = Type.Array(propertySchema)
-  const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
+// Default adapter using the peer dependency
+const defaultAdapter = createTypeBoxAdapter({ Type })
 
-  return Type.Intersect(
-    [
-      Type.Partial(
-        Type.Object(
-          {
-            $limit: Type.Number({ minimum: 0 }),
-            $skip: Type.Number({ minimum: 0 }),
-            $sort: sortDefinition(type),
-            $select: arrayOfKeys(type),
-            $and,
-            $or
-          },
-          { additionalProperties: false }
-        )
-      ),
-      propertySchema
-    ],
-    options
-  )
-}
+// Export individual functions for backward compatibility
+export const {
+  getValidator,
+  getDataValidator,
+  StringEnum,
+  sortDefinition,
+  queryProperty,
+  queryProperties,
+  querySyntax,
+  ObjectIdSchema
+} = defaultAdapter
 
-export const ObjectIdSchema = () =>
-  Type.Union([Type.String({ objectid: true }), Type.Object({}, { additionalProperties: true })])
+// Re-export TypeBox for convenience
+export { Type }
+export type { Static, TObject, TInteger, TOptional, TSchema, ObjectOptions, TIntersect, TUnion, TRecord }

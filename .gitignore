@@ -43,3 +43,4 @@ packages/**/lib
 **/build/*.tgz
 *.sqlite
 docs/.vitepress/cache
+.claude/
