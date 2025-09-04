@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import fetch from 'node-fetch'
 import { strict as assert } from 'assert'
 import { feathers } from '@feathersjs/feathers'
 import { default as init, FetchClient } from '../src/index.js'
@@ -18,7 +16,7 @@ describe('REST client tests', function () {
     const transports = init()
 
     try {
-      // @ts-ignore
+      // @ts-expect-error Test usage with invalid arguments
       transports.fetch()
     } catch (e: any) {
       assert.strictEqual(e.message, 'fetch has to be provided to feathers-rest')
