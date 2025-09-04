@@ -1,18 +1,18 @@
 import addFormats, { FormatName, FormatOptions, FormatsPluginOptions } from 'ajv-formats'
-import { ResolverStatus } from './resolver'
+import { ResolverStatus } from './resolver.js'
 import { HookContext } from '@feathersjs/hooks'
 
 export type { FromSchema } from 'json-schema-to-ts'
 export { addFormats, FormatName, FormatOptions, FormatsPluginOptions }
 
-export * from './schema'
-export * from './resolver'
-export * from './hooks'
-export * from './json-schema'
-export * from './default-schemas'
+export * from './schema.js'
+export * from './resolver.js'
+export * from './hooks/index.js'
+export * from './json-schema.js'
+export * from './default-schemas.js'
 
-export * as hooks from './hooks'
-export * as jsonSchema from './json-schema'
+export * as hooks from './hooks/index.js'
+export * as jsonSchema from './json-schema.js'
 
 export type Infer<S extends { _type: any }> = S['_type']
 

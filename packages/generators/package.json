@@ -27,10 +27,9 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 20"
   },
   "main": "lib/index.js",
-  "types": "lib/",
   "type": "module",
   "files": [
     "CHANGELOG.md",
@@ -54,7 +53,7 @@
   "dependencies": {
     "@featherscloud/pinion": "^0.5.5",
     "chalk": "^5.4.1",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   },

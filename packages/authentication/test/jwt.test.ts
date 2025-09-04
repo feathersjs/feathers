@@ -1,12 +1,12 @@
 import assert from 'assert'
-import merge from 'lodash/merge'
+import { merge } from 'lodash-es'
 import { feathers, Application, Service } from '@feathersjs/feathers'
 import { memory } from '@feathersjs/memory'
 import { getDispatch, resolve, resolveDispatch } from '@feathersjs/schema'
 
-import { AuthenticationService, JWTStrategy, hooks } from '../src'
+import { AuthenticationService, JWTStrategy, hooks } from '../src/index.js'
 import { ServerResponse } from 'http'
-import { MockRequest } from './fixtures'
+import { MockRequest } from './fixtures.js'
 
 const { authenticate } = hooks
 

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { select } from '../src'
+import { select } from '../src/index.js'
 
 describe('@feathersjs/adapter-commons', () => {
   describe('select', () => {

@@ -3,10 +3,11 @@ import { strict as assert } from 'assert'
 import express, { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import fs from 'fs'
-import { join } from 'path'
+import { join, dirname } from 'path'
 import { BadRequest, NotAcceptable, NotAuthenticated, NotFound, PaymentError } from '@feathersjs/errors'
 
-import { errorHandler } from '../src'
+import { errorHandler } from '../src/index.js'
+import { fileURLToPath } from 'url'
 
 const content = '<html><head></head><body>Error</body></html>'
 
@@ -17,6 +18,8 @@ const htmlHandler = function (_error: Error, _req: Request, res: Response, _next
 const jsonHandler = function (error: Error, _req: Request, res: Response, _next: NextFunction) {
   res.json(error)
 }
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 describe('error-handler', () => {
   describe('supports catch-all custom handlers', function () {

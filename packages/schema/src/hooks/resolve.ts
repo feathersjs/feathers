@@ -1,6 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { compose } from '@feathersjs/hooks'
-import { Resolver, ResolverStatus } from '../resolver'
+import { Resolver, ResolverStatus } from '../resolver.js'
 
 const getResult = <H extends HookContext>(context: H) => {
   const isPaginated = context.method === 'find' && context.result.data

@@ -1,6 +1,6 @@
 import { _ } from '@feathersjs/commons'
 import { JSONSchema } from 'json-schema-to-ts'
-import { JSONSchemaDefinition, Ajv, Validator } from './schema'
+import { JSONSchemaDefinition, Ajv, Validator } from './schema.js'
 
 export type DataSchemaMap = {
   create: JSONSchemaDefinition

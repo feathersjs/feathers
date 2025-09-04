@@ -1,5 +1,5 @@
-export * as hooks from './hooks'
-export { authenticate } from './hooks'
+export * as hooks from './hooks/index.js'
+export { authenticate } from './hooks/index.js'
 export {
   AuthenticationBase,
   AuthenticationRequest,
@@ -8,8 +8,8 @@ export {
   AuthenticationParams,
   ConnectionEvent,
   JwtVerifyOptions
-} from './core'
-export { AuthenticationBaseStrategy } from './strategy'
-export { AuthenticationService } from './service'
-export { JWTStrategy } from './jwt'
-export { authenticationSettingsSchema, AuthenticationConfiguration } from './options'
+} from './core.js'
+export { AuthenticationBaseStrategy } from './strategy.js'
+export { AuthenticationService } from './service.js'
+export { JWTStrategy } from './jwt.js'
+export { authenticationSettingsSchema, AuthenticationConfiguration } from './options.js'

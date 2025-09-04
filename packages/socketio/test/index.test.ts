@@ -9,17 +9,17 @@ import {
 } from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import { Request, Response } from 'express'
-import omit from 'lodash/omit'
-import extend from 'lodash/extend'
+import { omit } from 'lodash-es'
+import { extend } from 'lodash-es'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { Server } from 'http'
 import { Service } from '@feathersjs/tests'
 import { Socket } from 'socket.io-client'
 
-import methodTests from './methods'
-import eventTests from './events'
-import socketio from '../src'
+import methodTests from './methods.js'
+import eventTests from './events.js'
+import socketio from '../src/index.js'
 import { FeathersSocket, NextFunction } from '../src/middleware.js'
 
 class VerifierService {

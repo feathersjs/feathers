@@ -1,5 +1,5 @@
 import { Application, getServiceOptions, Params, RealTimeConnection } from '@feathersjs/feathers'
-import { getDispatcher, runMethod } from './utils'
+import { getDispatcher, runMethod } from './utils.js'
 
 export interface SocketOptions {
   done: Promise<any>

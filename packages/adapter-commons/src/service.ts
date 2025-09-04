@@ -4,8 +4,8 @@ import {
   AdapterServiceOptions,
   InternalServiceMethods,
   PaginationOptions
-} from './declarations'
-import { filterQuery } from './query'
+} from './declarations.js'
+import { filterQuery } from './query.js'
 
 export const VALIDATED = Symbol.for('@feathersjs/adapter/sanitized')
 

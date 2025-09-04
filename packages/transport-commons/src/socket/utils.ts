@@ -8,7 +8,7 @@ import {
 } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'lodash-es'
 
 const debug = createDebug('@feathersjs/transport-commons')
 

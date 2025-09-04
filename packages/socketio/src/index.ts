@@ -4,7 +4,7 @@ import { createDebug } from '@feathersjs/commons'
 import { Application, RealTimeConnection } from '@feathersjs/feathers'
 import { socket } from '@feathersjs/transport-commons'
 
-import { disconnect, params, authentication, FeathersSocket } from './middleware'
+import { disconnect, params, authentication, FeathersSocket } from './middleware.js'
 
 const debug = createDebug('@feathersjs/socketio')
 
@@ -16,17 +16,17 @@ declare module '@feathersjs/feathers' {
   }
 }
 
-function configureSocketio(callback?: (io: Server) => void): (app: Application) => void
-function configureSocketio(
+export default function configureSocketio(callback?: (io: Server) => void): (app: Application) => void
+export default function configureSocketio(
   options: number | Partial<ServerOptions>,
   callback?: (io: Server) => void
 ): (app: Application) => void
-function configureSocketio(
+export default function configureSocketio(
   port: number,
   options?: Partial<ServerOptions>,
   callback?: (io: Server) => void
 ): (app: Application) => void
-function configureSocketio(port?: any, options?: any, config?: any) {
+export default function configureSocketio(port?: any, options?: any, config?: any) {
   if (typeof port !== 'number') {
     config = options
     options = port
@@ -99,5 +99,3 @@ function configureSocketio(port?: any, options?: any, config?: any) {
     )
   }
 }
-
-export = configureSocketio

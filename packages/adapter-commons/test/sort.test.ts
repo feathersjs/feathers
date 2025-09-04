@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { sorter } from '../src'
+import { sorter } from '../src/index.js'
 
 describe('@feathersjs/adapter-commons', () => {
   describe('sorter', () => {

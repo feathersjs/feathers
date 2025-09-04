@@ -6,9 +6,9 @@ import { feathers } from '@feathersjs/feathers'
 import { clientTests } from '@feathersjs/tests'
 import { NotAcceptable } from '@feathersjs/errors'
 
-import createServer from './server'
-import rest from '../src'
-import { ServiceTypes } from './declarations'
+import createServer from './server.js'
+import rest from '../src/index.js'
+import { ServiceTypes } from './declarations.js'
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889'

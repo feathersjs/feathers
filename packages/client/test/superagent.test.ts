@@ -2,8 +2,8 @@ import superagent from 'superagent'
 import { clientTests } from '@feathersjs/tests'
 import { Server } from 'http'
 
-import * as feathers from '../dist/feathers'
-import app from './fixture'
+import * as feathers from '../dist/feathers.js'
+import app from './fixture.js'
 
 describe('Superagent REST connector', function () {
   let server: Server

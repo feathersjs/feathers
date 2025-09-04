@@ -4,9 +4,9 @@ import { feathers, Application as FeathersApplication } from '@feathersjs/feathe
 import * as express from '@feathersjs/express'
 import rest from '@feathersjs/rest-client'
 
-import authClient from '../../src'
-import getApp from './fixture'
-import commonTests from './commons'
+import authClient from '../../src/index.js'
+import getApp from './fixture.js'
+import commonTests from './commons.js'
 
 describe('@feathersjs/authentication-client Express integration', () => {
   let app: express.Application

@@ -4,8 +4,8 @@ import assert from 'assert'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'
 import { feathers } from '@feathersjs/feathers'
-import errors from '@feathersjs/errors'
-import { MongoDBService, AdapterId } from '../src'
+import * as errors from '@feathersjs/errors'
+import { MongoDBService, AdapterId } from '../src/index.js'
 
 const testSuite = adapterTests([
   '.options',

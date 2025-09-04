@@ -1,7 +1,7 @@
-import { AuthenticationService } from '@feathersjs/authentication/lib'
-import { feathers } from '@feathersjs/feathers/lib'
+import { AuthenticationService } from '@feathersjs/authentication'
+import { feathers } from '@feathersjs/feathers'
 import { strict as assert } from 'assert'
-import { getGrantConfig } from '../src/utils'
+import { getGrantConfig } from '../src/utils.js'
 
 describe('@feathersjs/authentication-oauth/utils', () => {
   it('getGrantConfig initialises Grant defaults', () => {

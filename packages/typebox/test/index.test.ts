@@ -9,7 +9,7 @@ import {
   getDataValidator,
   getValidator,
   ObjectIdSchema
-} from '../src'
+} from '../src/index.js'
 
 describe('@feathersjs/schema/typebox', () => {
   describe('querySyntax', () => {

@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import axios, { AxiosResponse } from 'axios'
 import { CookieJar } from 'tough-cookie'
-import { expressFixture } from './utils/fixture'
+import { expressFixture } from './utils/fixture.js'
 
 describe('@feathersjs/authentication-oauth service', () => {
   const port = 9778

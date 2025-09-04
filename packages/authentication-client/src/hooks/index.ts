@@ -1,2 +1,2 @@
-export { authentication } from './authentication'
-export { populateHeader } from './populate-header'
+export { authentication } from './authentication.js'
+export { populateHeader } from './populate-header.js'

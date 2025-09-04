@@ -3,8 +3,8 @@
   "description": "Feathers Express framework bindings and REST provider",
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
+  "main": "lib/index.js",
+  "type": "module",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -29,7 +29,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
   "files": [
     "CHANGELOG.md",
@@ -72,7 +72,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.1.0",
     "axios": "^1.11.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "mocha": "^11.7.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",

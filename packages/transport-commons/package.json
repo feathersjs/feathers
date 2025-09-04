@@ -3,8 +3,8 @@
   "description": "Shared functionality for websocket providers",
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
+  "main": "lib/index.js",
+  "type": "module",
   "keywords": [
     "feathers",
     "feathers-plugin"
@@ -29,7 +29,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
   "scripts": {
     "prepublish": "npm run compile",
@@ -58,7 +58,7 @@
     "@feathersjs/errors": "^5.0.34",
     "@feathersjs/feathers": "^5.0.34",
     "encodeurl": "^2.0.0",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@types/encodeurl": "^1.0.3",

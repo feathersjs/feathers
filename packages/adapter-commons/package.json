@@ -7,6 +7,7 @@
     "feathers"
   ],
   "license": "MIT",
+  "type": "module",
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/feathers"
@@ -26,10 +27,9 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
-  "main": "lib/",
-  "types": "lib/",
+  "main": "lib/index.js",
   "scripts": {
     "prepublish": "npm run compile",
     "pack": "npm pack --pack-destination ../generators/test/build",

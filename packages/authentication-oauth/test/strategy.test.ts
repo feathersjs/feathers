@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import { expressFixture, TestOAuthStrategy } from './utils/fixture'
+import { expressFixture, TestOAuthStrategy } from './utils/fixture.js'
 import { AuthenticationService } from '@feathersjs/authentication'
 
 describe('@feathersjs/authentication-oauth/strategy', () => {

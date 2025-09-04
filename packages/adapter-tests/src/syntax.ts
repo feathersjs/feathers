@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { AdapterSyntaxTest } from './declarations'
+import { AdapterSyntaxTest } from './declarations.js'
 
 export default (test: AdapterSyntaxTest, app: any, _errors: any, serviceName: string, idProp: string) => {
   describe('Query Syntax', () => {

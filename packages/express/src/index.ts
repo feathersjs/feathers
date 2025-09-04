@@ -4,10 +4,10 @@ import { createDebug } from '@feathersjs/commons'
 import cors from 'cors'
 import compression from 'compression'
 
-import { rest, RestOptions, formatter } from './rest'
-import { errorHandler, notFound, ErrorHandlerOptions } from './handlers'
-import { Application, ExpressOverrides } from './declarations'
-import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication'
+import { rest, RestOptions, formatter } from './rest.js'
+import { errorHandler, notFound, ErrorHandlerOptions } from './handlers.js'
+import { Application, ExpressOverrides } from './declarations.js'
+import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication.js'
 import {
   default as original,
   static as serveStatic,

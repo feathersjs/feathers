@@ -1,7 +1,7 @@
 import assert from 'assert'
 import axios from 'axios'
 
-import { verify } from './fixture'
+import { verify } from './fixture.js'
 
 export function restTests(description: string, name: string, port: number) {
   describe(description, () => {

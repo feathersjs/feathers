@@ -1,11 +1,11 @@
 import { PaginationOptions } from '@feathersjs/adapter-commons'
-import { MethodNotAllowed } from '@feathersjs/errors/lib'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import { Paginated, Params } from '@feathersjs/feathers'
-import { AdapterId, MongoDbAdapter, MongoDBAdapterParams, NullableAdapterId } from './adapter'
+import { AdapterId, MongoDbAdapter, MongoDBAdapterParams, NullableAdapterId } from './adapter.js'
 
-export * from './adapter'
-export * from './error-handler'
-export * from './converters'
+export * from './adapter.js'
+export * from './error-handler.js'
+export * from './converters.js'
 
 export class MongoDBService<
   Result = any,

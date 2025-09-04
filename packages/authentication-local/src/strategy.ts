@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import bcrypt from 'bcryptjs'
-import get from 'lodash/get'
+import { get } from 'lodash-es'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { Query, Params } from '@feathersjs/feathers'
 import { AuthenticationRequest, AuthenticationBaseStrategy } from '@feathersjs/authentication'

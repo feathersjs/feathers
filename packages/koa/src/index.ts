@@ -6,13 +6,13 @@ import { koaBody as bodyParser } from 'koa-body'
 import cors from '@koa/cors'
 import serveStatic from 'koa-static'
 
-import { Application } from './declarations'
+import { Application } from './declarations.js'
 
 export { Koa, bodyParser, cors, serveStatic }
-export * from './authentication'
-export * from './declarations'
-export * from './handlers'
-export * from './rest'
+export * from './authentication.js'
+export * from './declarations.js'
+export * from './handlers.js'
+export * from './rest.js'
 
 const debug = createDebug('@feathersjs/koa')
 

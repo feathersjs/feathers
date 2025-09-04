@@ -1,6 +1,6 @@
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
-import { ConnectionEvent } from '../core'
+import { ConnectionEvent } from '../core.js'
 
 const debug = createDebug('@feathersjs/authentication/hooks/connection')
 

@@ -2,9 +2,9 @@ import assert from 'assert'
 import { EventEmitter } from 'events'
 import { feathers, Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
-import isPlainObject from 'lodash/isPlainObject'
+import { isPlainObject } from 'lodash-es'
 
-import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils'
+import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils.js'
 
 describe('socket commons utils', () => {
   describe('.normalizeError', () => {

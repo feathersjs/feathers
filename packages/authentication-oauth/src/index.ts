@@ -2,9 +2,9 @@ import { Application } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { resolveDispatch } from '@feathersjs/schema'
 
-import { OAuthStrategy, OAuthProfile } from './strategy'
-import { redirectHook, OAuthService, OAuthCallbackService } from './service'
-import { getGrantConfig, authenticationServiceOptions, OauthSetupSettings } from './utils'
+import { OAuthStrategy, OAuthProfile } from './strategy.js'
+import { redirectHook, OAuthService, OAuthCallbackService } from './service.js'
+import { getGrantConfig, authenticationServiceOptions, OauthSetupSettings } from './utils.js'
 
 const debug = createDebug('@feathersjs/authentication-oauth')
 

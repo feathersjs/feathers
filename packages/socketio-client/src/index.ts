@@ -1,4 +1,4 @@
-import { Service, SocketService } from '@feathersjs/transport-commons/client'
+import { Service, SocketService } from '@feathersjs/transport-commons/client.js'
 import { Socket } from 'socket.io-client'
 import {
   Application,

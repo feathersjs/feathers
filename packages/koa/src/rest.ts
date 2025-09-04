@@ -4,8 +4,8 @@ import { createDebug } from '@feathersjs/commons'
 import { getServiceOptions, defaultServiceMethods, createContext } from '@feathersjs/feathers'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
-import { Application, Middleware } from './declarations'
-import { AuthenticationSettings, parseAuthentication } from './authentication'
+import { Application, Middleware } from './declarations.js'
+import { AuthenticationSettings, parseAuthentication } from './authentication.js'
 
 const debug = createDebug('@feathersjs/koa/rest')
 

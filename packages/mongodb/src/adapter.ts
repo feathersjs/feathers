@@ -23,7 +23,7 @@ import {
   getLimit
 } from '@feathersjs/adapter-commons'
 import { Id, Paginated } from '@feathersjs/feathers'
-import { errorHandler } from './error-handler'
+import { errorHandler } from './error-handler.js'
 
 export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   Model: Collection | Promise<Collection>

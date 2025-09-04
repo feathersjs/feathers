@@ -1,7 +1,7 @@
 import { createDebug } from '@feathersjs/commons'
 import { HookContext } from '@feathersjs/feathers'
 import { Knex } from 'knex'
-import { KnexAdapterTransaction } from './declarations'
+import { KnexAdapterTransaction } from './declarations.js'
 
 const debug = createDebug('feathers-knex-transaction')
 

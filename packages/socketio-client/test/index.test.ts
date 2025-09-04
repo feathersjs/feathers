@@ -5,8 +5,8 @@ import { CustomMethod, feathers } from '@feathersjs/feathers'
 import { io, Socket } from 'socket.io-client'
 import { clientTests } from '@feathersjs/tests'
 
-import { createServer } from './server'
-import socketio, { SocketService } from '../src'
+import { createServer } from './server.js'
+import socketio, { SocketService } from '../src/index.js'
 
 type ServiceTypes = {
   '/': SocketService

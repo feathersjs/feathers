@@ -2,7 +2,7 @@ import { Application, HookContext } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { authenticate as AuthenticateHook } from '@feathersjs/authentication'
 
-import { Middleware } from './declarations'
+import { Middleware } from './declarations.js'
 
 const debug = createDebug('@feathersjs/koa/authentication')
 

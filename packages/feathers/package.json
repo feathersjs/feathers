@@ -14,8 +14,8 @@
     "socket.io",
     "realtime"
   ],
-  "main": "lib/",
-  "types": "lib/",
+  "type": "module",
+  "main": "lib/index.js",
   "author": {
     "name": "Feathers contributors",
     "email": "hello@feathersjs.com",
@@ -48,13 +48,13 @@
     "test": "mocha --config ../../.mocharc.json --recursive test/"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "feathers": "^6.0.0-pre.1"
+    "feathers": "^6.0.0-pre.2"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",

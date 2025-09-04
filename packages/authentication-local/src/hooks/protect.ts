@@ -1,4 +1,4 @@
-import omit from 'lodash/omit'
+import { omit } from 'lodash-es'
 import { HookContext, NextFunction } from '@feathersjs/feathers'
 
 /**

@@ -1,3 +1,3 @@
-const createConfig = require('./create-config');
+import createConfig from './create-config.js'
 
-module.exports = createConfig('feathers');
+export default createConfig('feathers')

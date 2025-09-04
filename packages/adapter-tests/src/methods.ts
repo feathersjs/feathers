@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { AdapterMethodsTest } from './declarations'
+import { AdapterMethodsTest } from './declarations.js'
 
 export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: string, idProp: string) => {
   describe(' Methods', () => {

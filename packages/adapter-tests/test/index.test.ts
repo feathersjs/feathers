@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert'
-import adapterTests from '../src'
+import adapterTests from '../src/index.js'
 
 const testSuite = adapterTests([
   '.events',
@@ -77,9 +77,5 @@ const testSuite = adapterTests([
 describe('Feathers Memory Service', () => {
   it('loads the test suite', () => {
     assert.ok(typeof testSuite === 'function')
-  })
-
-  it('exports as CommonJS', () => {
-    assert.equal(typeof require('../lib'), 'function')
   })
 })

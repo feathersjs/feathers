@@ -1,9 +1,9 @@
 import { Application, TransportConnection, defaultServiceMethods } from '@feathersjs/feathers'
 
-import { Base } from './base'
-import { AxiosClient } from './axios'
-import { FetchClient } from './fetch'
-import { SuperagentClient } from './superagent'
+import { Base } from './base.js'
+import { AxiosClient } from './axios.js'
+import { FetchClient } from './fetch.js'
+import { SuperagentClient } from './superagent.js'
 
 export { AxiosClient, FetchClient, SuperagentClient }
 
