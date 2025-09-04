@@ -3,7 +3,7 @@
   "description": "Feathers MongoDB service adapter",
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
+  "main": "lib/index.js",
   "type": "module",
   "keywords": [
     "feathers",

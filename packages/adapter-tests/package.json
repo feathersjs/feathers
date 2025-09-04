@@ -28,8 +28,7 @@
   "engines": {
     "node": ">= 20"
   },
-  "main": "lib/",
-  "types": "lib/",
+  "main": "lib/index.js",
   "type": "module",
   "scripts": {
     "prepublish": "npm run compile",

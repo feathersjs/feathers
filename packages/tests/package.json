@@ -4,8 +4,7 @@
   "description": "Feathers core module common tests",
   "version": "5.0.34",
   "homepage": "https://feathersjs.com",
-  "main": "lib/",
-  "types": "lib/",
+  "main": "lib/index.js",
   "type": "module",
   "keywords": [
     "feathers"

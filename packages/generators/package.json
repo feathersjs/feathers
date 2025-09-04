@@ -30,7 +30,6 @@
     "node": ">= 20"
   },
   "main": "lib/index.js",
-  "types": "lib/",
   "type": "module",
   "files": [
     "CHANGELOG.md",
