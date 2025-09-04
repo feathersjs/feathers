@@ -65,7 +65,7 @@ const servicesMiddleware = (): RequestHandler => {
     const options = getServiceOptions(lookup.service)
     const middleware = options.express.composed
 
-    return middleware(req, res, next)
+    middleware(req, res, next)
   })
 }
 
