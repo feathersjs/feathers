@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.1...v6.0.0-pre.2) (2025-09-04)
+
+### Bug Fixes
+
+- Add typesVersions for TypeScript compatibility ([87c181c](https://github.com/feathersjs/feathers/commit/87c181cf8d3bcd4f86d0caad41de83d220077ad8))
+
 # [6.0.0-pre.1](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.0...v6.0.0-pre.1) (2025-09-03)
 
 ### Bug Fixes

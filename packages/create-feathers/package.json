@@ -1,7 +1,7 @@
 {
   "name": "create-feathers",
   "description": "Create a new Feathers application",
-  "version": "6.0.0-pre.1",
+  "version": "6.0.0-pre.2",
   "homepage": "https://feathersjs.com",
   "bin": {
     "create-feathers": "./bin/create-feathers.js"
