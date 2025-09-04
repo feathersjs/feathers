@@ -59,11 +59,9 @@
     "@feathersjs/transport-commons": "^5.0.34",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
-    "@types/express": "^4.17.21",
-    "@types/express-serve-static-core": "^4.19.5",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@feathersjs/authentication-local": "^5.0.34",

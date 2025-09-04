@@ -8,16 +8,7 @@ import { rest, RestOptions, formatter } from './rest.js'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers.js'
 import { Application, ExpressOverrides } from './declarations.js'
 import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication.js'
-import {
-  default as original,
-  static as serveStatic,
-  json,
-  raw,
-  text,
-  urlencoded,
-  query,
-  Router
-} from 'express'
+import { default as original, static as serveStatic, json, raw, text, urlencoded, Router } from 'express'
 
 export {
   original,
@@ -27,7 +18,6 @@ export {
   raw,
   text,
   urlencoded,
-  query,
   rest,
   Router,
   RestOptions,
@@ -61,6 +51,8 @@ export default function feathersExpress<S = any, C = any>(
   const app = expressApp as any as Application<S, C>
   const { use: expressUse, listen: expressListen } = expressApp as any
   const { use: feathersUse, teardown: feathersTeardown } = feathersApp
+
+  expressApp.set('query parser', 'extended')
 
   Object.assign(app, {
     use(location: string & keyof S, ...rest: any[]) {
