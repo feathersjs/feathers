@@ -1,11 +1,33 @@
 import { stripSlashes } from './commons.js'
 
 export interface LookupData {
-  params: { [key: string]: string }
+  params: { [key: string]: string | string[] }
 }
 
 export interface LookupResult<T> extends LookupData {
   data?: T
+}
+
+export interface RouterInterface<T = any> {
+  /**
+   * Look up a route by path and return the matched data and parameters
+   */
+  lookup(path: string): LookupResult<T> | null
+
+  /**
+   * Insert a new route with associated data
+   */
+  insert(path: string, data: T): void
+
+  /**
+   * Remove a route by path
+   */
+  remove(path: string): void
+
+  /**
+   * Whether route matching is case sensitive
+   */
+  caseSensitive: boolean
 }
 
 export class RouteNode<T = any> {
@@ -115,7 +137,7 @@ export class RouteNode<T = any> {
   }
 }
 
-export class Router<T = any> {
+export class Router<T = any> implements RouterInterface<T> {
   public caseSensitive = true
 
   constructor(public root: RouteNode<T> = new RouteNode<T>('', 0)) {}
