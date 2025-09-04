@@ -1,5 +1,4 @@
 import { strict as assert } from 'assert'
-import fetch from 'node-fetch'
 import { feathers } from '@feathersjs/feathers'
 import { clientTests } from '@feathersjs/tests'
 import { NotAcceptable } from '@feathersjs/errors'

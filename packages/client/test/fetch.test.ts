@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-ignore
-import fetch from 'node-fetch'
 import { Server } from 'http'
 import { clientTests } from '@feathersjs/tests'
 
