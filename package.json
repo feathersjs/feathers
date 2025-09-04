@@ -38,7 +38,7 @@
     "lint": "npm run prettier && npm run eslint",
     "compile": "lerna run compile",
     "build:docs": "npm run build --workspace docs",
-    "update-dependencies": "npm exec --workspaces --include-workspace-root -- ncu -u --dep prod,dev,optional,peer -x \"@sinclair/typebox\",commander",
+    "update-dependencies": "npm exec --workspaces --include-workspace-root -- ncu -u --dep prod,dev,optional,peer -x \"@sinclair/typebox\",flexsearch",
     "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",
     "generate:package": "pinion run generators/package.ts"
   },
