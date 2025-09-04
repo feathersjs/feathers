@@ -26,6 +26,25 @@
     "./client": "./lib/client/index.js",
     "./http": "./lib/http/index.js"
   },
+  "typesVersions": {
+    "*": {
+      "errors": [
+        "./lib/errors.d.ts"
+      ],
+      "hooks": [
+        "./lib/hooks/index.d.ts"
+      ],
+      "commons": [
+        "./lib/commons.d.ts"
+      ],
+      "client": [
+        "./lib/client/index.d.ts"
+      ],
+      "http": [
+        "./lib/http/index.d.ts"
+      ]
+    }
+  },
   "author": {
     "name": "Feathers contributors",
     "email": "hello@feathersjs.com",
@@ -60,7 +79,7 @@
     "test": "vitest run --coverage"
   },
   "engines": {
-    "node": ">= 22"
+    "node": ">= 20"
   },
   "publishConfig": {
     "access": "public"
