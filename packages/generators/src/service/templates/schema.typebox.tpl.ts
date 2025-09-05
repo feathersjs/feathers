@@ -91,7 +91,7 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
   }
 ])
 export const ${camelName}QuerySchema = Type.Composite([
-  querySyntax(${camelName}QueryProperties),
+  querySyntax(${camelName}QueryProperties, {}),
   // Add additional query properties here
   Type.Object({}, { additionalProperties: false })
 ], { additionalProperties: false })

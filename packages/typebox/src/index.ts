@@ -97,7 +97,7 @@ export function sortDefinition<T extends TObject>(schema: T) {
  */
 export const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
   def: T,
-  extension: X = {} as X
+  extension: X
 ) =>
   Type.Union([
     def,
@@ -113,7 +113,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
             $in: Type.Array(def),
             $nin: Type.Array(def)
           }),
-          Type.Object(extension)
+          Type.Object((extension || {}) as X)
         ],
         { additionalProperties: false }
       )
@@ -136,7 +136,7 @@ export const queryProperties = <
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   definition: T,
-  extensions: X = {} as X
+  extensions: X
 ) => {
   const properties = Object.keys(definition.properties).reduce(
     (res, key) => {
@@ -158,7 +158,7 @@ export const queryProperties = <
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param type The properties to create the query syntax for
- * @param extensions Additional properties to add to the query syntax
+ * @param extensions Additional properties to add to the query syntax, use `{}` if none
  * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
@@ -167,7 +167,7 @@ export const querySyntax = <
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   type: T,
-  extensions: X = {} as X,
+  extensions: X,
   options: ObjectOptions = { additionalProperties: false }
 ) => {
   const propertySchema = queryProperties(type, extensions)

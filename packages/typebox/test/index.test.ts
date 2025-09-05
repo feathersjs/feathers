@@ -18,7 +18,7 @@ describe('@feathersjs/schema/typebox', () => {
         name: Type.String(),
         age: Type.Number()
       })
-      const querySchema = querySyntax(schema)
+      const querySchema = querySyntax(schema, {})
 
       type Query = Static<typeof querySchema>
 
@@ -41,7 +41,7 @@ describe('@feathersjs/schema/typebox', () => {
     })
 
     it('querySyntax works with no properties', async () => {
-      const schema = querySyntax(Type.Object({}))
+      const schema = querySyntax(Type.Object({}), {})
 
       new Ajv().compile(schema)
     })
