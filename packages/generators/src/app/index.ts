@@ -182,6 +182,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
 
           if (schema === 'typebox') {
             dependencies.push('@feathersjs/typebox')
+            dependencies.push('@sinclair/typebox')
           }
 
           return addVersions(dependencies, dependencyVersions)
