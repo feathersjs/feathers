@@ -104,7 +104,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
     Type.Union([
       def,
       Type.Partial(
-        Type.Intersect(
+        Type.Composite(
           [
             Type.Object({
               $gt: def,
@@ -191,12 +191,12 @@ export const querySyntax = <
             $sort: sortDefinition(type),
             $select: arrayOfKeys(type),
             $and,
-            $or
+            $or,
+            ...propertySchema.properties
           },
           { additionalProperties: false }
         )
-      ),
-      propertySchema
+      )
     ],
     options
   )
