@@ -97,30 +97,28 @@ export function sortDefinition<T extends TObject>(schema: T) {
  */
 export const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
   def: T,
-  extension: X = {} as X
+  extension: X
 ) =>
-  Type.Optional(
-    Type.Union([
-      def,
-      Type.Partial(
-        Type.Intersect(
-          [
-            Type.Object({
-              $gt: def,
-              $gte: def,
-              $lt: def,
-              $lte: def,
-              $ne: def,
-              $in: def.type === 'array' ? def : Type.Array(def),
-              $nin: def.type === 'array' ? def : Type.Array(def)
-            }),
-            Type.Object(extension)
-          ],
-          { additionalProperties: false }
-        )
+  Type.Union([
+    def,
+    Type.Partial(
+      Type.Intersect(
+        [
+          Type.Object({
+            $gt: def,
+            $gte: def,
+            $lt: def,
+            $lte: def,
+            $ne: def,
+            $in: Type.Array(def),
+            $nin: Type.Array(def)
+          }),
+          Type.Object((extension || {}) as X)
+        ],
+        { additionalProperties: false }
       )
-    ])
-  )
+    )
+  ])
 
 type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = ReturnType<
   typeof queryProperty<T, X>
@@ -138,7 +136,7 @@ export const queryProperties = <
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   definition: T,
-  extensions: X = {} as X
+  extensions: X
 ) => {
   const properties = Object.keys(definition.properties).reduce(
     (res, key) => {
@@ -160,7 +158,7 @@ export const queryProperties = <
  * and `$sort` and `$select` for the allowed properties.
  *
  * @param type The properties to create the query syntax for
- * @param extensions Additional properties to add to the query syntax
+ * @param extensions Additional properties to add to the query syntax, use `{}` if none
  * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
@@ -169,30 +167,26 @@ export const querySyntax = <
   X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
 >(
   type: T,
-  extensions: X = {} as X,
+  extensions: X,
   options: ObjectOptions = { additionalProperties: false }
 ) => {
   const propertySchema = queryProperties(type, extensions)
   const $or = Type.Array(propertySchema)
   const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
-  return Type.Intersect(
-    [
-      Type.Partial(
-        Type.Object(
-          {
-            $limit: Type.Number({ minimum: 0 }),
-            $skip: Type.Number({ minimum: 0 }),
-            $sort: sortDefinition(type),
-            $select: arrayOfKeys(type),
-            $and,
-            $or
-          },
-          { additionalProperties: false }
-        )
-      ),
-      propertySchema
-    ],
+  return Type.Partial(
+    Type.Object(
+      {
+        $limit: Type.Number({ minimum: 0 }),
+        $skip: Type.Number({ minimum: 0 }),
+        $sort: sortDefinition(type),
+        $select: arrayOfKeys(type),
+        $and,
+        $or,
+        ...propertySchema.properties
+      },
+      { additionalProperties: false }
+    ),
     options
   )
 }

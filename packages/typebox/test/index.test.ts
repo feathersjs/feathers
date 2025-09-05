@@ -18,7 +18,7 @@ describe('@feathersjs/schema/typebox', () => {
         name: Type.String(),
         age: Type.Number()
       })
-      const querySchema = querySyntax(schema)
+      const querySchema = querySyntax(schema, {})
 
       type Query = Static<typeof querySchema>
 
@@ -41,7 +41,7 @@ describe('@feathersjs/schema/typebox', () => {
     })
 
     it('querySyntax works with no properties', async () => {
-      const schema = querySyntax(Type.Object({}))
+      const schema = querySyntax(Type.Object({}), {})
 
       new Ajv().compile(schema)
     })
@@ -80,29 +80,8 @@ describe('@feathersjs/schema/typebox', () => {
     })
   })
 
-  it('$in and $nin works with array type', async () => {
-    const schema = Type.Object({
-      things: Type.Array(Type.Number())
-    })
-    const querySchema = querySyntax(schema)
-    const validator = new Ajv().compile(querySchema)
-
-    type Query = Static<typeof querySchema>
-
-    const query: Query = {
-      things: {
-        $in: [10, 20],
-        $nin: [30]
-      }
-    }
-
-    const validated = (await validator(query)) as any as Query
-
-    assert.ok(validated)
-  })
-
   it('defaultAppConfiguration', async () => {
-    const configSchema = Type.Intersect([
+    const configSchema = Type.Composite([
       defaultAppConfiguration,
       Type.Object({
         host: Type.String(),
