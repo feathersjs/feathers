@@ -8,7 +8,6 @@ import {
   TIntersect,
   TUnion,
   type TRecord
-  // TArray
 } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
@@ -110,13 +109,9 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
             $gte: def,
             $lt: def,
             $lte: def,
-            $ne: def
-            // $in: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
-            //   ? T
-            //   : TArray<T>,
-            // $nin: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
-            //   ? T
-            //   : TArray<T>
+            $ne: def,
+            $in: Type.Array(def),
+            $nin: Type.Array(def)
           }),
           Type.Object(extension)
         ],
