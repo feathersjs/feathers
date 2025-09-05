@@ -53,7 +53,7 @@ export const ${camelName}ExternalResolver = resolve<${upperName}, HookContext<${
     authStrategies,
     `// The password should never be visible externally
   password: async () => undefined`
-  )}  
+  )}
 })
 
 // Schema for creating new entries
@@ -90,7 +90,7 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
       : `'text'`
   }
 ])
-export const ${camelName}QuerySchema = Type.Intersect([
+export const ${camelName}QuerySchema = Type.Composite([
   querySyntax(${camelName}QueryProperties),
   // Add additional query properties here
   Type.Object({}, { additionalProperties: false })

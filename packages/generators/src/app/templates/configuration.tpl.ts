@@ -58,7 +58,7 @@ import type { Static } from '@feathersjs/typebox'
 
 import { dataValidator } from './validators'
 
-export const configurationSchema = Type.Intersect([
+export const configurationSchema = Type.Composite([
   defaultAppConfiguration,
   Type.Object({
     host: Type.String(),

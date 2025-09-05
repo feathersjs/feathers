@@ -7,8 +7,8 @@ import {
   ObjectOptions,
   TIntersect,
   TUnion,
-  type TRecord,
-  TArray
+  type TRecord
+  // TArray
 } from '@sinclair/typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
@@ -100,32 +100,30 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
   def: T,
   extension: X = {} as X
 ) =>
-  Type.Optional(
-    Type.Union([
-      def,
-      Type.Partial(
-        Type.Composite(
-          [
-            Type.Object({
-              $gt: def,
-              $gte: def,
-              $lt: def,
-              $lte: def,
-              $ne: def,
-              $in: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
-                ? T
-                : TArray<T>,
-              $nin: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
-                ? T
-                : TArray<T>
-            }),
-            Type.Object(extension)
-          ],
-          { additionalProperties: false }
-        )
+  Type.Union([
+    def,
+    Type.Partial(
+      Type.Intersect(
+        [
+          Type.Object({
+            $gt: def,
+            $gte: def,
+            $lt: def,
+            $lte: def,
+            $ne: def
+            // $in: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
+            //   ? T
+            //   : TArray<T>,
+            // $nin: (def.type === 'array' ? def : Type.Array(def)) as unknown as T extends TArray
+            //   ? T
+            //   : TArray<T>
+          }),
+          Type.Object(extension)
+        ],
+        { additionalProperties: false }
       )
-    ])
-  )
+    )
+  ])
 
 type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = ReturnType<
   typeof queryProperty<T, X>
@@ -181,23 +179,19 @@ export const querySyntax = <
   const $or = Type.Array(propertySchema)
   const $and = Type.Array(Type.Union([propertySchema, Type.Object({ $or })]))
 
-  return Type.Intersect(
-    [
-      Type.Partial(
-        Type.Object(
-          {
-            $limit: Type.Number({ minimum: 0 }),
-            $skip: Type.Number({ minimum: 0 }),
-            $sort: sortDefinition(type),
-            $select: arrayOfKeys(type),
-            $and,
-            $or,
-            ...propertySchema.properties
-          },
-          { additionalProperties: false }
-        )
-      )
-    ],
+  return Type.Partial(
+    Type.Object(
+      {
+        $limit: Type.Number({ minimum: 0 }),
+        $skip: Type.Number({ minimum: 0 }),
+        $sort: sortDefinition(type),
+        $select: arrayOfKeys(type),
+        $and,
+        $or,
+        ...propertySchema.properties
+      },
+      { additionalProperties: false }
+    ),
     options
   )
 }
