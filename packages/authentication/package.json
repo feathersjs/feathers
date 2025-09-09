@@ -63,15 +63,15 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "long-timeout": "^0.1.1",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.34",
     "@types/lodash": "^4.17.20",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.3.1",
     "@types/uuid": "^10.0.0",
-    "mocha": "^11.7.1",
+    "mocha": "^11.7.2",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
