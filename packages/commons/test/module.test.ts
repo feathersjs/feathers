@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert'
 import { _ } from '../src'
+import * as commons from '../src'
 
 describe('module', () => {
   it('is commonjs compatible', () => {
@@ -9,6 +10,18 @@ describe('module', () => {
     assert.equal(typeof commons, 'object')
     assert.equal(typeof commons.stripSlashes, 'function')
     assert.equal(typeof commons._, 'object')
+    assert.equal(typeof commons.each, 'function')
+    assert.equal(typeof commons.some, 'function')
+    assert.equal(typeof commons.every, 'function')
+    assert.equal(typeof commons.keys, 'function')
+    assert.equal(typeof commons.values, 'function')
+    assert.equal(typeof commons.isMatch, 'function')
+    assert.equal(typeof commons.isEmpty, 'function')
+    assert.equal(typeof commons.isObject, 'function')
+    assert.equal(typeof commons.extend, 'function')
+    assert.equal(typeof commons.omit, 'function')
+    assert.equal(typeof commons.pick, 'function')
+    assert.equal(typeof commons.merge, 'function')
   })
 
   it('exposes lodash methods under _', () => {
@@ -24,5 +37,20 @@ describe('module', () => {
     assert.equal(typeof _.omit, 'function')
     assert.equal(typeof _.pick, 'function')
     assert.equal(typeof _.merge, 'function')
+  })
+
+  it('exposes separate methods under _', () => {
+    assert.equal(typeof commons.each, 'function')
+    assert.equal(typeof commons.some, 'function')
+    assert.equal(typeof commons.every, 'function')
+    assert.equal(typeof commons.keys, 'function')
+    assert.equal(typeof commons.values, 'function')
+    assert.equal(typeof commons.isMatch, 'function')
+    assert.equal(typeof commons.isEmpty, 'function')
+    assert.equal(typeof commons.isObject, 'function')
+    assert.equal(typeof commons.extend, 'function')
+    assert.equal(typeof commons.omit, 'function')
+    assert.equal(typeof commons.pick, 'function')
+    assert.equal(typeof commons.merge, 'function')
   })
 })

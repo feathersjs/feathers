@@ -1,5 +1,5 @@
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
-import { _ } from '@feathersjs/commons'
+import { omit } from '@feathersjs/commons'
 import {
   sorter,
   select,
@@ -75,11 +75,11 @@ export class MemoryAdapter<
     const { paginate } = this.getOptions(params)
     const { query, filters } = this.getQuery(params)
 
-    let values = _.values(this.store)
+    let values = Object.values(this.store)
     const hasSkip = filters.$skip !== undefined
     const hasSort = filters.$sort !== undefined
     const hasLimit = filters.$limit !== undefined
-    const hasQuery = _.keys(query).length > 0
+    const hasQuery = Object.keys(query).length > 0
 
     if (hasSort) {
       values.sort(this.options.sorter(filters.$sort))
@@ -171,7 +171,7 @@ export class MemoryAdapter<
     }
 
     const id = (data as any)[this.id] || this._uId++
-    const current = _.extend({}, data, { [this.id]: id })
+    const current = { ...data, [this.id]: id } as Result
     const result = (this.store[id] = current)
 
     return _select(result, params, this.id) as Result
@@ -189,7 +189,7 @@ export class MemoryAdapter<
     // eslint-disable-next-line eqeqeq
     id = oldId == id ? oldId : id
 
-    this.store[id] = _.extend({}, data, { [this.id]: id })
+    this.store[id] = { ...data, [this.id]: id } as Result
 
     return this._get(id, params)
   }
@@ -214,7 +214,7 @@ export class MemoryAdapter<
     const patchEntry = (entry: Result) => {
       const currentId = (entry as any)[this.id]
 
-      this.store[currentId] = _.extend(this.store[currentId], _.omit(data, this.id))
+      Object.assign(this.store[currentId], omit(data, this.id))
 
       return _select(this.store[currentId], params, this.id)
     }

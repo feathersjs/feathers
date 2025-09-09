@@ -1,31 +1,31 @@
 /* tslint:disable:no-unused-expression */
 import { strict as assert } from 'assert'
-import { _, stripSlashes, isPromise, createSymbol } from '../src'
+import * as _ from '../src'
 
 describe('@feathersjs/commons utils', () => {
   it('stripSlashes', () => {
-    assert.equal(stripSlashes('some/thing'), 'some/thing')
-    assert.equal(stripSlashes('/some/thing'), 'some/thing')
-    assert.equal(stripSlashes('some/thing/'), 'some/thing')
-    assert.equal(stripSlashes('/some/thing/'), 'some/thing')
-    assert.equal(stripSlashes('//some/thing/'), 'some/thing')
-    assert.equal(stripSlashes('//some//thing////'), 'some//thing')
+    assert.equal(_.stripSlashes('some/thing'), 'some/thing')
+    assert.equal(_.stripSlashes('/some/thing'), 'some/thing')
+    assert.equal(_.stripSlashes('some/thing/'), 'some/thing')
+    assert.equal(_.stripSlashes('/some/thing/'), 'some/thing')
+    assert.equal(_.stripSlashes('//some/thing/'), 'some/thing')
+    assert.equal(_.stripSlashes('//some//thing////'), 'some//thing')
   })
 
   it('isPromise', () => {
-    assert.equal(isPromise(Promise.resolve()), true)
+    assert.equal(_.isPromise(Promise.resolve()), true)
     assert.ok(
-      isPromise({
+      _.isPromise({
         then() {
           return true
         }
       })
     )
-    assert.equal(isPromise(null), false)
+    assert.equal(_.isPromise(null), false)
   })
 
   it('createSymbol', () => {
-    assert.equal(typeof createSymbol('a test'), 'symbol')
+    assert.equal(typeof _.createSymbol('a test'), 'symbol')
   })
 
   describe('_', () => {
@@ -52,6 +52,7 @@ describe('@feathersjs/commons utils', () => {
         assert.equal(value, 'hi')
       })
 
+      // @ts-expect-error (should fail)
       _.each('moo', () => assert.fail('Should never get here'))
     })
 

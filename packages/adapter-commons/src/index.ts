@@ -1,4 +1,4 @@
-import { _ } from '@feathersjs/commons'
+import { pick } from '@feathersjs/commons'
 import { Params } from '@feathersjs/feathers'
 
 export * from './declarations'
@@ -17,7 +17,7 @@ export function select(params: Params, ...otherFields: string[]) {
   }
 
   const resultFields = queryFields.concat(otherFields)
-  const convert = (result: any) => _.pick(result, ...resultFields)
+  const convert = (result: any) => pick(result, ...resultFields)
 
   return (result: any) => {
     if (Array.isArray(result)) {

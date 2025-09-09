@@ -13,7 +13,7 @@ import {
   FindOneAndDeleteOptions
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
-import { _ } from '@feathersjs/commons'
+import { omit } from '@feathersjs/commons'
 import {
   AdapterBase,
   AdapterParams,
@@ -195,7 +195,7 @@ export class MongoDbAdapter<
     if (this.id === '_id') {
       // Default Mongo IDs cannot be updated. The Mongo library handles
       // this automatically.
-      return _.omit(data, this.id)
+      return omit(data, this.id)
     } else if (id !== null) {
       // If not using the default Mongo _id field set the ID to its
       // previous value. This prevents orphaned documents.

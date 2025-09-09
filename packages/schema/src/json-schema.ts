@@ -1,4 +1,4 @@
-import { _ } from '@feathersjs/commons'
+import { omit } from '@feathersjs/commons'
 import { JSONSchema } from 'json-schema-to-ts'
 import { JSONSchemaDefinition, Ajv, Validator } from './schema'
 
@@ -99,7 +99,7 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
   def: T,
   extensions: X = {} as X
 ) => {
-  const definition = _.omit(def, 'default')
+  const definition = omit(def, 'default')
   return {
     anyOf: [
       definition,

@@ -1,5 +1,5 @@
 import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
-import { _ } from '@feathersjs/commons'
+import { isObject, pick, omit } from '@feathersjs/commons'
 import { AdapterBase, PaginationOptions, AdapterQuery, getLimit } from '@feathersjs/adapter-commons'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
@@ -97,7 +97,7 @@ export class KnexAdapter<
     return Object.keys(query || {}).reduce((currentQuery, key) => {
       const value = query[key]
 
-      if (_.isObject(value) && !(value instanceof Date)) {
+      if (isObject(value) && !(value instanceof Date)) {
         return knexify(currentQuery, value, key)
       }
 
@@ -146,7 +146,7 @@ export class KnexAdapter<
     // build up the knex query out of the query params, include $and and $or filters
     this.knexify(builder, {
       ...query,
-      ..._.pick(filters, '$and', '$or')
+      ...pick(filters, '$and', '$or')
     })
 
     // Handle $sort
@@ -263,7 +263,7 @@ export class KnexAdapter<
 
     return this._get(id, {
       ...params,
-      query: _.pick(params?.query || {}, '$select')
+      query: pick(params?.query || {}, '$select')
     })
   }
 
@@ -284,7 +284,7 @@ export class KnexAdapter<
     }
 
     const { name, id: idField } = this.getOptions(params)
-    const data = _.omit(raw, this.id)
+    const data = omit(raw, this.id)
     const results = await this._findOrGet(id, {
       ...params,
       query: {
@@ -322,7 +322,7 @@ export class KnexAdapter<
       throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
     }
 
-    const data = _.omit(_data, this.id)
+    const data = omit(_data, this.id)
     const oldData = await this._get(id, params)
     const newObject = Object.keys(oldData).reduce((result: any, key) => {
       if (key !== this.id) {
