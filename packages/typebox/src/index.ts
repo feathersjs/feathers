@@ -8,10 +8,9 @@ import {
   TIntersect,
   TUnion,
   type TRecord
-} from '@sinclair/typebox'
+} from 'typebox'
 import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
 
-export * from '@sinclair/typebox'
 export * from './default-schemas.js'
 
 export type TDataSchemaMap = {

@@ -81,7 +81,7 @@ describe('@feathersjs/schema/typebox', () => {
   })
 
   it('defaultAppConfiguration', async () => {
-    const configSchema = Type.Composite([
+    const configSchema = Type.Intersect([
       defaultAppConfiguration,
       Type.Object({
         host: Type.String(),
