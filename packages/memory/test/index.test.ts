@@ -1,6 +1,6 @@
 import assert from 'assert'
 import adapterTests from '@feathersjs/adapter-tests'
-import errors from '@feathersjs/errors'
+import errors, { NotFound } from '@feathersjs/errors'
 import { feathers } from '@feathersjs/feathers'
 
 import { MemoryService } from '../src'
@@ -272,6 +272,34 @@ describe('Feathers Memory Service', () => {
           }
         }
       })
+    }
+  })
+
+  it('.update + id + query', async () => {
+    const people = app.service('people')
+    const person = await people.create({
+      name: 'test',
+      age: 42
+    })
+    try {
+      await assert.rejects(
+        () =>
+          people.update(
+            person.id,
+            {
+              name: 'Tester'
+            },
+            {
+              query: { name: 'person' }
+            }
+          ),
+        NotFound
+      )
+
+      const unchanged = await people.get(person.id)
+      assert.strictEqual(unchanged.name, person.name, 'name is still test')
+    } finally {
+      await people.remove(person.id)
     }
   })
 
