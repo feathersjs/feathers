@@ -182,7 +182,7 @@ export class MemoryAdapter<
       throw new BadRequest("You can not replace multiple instances. Did you mean 'patch'?")
     }
 
-    const oldEntry = await this._get(id)
+    const oldEntry = await this._get(id, params)
     // We don't want our id to change type if it can be coerced
     const oldId = (oldEntry as any)[this.id]
 
