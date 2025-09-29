@@ -1,5 +1,4 @@
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
-import { _ } from '@feathersjs/commons'
 import {
   sorter,
   select,
@@ -75,11 +74,11 @@ export class MemoryAdapter<
     const { paginate } = this.getOptions(params)
     const { query, filters } = this.getQuery(params)
 
-    let values = _.values(this.store)
+    let values = Object.values(this.store)
     const hasSkip = filters.$skip !== undefined
     const hasSort = filters.$sort !== undefined
     const hasLimit = filters.$limit !== undefined
-    const hasQuery = _.keys(query).length > 0
+    const hasQuery = Object.keys(query).length > 0
 
     if (hasSort) {
       values.sort(this.options.sorter(filters.$sort))
@@ -171,8 +170,8 @@ export class MemoryAdapter<
     }
 
     const id = (data as any)[this.id] || this._uId++
-    const current = _.extend({}, data, { [this.id]: id })
-    const result = (this.store[id] = current)
+    const current = { ...data, [this.id]: id }
+    const result = (this.store[id] = current as any)
 
     return _select(result, params, this.id) as Result
   }
@@ -183,13 +182,8 @@ export class MemoryAdapter<
     }
 
     const oldEntry = await this._get(id, params)
-    // We don't want our id to change type if it can be coerced
-    const oldId = (oldEntry as any)[this.id]
 
-    // eslint-disable-next-line eqeqeq
-    id = oldId == id ? oldId : id
-
-    this.store[id] = _.extend({}, data, { [this.id]: id })
+    this.store[id] = { ...data, [this.id]: (oldEntry as any)[this.id] } as Result
 
     return this._get(id, params)
   }
@@ -214,7 +208,11 @@ export class MemoryAdapter<
     const patchEntry = (entry: Result) => {
       const currentId = (entry as any)[this.id]
 
-      this.store[currentId] = _.extend(this.store[currentId], _.omit(data, this.id))
+      this.store[currentId] = {
+        ...this.store[currentId],
+        ...data,
+        [this.id]: (entry as any)[this.id]
+      }
 
       return _select(this.store[currentId], params, this.id)
     }

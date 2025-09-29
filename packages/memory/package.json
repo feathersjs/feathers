@@ -50,7 +50,6 @@
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.35",
-    "@feathersjs/commons": "^5.0.35",
     "@feathersjs/errors": "^5.0.35",
     "sift": "^17.1.3"
   },
