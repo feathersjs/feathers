@@ -292,6 +292,9 @@ export default (test: AdapterMethodsTest, app: any, _errors: any, serviceName: s
         } catch (error: any) {
           assert.strictEqual(error.name, 'NotFound', 'Got a NotFound Feathers error')
         }
+
+        const updatedDoug = await service.get(doug[idProp])
+        assert.strictEqual(updatedDoug.name, 'Doug', 'Doug was not updated')
       })
 
       test('.update + NotFound', async () => {
