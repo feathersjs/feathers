@@ -21,7 +21,7 @@ import { AuthenticationGeneratorArguments } from '../lib/authentication'
 const matrix = {
   language: ['js', 'ts'] as const,
   framework: ['koa', 'express'] as const,
-  schema: ['typebox'] as const
+  schema: ['typebox', 'json'] as const
 }
 
 const defaultCombination = {

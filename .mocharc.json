@@ -1,5 +1,5 @@
 {
-  "timeout": 30000,
+  "timeout": 60000,
   "require": ["source-map-support/register"],
   "reporter": "Dot",
   "extension": ".test.ts",
