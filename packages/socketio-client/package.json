@@ -63,12 +63,12 @@
     "@feathersjs/socketio": "^5.0.35",
     "@feathersjs/tests": "^5.0.35",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.3.1",
-    "mocha": "^11.7.2",
+    "@types/node": "^24.6.1",
+    "mocha": "^11.7.3",
     "shx": "^0.4.0",
     "socket.io-client": "^4.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
