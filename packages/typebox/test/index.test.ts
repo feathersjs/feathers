@@ -81,14 +81,16 @@ describe('@feathersjs/schema/typebox', () => {
   })
 
   it('defaultAppConfiguration', async () => {
-    const configSchema = Type.Composite([
-      defaultAppConfiguration,
-      Type.Object({
-        host: Type.String(),
-        port: Type.Number(),
-        public: Type.String()
-      })
-    ])
+    const configSchema = Type.Evaluate(
+      Type.Intersect([
+        defaultAppConfiguration,
+        Type.Object({
+          host: Type.String(),
+          port: Type.Number(),
+          public: Type.String()
+        })
+      ])
+    )
 
     const validator = new Ajv().compile(configSchema)
     const validated = await validator({

@@ -1,4 +1,4 @@
-import { Type, Static } from '@sinclair/typebox'
+import { Type, Static } from 'typebox'
 
 export const authenticationSettingsSchema = Type.Object({
   secret: Type.String({ description: 'The JWT signing secret' }),
