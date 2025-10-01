@@ -90,11 +90,11 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
       : `'text'`
   }
 ])
-export const ${camelName}QuerySchema = Type.Composite([
+export const ${camelName}QuerySchema = Type.Evaluate(Type.Intersect([
   querySyntax(${camelName}QueryProperties, {}),
   // Add additional query properties here
   Type.Object({}, { additionalProperties: false })
-], { additionalProperties: false })
+], { additionalProperties: false }))
 export type ${upperName}Query = Static<typeof ${camelName}QuerySchema>
 export const ${camelName}QueryValidator = getValidator(${camelName}QuerySchema, queryValidator)
 export const ${camelName}QueryResolver = resolve<${upperName}Query, HookContext<${upperName}Service>>({
