@@ -1,13 +1,12 @@
 import Koa from 'koa'
 import koaQs from 'koa-qs'
-import { Application as FeathersApplication } from '@feathersjs/feathers'
+import type { Application as FeathersApplication } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { koaBody as bodyParser } from 'koa-body'
 import cors from '@koa/cors'
 import serveStatic from 'koa-static'
 
-import { Application } from './declarations.js'
-
+import type { Application } from './declarations.js'
 export { Koa, bodyParser, cors, serveStatic }
 export * from './authentication.js'
 export * from './declarations.js'

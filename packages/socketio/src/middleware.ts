@@ -1,4 +1,4 @@
-import { Application, Params, RealTimeConnection } from '@feathersjs/feathers'
+import type { Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { Socket } from 'socket.io'
 

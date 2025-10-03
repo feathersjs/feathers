@@ -1,5 +1,6 @@
 import { memory } from '@feathersjs/memory'
-import { feathers, Params, HookContext } from '@feathersjs/feathers'
+import type { Params, HookContext } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { authenticate, AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy, hooks } from '@feathersjs/authentication-local'
 

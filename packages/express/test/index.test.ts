@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { strict as assert } from 'assert'
-import express, { Request, Response, NextFunction } from 'express'
+import express from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
-import { feathers, HookContext, Id } from '@feathersjs/feathers'
-import { RequestListener } from 'http'
+import type { HookContext, Id } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { RequestListener } from 'http'
 import { fileURLToPath } from 'url'
 
 import {

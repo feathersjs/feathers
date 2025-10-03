@@ -1,10 +1,10 @@
 import assert from 'assert'
 import { omit } from 'lodash-es'
-import { Application, HookContext } from '@feathersjs/feathers'
+import type { Application, HookContext } from '@feathersjs/feathers'
 import { resolve } from '@feathersjs/schema'
 
 import { LocalStrategy, passwordHash } from '../src/index.js'
-import { createApplication, ServiceTypes } from './fixture.js'
+import { createApplication, type ServiceTypes } from './fixture.js'
 
 describe('@feathersjs/authentication-local/strategy', () => {
   const password = 'localsecret'

@@ -14,15 +14,14 @@ import {
 } from 'mongodb'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
-import {
-  AdapterBase,
+import type {
   AdapterParams,
   AdapterServiceOptions,
   PaginationOptions,
-  AdapterQuery,
-  getLimit
+  AdapterQuery
 } from '@feathersjs/adapter-commons'
-import { Id, Paginated } from '@feathersjs/feathers'
+import { AdapterBase, getLimit } from '@feathersjs/adapter-commons'
+import type { Id, Paginated } from '@feathersjs/feathers'
 import { errorHandler } from './error-handler.js'
 
 export interface MongoDBAdapterOptions extends AdapterServiceOptions {

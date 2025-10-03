@@ -1,9 +1,8 @@
-import { PaginationOptions } from '@feathersjs/adapter-commons'
+import type { PaginationOptions } from '@feathersjs/adapter-commons'
 import { MethodNotAllowed } from '@feathersjs/errors'
-import { Paginated, ServiceMethods, Id, NullableId, Params } from '@feathersjs/feathers'
+import type { Paginated, ServiceMethods, Id, NullableId, Params } from '@feathersjs/feathers'
 import { KnexAdapter } from './adapter.js'
-import { KnexAdapterParams } from './declarations.js'
-
+import type { KnexAdapterParams } from './declarations.js'
 export * from './declarations.js'
 export * from './adapter.js'
 export * from './error-handler.js'

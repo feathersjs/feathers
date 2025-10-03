@@ -1,12 +1,9 @@
-import { Application, feathers, NextFunction } from '@feathersjs/feathers'
+import type { Application, NextFunction } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import express, { rest, errorHandler } from '@feathersjs/express'
 import { memory, MemoryService } from '@feathersjs/memory'
-import {
-  AuthenticationService,
-  JWTStrategy,
-  AuthenticationRequest,
-  AuthenticationParams
-} from '@feathersjs/authentication'
+import type { AuthenticationRequest, AuthenticationParams } from '@feathersjs/authentication'
+import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import { provider } from './provider.js'
 import { oauth, OAuthStrategy } from '../../src/index.js'
 

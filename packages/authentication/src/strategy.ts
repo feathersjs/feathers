@@ -1,6 +1,6 @@
-import { AuthenticationStrategy, AuthenticationBase } from './core.js'
-import { Application, Service } from '@feathersjs/feathers'
-
+import type { AuthenticationStrategy } from './core.js'
+import { AuthenticationBase } from './core.js'
+import type { Application, Service } from '@feathersjs/feathers'
 export class AuthenticationBaseStrategy implements AuthenticationStrategy {
   authentication?: AuthenticationBase
   app?: Application

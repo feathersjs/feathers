@@ -1,6 +1,5 @@
 import { omit } from 'lodash-es'
-import { HookContext, NextFunction } from '@feathersjs/feathers'
-
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 /**
  * @deprecated For reliable safe data representations use Feathers schema dispatch resolvers.
  * @see https://dove.feathersjs.comapi/authentication/local.html#protecting-fields

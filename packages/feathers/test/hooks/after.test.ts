@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { feathers, Id } from '../../src/index.js'
-
+import type { Id } from '../../src/index.js'
+import { feathers } from '../../src/index.js'
 describe('`after` hooks', () => {
   it('.after hooks can return a promise', async () => {
     const app = feathers().use('/dummy', {

@@ -6,7 +6,7 @@ import { Server } from 'http'
 
 import rest from '../src/index.js'
 import createServer from './server.js'
-import { ServiceTypes } from './declarations.js'
+import type { ServiceTypes } from './declarations.js'
 
 describe('fetch REST connector', function () {
   const url = 'http://localhost:8889'

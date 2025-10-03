@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { feathers, Params, ServiceInterface } from '../../src/index.js'
-
+import type { Params, ServiceInterface } from '../../src/index.js'
+import { feathers } from '../../src/index.js'
 describe('`around` hooks', () => {
   it('around hooks can set hook.result which will skip service method', async () => {
     const app = feathers().use('/dummy', {

@@ -1,4 +1,5 @@
-import { feathers, Id, NullableId, Params } from '@feathersjs/feathers'
+import type { Id, NullableId, Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import expressify, { rest, urlencoded, json } from '@feathersjs/express'
 import { MemoryService } from '@feathersjs/memory'
 import { FeathersError, NotAcceptable } from '@feathersjs/errors'

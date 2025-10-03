@@ -1,4 +1,5 @@
-import { feathers, Id, Params } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
 import '@feathersjs/transport-commons'
 import { MemoryService } from '@feathersjs/memory'

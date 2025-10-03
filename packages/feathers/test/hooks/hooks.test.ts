@@ -1,7 +1,8 @@
 import assert from 'assert'
-import { hooks, NextFunction } from 'feathers/hooks'
-import { HookContext, createContext, feathers, Id, Params, ServiceInterface } from '../../src/index.js'
-
+import type { NextFunction } from 'feathers/hooks'
+import { hooks } from 'feathers/hooks'
+import type { HookContext, Id, Params, ServiceInterface } from '../../src/index.js'
+import { createContext, feathers } from '../../src/index.js'
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {
     interface SimpleParams extends Params {

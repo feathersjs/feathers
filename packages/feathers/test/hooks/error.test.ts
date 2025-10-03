@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { feathers, Application, FeathersService } from '../../src/index.js'
-
+import type { Application, FeathersService } from '../../src/index.js'
+import { feathers } from '../../src/index.js'
 describe('`error` hooks', () => {
   describe('on direct service method errors', () => {
     const errorMessage = 'Something else went wrong'

@@ -5,8 +5,7 @@ import { http } from '@feathersjs/transport-commons'
 import { createContext, defaultServiceMethods, getServiceOptions } from '@feathersjs/feathers'
 
 import { AuthenticationSettings, parseAuthentication } from './authentication.js'
-import { Application } from './declarations.js'
-
+import type { Application } from './declarations.js'
 const debug = createDebug('@feathersjs/express/rest')
 
 const toHandler = (

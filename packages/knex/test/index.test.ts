@@ -1,14 +1,15 @@
-import knex, { Knex } from 'knex'
+import knex, { type Knex } from 'knex'
 import assert from 'assert'
-import { feathers, HookContext, Service } from '@feathersjs/feathers'
+import type { HookContext, Service } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import adapterTests from '@feathersjs/adapter-tests'
 import { errors } from '@feathersjs/errors'
 import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
 import connection from './connection.js'
-import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index.js'
-import { AdapterQuery } from '@feathersjs/adapter-commons'
-
+import type { KnexAdapterParams } from '../src/index.js'
+import { ERROR, KnexService, transaction } from '../src/index.js'
+import type { AdapterQuery } from '@feathersjs/adapter-commons'
 const testSuite = adapterTests([
   '.options',
   '.events',

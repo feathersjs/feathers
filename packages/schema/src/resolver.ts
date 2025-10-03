@@ -1,6 +1,5 @@
 import { BadRequest } from '@feathersjs/errors'
-import { Schema } from './schema.js'
-
+import type { Schema } from './schema.js'
 type PromiseOrLiteral<V> = Promise<V> | V
 
 export type PropertyResolver<T, V, C> = ((

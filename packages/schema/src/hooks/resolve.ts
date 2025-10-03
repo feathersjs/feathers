@@ -1,4 +1,4 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 import { compose } from '@feathersjs/hooks'
 import { Resolver, ResolverStatus } from '../resolver.js'
 

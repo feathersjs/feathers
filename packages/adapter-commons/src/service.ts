@@ -1,5 +1,5 @@
-import { Id, Paginated, Query } from '@feathersjs/feathers'
-import {
+import type { Id, Paginated, Query } from '@feathersjs/feathers'
+import type {
   AdapterParams,
   AdapterServiceOptions,
   InternalServiceMethods,

@@ -2,7 +2,7 @@ import { get, set } from 'lodash-es'
 import { cloneDeep } from 'lodash-es'
 import { BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 import { LocalStrategy } from '../strategy.js'
 
 const debug = createDebug('@feathersjs/authentication-local/hooks/hash-password')

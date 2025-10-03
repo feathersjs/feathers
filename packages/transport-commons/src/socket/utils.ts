@@ -1,11 +1,5 @@
-import {
-  HookContext,
-  Application,
-  RealTimeConnection,
-  createContext,
-  getServiceOptions,
-  CombinedChannel
-} from '@feathersjs/feathers'
+import type { HookContext, Application, RealTimeConnection } from '@feathersjs/feathers'
+import { createContext, getServiceOptions, CombinedChannel } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import { isEqual } from 'lodash-es'

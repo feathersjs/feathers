@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Server } from 'http'
-import { feathers, Application as FeathersApplication } from '@feathersjs/feathers'
+import type { Application as FeathersApplication } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import * as express from '@feathersjs/express'
 import rest from '@feathersjs/rest-client'
 

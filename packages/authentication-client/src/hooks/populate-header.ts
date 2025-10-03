@@ -1,5 +1,4 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
-
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 export const populateHeader = () => {
   return (context: HookContext, next: NextFunction) => {
     const {

@@ -1,14 +1,14 @@
 import { io } from 'socket.io-client'
 import assert from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
 import socketioClient from '@feathersjs/socketio-client'
 
 import authClient from '../../src/index.js'
 import getApp from './fixture.js'
 import commonTests from './commons.js'
-import { AuthenticationResult } from '@feathersjs/authentication'
-
+import type { AuthenticationResult } from '@feathersjs/authentication'
 describe('@feathersjs/authentication-client Socket.io integration', () => {
   let app: Application
 

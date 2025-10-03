@@ -1,6 +1,7 @@
 import path from 'path'
 import { NotFound, GeneralError } from '@feathersjs/errors'
-import { Request, Response, NextFunction, ErrorRequestHandler, RequestHandler } from 'express'
+import type { NextFunction } from 'express'
+import { Request, Response, ErrorRequestHandler, RequestHandler } from 'express'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))

@@ -1,5 +1,5 @@
-import { Type, Static } from 'typebox'
-
+import type { Static } from 'typebox'
+import { Type } from 'typebox'
 export const authenticationSettingsSchema = Type.Object({
   secret: Type.String({ description: 'The JWT signing secret' }),
   entity: Type.Optional(

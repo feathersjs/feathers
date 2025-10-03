@@ -1,5 +1,6 @@
-import { AdapterBase, AdapterParams, PaginationOptions } from '../src/index.js'
-import { Id, NullableId, Paginated } from '@feathersjs/feathers'
+import type { AdapterParams, PaginationOptions } from '../src/index.js'
+import { AdapterBase } from '../src/index.js'
+import type { Id, NullableId, Paginated } from '@feathersjs/feathers'
 import { BadRequest, MethodNotAllowed } from '@feathersjs/errors'
 
 export type Data = {

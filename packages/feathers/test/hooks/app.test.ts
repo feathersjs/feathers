@@ -1,7 +1,8 @@
 import assert from 'assert'
 
-import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../src/index.js'
+import type { Application, ApplicationHookMap, ServiceInterface, Params } from '../../src/index.js'
 
+import { feathers } from '../../src/index.js'
 type Todo = {
   id?: string
   params?: TodoParams

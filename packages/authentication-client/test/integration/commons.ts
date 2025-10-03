@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
 import '../../src/index.js'
 
 export default (

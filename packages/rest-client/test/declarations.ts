@@ -1,4 +1,4 @@
-import { CustomMethod } from '@feathersjs/feathers'
+import type { CustomMethod } from '@feathersjs/feathers'
 import { RestService } from '../src/index.js'
 
 type Data = { message: string }

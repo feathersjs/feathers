@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { feathers, Params, ServiceInterface } from '../../src/index.js'
-
+import type { Params, ServiceInterface } from '../../src/index.js'
+import { feathers } from '../../src/index.js'
 describe('`before` hooks', () => {
   it('.before hooks can return a promise', async () => {
     interface DummyParams extends Params {

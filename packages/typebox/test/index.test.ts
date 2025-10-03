@@ -1,16 +1,15 @@
 import assert from 'assert'
 import { ObjectId as MongoObjectId } from 'mongodb'
 import { Ajv } from '@feathersjs/schema'
+import type { Static } from '../src/index.js'
 import {
   querySyntax,
   Type,
-  Static,
   defaultAppConfiguration,
   getDataValidator,
   getValidator,
   ObjectIdSchema
 } from '../src/index.js'
-
 describe('@feathersjs/schema/typebox', () => {
   describe('querySyntax', () => {
     it('basics', async () => {

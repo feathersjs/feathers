@@ -1,12 +1,14 @@
 import express, { Express } from 'express'
-import { Application as FeathersApplication, defaultServiceMethods } from '@feathersjs/feathers'
+import type { Application as FeathersApplication } from '@feathersjs/feathers'
+import { defaultServiceMethods } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import cors from 'cors'
 import compression from 'compression'
 
 import { rest, RestOptions, formatter } from './rest.js'
 import { errorHandler, notFound, ErrorHandlerOptions } from './handlers.js'
-import { Application, ExpressOverrides } from './declarations.js'
+import type { Application } from './declarations.js'
+import { ExpressOverrides } from './declarations.js'
 import { AuthenticationSettings, authenticate, parseAuthentication } from './authentication.js'
 import { default as original, static as serveStatic, json, raw, text, urlencoded, Router } from 'express'
 

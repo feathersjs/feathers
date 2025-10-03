@@ -1,10 +1,9 @@
-import { RequestHandler, Request, Response } from 'express'
-import { HookContext } from '@feathersjs/feathers'
+import type { RequestHandler, Request, Response } from 'express'
+import type { HookContext } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { authenticate as AuthenticateHook } from '@feathersjs/authentication'
 
-import { Application } from './declarations.js'
-
+import type { Application } from './declarations.js'
 const debug = createDebug('@feathersjs/express/authentication')
 
 const toHandler = (

@@ -1,6 +1,6 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
-import { AuthenticationBase, ConnectionEvent } from '../core.js'
-
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { ConnectionEvent } from '../core.js'
+import { AuthenticationBase } from '../core.js'
 export default (event: ConnectionEvent) => async (context: HookContext, next: NextFunction) => {
   await next()
 

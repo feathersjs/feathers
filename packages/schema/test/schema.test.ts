@@ -1,7 +1,9 @@
 import assert from 'assert'
 
-import { schema, Infer, queryProperty } from '../src/index.js'
-import Ajv, { AnySchemaObject } from 'ajv'
+import type { Infer } from '../src/index.js'
+
+import { schema, queryProperty } from '../src/index.js'
+import Ajv, { type AnySchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
 const customAjv = new Ajv({

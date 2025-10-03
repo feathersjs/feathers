@@ -1,9 +1,10 @@
 import knex from 'knex'
 import assert from 'assert'
-import { feathers, Paginated } from '@feathersjs/feathers'
-import { KnexAdapterParams, KnexService, transaction } from '../src/index.js'
-import { PaginationOptions } from '@feathersjs/adapter-commons'
-
+import type { Paginated } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { KnexAdapterParams } from '../src/index.js'
+import { KnexService, transaction } from '../src/index.js'
+import type { PaginationOptions } from '@feathersjs/adapter-commons'
 // const { transaction } = service.hooks
 
 const db = knex({

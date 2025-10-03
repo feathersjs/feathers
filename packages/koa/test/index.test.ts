@@ -1,10 +1,12 @@
 import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
-import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
-import { koa, rest, Application, bodyParser, errorHandler } from '../src/index.js'
-
+import type { ApplicationHookMap, Id } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import { Service } from '@feathersjs/tests'
+import { restTests } from '@feathersjs/tests'
+import type { Application } from '../src/index.js'
+import { koa, rest, bodyParser, errorHandler } from '../src/index.js'
 describe('@feathersjs/koa', () => {
   let app: Application
 

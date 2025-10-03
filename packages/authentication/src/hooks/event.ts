@@ -1,7 +1,6 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
-import { ConnectionEvent } from '../core.js'
-
+import type { ConnectionEvent } from '../core.js'
 const debug = createDebug('@feathersjs/authentication/hooks/connection')
 
 export default (event: ConnectionEvent) => async (context: HookContext, next: NextFunction) => {

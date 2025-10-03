@@ -1,8 +1,7 @@
 import { _ } from '@feathersjs/commons'
 import { BadRequest } from '@feathersjs/errors'
-import { Query } from '@feathersjs/feathers'
-import { FilterQueryOptions, FilterSettings, PaginationParams } from './declarations.js'
-
+import type { Query } from '@feathersjs/feathers'
+import type { FilterQueryOptions, FilterSettings, PaginationParams } from './declarations.js'
 const parse = (value: any) => (typeof value !== 'undefined' ? parseInt(value, 10) : value)
 
 const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor

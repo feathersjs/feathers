@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
-
+import type { Application } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 describe('app.routes', () => {
   let app: Application
 

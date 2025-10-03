@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/ban-ts-comment */
 import { IncomingMessage } from 'http'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { Params } from '@feathersjs/feathers'
+import type { Params } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 // @ts-ignore
 import lt from 'long-timeout'
 
 import { AuthenticationBaseStrategy } from './strategy.js'
-import { AuthenticationParams, AuthenticationRequest, AuthenticationResult, ConnectionEvent } from './core.js'
-
+import type {
+  AuthenticationParams,
+  AuthenticationRequest,
+  AuthenticationResult,
+  ConnectionEvent
+} from './core.js'
 const debug = createDebug('@feathersjs/authentication/jwt')
 const SPLIT_HEADER = /(\S+)\s+(\S+)/
 

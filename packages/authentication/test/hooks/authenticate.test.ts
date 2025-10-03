@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { feathers, Application, Params, ServiceMethods } from '@feathersjs/feathers'
-
+import type { Application, Params, ServiceMethods } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { Strategy1, Strategy2 } from '../fixtures.js'
 import { AuthenticationService, hooks } from '../../src/index.js'
 

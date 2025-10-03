@@ -5,8 +5,8 @@ const template = ({
   framework,
   schema
 }: AppGeneratorContext) => /* ts */ `// For more information about this file see https://dove.feathersjs.com/guides/cli/typescript.html
-import { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
-import { Application as FeathersApplication } from '@feathersjs/${framework}'
+import type { HookContext as FeathersHookContext, NextFunction } from '@feathersjs/feathers'
+import type { Application as FeathersApplication } from '@feathersjs/${framework}'
 ${
   schema === false
     ? `type ApplicationConfiguration = any`

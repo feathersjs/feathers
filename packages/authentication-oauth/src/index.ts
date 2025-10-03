@@ -1,4 +1,4 @@
-import { Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { resolveDispatch } from '@feathersjs/schema'
 

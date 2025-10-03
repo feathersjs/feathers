@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { HookContext } from '@feathersjs/feathers'
+import type { HookContext } from '@feathersjs/feathers'
 import * as http from 'feathers/http'
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {
