@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import jwt from 'jsonwebtoken'
-import { Infer, schema } from '@feathersjs/schema'
+import type { Infer } from '@feathersjs/schema'
+import { schema } from '@feathersjs/schema'
+import type { AuthenticationRequest } from '../src/core.js'
 
-import { AuthenticationBase, AuthenticationRequest } from '../src/core.js'
+import { AuthenticationBase } from '../src/core.js'
 import { authenticationSettingsSchema } from '../src/options.js'
-import { Strategy1, Strategy2, MockRequest } from './fixtures.js'
+import { Strategy1, Strategy2, type MockRequest } from './fixtures.js'
 import { ServerResponse } from 'http'
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/

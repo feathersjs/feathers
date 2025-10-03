@@ -1,14 +1,14 @@
 import { strict as assert } from 'assert'
-import {
-  feathers,
+import type {
   Application,
   HookContext,
   NullableId,
   Params,
   ApplicationHookContext
 } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import express from '@feathersjs/express'
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import { omit } from 'lodash-es'
 import { extend } from 'lodash-es'
 import { io } from 'socket.io-client'
@@ -20,7 +20,7 @@ import { Socket } from 'socket.io-client'
 import methodTests from './methods.js'
 import eventTests from './events.js'
 import socketio from '../src/index.js'
-import { FeathersSocket, NextFunction } from '../src/middleware.js'
+import type { NextFunction, FeathersSocket } from '../src/middleware.js'
 
 class VerifierService {
   async find(params: Params) {

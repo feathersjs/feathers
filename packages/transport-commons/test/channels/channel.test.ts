@@ -1,13 +1,6 @@
 import assert from 'assert'
-import {
-  feathers,
-  channelUtils,
-  Channel,
-  CombinedChannel,
-  Application,
-  RealTimeConnection
-} from '@feathersjs/feathers'
-
+import type { Application, RealTimeConnection } from '@feathersjs/feathers'
+import { feathers, channelUtils, Channel, CombinedChannel } from '@feathersjs/feathers'
 describe('app.channel', () => {
   let app: Application
 

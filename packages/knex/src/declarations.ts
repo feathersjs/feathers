@@ -1,6 +1,5 @@
 import { Knex } from 'knex'
-import { AdapterServiceOptions, AdapterParams, AdapterQuery } from '@feathersjs/adapter-commons'
-
+import type { AdapterServiceOptions, AdapterParams, AdapterQuery } from '@feathersjs/adapter-commons'
 export interface KnexAdapterOptions extends AdapterServiceOptions {
   Model: Knex
   name: string

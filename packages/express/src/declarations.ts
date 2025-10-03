@@ -1,6 +1,6 @@
 import http from 'http'
 import express, { Express } from 'express'
-import {
+import type {
   Application as FeathersApplication,
   Params as FeathersParams,
   HookContext,
@@ -8,7 +8,6 @@ import {
   ServiceInterface,
   RouteLookup
 } from '@feathersjs/feathers'
-
 interface ExpressUseHandler<T, Services> {
   <L extends keyof Services & string>(
     path: L,

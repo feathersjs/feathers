@@ -8,8 +8,8 @@ import Type, {
   type TObjectOptions,
   type TRecord
 } from 'typebox'
-import { jsonSchema, Validator, DataValidatorMap, Ajv } from '@feathersjs/schema'
-
+import type { Validator, DataValidatorMap } from '@feathersjs/schema'
+import { jsonSchema, Ajv } from '@feathersjs/schema'
 export * from './default-schemas.js'
 export { Type, Static } from 'typebox'
 

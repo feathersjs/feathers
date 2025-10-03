@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { strict as assert } from 'assert'
 import { Server } from 'http'
-import { CustomMethod, feathers } from '@feathersjs/feathers'
+import type { CustomMethod } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { io, Socket } from 'socket.io-client'
 import { clientTests } from '@feathersjs/tests'
 
 import { createServer } from './server.js'
-import socketio, { SocketService } from '../src/index.js'
+import socketio, { type SocketService } from '../src/index.js'
 
 type ServiceTypes = {
   '/': SocketService

@@ -1,4 +1,5 @@
-import { feathers, Application, HookContext, Id, Params } from '@feathersjs/feathers'
+import type { Application, HookContext, Id, Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import * as express from '@feathersjs/express'
 import { MemoryService } from '@feathersjs/memory'
 

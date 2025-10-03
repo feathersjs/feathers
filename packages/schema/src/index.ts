@@ -1,7 +1,6 @@
 import addFormats, { FormatName, FormatOptions, FormatsPluginOptions } from 'ajv-formats'
 import { ResolverStatus } from './resolver.js'
-import { HookContext } from '@feathersjs/hooks'
-
+import type { HookContext } from '@feathersjs/hooks'
 export type { FromSchema } from 'json-schema-to-ts'
 export { addFormats, FormatName, FormatOptions, FormatsPluginOptions }
 

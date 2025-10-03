@@ -1,9 +1,8 @@
-import { Application, HookContext } from '@feathersjs/feathers'
+import type { Application, HookContext } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
 import { authenticate as AuthenticateHook } from '@feathersjs/authentication'
 
-import { Middleware } from './declarations.js'
-
+import type { Middleware } from './declarations.js'
 const debug = createDebug('@feathersjs/koa/authentication')
 
 export type AuthenticationSettings = {

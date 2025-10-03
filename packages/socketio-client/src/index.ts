@@ -1,12 +1,8 @@
-import { Service, SocketService } from '@feathersjs/transport-commons/client.js'
+import type { SocketService } from '@feathersjs/transport-commons/client.js'
+import { Service } from '@feathersjs/transport-commons/client.js'
 import { Socket } from 'socket.io-client'
-import {
-  Application,
-  TransportConnection,
-  defaultEventMap,
-  defaultServiceMethods
-} from '@feathersjs/feathers'
-
+import type { Application, TransportConnection } from '@feathersjs/feathers'
+import { defaultEventMap, defaultServiceMethods } from '@feathersjs/feathers'
 export { SocketService }
 
 declare module '@feathersjs/feathers' {

@@ -1,7 +1,7 @@
 import http from 'http'
 import { Server, ServerOptions } from 'socket.io'
 import { createDebug } from '@feathersjs/commons'
-import { Application, RealTimeConnection } from '@feathersjs/feathers'
+import type { Application, RealTimeConnection } from '@feathersjs/feathers'
 import { socket } from '@feathersjs/transport-commons'
 
 import { disconnect, params, authentication, FeathersSocket } from './middleware.js'

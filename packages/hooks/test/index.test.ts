@@ -1,15 +1,6 @@
 import assert from 'assert'
-import {
-  BaseHookContext,
-  functionHooks,
-  getManager,
-  HookContext,
-  hooks,
-  middleware,
-  NextFunction,
-  setMiddleware
-} from '../src/index.js'
-
+import type { HookContext, NextFunction } from '../src/index.js'
+import { BaseHookContext, functionHooks, getManager, hooks, middleware, setMiddleware } from '../src/index.js'
 const hello = (name?: string, _params: any = {}) => {
   return Promise.resolve(`Hello ${name}`)
 }

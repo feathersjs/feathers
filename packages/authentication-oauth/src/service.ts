@@ -1,5 +1,5 @@
 import { createDebug } from '@feathersjs/commons'
-import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
+import type { HookContext, NextFunction, Params } from '@feathersjs/feathers'
 import { FeathersError, GeneralError } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore

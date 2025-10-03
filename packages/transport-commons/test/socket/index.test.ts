@@ -1,9 +1,10 @@
 import assert from 'assert'
 import { EventEmitter } from 'events'
-import { feathers, Application, Id, Params } from '@feathersjs/feathers'
+import type { Application, Id, Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import type { SocketOptions } from '../../src/socket/index.js'
 
-import { socket as commons, SocketOptions } from '../../src/socket/index.js'
-
+import { socket as commons } from '../../src/socket/index.js'
 class DummyService {
   async get(id: Id, params: Params) {
     return { id, params }

@@ -1,4 +1,4 @@
-import { HookContext } from '@feathersjs/feathers'
+import type { HookContext } from '@feathersjs/feathers'
 import hashPassword from './hooks/hash-password.js'
 import protect from './hooks/protect.js'
 import { LocalStrategy } from './strategy.js'

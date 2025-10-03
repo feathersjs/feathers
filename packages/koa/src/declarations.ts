@@ -1,6 +1,11 @@
 import Koa, { Next } from 'koa'
 import { Server } from 'http'
-import { Application as FeathersApplication, HookContext, Params, RouteLookup } from '@feathersjs/feathers'
+import type {
+  Application as FeathersApplication,
+  HookContext,
+  Params,
+  RouteLookup
+} from '@feathersjs/feathers'
 import '@feathersjs/authentication'
 
 export type ApplicationAddons = {

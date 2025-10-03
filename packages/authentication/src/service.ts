@@ -2,20 +2,16 @@ import { merge } from 'lodash-es'
 import { NotAuthenticated } from '@feathersjs/errors'
 import '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'
-import { ServiceMethods } from '@feathersjs/feathers'
+import type { ServiceMethods } from '@feathersjs/feathers'
 import { resolveDispatch } from '@feathersjs/schema'
 import jsonwebtoken from 'jsonwebtoken'
 import { hooks } from '@feathersjs/hooks'
 
-import {
-  AuthenticationBase,
-  AuthenticationResult,
-  AuthenticationRequest,
-  AuthenticationParams
-} from './core.js'
-import { connection, event } from './hooks/index.js'
-import { RealTimeConnection } from '@feathersjs/feathers'
+import type { AuthenticationResult, AuthenticationRequest, AuthenticationParams } from './core.js'
 
+import { AuthenticationBase } from './core.js'
+import { connection, event } from './hooks/index.js'
+import type { RealTimeConnection } from '@feathersjs/feathers'
 const debug = createDebug('@feathersjs/authentication/service')
 
 declare module '@feathersjs/feathers' {

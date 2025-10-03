@@ -1,4 +1,4 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 import { stripSlashes } from '@feathersjs/commons'
 
 export const authentication = () => {

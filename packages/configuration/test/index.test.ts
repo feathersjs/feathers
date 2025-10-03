@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert'
-import { feathers, Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { Ajv, schema } from '@feathersjs/schema'
 import configuration from '../src/index.js'
 

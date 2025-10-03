@@ -1,7 +1,9 @@
-import { feathers, HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
+import type { HookContext, Application as FeathersApplication } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { memory, MemoryService } from '@feathersjs/memory'
 import { GeneralError } from '@feathersjs/errors'
-import { AdapterParams } from '@feathersjs/adapter-commons'
+import type { AdapterParams } from '@feathersjs/adapter-commons'
+import type { FromSchema } from '../src/index.js'
 
 import {
   resolve,
@@ -14,13 +16,11 @@ import {
   resolveDispatch,
   resolveAll,
   Ajv,
-  FromSchema,
   getValidator,
   getDataValidator,
   virtual,
   resolveExternal
 } from '../src/index.js'
-
 const fixtureAjv = new Ajv({
   coerceTypes: true,
   addUsedSchema: false

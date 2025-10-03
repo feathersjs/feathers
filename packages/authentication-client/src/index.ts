@@ -1,6 +1,7 @@
-import { AuthenticationClient, AuthenticationClientOptions } from './core.js'
+import type { AuthenticationClientOptions } from './core.js'
+import { AuthenticationClient } from './core.js'
 import * as hooks from './hooks/index.js'
-import { Application } from '@feathersjs/feathers'
+import type { Application } from '@feathersjs/feathers'
 import { Storage, MemoryStorage, StorageWrapper } from './storage.js'
 
 declare module '@feathersjs/feathers' {

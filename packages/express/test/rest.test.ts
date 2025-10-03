@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { strict as assert } from 'assert'
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 
 import { Server } from 'http'
-import { Request, Response, NextFunction } from 'express'
-import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import type { NextFunction, Request, Response } from 'express'
+import type { ApplicationHookMap, HookContext, Id, Params } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
+import { Service } from '@feathersjs/tests'
+import { restTests } from '@feathersjs/tests'
 import { BadRequest } from '@feathersjs/errors'
 
 import * as express from '../src/index.js'

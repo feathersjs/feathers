@@ -1,7 +1,6 @@
 import { NotAuthenticated } from '@feathersjs/errors'
-import { Params } from '@feathersjs/feathers'
-
-import { AuthenticationRequest } from '../src/core.js'
+import type { Params } from '@feathersjs/feathers'
+import type { AuthenticationRequest } from '../src/core.js'
 import { IncomingMessage } from 'http'
 import { AuthenticationBaseStrategy } from '../src/strategy.js'
 

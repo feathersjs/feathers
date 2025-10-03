@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { convert } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
-
+import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 const debug = createDebug('@feathersjs/transport-commons/client')
 
 const namespacedEmitterMethods = [

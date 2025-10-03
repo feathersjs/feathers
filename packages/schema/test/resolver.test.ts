@@ -1,8 +1,9 @@
 import assert from 'assert'
 import { BadRequest } from '@feathersjs/errors'
 
-import { FromSchema, schema, resolve, virtual } from '../src/index.js'
+import type { FromSchema } from '../src/index.js'
 
+import { schema, resolve, virtual } from '../src/index.js'
 describe('@feathersjs/schema/resolver', () => {
   const userSchema = {
     $id: 'simple-user',

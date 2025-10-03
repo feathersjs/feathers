@@ -1,6 +1,7 @@
 import assert from 'assert'
 import { EventEmitter } from 'events'
-import { feathers, Application, Params, RealTimeConnection } from '@feathersjs/feathers'
+import type { Application, Params, RealTimeConnection } from '@feathersjs/feathers'
+import { feathers } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { isPlainObject } from 'lodash-es'
 

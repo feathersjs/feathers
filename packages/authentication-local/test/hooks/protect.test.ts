@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { HookContext } from '@feathersjs/feathers'
+import type { HookContext } from '@feathersjs/feathers'
 import { hooks } from '../../src/index.js'
 
 const { protect } = hooks

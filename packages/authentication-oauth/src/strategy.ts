@@ -1,10 +1,10 @@
-import {
+import type {
   AuthenticationRequest,
-  AuthenticationBaseStrategy,
   AuthenticationResult,
   AuthenticationParams
 } from '@feathersjs/authentication'
-import { Params } from '@feathersjs/feathers'
+import { AuthenticationBaseStrategy } from '@feathersjs/authentication'
+import type { Params } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug, _ } from '@feathersjs/commons'
 import qs from 'qs'

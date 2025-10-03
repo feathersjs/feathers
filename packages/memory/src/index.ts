@@ -1,16 +1,9 @@
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { _ } from '@feathersjs/commons'
-import {
-  sorter,
-  select,
-  AdapterBase,
-  AdapterServiceOptions,
-  PaginationOptions,
-  AdapterParams
-} from '@feathersjs/adapter-commons'
+import type { AdapterServiceOptions, PaginationOptions, AdapterParams } from '@feathersjs/adapter-commons'
+import { sorter, select, AdapterBase } from '@feathersjs/adapter-commons'
 import sift from 'sift'
-import { NullableId, Id, Params, Paginated } from '@feathersjs/feathers'
-
+import type { NullableId, Id, Params, Paginated } from '@feathersjs/feathers'
 export interface MemoryServiceStore<T> {
   [key: string]: T
 }

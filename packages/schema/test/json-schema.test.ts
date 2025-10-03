@@ -1,7 +1,7 @@
 import Ajv from 'ajv'
 import assert from 'assert'
 import { ObjectId as MongoObjectId } from 'mongodb'
-import { FromSchema } from '../src/index.js'
+import type { FromSchema } from '../src/index.js'
 import { querySyntax, ObjectIdSchema } from '../src/json-schema.js'
 
 describe('@feathersjs/schema/json-schema', () => {

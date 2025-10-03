@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { Application } from '@feathersjs/feathers'
-
+import type { Application } from '@feathersjs/feathers'
 import { hooks } from '../../src/index.js'
-import { createApplication, ServiceTypes } from '../fixture.js'
+import { createApplication, type ServiceTypes } from '../fixture.js'
 
 const { hashPassword } = hooks
 

@@ -2,10 +2,11 @@ import { Db, MongoClient, ObjectId } from 'mongodb'
 import adapterTests from '@feathersjs/adapter-tests'
 import assert from 'assert'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { Ajv, FromSchema, getValidator, hooks, querySyntax } from '@feathersjs/schema'
+import type { FromSchema } from '@feathersjs/schema'
+import { Ajv, getValidator, hooks, querySyntax } from '@feathersjs/schema'
 import { feathers } from '@feathersjs/feathers'
 import * as errors from '@feathersjs/errors'
-import { MongoDBService, AdapterId } from '../src/index.js'
+import { MongoDBService, type AdapterId } from '../src/index.js'
 
 const testSuite = adapterTests([
   '.options',

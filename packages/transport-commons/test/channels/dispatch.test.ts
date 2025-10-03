@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { feathers, Application, HookContext, Channel, CombinedChannel } from '@feathersjs/feathers'
-
+import type { Application, HookContext } from '@feathersjs/feathers'
+import { feathers, Channel, CombinedChannel } from '@feathersjs/feathers'
 class TestService {
   events = ['foo']
 

@@ -1,5 +1,4 @@
-import { Query, Params, Paginated, Id, PaginationParams, PaginationOptions } from '@feathersjs/feathers'
-
+import type { Query, Params, Paginated, Id, PaginationParams, PaginationOptions } from '@feathersjs/feathers'
 export type FilterQueryOptions = {
   filters?: FilterSettings
   operators?: string[]

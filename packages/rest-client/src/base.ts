@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { Params, Id, Query, NullableId, ServiceInterface } from '@feathersjs/feathers'
+import type { Params, Id, Query, NullableId, ServiceInterface } from '@feathersjs/feathers'
 import { Unavailable, convert } from '@feathersjs/errors'
 import { _, stripSlashes } from '@feathersjs/commons'
 

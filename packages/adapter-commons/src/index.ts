@@ -1,6 +1,5 @@
 import { _ } from '@feathersjs/commons'
-import { Params } from '@feathersjs/feathers'
-
+import type { Params } from '@feathersjs/feathers'
 export * from './declarations.js'
 export * from './service.js'
 export * from './query.js'

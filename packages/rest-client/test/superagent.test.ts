@@ -8,7 +8,7 @@ import { NotAcceptable } from '@feathersjs/errors'
 
 import rest from '../src/index.js'
 import createServer from './server.js'
-import { ServiceTypes } from './declarations.js'
+import type { ServiceTypes } from './declarations.js'
 
 describe('Superagent REST connector', function () {
   let server: Server

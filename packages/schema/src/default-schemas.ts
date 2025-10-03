@@ -1,5 +1,4 @@
-import { FromSchema } from 'json-schema-to-ts'
-
+import type { FromSchema } from 'json-schema-to-ts'
 export const authenticationSettingsSchema = {
   type: 'object',
   required: ['secret', 'entity', 'authStrategies'],

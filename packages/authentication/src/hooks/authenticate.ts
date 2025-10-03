@@ -1,4 +1,4 @@
-import { HookContext, NextFunction } from '@feathersjs/feathers'
+import type { HookContext, NextFunction } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 

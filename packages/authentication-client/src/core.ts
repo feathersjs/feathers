@@ -1,6 +1,6 @@
 import { NotAuthenticated, FeathersError } from '@feathersjs/errors'
-import { Application, Params } from '@feathersjs/feathers'
-import { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication'
+import type { Application, Params } from '@feathersjs/feathers'
+import type { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication'
 import { Storage, StorageWrapper } from './storage.js'
 
 class OauthError extends FeathersError {

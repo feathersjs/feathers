@@ -8,7 +8,7 @@ import { NotAcceptable } from '@feathersjs/errors'
 
 import createServer from './server.js'
 import rest from '../src/index.js'
-import { ServiceTypes } from './declarations.js'
+import type { ServiceTypes } from './declarations.js'
 
 describe('Axios REST connector', function () {
   const url = 'http://localhost:8889'

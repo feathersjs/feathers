@@ -1,5 +1,6 @@
 import Ajv, { AsyncValidateFunction, ValidateFunction } from 'ajv'
-import { FromSchema, JSONSchema } from 'json-schema-to-ts'
+import type { FromSchema } from 'json-schema-to-ts'
+import { JSONSchema } from 'json-schema-to-ts'
 import { BadRequest } from '@feathersjs/errors'
 
 export const DEFAULT_AJV = new Ajv({

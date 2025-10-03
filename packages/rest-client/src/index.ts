@@ -1,5 +1,5 @@
-import { Application, TransportConnection, defaultServiceMethods } from '@feathersjs/feathers'
-
+import type { Application, TransportConnection } from '@feathersjs/feathers'
+import { defaultServiceMethods } from '@feathersjs/feathers'
 import { Base } from './base.js'
 import { AxiosClient } from './axios.js'
 import { FetchClient } from './fetch.js'

@@ -1,4 +1,4 @@
-import { Params } from '@feathersjs/feathers'
+import type { Params } from '@feathersjs/feathers'
 import { Base, RestClientParams } from './base.js'
 
 export class SuperagentClient<T = any, D = Partial<T>, P extends Params = RestClientParams> extends Base<

@@ -1,7 +1,6 @@
 import { strict as assert } from 'assert'
 import _axios from 'axios'
-import { AuthenticationResult } from '@feathersjs/authentication'
-
+import type { AuthenticationResult } from '@feathersjs/authentication'
 import app from './app.fixture.js'
 
 const axios = _axios.create({

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-empty-function */
 import assert from 'assert'
-import { feathers, Feathers, getServiceOptions, Id, version } from '../src/index.js'
-
+import type { Id } from '../src/index.js'
+import { feathers, Feathers, getServiceOptions, version } from '../src/index.js'
 describe('Feathers application', () => {
   it('initializes', () => {
     const app = feathers()

@@ -1,11 +1,12 @@
-import { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
+import type { Id, NullableId, Paginated, Query } from '@feathersjs/feathers'
 import { _ } from '@feathersjs/commons'
-import { AdapterBase, PaginationOptions, AdapterQuery, getLimit } from '@feathersjs/adapter-commons'
+import type { PaginationOptions, AdapterQuery } from '@feathersjs/adapter-commons'
+import { AdapterBase, getLimit } from '@feathersjs/adapter-commons'
 import { BadRequest, MethodNotAllowed, NotFound } from '@feathersjs/errors'
 import { Knex } from 'knex'
 
 import { errorHandler } from './error-handler.js'
-import { KnexAdapterOptions, KnexAdapterParams } from './declarations.js'
+import type { KnexAdapterOptions, KnexAdapterParams } from './declarations.js'
 const METHODS = {
   $ne: 'whereNot',
   $in: 'whereIn',

@@ -1,6 +1,6 @@
-import { Application, ApplicationHookContext, NextFunction } from '@feathersjs/feathers'
+import type { Application, ApplicationHookContext, NextFunction } from '@feathersjs/feathers'
 import { createDebug } from '@feathersjs/commons'
-import { Schema, Validator } from '@feathersjs/schema'
+import type { Schema, Validator } from '@feathersjs/schema'
 import config from 'config'
 
 const debug = createDebug('@feathersjs/configuration')

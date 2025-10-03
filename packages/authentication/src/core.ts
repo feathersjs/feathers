@@ -3,10 +3,10 @@ import jsonwebtoken, { SignOptions, Secret, VerifyOptions, Algorithm } from 'jso
 import { v4 as uuidv4 } from 'uuid'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import { Application, Params } from '@feathersjs/feathers'
+import type { Application, Params } from '@feathersjs/feathers'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AuthenticationConfiguration, defaultOptions } from './options.js'
-
+import type { AuthenticationConfiguration } from './options.js'
+import { defaultOptions } from './options.js'
 const debug = createDebug('@feathersjs/authentication/base')
 
 export interface AuthenticationResult {
