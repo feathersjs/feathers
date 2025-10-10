@@ -64,6 +64,19 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
     assert.deepStrictEqual(http.getResponse(locationContext as HookContext).headers, {
       Location: '/'
     })
+
+    assert.deepStrictEqual(
+      http.getResponse({
+        http: {
+          location:
+            'https://github.com/login/oauth/authorize?redirect_uri=http%3A%2F%2Flocalhost%3A8787%2Foauth%2Fgithub%2Fcallback'
+        }
+      } as HookContext).headers,
+      {
+        Location:
+          'https://github.com/login/oauth/authorize?redirect_uri=http%3A%2F%2Flocalhost%3A8787%2Foauth%2Fgithub%2Fcallback'
+      }
+    )
   })
 
   it('getServiceMethod', () => {
