@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.2...v6.0.0-pre.3) (2025-10-10)
+
+### Bug Fixes
+
+- Fix redirect URI encoding ([#3621](https://github.com/feathersjs/feathers/issues/3621)) ([4dbcce5](https://github.com/feathersjs/feathers/commit/4dbcce598d894846899417cd51820a70b00f22e0))
+
 # [6.0.0-pre.2](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.1...v6.0.0-pre.2) (2025-09-04)
 
 ### Bug Fixes
