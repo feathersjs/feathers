@@ -84,7 +84,7 @@ export function getResponse(context: HookContext) {
   let location = headers.Location
 
   if (http.location !== undefined) {
-    location = encodeURI(http.location)
+    location = http.location
     headers = { ...headers, Location: location }
   }
 
