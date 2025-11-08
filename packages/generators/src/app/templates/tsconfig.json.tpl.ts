@@ -18,7 +18,8 @@ export const generate = (ctx: AppGeneratorContext) =>
             declaration: true,
             strict: true,
             esModuleInterop: true,
-            sourceMap: true
+            sourceMap: true,
+            skipLibCheck: true
           },
           include: [lib],
           exclude: ['test']
