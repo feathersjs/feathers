@@ -8,7 +8,7 @@ export type IdQueryObject<T> = {
   $ne?: T
 }
 
-const toObjectId = (value: ObjectIdParam) => new ObjectId(value)
+const toObjectId = (value: ObjectIdParam) => new ObjectId(value as string)
 
 export async function resolveObjectId(value: ObjectIdParam) {
   return toObjectId(value)
