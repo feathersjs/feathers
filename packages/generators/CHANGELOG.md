@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.36](https://github.com/feathersjs/feathers/compare/v5.0.35...v5.0.36) (2025-11-08)
+
+### Bug Fixes
+
+- **dependencies:** Update all dependencies ([#3625](https://github.com/feathersjs/feathers/issues/3625)) ([2698e4e](https://github.com/feathersjs/feathers/commit/2698e4e2996fbf479d82435938d907bc3d5b583a))
+- **generators:** typebox generated schema resolver generic ([#3622](https://github.com/feathersjs/feathers/issues/3622)) ([55a4a9b](https://github.com/feathersjs/feathers/commit/55a4a9b6bb021c369fb65b50fa13869311587c3f))
+
 ## [5.0.35](https://github.com/feathersjs/feathers/compare/v5.0.34...v5.0.35) (2025-09-09)
 
 ### Bug Fixes
