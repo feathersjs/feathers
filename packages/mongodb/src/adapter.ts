@@ -72,7 +72,7 @@ export class MongoDbAdapter<
       return id
     }
 
-    if (this.id === '_id' && ObjectId.isValid(id)) {
+    if (this.id === '_id' && ObjectId.isValid(id as string)) {
       id = new ObjectId(id.toString())
     }
 

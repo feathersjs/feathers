@@ -63,9 +63,9 @@
     "@feathersjs/memory": "^5.0.35",
     "@feathersjs/tests": "^5.0.35",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.9.2",
+    "@types/node": "^24.10.0",
     "lodash": "^4.17.21",
-    "mocha": "^11.7.4",
+    "mocha": "^11.7.5",
     "shx": "^0.4.0",
     "socket.io-client": "^4.8.1",
     "typescript": "^5.9.3"

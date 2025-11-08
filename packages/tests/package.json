@@ -45,14 +45,14 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.20",
-    "axios": "^1.13.1",
+    "axios": "^1.13.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^5.0.35",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.9.2",
-    "mocha": "^11.7.4",
+    "@types/node": "^24.10.0",
+    "mocha": "^11.7.5",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

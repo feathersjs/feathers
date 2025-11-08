@@ -63,7 +63,7 @@
     "@feathersjs/socketio": "^5.0.35",
     "@feathersjs/tests": "^5.0.35",
     "babel-loader": "^10.0.0",
-    "mocha": "^11.7.4",
+    "mocha": "^11.7.5",
     "node-fetch": "^2.6.1",
     "shx": "^0.4.0",
     "socket.io-client": "^4.8.1",
