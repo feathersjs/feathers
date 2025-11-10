@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.37](https://github.com/feathersjs/feathers/compare/v5.0.36...v5.0.37) (2025-11-10)
+
+### Bug Fixes
+
+- Revert to compatible UUID package ([#3630](https://github.com/feathersjs/feathers/issues/3630)) ([5c8c9e3](https://github.com/feathersjs/feathers/commit/5c8c9e36efbbf695eccd6d8822e36e1ea75c1516))
+
 ## [5.0.36](https://github.com/feathersjs/feathers/compare/v5.0.35...v5.0.36) (2025-11-08)
 
 ### Bug Fixes
