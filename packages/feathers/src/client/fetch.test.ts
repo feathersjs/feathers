@@ -1,7 +1,7 @@
 import { beforeAll, describe, it, expect } from 'vitest'
 import { feathers } from '../index.js'
 import { clientTests } from '../../fixtures/client.js'
-import { NotAcceptable, NotFound, MethodNotAllowed } from '../errors.js'
+import { NotAcceptable, NotFound, MethodNotAllowed, BadRequest } from '../errors.js'
 
 import { getApp, createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
 import { fetchClient } from './index.js'
@@ -113,6 +113,11 @@ describe('fetch REST connector', function () {
     await expect(() => service.wrongCustomMethod({})).rejects.toThrow(MethodNotAllowed)
     //@ts-expect-error Testing method with parameters
     await expect(() => service.internalMethod({})).rejects.toThrow(MethodNotAllowed)
+  })
+
+  it('.get with undefined and null erorrs', async () => {
+    await expect(() => service.get(undefined, {})).rejects.toThrow(BadRequest)
+    await expect(() => service.get(null, {})).rejects.toThrow(BadRequest)
   })
 
   it('supports async iterable streams', async () => {
