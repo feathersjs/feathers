@@ -96,6 +96,32 @@ describe('@feathersjs/authentication-client', () => {
     }
   })
 
+  it('getAccessToken prefers URL token over storage token (#3631)', async () => {
+    const auth = app.authentication
+    const storageToken = 'old-storage-token'
+    const urlToken = 'new-url-token'
+
+    await auth.setAccessToken(storageToken)
+
+    let stored = await auth.storage.getItem(auth.options.storageKey)
+    assert.strictEqual(stored, storageToken)
+
+    const originalWindow = (global as any).window
+      ; (global as any).window = {
+        location: { hash: `access_token=${urlToken}` }
+      }
+
+    try {
+      const token = await auth.getAccessToken()
+      assert.strictEqual(token, urlToken, 'Should return URL token over storage token')
+
+      stored = await auth.storage.getItem(auth.options.storageKey)
+      assert.strictEqual(stored, undefined, 'Storage should be cleared when URL token is used')
+    } finally {
+      ; (global as any).window = originalWindow
+    }
+  })
+
   it('authenticate, authentication hook, login event', async () => {
     const data = {
       strategy: 'testing'
