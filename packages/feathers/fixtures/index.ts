@@ -62,9 +62,8 @@ function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
           method: req.method,
           headers,
           body: req as unknown as ReadableStream<Uint8Array>,
-          // @ts-expect-error duplex is required for streaming bodies in Node
           duplex: 'half'
-        })
+        } as RequestInit)
       }
     } else {
       request = new Request(url, {
