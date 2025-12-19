@@ -175,6 +175,57 @@ app.configure(
 )
 ```
 
+### FormData and File Uploads
+
+The REST client automatically detects when you pass a `FormData` object and handles it appropriately - skipping JSON serialization and letting the browser set the correct `Content-Type` header with the multipart boundary.
+
+```ts
+// Create a FormData object
+const formData = new FormData()
+formData.append('file', fileInput.files[0])
+formData.append('description', 'My uploaded file')
+
+// Upload using the service - FormData is auto-detected
+const result = await app.service('uploads').create(formData)
+```
+
+On the server, the data is parsed and converted to a plain object:
+
+```ts
+// Server receives:
+{
+  file: File,
+  description: 'My uploaded file'
+}
+```
+
+Multiple values for the same field name become an array:
+
+```ts
+// Client
+const formData = new FormData()
+formData.append('files', file1)
+formData.append('files', file2)
+formData.append('files', file3)
+
+// Server receives:
+{
+  files: [File, File, File] // All files in one array
+}
+```
+
+<BlockQuote type="warning" label="REST only">
+
+FormData and file uploads are only supported with the REST/HTTP transport. Socket.io does not support FormData - attempting to send FormData over websockets will result in an error.
+
+</BlockQuote>
+
+<BlockQuote type="info" label="note">
+
+File uploads use the native `Request.formData()` API which buffers the entire request into memory. For large file uploads (videos, large datasets), consider using presigned URLs to upload directly to cloud storage (S3, R2, etc.).
+
+</BlockQuote>
+
 ### Custom Methods
 
 On the client, [custom service methods](../services.md#custom-methods) registered using the `methods` option when registering the service via `restClient.service()`:

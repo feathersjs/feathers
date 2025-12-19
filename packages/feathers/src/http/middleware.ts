@@ -21,6 +21,17 @@ export interface HandlerContext extends HookContext {
 
 export type Middleware = (context: HandlerContext, next: NextFunction) => Promise<void>
 
+function formDataToObject(formData: FormData): Record<string, File | string | (File | string)[]> {
+  const result: Record<string, File | string | (File | string)[]> = {}
+
+  for (const key of new Set(formData.keys())) {
+    const values = formData.getAll(key) as (File | string)[]
+    result[key] = values.length === 1 ? values[0] : values
+  }
+
+  return result
+}
+
 export function bodyParser() {
   return async (context: HandlerContext, next: NextFunction) => {
     const contentType = context.request.headers.get('content-type')
@@ -33,6 +44,8 @@ export function bodyParser() {
           context.data = await request.json()
         } else if (contentType?.includes('application/x-www-form-urlencoded')) {
           context.data = Object.fromEntries(new URLSearchParams(await request.text()))
+        } else if (contentType?.includes('multipart/form-data')) {
+          context.data = formDataToObject(await request.formData())
         } else {
           throw new Error('Invalid content type')
         }

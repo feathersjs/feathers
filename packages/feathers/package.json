@@ -92,7 +92,6 @@
   "devDependencies": {
     "@types/node": "^24.1.0",
     "@vitest/coverage-v8": "^3.2.4",
-    "@whatwg-node/server": "^0.10.12",
     "shx": "^0.4.0",
     "typescript": "^5.8.0",
     "vitest": "^3.2.4"

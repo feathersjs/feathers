@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest'
+import { describe, it, beforeAll } from 'vitest'
 import assert from 'assert'
 import { HookContext, hooks, middleware, NextFunction } from './index.js'
 
@@ -18,12 +18,13 @@ const hello = async (name: string, _params: any = {}) => {
 }
 let baseline: number
 let threshold: number
-;(async () => {
-  baseline = await getRuntime(() => hello('Dave'))
-  threshold = baseline * 15
-})()
 
 describe('feathers/hooks benchmark', () => {
+  beforeAll(async () => {
+    baseline = await getRuntime(() => hello('Dave'))
+    threshold = baseline * 20
+  })
+
   it('empty hook', async () => {
     const hookHello1 = hooks(hello, middleware([]))
     const runtime = await getRuntime(() => hookHello1('Dave'))

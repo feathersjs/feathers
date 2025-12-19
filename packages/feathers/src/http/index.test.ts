@@ -35,6 +35,66 @@ describe('http test', () => {
     verify.create({ description: 'Form encoded' }, await res.json())
   })
 
+  it('works with multipart/form-data body', async () => {
+    const formData = new FormData()
+    formData.append('description', 'Multipart form data')
+    formData.append('name', 'test-upload')
+
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
+      method: 'POST',
+      body: formData
+    })
+
+    expect(res.status).toBe(201)
+
+    const result = await res.json()
+    // Single FormData fields are unwrapped
+    expect(result.description).toBe('Multipart form data')
+    expect(result.name).toBe('test-upload')
+    expect(result.id).toBe(42)
+    expect(result.status).toBe('created')
+  })
+
+  it('handles multiple values for same field in multipart/form-data', async () => {
+    const formData = new FormData()
+    formData.append('tags', 'one')
+    formData.append('tags', 'two')
+    formData.append('tags', 'three')
+    formData.append('description', 'Multiple tags')
+
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
+      method: 'POST',
+      body: formData
+    })
+
+    expect(res.status).toBe(201)
+
+    const result = await res.json()
+    // Multiple values become an array, single values are unwrapped
+    expect(result.tags).toEqual(['one', 'two', 'three'])
+    expect(result.description).toBe('Multiple tags')
+  })
+
+  it('handles file uploads in multipart/form-data', async () => {
+    const formData = new FormData()
+    const fileContent = 'Hello, this is a test file!'
+    const file = new File([fileContent], 'test.txt', { type: 'text/plain' })
+    formData.append('file', file)
+    formData.append('description', 'File upload test')
+
+    const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
+      method: 'POST',
+      body: formData
+    })
+
+    expect(res.status).toBe(201)
+
+    const result = await res.json()
+    expect(result.description).toBe('File upload test')
+    // File objects are serialized when sent through JSON response
+    expect(result.file).toBeDefined()
+  })
+
   it('handles CORS', async () => {
     let res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
       method: 'OPTIONS',

@@ -1,5 +1,4 @@
-import { createServerAdapter } from '@whatwg-node/server'
-import { createServer } from 'node:http'
+import { createServer, IncomingMessage, ServerResponse } from 'node:http'
 import { TestService } from './fixture.js'
 
 import { feathers, Application, Params } from '../src/index.js'
@@ -8,6 +7,94 @@ import { createHandler, SseService } from '../src/http/index.js'
 export * from './client.js'
 export * from './rest.js'
 export * from './fixture.js'
+
+/**
+ * Creates a native Node.js HTTP adapter that properly converts
+ * IncomingMessage to a standard Request object.
+ * This avoids bugs in @whatwg-node/server with FormData handling.
+ */
+function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
+  return async (req: IncomingMessage, res: ServerResponse) => {
+    // Collect body chunks
+    const chunks: Buffer[] = []
+    for await (const chunk of req) {
+      chunks.push(chunk as Buffer)
+    }
+    const body = Buffer.concat(chunks)
+
+    // Build headers object
+    const headers = new Headers()
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (value) {
+        if (Array.isArray(value)) {
+          value.forEach((v) => headers.append(key, v))
+        } else {
+          headers.set(key, value)
+        }
+      }
+    }
+
+    // Create the Request object
+    const url = `http://${req.headers.host || 'localhost'}${req.url}`
+    const request = new Request(url, {
+      method: req.method,
+      headers,
+      body: body.length > 0 ? body : undefined,
+      // @ts-expect-error duplex is required for streaming bodies in Node
+      duplex: 'half'
+    })
+
+    // Call the handler and get the Response
+    const response = await handler(request)
+
+    // Write the response
+    res.statusCode = response.status
+
+    response.headers.forEach((value, key) => {
+      res.setHeader(key, value)
+    })
+
+    if (response.body) {
+      const reader = response.body.getReader()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        res.write(value)
+      }
+    }
+
+    res.end()
+  }
+}
+
+export type UploadData = {
+  file?: File | File[]
+  files?: File | File[]
+  description?: string
+  name?: string
+  tags?: string | string[]
+  [key: string]: File | File[] | string | string[] | undefined
+}
+
+export class UploadService {
+  async create(data: UploadData, params: Params) {
+    return {
+      ...data,
+      id: 1,
+      status: 'uploaded',
+      provider: params.provider
+    }
+  }
+
+  async patch(id: number | string, data: UploadData, params: Params) {
+    return {
+      ...data,
+      id,
+      status: 'patched',
+      provider: params.provider
+    }
+  }
+}
 
 export class ResponseTestService {
   async find() {
@@ -44,6 +131,7 @@ export class ResponseTestService {
 
 export type TestServiceTypes = {
   todos: TestService
+  uploads: UploadService
   test: ResponseTestService
   sse: SseService
 }
@@ -56,6 +144,9 @@ export function getApp(): TestApplication {
   app.use('todos', new TestService(), {
     methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod']
   })
+  app.use('uploads', new UploadService(), {
+    methods: ['create', 'patch']
+  })
   app.use('test', new ResponseTestService())
   app.use('sse', new SseService())
 
@@ -64,11 +155,10 @@ export function getApp(): TestApplication {
 
 export async function createTestServer(port: number, app: TestApplication) {
   const handler = createHandler(app)
-  // You can create your Node server instance by using our adapter
-  const nodeServer = createServer(createServerAdapter(handler))
+  // Use native Node.js adapter for proper FormData handling
+  const nodeServer = createServer(createNativeAdapter(handler))
 
   await new Promise<void>((resolve) => {
-    // Then start listening on some port
     nodeServer.listen(port, () => resolve())
   })
 
