@@ -129,21 +129,24 @@ describe('KoaRouter', () => {
   })
 
   describe('case sensitivity', () => {
-    it('respects case sensitivity setting', () => {
+    it('is case sensitive by default (Koa behavior)', () => {
       const router = new KoaRouter<string>()
 
       router.insert('/Users', 'users-handler')
 
       // Case sensitive by default
-      router.caseSensitive = true
       assert.strictEqual(router.lookup('/users'), null)
       assert.deepStrictEqual(router.lookup('/Users'), {
         data: 'users-handler',
         params: Object.create(null)
       })
+    })
 
-      // Case insensitive
-      router.caseSensitive = false
+    it('can be set to case insensitive via constructor', () => {
+      const router = new KoaRouter<string>({ caseSensitive: false })
+
+      router.insert('/Users', 'users-handler')
+
       assert.deepStrictEqual(router.lookup('/users'), {
         data: 'users-handler',
         params: Object.create(null)

@@ -129,7 +129,7 @@ describe('ExpressRouter', () => {
   })
 
   describe('case sensitivity', () => {
-    it('respects case sensitivity setting', () => {
+    it('is case insensitive by default (Express behavior)', () => {
       const router = new ExpressRouter<string>()
 
       router.insert('/Users', 'users-handler')
@@ -143,9 +143,13 @@ describe('ExpressRouter', () => {
         data: 'users-handler',
         params: Object.create(null)
       })
+    })
 
-      // Case sensitive
-      router.caseSensitive = true
+    it('can be set to case sensitive via constructor', () => {
+      const router = new ExpressRouter<string>({ caseSensitive: true })
+
+      router.insert('/Users', 'users-handler')
+
       assert.strictEqual(router.lookup('/users'), null)
       assert.strictEqual(router.lookup('/USERS'), null)
       assert.deepStrictEqual(router.lookup('/Users'), {

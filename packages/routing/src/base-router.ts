@@ -24,6 +24,7 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
     originalPath: string
   }> = []
 
+  private pathSet: Set<string> = new Set()
   private options: RouterOptions
 
   constructor(options: RouterOptions) {
@@ -35,10 +36,7 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
     const normalizedPath = normalizePath(path)
 
     for (const route of this.routes) {
-      const flags = this.caseSensitive ? '' : 'i'
-      const testRegex = new RegExp(route.regexp.source, flags)
-
-      const match = testRegex.exec(normalizedPath)
+      const match = route.regexp.exec(normalizedPath)
 
       if (match) {
         const params: { [key: string]: string | string[] } = Object.create(null)
@@ -70,7 +68,7 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
   insert(path: string, data: T): void {
     const normalizedPath = normalizePath(path)
 
-    if (this.routes.find((route) => route.originalPath === normalizedPath)) {
+    if (this.pathSet.has(normalizedPath)) {
       throw new Error(`Path ${normalizedPath} already exists`)
     }
 
@@ -81,6 +79,7 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
       start: true
     })
 
+    this.pathSet.add(normalizedPath)
     this.routes.push({
       regexp,
       keys,
@@ -94,6 +93,7 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
     const index = this.routes.findIndex((route) => route.originalPath === normalizedPath)
 
     if (index !== -1) {
+      this.pathSet.delete(normalizedPath)
       this.routes.splice(index, 1)
     }
   }

@@ -1,4 +1,4 @@
-import { BaseRouter } from './base-router.js'
+import { BaseRouter, RouterOptions } from './base-router.js'
 
 /**
  * Koa-compatible router implementation
@@ -8,7 +8,7 @@ import { BaseRouter } from './base-router.js'
  *
  * Supports all Koa routing features:
  * - Named parameters: /users/:id
- * - Wildcards: /docs/*
+ * - Wildcards: /docs/*path
  * - Optional parameters: /users/:id?
  * - Regex constraints: /users/:id(\\d+)
  * - Repeating parameters: /files/:path+
@@ -17,10 +17,10 @@ import { BaseRouter } from './base-router.js'
  * Defaults to case sensitive routing (Koa behavior)
  */
 export class KoaRouter<T = any> extends BaseRouter<T> {
-  constructor() {
+  constructor(options: Partial<RouterOptions> = {}) {
     super({
-      caseSensitive: true, // Koa default
-      trailing: true // Koa default
+      caseSensitive: options.caseSensitive ?? true, // Koa default
+      trailing: options.trailing ?? true // Koa default
     })
   }
 }
