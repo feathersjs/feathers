@@ -33,6 +33,10 @@ export abstract class BaseRouter<T = any> implements RouterInterface<T> {
   }
 
   lookup(path: string): LookupResult<T> | null {
+    if (typeof path !== 'string') {
+      return null
+    }
+
     const normalizedPath = normalizePath(path)
 
     for (const route of this.routes) {

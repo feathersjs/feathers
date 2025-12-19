@@ -58,4 +58,14 @@ describe('BaseRouter', () => {
     assert.ok(result2)
     assert.deepStrictEqual(result2.params['path'], ['a', 'b', 'c'])
   })
+
+  it('returns null for non-string paths', () => {
+    const router = new TestRouter()
+    router.insert('/users', 'users-handler')
+
+    assert.strictEqual(router.lookup(null as any), null)
+    assert.strictEqual(router.lookup(undefined as any), null)
+    assert.strictEqual(router.lookup(123 as any), null)
+    assert.strictEqual(router.lookup({} as any), null)
+  })
 })
