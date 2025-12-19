@@ -1,5 +1,5 @@
 import { Params, Id, Query, NullableId } from '../declarations.js'
-import { Unavailable, convert, errors } from '../errors.js'
+import { BadRequest, Unavailable, convert, errors } from '../errors.js'
 import { _, stripSlashes } from '../commons.js'
 import { protectedProperties } from '../service.js'
 
@@ -179,8 +179,8 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   }
 
   async _get(id: Id, params?: P) {
-    if (typeof id === 'undefined') {
-      throw new Error("id for 'get' can not be undefined")
+    if (id === null || typeof id === 'undefined') {
+      throw new BadRequest("id for 'get' can not be null of undefined")
     }
 
     return this.request(
