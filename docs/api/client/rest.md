@@ -293,6 +293,12 @@ async create(stream: ReadableStream, params: Params) {
 }
 ```
 
+<BlockQuote type="warning" label="Header size limits">
+
+HTTP headers are typically limited to 8KB total. Keep metadata small - use headers for filenames, options, and IDs, not large data payloads.
+
+</BlockQuote>
+
 <BlockQuote type="info" label="Content-Type">
 
 If no `Content-Type` header is specified, streaming requests default to `application/octet-stream`. Any content type not recognized as JSON, form-urlencoded, or multipart will be streamed through to the service.
