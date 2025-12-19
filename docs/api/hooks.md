@@ -199,6 +199,74 @@ If you want to inspect the hook context, e.g. via `console.log`, the object retu
 
 </BlockQuote>
 
+#### Working with Streams
+
+When using [streaming uploads](./client/rest.md#streaming-uploads), `context.data` will be a `ReadableStream`. Since streams can only be consumed once, around hooks are the recommended way to work with streaming data. Here are common patterns:
+
+**Passing streams through unchanged:**
+
+If you only need to validate metadata or check permissions, you can let the stream pass through to the service:
+
+```ts
+app.service('uploads').hooks({
+  around: {
+    create: [
+      async (context: HookContext, next: NextFunction) => {
+        // Validate using headers - don't consume the stream
+        const contentType = context.params.headers?.['content-type']
+        if (!contentType?.startsWith('image/')) {
+          throw new BadRequest('Only images are allowed')
+        }
+
+        // Stream passes through unchanged
+        await next()
+      }
+    ]
+  }
+})
+```
+
+**Wrapping streams with transforms:**
+
+You can wrap the incoming stream with a transform stream for processing:
+
+```ts
+import { TransformStream } from 'node:stream/web'
+
+app.service('uploads').hooks({
+  around: {
+    create: [
+      async (context: HookContext, next: NextFunction) => {
+        const originalStream = context.data as ReadableStream
+
+        // Create a transform that tracks bytes
+        let totalBytes = 0
+        const countingTransform = new TransformStream({
+          transform(chunk, controller) {
+            totalBytes += chunk.length
+            controller.enqueue(chunk)
+          }
+        })
+
+        // Replace with transformed stream
+        context.data = originalStream.pipeThrough(countingTransform)
+
+        await next()
+
+        // After service completes, totalBytes is available
+        context.result.size = totalBytes
+      }
+    ]
+  }
+})
+```
+
+<BlockQuote type="warning" label="Important">
+
+Streams can only be consumed once. If you need to read the stream content in a hook (e.g., for validation), you must either buffer the entire stream or use a tee/transform approach. For large files, prefer validating metadata from headers rather than consuming the stream.
+
+</BlockQuote>
+
 ### `context.error`
 
 `context.error` is a **writeable** property with the error object that was thrown in a failed method call. It can be modified to change the error that is returned at the end.
