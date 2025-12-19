@@ -76,8 +76,19 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
     }
 
     if (options.body) {
+      // Pass through FormData directly (browser sets Content-Type with boundary)
       if (options.body instanceof FormData) {
         fetchOptions.body = options.body
+      } else if (options.body instanceof ReadableStream) {
+        // Pass through ReadableStream directly for streaming uploads
+        fetchOptions.body = options.body
+        // @ts-expect-error duplex is required for streaming bodies
+        fetchOptions.duplex = 'half'
+        // Default to application/octet-stream if no Content-Type specified
+        fetchOptions.headers = {
+          'Content-Type': 'application/octet-stream',
+          ...fetchOptions.headers
+        }
       } else {
         fetchOptions.body = JSON.stringify(options.body)
         fetchOptions.headers = {

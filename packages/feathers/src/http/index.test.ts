@@ -226,5 +226,92 @@ describe('http test', () => {
     })
   })
 
+  describe('streaming request body', () => {
+    it('streams text data to a service', async () => {
+      const data = 'Hello, this is streamed text data!'
+      const stream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode(data))
+          controller.close()
+        }
+      })
+
+      const res = await fetch(`http://localhost:${TEST_PORT}/streaming`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        body: stream,
+        // @ts-expect-error duplex required for streaming
+        duplex: 'half'
+      })
+
+      expect(res.status).toBe(201)
+
+      const result = await res.json()
+      expect(result.received).toBe(data)
+      expect(result.size).toBe(data.length)
+      expect(result.contentType).toBe('text/plain')
+    })
+
+    it('streams binary data to a service', async () => {
+      const bytes = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]) // "Hello"
+      const stream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(bytes)
+          controller.close()
+        }
+      })
+
+      const res = await fetch(`http://localhost:${TEST_PORT}/streaming`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/octet-stream'
+        },
+        body: stream,
+        // @ts-expect-error duplex required for streaming
+        duplex: 'half'
+      })
+
+      expect(res.status).toBe(201)
+
+      const result = await res.json()
+      expect(result.received).toBe('Hello')
+      expect(result.size).toBe(5)
+    })
+
+    it('streams chunked data to a service', async () => {
+      const chunks = ['chunk1', 'chunk2', 'chunk3']
+      let chunkIndex = 0
+
+      const stream = new ReadableStream({
+        pull(controller) {
+          if (chunkIndex < chunks.length) {
+            controller.enqueue(new TextEncoder().encode(chunks[chunkIndex]))
+            chunkIndex++
+          } else {
+            controller.close()
+          }
+        }
+      })
+
+      const res = await fetch(`http://localhost:${TEST_PORT}/streaming`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        body: stream,
+        // @ts-expect-error duplex required for streaming
+        duplex: 'half'
+      })
+
+      expect(res.status).toBe(201)
+
+      const result = await res.json()
+      expect(result.received).toBe('chunk1chunk2chunk3')
+      expect(result.size).toBe(18)
+    })
+  })
+
   restTests('http', 'todos', TEST_PORT)
 })

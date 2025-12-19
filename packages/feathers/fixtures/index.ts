@@ -9,19 +9,21 @@ export * from './rest.js'
 export * from './fixture.js'
 
 /**
+ * Content types that require buffering (structured data formats)
+ */
+const BUFFERED_CONTENT_TYPES = [
+  'multipart/form-data',
+  'application/x-www-form-urlencoded',
+  'application/json'
+]
+
+/**
  * Creates a native Node.js HTTP adapter that properly converts
  * IncomingMessage to a standard Request object.
- * This avoids bugs in @whatwg-node/server with FormData handling.
+ * Buffers JSON, form-urlencoded, and multipart requests; streams everything else.
  */
 function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
   return async (req: IncomingMessage, res: ServerResponse) => {
-    // Collect body chunks
-    const chunks: Buffer[] = []
-    for await (const chunk of req) {
-      chunks.push(chunk as Buffer)
-    }
-    const body = Buffer.concat(chunks)
-
     // Build headers object
     const headers = new Headers()
     for (const [key, value] of Object.entries(req.headers)) {
@@ -34,12 +36,32 @@ function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
       }
     }
 
-    // Create the Request object
     const url = `http://${req.headers.host || 'localhost'}${req.url}`
+    const contentType = req.headers['content-type'] || ''
+    const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method || '')
+
+    let body: Buffer | ReadableStream<Uint8Array> | undefined
+
+    if (hasBody) {
+      // Buffer form data and JSON, stream everything else
+      const needsBuffering = BUFFERED_CONTENT_TYPES.some((type) => contentType.includes(type))
+
+      if (needsBuffering) {
+        const chunks: Buffer[] = []
+        for await (const chunk of req) {
+          chunks.push(chunk as Buffer)
+        }
+        const buffer = Buffer.concat(chunks)
+        body = buffer.length > 0 ? buffer : undefined
+      } else {
+        body = req as unknown as ReadableStream<Uint8Array>
+      }
+    }
+
     const request = new Request(url, {
       method: req.method,
       headers,
-      body: body.length > 0 ? body : undefined,
+      body,
       // @ts-expect-error duplex is required for streaming bodies in Node
       duplex: 'half'
     })
@@ -96,6 +118,37 @@ export class UploadService {
   }
 }
 
+export class StreamingService {
+  async create(data: ReadableStream, params: Params) {
+    // Consume the stream and collect the data
+    const chunks: Uint8Array[] = []
+    const reader = data.getReader()
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      chunks.push(value)
+    }
+
+    const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
+    const combined = new Uint8Array(totalLength)
+    let offset = 0
+    for (const chunk of chunks) {
+      combined.set(chunk, offset)
+      offset += chunk.length
+    }
+
+    const text = new TextDecoder().decode(combined)
+
+    return {
+      received: text,
+      size: totalLength,
+      contentType: params.headers?.['content-type'] || 'unknown',
+      provider: params.provider
+    }
+  }
+}
+
 export class ResponseTestService {
   async find() {
     return new Response('Plain text', {
@@ -132,6 +185,7 @@ export class ResponseTestService {
 export type TestServiceTypes = {
   todos: TestService
   uploads: UploadService
+  streaming: StreamingService
   test: ResponseTestService
   sse: SseService
 }
@@ -147,6 +201,9 @@ export function getApp(): TestApplication {
   app.use('uploads', new UploadService(), {
     methods: ['create', 'patch']
   })
+  app.use('streaming', new StreamingService(), {
+    methods: ['create']
+  })
   app.use('test', new ResponseTestService())
   app.use('sse', new SseService())
 
@@ -155,7 +212,7 @@ export function getApp(): TestApplication {
 
 export async function createTestServer(port: number, app: TestApplication) {
   const handler = createHandler(app)
-  // Use native Node.js adapter for proper FormData handling
+  // Use native Node.js adapter for proper FormData and streaming support
   const nodeServer = createServer(createNativeAdapter(handler))
 
   await new Promise<void>((resolve) => {

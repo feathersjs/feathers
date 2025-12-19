@@ -169,5 +169,40 @@ describe('fetch REST connector', function () {
     expect(result.status).toBe('patched')
   })
 
+  it('supports streaming request body with ReadableStream', async () => {
+    const data = 'Streamed from client!'
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(data))
+        controller.close()
+      }
+    })
+
+    const result = await app.service('streaming').create(stream as any, {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    })
+
+    expect(result.received).toBe(data)
+    expect(result.size).toBe(data.length)
+    expect(result.contentType).toBe('text/plain')
+  })
+
+  it('defaults to application/octet-stream for streams without Content-Type', async () => {
+    const data = 'Binary-ish data'
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(data))
+        controller.close()
+      }
+    })
+
+    const result = await app.service('streaming').create(stream as any)
+
+    expect(result.received).toBe(data)
+    expect(result.contentType).toBe('application/octet-stream')
+  })
+
   clientTests(app, 'todos')
 })

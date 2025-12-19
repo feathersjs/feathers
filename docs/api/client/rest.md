@@ -22,7 +22,7 @@ The following chapter describes the use of
 npm install @feathersjs/rest-client --save
 ```
 
-`@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](https://github.com/ladjs/superagent) or [Axios](https://github.com/mzabriskie/axios).
+`@feathersjs/rest-client` allows to connect to a service exposed through a REST HTTP transport (e.g. with [Koa](../koa.md#rest) or [Express](../express.md#rest)) using [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Superagent](https://github.com/ladjs/superagent) or [Axios](https://github.com/mzabriskie/axios).
 
 <BlockQuote type="info">
 
@@ -223,6 +223,61 @@ FormData and file uploads are only supported with the REST/HTTP transport. Socke
 <BlockQuote type="info" label="note">
 
 File uploads use the native `Request.formData()` API which buffers the entire request into memory. For large file uploads (videos, large datasets), consider using presigned URLs to upload directly to cloud storage (S3, R2, etc.).
+
+</BlockQuote>
+
+### Streaming Uploads
+
+The REST client supports streaming data to services using `ReadableStream`. This is useful for large file uploads, real-time data ingestion, or piping data directly to storage without buffering.
+
+```ts
+// Stream a file to a service
+const file = fileInput.files[0]
+const stream = file.stream()
+
+const result = await app.service('uploads').create(stream, {
+  headers: {
+    'Content-Type': file.type,
+    'X-Filename': file.name
+  }
+})
+```
+
+On the server, the service receives the `ReadableStream` directly:
+
+```ts
+class UploadService {
+  async create(stream: ReadableStream, params: Params) {
+    const filename = params.headers['x-filename']
+    const contentType = params.headers['content-type']
+    
+    // Pipe directly to storage - no buffering
+    await storage.upload(filename, stream, { contentType })
+    
+    return { filename, uploaded: true }
+  }
+}
+```
+
+The stream can be piped directly to cloud storage (S3, R2, etc.) without loading the entire file into memory:
+
+```ts
+async create(stream: ReadableStream, params: Params) {
+  // Stream directly to R2/S3
+  await env.MY_BUCKET.put(params.headers['x-filename'], stream)
+  return { success: true }
+}
+```
+
+<BlockQuote type="info" label="Content-Type">
+
+If no `Content-Type` header is specified, streaming requests default to `application/octet-stream`. Any content type not recognized as JSON, form-urlencoded, or multipart will be streamed through to the service.
+
+</BlockQuote>
+
+<BlockQuote type="warning" label="REST only">
+
+Streaming uploads are only supported with the REST/HTTP transport. Socket.io does not support streaming request bodies.
 
 </BlockQuote>
 
