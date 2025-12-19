@@ -76,10 +76,14 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
     }
 
     if (options.body) {
-      fetchOptions.body = JSON.stringify(options.body)
-      fetchOptions.headers = {
-        'Content-Type': 'application/json',
-        ...fetchOptions.headers
+      if (options.body instanceof FormData) {
+        fetchOptions.body = options.body
+      } else {
+        fetchOptions.body = JSON.stringify(options.body)
+        fetchOptions.headers = {
+          'Content-Type': 'application/json',
+          ...fetchOptions.headers
+        }
       }
     }
 

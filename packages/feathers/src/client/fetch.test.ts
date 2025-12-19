@@ -131,5 +131,43 @@ describe('fetch REST connector', function () {
     expect(messages[4]).toEqual({ message: 'Hello test 5' })
   })
 
+  it('supports FormData in create', async () => {
+    const formData = new FormData()
+    formData.append('description', 'FormData test')
+    formData.append('name', 'test-file')
+
+    const result = await app.service('uploads').create(formData)
+
+    // Single FormData fields are unwrapped on the server
+    expect(result.description).toBe('FormData test')
+    expect(result.name).toBe('test-file')
+    expect(result.id).toBe(1)
+    expect(result.status).toBe('uploaded')
+  })
+
+  it('supports FormData with multiple values', async () => {
+    const formData = new FormData()
+    formData.append('tags', 'one')
+    formData.append('tags', 'two')
+    formData.append('description', 'Multi-value test')
+
+    const result = await app.service('uploads').create(formData)
+
+    // Multiple values become array, single values unwrapped
+    expect(result.tags).toEqual(['one', 'two'])
+    expect(result.description).toBe('Multi-value test')
+  })
+
+  it('supports FormData in patch', async () => {
+    const formData = new FormData()
+    formData.append('description', 'Patched with FormData')
+
+    const result = await app.service('uploads').patch(42, formData)
+
+    expect(result.description).toBe('Patched with FormData')
+    expect(result.id).toBe('42') // ID comes from URL path, returned as string
+    expect(result.status).toBe('patched')
+  })
+
   clientTests(app, 'todos')
 })
