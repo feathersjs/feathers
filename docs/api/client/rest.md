@@ -269,6 +269,30 @@ async create(stream: ReadableStream, params: Params) {
 }
 ```
 
+For more complex metadata, you can stringify an object into a header:
+
+```ts
+// Client
+const file = fileInput.files[0]
+
+await app.service('csv-import').create(file.stream(), {
+  headers: {
+    'Content-Type': 'text/csv',
+    'X-Import-Options': JSON.stringify({
+      filename: file.name,
+      tableName: 'products',
+      skipHeader: true
+    })
+  }
+})
+
+// Server
+async create(stream: ReadableStream, params: Params) {
+  const options = JSON.parse(params.headers['x-import-options'])
+  // options.filename, options.tableName, options.skipHeader
+}
+```
+
 <BlockQuote type="info" label="Content-Type">
 
 If no `Content-Type` header is specified, streaming requests default to `application/octet-stream`. Any content type not recognized as JSON, form-urlencoded, or multipart will be streamed through to the service.
