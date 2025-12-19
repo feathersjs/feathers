@@ -136,7 +136,7 @@ describe('fetch REST connector', function () {
     formData.append('description', 'FormData test')
     formData.append('name', 'test-file')
 
-    const result = await app.service('uploads').create(formData)
+    const result = await app.service('uploads').create(formData, {})
 
     // Single FormData fields are unwrapped on the server
     expect(result.description).toBe('FormData test')
@@ -151,7 +151,7 @@ describe('fetch REST connector', function () {
     formData.append('tags', 'two')
     formData.append('description', 'Multi-value test')
 
-    const result = await app.service('uploads').create(formData)
+    const result = await app.service('uploads').create(formData, {})
 
     // Multiple values become array, single values unwrapped
     expect(result.tags).toEqual(['one', 'two'])
@@ -162,7 +162,7 @@ describe('fetch REST connector', function () {
     const formData = new FormData()
     formData.append('description', 'Patched with FormData')
 
-    const result = await app.service('uploads').patch(42, formData)
+    const result = await app.service('uploads').patch(42, formData, {})
 
     expect(result.description).toBe('Patched with FormData')
     expect(result.id).toBe('42') // ID comes from URL path, returned as string
@@ -198,7 +198,7 @@ describe('fetch REST connector', function () {
       }
     })
 
-    const result = await app.service('streaming').create(stream as any)
+    const result = await app.service('streaming').create(stream, {})
 
     expect(result.received).toBe(data)
     expect(result.contentType).toBe('application/octet-stream')

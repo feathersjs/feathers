@@ -40,7 +40,7 @@ function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
     const contentType = req.headers['content-type'] || ''
     const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method || '')
 
-    let body: Buffer | ReadableStream<Uint8Array> | undefined
+    let request: Request
 
     if (hasBody) {
       // Buffer form data and JSON, stream everything else
@@ -52,19 +52,26 @@ function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
           chunks.push(chunk as Buffer)
         }
         const buffer = Buffer.concat(chunks)
-        body = buffer.length > 0 ? buffer : undefined
+        request = new Request(url, {
+          method: req.method,
+          headers,
+          body: buffer.length > 0 ? new Uint8Array(buffer) : undefined
+        })
       } else {
-        body = req as unknown as ReadableStream<Uint8Array>
+        request = new Request(url, {
+          method: req.method,
+          headers,
+          body: req as unknown as ReadableStream<Uint8Array>,
+          // @ts-expect-error duplex is required for streaming bodies in Node
+          duplex: 'half'
+        })
       }
+    } else {
+      request = new Request(url, {
+        method: req.method,
+        headers
+      })
     }
-
-    const request = new Request(url, {
-      method: req.method,
-      headers,
-      body,
-      // @ts-expect-error duplex is required for streaming bodies in Node
-      duplex: 'half'
-    })
 
     // Call the handler and get the Response
     const response = await handler(request)
@@ -89,28 +96,33 @@ function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
   }
 }
 
-export type UploadData = {
+export type UploadInput = FormData | UploadResult
+
+export type UploadResult = {
+  id?: number | string
+  status?: string
+  provider?: string
   file?: File | File[]
   files?: File | File[]
   description?: string
   name?: string
   tags?: string | string[]
-  [key: string]: File | File[] | string | string[] | undefined
+  [key: string]: File | File[] | string | string[] | number | undefined
 }
 
 export class UploadService {
-  async create(data: UploadData, params: Params) {
+  async create(data: UploadInput, params: Params): Promise<UploadResult> {
     return {
-      ...data,
+      ...(data as UploadResult),
       id: 1,
       status: 'uploaded',
       provider: params.provider
     }
   }
 
-  async patch(id: number | string, data: UploadData, params: Params) {
+  async patch(id: number | string, data: UploadInput, params: Params): Promise<UploadResult> {
     return {
-      ...data,
+      ...(data as UploadResult),
       id,
       status: 'patched',
       provider: params.provider

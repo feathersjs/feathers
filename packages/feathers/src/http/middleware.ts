@@ -45,6 +45,7 @@ export function bodyParser() {
           const request = context.request.clone()
           context.data = Object.fromEntries(new URLSearchParams(await request.text()))
         } else if (contentType?.includes('multipart/form-data')) {
+          const request = context.request.clone()
           context.data = formDataToObject(await request.formData())
         } else {
           // Stream all other content types directly to the service
