@@ -141,7 +141,7 @@ describe('fetch REST connector', function () {
     formData.append('description', 'FormData test')
     formData.append('name', 'test-file')
 
-    const result = await app.service('uploads').create(formData)
+    const result = await app.service('uploads').create(formData, {})
 
     // Single FormData fields are unwrapped on the server
     expect(result.description).toBe('FormData test')
@@ -156,7 +156,7 @@ describe('fetch REST connector', function () {
     formData.append('tags', 'two')
     formData.append('description', 'Multi-value test')
 
-    const result = await app.service('uploads').create(formData)
+    const result = await app.service('uploads').create(formData, {})
 
     // Multiple values become array, single values unwrapped
     expect(result.tags).toEqual(['one', 'two'])
@@ -167,11 +167,46 @@ describe('fetch REST connector', function () {
     const formData = new FormData()
     formData.append('description', 'Patched with FormData')
 
-    const result = await app.service('uploads').patch(42, formData)
+    const result = await app.service('uploads').patch(42, formData, {})
 
     expect(result.description).toBe('Patched with FormData')
     expect(result.id).toBe('42') // ID comes from URL path, returned as string
     expect(result.status).toBe('patched')
+  })
+
+  it('supports streaming request body with ReadableStream', async () => {
+    const data = 'Streamed from client!'
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(data))
+        controller.close()
+      }
+    })
+
+    const result = await app.service('streaming').create(stream as any, {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    })
+
+    expect(result.received).toBe(data)
+    expect(result.size).toBe(data.length)
+    expect(result.contentType).toBe('text/plain')
+  })
+
+  it('defaults to application/octet-stream for streams without Content-Type', async () => {
+    const data = 'Binary-ish data'
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode(data))
+        controller.close()
+      }
+    })
+
+    const result = await app.service('streaming').create(stream, {})
+
+    expect(result.received).toBe(data)
+    expect(result.contentType).toBe('application/octet-stream')
   })
 
   clientTests(app, 'todos')

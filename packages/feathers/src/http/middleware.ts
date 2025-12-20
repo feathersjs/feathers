@@ -37,19 +37,21 @@ export function bodyParser() {
     const contentType = context.request.headers.get('content-type')
 
     if (BODY_METHODS.includes(context.request.method)) {
-      const request = context.request.clone()
-
       try {
         if (contentType?.includes('application/json')) {
+          const request = context.request.clone()
           context.data = await request.json()
         } else if (contentType?.includes('application/x-www-form-urlencoded')) {
+          const request = context.request.clone()
           context.data = Object.fromEntries(new URLSearchParams(await request.text()))
         } else if (contentType?.includes('multipart/form-data')) {
+          const request = context.request.clone()
           context.data = formDataToObject(await request.formData())
         } else {
-          throw new Error('Invalid content type')
+          // Stream all other content types directly to the service
+          context.data = context.request.body as any
         }
-      } catch (error) {
+      } catch (_error) {
         throw new BadRequest('Invalid request body')
       }
     }
