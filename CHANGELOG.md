@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.4](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.3...v6.0.0-pre.4) (2025-12-20)
+
+### Bug Fixes
+
+- Do not allow id or undefined in fetch client .get ([#3632](https://github.com/feathersjs/feathers/issues/3632)) ([4faeeec](https://github.com/feathersjs/feathers/commit/4faeeecf0911dcf1cd121446c9ac22c7b0aa0c9d))
+
+### Features
+
+- **http:** Add multipart/form-data support for file uploads ([#3634](https://github.com/feathersjs/feathers/issues/3634)) ([8476bf2](https://github.com/feathersjs/feathers/commit/8476bf23b10218e531f2ad93f3c5934e1582da7b))
+- **http:** Add streaming request body support ([#3635](https://github.com/feathersjs/feathers/issues/3635)) ([4c2aa85](https://github.com/feathersjs/feathers/commit/4c2aa859465da46334b9b5d2209766a17d71a8b7))
+
 # [6.0.0-pre.3](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.2...v6.0.0-pre.3) (2025-10-10)
 
 ### Bug Fixes
