@@ -1,0 +1,47 @@
+{
+  "name": "@feathersjs/routing",
+  "version": "6.0.0-pre.0",
+  "description": "Express and Koa compatible routers for Feathers applications",
+  "keywords": [
+    "feathers",
+    "routing",
+    "express",
+    "koa"
+  ],
+  "license": "MIT",
+  "author": "Feathers Team",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "compile": "shx rm -rf lib/ && tsc",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "feathers": "^6.0.0-pre.0",
+    "path-to-regexp": "^8.2.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4",
+    "typescript": "^5.6.2",
+    "shx": "^0.3.4"
+  },
+  "engines": {
+    "node": ">= 18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feathersjs/feathers.git",
+    "directory": "packages/routing"
+  }
+}
