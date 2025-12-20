@@ -1,99 +1,13 @@
-import { createServer, IncomingMessage, ServerResponse } from 'node:http'
+import { createServer } from 'node:http'
 import { TestService } from './fixture.js'
 
 import { feathers, Application, Params } from '../src/index.js'
 import { createHandler, SseService } from '../src/http/index.js'
+import { toNodeHandler } from '../src/http/node.js'
 
 export * from './client.js'
 export * from './rest.js'
 export * from './fixture.js'
-
-/**
- * Content types that require buffering (structured data formats)
- */
-const BUFFERED_CONTENT_TYPES = [
-  'multipart/form-data',
-  'application/x-www-form-urlencoded',
-  'application/json'
-]
-
-/**
- * Creates a native Node.js HTTP adapter that properly converts
- * IncomingMessage to a standard Request object.
- * Buffers JSON, form-urlencoded, and multipart requests; streams everything else.
- */
-function createNativeAdapter(handler: (request: Request) => Promise<Response>) {
-  return async (req: IncomingMessage, res: ServerResponse) => {
-    // Build headers object
-    const headers = new Headers()
-    for (const [key, value] of Object.entries(req.headers)) {
-      if (value) {
-        if (Array.isArray(value)) {
-          value.forEach((v) => headers.append(key, v))
-        } else {
-          headers.set(key, value)
-        }
-      }
-    }
-
-    const url = `http://${req.headers.host || 'localhost'}${req.url}`
-    const contentType = req.headers['content-type'] || ''
-    const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method || '')
-
-    let request: Request
-
-    if (hasBody) {
-      // Buffer form data and JSON, stream everything else
-      const needsBuffering = BUFFERED_CONTENT_TYPES.some((type) => contentType.includes(type))
-
-      if (needsBuffering) {
-        const chunks: Buffer[] = []
-        for await (const chunk of req) {
-          chunks.push(chunk as Buffer)
-        }
-        const buffer = Buffer.concat(chunks)
-        request = new Request(url, {
-          method: req.method,
-          headers,
-          body: buffer.length > 0 ? new Uint8Array(buffer) : undefined
-        })
-      } else {
-        request = new Request(url, {
-          method: req.method,
-          headers,
-          body: req as unknown as ReadableStream<Uint8Array>,
-          duplex: 'half'
-        } as RequestInit)
-      }
-    } else {
-      request = new Request(url, {
-        method: req.method,
-        headers
-      })
-    }
-
-    // Call the handler and get the Response
-    const response = await handler(request)
-
-    // Write the response
-    res.statusCode = response.status
-
-    response.headers.forEach((value, key) => {
-      res.setHeader(key, value)
-    })
-
-    if (response.body) {
-      const reader = response.body.getReader()
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        res.write(value)
-      }
-    }
-
-    res.end()
-  }
-}
 
 export type UploadInput = FormData | UploadResult
 
@@ -223,8 +137,7 @@ export function getApp(): TestApplication {
 
 export async function createTestServer(port: number, app: TestApplication) {
   const handler = createHandler(app)
-  // Use native Node.js adapter for proper FormData and streaming support
-  const nodeServer = createServer(createNativeAdapter(handler))
+  const nodeServer = createServer(toNodeHandler(handler))
 
   await new Promise<void>((resolve) => {
     nodeServer.listen(port, () => resolve())

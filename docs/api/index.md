@@ -20,11 +20,12 @@ Feathers core functionality that works on the client and the server
 
 Expose a Feathers application as an API server
 
-- [Configuration](./configuration.md) - A node-config wrapper to initialize configuration of a server side application.
+- [HTTP](./http.md) - Web Standard HTTP handler for Deno, Bun, Cloudflare Workers, and Node.js
 - [Koa](./koa.md) - Feathers KoaJS framework bindings, REST API provider and error middleware.
 - [Express](./express.md) - Feathers Express framework bindings, REST API provider and error middleware.
 - [Socket.io](./socketio.md) - The Socket.io real-time transport provider
 - [Channels](./channels.md) - Channels are used to send real-time events to clients
+- [Configuration](./configuration.md) - A node-config wrapper to initialize configuration of a server side application.
 
 ## Authentication
 

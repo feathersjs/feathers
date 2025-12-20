@@ -24,7 +24,8 @@
     "./commons": "./lib/commons.js",
     "./errors": "./lib/errors.js",
     "./client": "./lib/client/index.js",
-    "./http": "./lib/http/index.js"
+    "./http": "./lib/http/index.js",
+    "./http/node": "./lib/http/node.js"
   },
   "typesVersions": {
     "*": {
@@ -42,6 +43,9 @@
       ],
       "http": [
         "./lib/http/index.d.ts"
+      ],
+      "http/node": [
+        "./lib/http/node.d.ts"
       ]
     }
   },
