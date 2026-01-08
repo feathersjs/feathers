@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { discord, font, github, ogImage, ogUrl, twitter, feathersDescription, feathersName } from './meta'
+import { discord, font, github, ogImage, ogUrl, x, feathersDescription, feathersName } from './meta'
 import sidebar from './config.sidebar'
 import nav from './config.nav'
 
@@ -60,6 +60,12 @@ export default defineConfig({
     },
 
     socialLinks: [
+      {
+        icon: {
+          svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.244 2H21l-6.5 7.43L22 22h-6.1l-4.77-6.23L5.7 22H3l6.93-7.9L2 2h6.25l4.3 5.6L18.244 2zm-2.14 18h1.7L7.1 4h-1.8l10.8 16z"/></svg>`
+        },
+        link: x
+      },
       { icon: 'discord', link: discord },
       { icon: 'github', link: github }
     ],
