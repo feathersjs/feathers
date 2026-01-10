@@ -226,14 +226,13 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
 
   hooks(service, serviceMethodHooks)
 
-  service.hooks = createServiceHooksMethod(this, service, registerHooks, createMethodHookManager)
+  service.hooks = createServiceHooksMethod(this, registerHooks, createMethodHookManager)
 
   return service
 }
 
 function createServiceHooksMethod<A>(
   app: A,
-  service: FeathersService<A>,
   registerHooks: ReturnType<typeof enableHooks>,
   createMethodHookManager: (app: A, method: string) => FeathersHookManager<A>
 ) {
