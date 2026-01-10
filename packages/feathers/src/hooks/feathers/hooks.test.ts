@@ -364,6 +364,100 @@ describe('hooks basics', () => {
     )
   })
 
+  it('can register hooks on methods not in the methods option', async () => {
+    class Dummy {
+      async get(id: Id) {
+        return { id }
+      }
+
+      async internalMethod(data: any) {
+        return data
+      }
+    }
+
+    const app = feathers<{
+      dummy: Dummy
+    }>().use('dummy', new Dummy(), {
+      methods: ['get'] // internalMethod not in methods
+    })
+
+    // Should be able to register hooks on internalMethod even though it's not in methods
+    app.service('dummy').hooks({
+      internalMethod: [
+        async (context, next) => {
+          context.data.fromHook = true
+          await next()
+        }
+      ]
+    })
+
+    const result = await app.service('dummy').internalMethod({
+      message: 'testing'
+    })
+
+    assert.deepStrictEqual(result, {
+      message: 'testing',
+      fromHook: true
+    })
+  })
+
+  it('all hooks only apply to methods in the methods option', async () => {
+    const allHookCalls: string[] = []
+
+    class Dummy {
+      async get(id: Id) {
+        return { id }
+      }
+
+      async create(data: any) {
+        return data
+      }
+
+      async helperMethod(data: any) {
+        return data
+      }
+    }
+
+    const app = feathers<{
+      dummy: Dummy
+    }>().use('dummy', new Dummy(), {
+      methods: ['get', 'create'] // helperMethod not in methods
+    })
+
+    // Register an "all" hook
+    app.service('dummy').hooks({
+      around: {
+        all: [
+          async (context, next) => {
+            allHookCalls.push(context.method)
+            await next()
+          }
+        ]
+      }
+    })
+
+    // Register a specific hook on helperMethod
+    app.service('dummy').hooks({
+      helperMethod: [
+        async (context, next) => {
+          context.data.specificHook = true
+          await next()
+        }
+      ]
+    })
+
+    // Call methods
+    await app.service('dummy').get(1)
+    await app.service('dummy').create({ test: true })
+    const helperResult = await app.service('dummy').helperMethod({ test: true })
+
+    // "all" hook should have been called for get and create, but NOT helperMethod
+    assert.deepStrictEqual(allHookCalls, ['get', 'create'])
+
+    // But the specific hook should have run on helperMethod
+    assert.deepStrictEqual(helperResult, { test: true, specificHook: true })
+  })
+
   it('normalizes params to object even when it is falsy (#1001)', async () => {
     const app = feathers().use('/dummy', {
       async get(id: Id, params: Params) {

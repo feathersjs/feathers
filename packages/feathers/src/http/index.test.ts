@@ -1,8 +1,12 @@
 import { beforeAll, describe, it, expect } from 'vitest'
+import { createServer } from 'node:http'
 import { restTests, verify, getApp, createTestServer } from '../../fixtures/index.js'
-import { CORS_HEADERS } from './index.js'
+import { CORS_HEADERS, createHandler } from './index.js'
+import { toNodeHandler } from './node.js'
+import { feathers, Params } from '../index.js'
 
 const TEST_PORT = 4444
+const EXTERNAL_METHODS_PORT = 4445
 
 describe('http test', () => {
   beforeAll(async () => {
@@ -314,4 +318,94 @@ describe('http test', () => {
   })
 
   restTests('http', 'todos', TEST_PORT)
+
+  describe('externalMethods option', () => {
+    let externalMethodsHookCalls: string[] = []
+
+    beforeAll(async () => {
+      class ExternalMethodsService {
+        async find() {
+          return [{ id: 1, name: 'test' }]
+        }
+
+        async get(id: string) {
+          return { id, name: 'test' }
+        }
+
+        async internalMethod(data: any) {
+          return { ...data, processed: true }
+        }
+      }
+
+      const app = feathers<{ external: ExternalMethodsService }>()
+
+      app.use('external', new ExternalMethodsService(), {
+        // methods controls which methods get "all" hooks
+        methods: ['find', 'get', 'internalMethod'],
+        // externalMethods controls which methods are exposed via HTTP
+        externalMethods: ['find', 'get'] // internalMethod NOT exposed
+      })
+
+      // Add an "all" hook to track which methods it runs on
+      app.service('external').hooks({
+        around: {
+          all: [
+            async (context, next) => {
+              externalMethodsHookCalls.push(context.method)
+              await next()
+            }
+          ]
+        }
+      })
+
+      const handler = createHandler(app)
+      const nodeServer = createServer(toNodeHandler(handler))
+
+      await new Promise<void>((resolve) => {
+        nodeServer.listen(EXTERNAL_METHODS_PORT, () => resolve())
+      })
+
+      await app.setup(nodeServer)
+    })
+
+    it('allows access to methods in externalMethods', async () => {
+      externalMethodsHookCalls = []
+
+      const res = await fetch(`http://localhost:${EXTERNAL_METHODS_PORT}/external`)
+      expect(res.status).toBe(200)
+
+      const data = await res.json()
+      expect(data).toEqual([{ id: 1, name: 'test' }])
+
+      // "all" hook should have run
+      expect(externalMethodsHookCalls).toContain('find')
+    })
+
+    it('blocks access to methods not in externalMethods', async () => {
+      const res = await fetch(`http://localhost:${EXTERNAL_METHODS_PORT}/external`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Service-Method': 'internalMethod'
+        },
+        body: JSON.stringify({ data: 'test' })
+      })
+
+      expect(res.status).toBe(405)
+
+      const error = await res.json()
+      expect(error.name).toBe('MethodNotAllowed')
+      expect(error.message).toBe('Method `internalMethod` is not supported by this endpoint.')
+    })
+
+    it('runs "all" hooks on methods in methods option (including non-external)', async () => {
+      externalMethodsHookCalls = []
+
+      // Call find via HTTP (external)
+      await fetch(`http://localhost:${EXTERNAL_METHODS_PORT}/external`)
+
+      // "all" hook runs on find
+      expect(externalMethodsHookCalls).toEqual(['find'])
+    })
+  })
 })

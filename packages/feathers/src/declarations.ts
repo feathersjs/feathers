@@ -30,9 +30,16 @@ export interface ServiceOptions<MethodTypes = string> {
    */
   events?: string[] | readonly string[]
   /**
-   * A list of service methods that should be available __externally__ to clients
+   * A list of service methods that `all` hooks will apply to.
+   * Defaults to the standard service methods (find, get, create, update, patch, remove)
+   * that exist on the service.
    */
   methods?: MethodTypes[] | readonly MethodTypes[]
+  /**
+   * A list of service methods that should be available __externally__ to clients
+   * via transports like HTTP or WebSockets. Defaults to `methods` if not specified.
+   */
+  externalMethods?: MethodTypes[] | readonly MethodTypes[]
   /**
    * Provide a full list of events that this service should emit to clients.
    * Unlike the `events` option, this will not be merged with the default events.
