@@ -3,7 +3,7 @@ import { createServer } from 'node:http'
 import { restTests, verify, getApp, createTestServer } from '../../fixtures/index.js'
 import { CORS_HEADERS, createHandler } from './index.js'
 import { toNodeHandler } from './node.js'
-import { feathers, Params } from '../index.js'
+import { feathers } from '../index.js'
 
 const TEST_PORT = 4444
 const EXTERNAL_METHODS_PORT = 4445

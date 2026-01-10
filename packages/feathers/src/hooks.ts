@@ -192,10 +192,9 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
     return service
   }
 
-  const app = this
   const hookMethods = getHookMethods(service, options)
 
-  const createMethodHookManager = (method: string) => {
+  const createMethodHookManager = (app: A, method: string) => {
     const params = (defaultServiceArguments as any)[method] || ['data', 'params']
 
     return new FeathersHookManager<A>(app, method).params(...params).props({
@@ -216,7 +215,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
   }
 
   const serviceMethodHooks = hookMethods.reduce((res, method) => {
-    res[method] = createMethodHookManager(method)
+    res[method] = createMethodHookManager(this, method)
     return res
   }, {} as BaseHookMap)
 
@@ -227,7 +226,18 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
 
   hooks(service, serviceMethodHooks)
 
-  service.hooks = function (this: any, hookOptions: any) {
+  service.hooks = createServiceHooksMethod(this, service, registerHooks, createMethodHookManager)
+
+  return service
+}
+
+function createServiceHooksMethod<A>(
+  app: A,
+  service: FeathersService<A>,
+  registerHooks: ReturnType<typeof enableHooks>,
+  createMethodHookManager: (app: A, method: string) => FeathersHookManager<A>
+) {
+  return function (this: any, hookOptions: any) {
     if (hookOptions.before || hookOptions.after || hookOptions.error || hookOptions.around) {
       return registerHooks.call(this, hookOptions)
     }
@@ -250,7 +260,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
           throw new Error(`Method ${method} does not exist on this service`)
         }
 
-        const methodManager = createMethodHookManager(method)
+        const methodManager = createMethodHookManager(app, method)
         hooks(this, { [method]: methodManager })
         manager = methodManager
       }
@@ -260,6 +270,4 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
 
     return this
   }
-
-  return service
 }
