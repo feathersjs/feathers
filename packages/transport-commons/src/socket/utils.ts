@@ -3,7 +3,8 @@ import {
   Application,
   RealTimeConnection,
   createContext,
-  getServiceOptions
+  getServiceOptions,
+  getExternalMethods
 } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
@@ -97,10 +98,10 @@ export async function runMethod(
     }
 
     const { service, params: route = {} } = lookup
-    const { methods } = getServiceOptions(service)
+    const externalMethods = getExternalMethods(getServiceOptions(service))
 
-    // Only service methods are allowed
-    if (!methods.includes(method)) {
+    // Only externally exposed service methods are allowed
+    if (!externalMethods.includes(method)) {
       throw new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`)
     }
 

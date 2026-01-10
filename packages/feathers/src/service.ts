@@ -35,6 +35,10 @@ export function getHookMethods(service: any, options: ServiceOptions) {
     .concat(methods)
 }
 
+export function getExternalMethods(options: ServiceOptions): readonly string[] {
+  return options.externalMethods || options.methods || []
+}
+
 export function getServiceOptions(service: any): ServiceOptions {
   return service[SERVICE]
 }
@@ -44,12 +48,15 @@ export const normalizeServiceOptions = (service: any, options: ServiceOptions = 
     methods = defaultServiceMethods.filter((method) => typeof service[method] === 'function'),
     events = service.events || []
   } = options
+  // externalMethods defaults to methods for backwards compatibility
+  const externalMethods = options.externalMethods || methods
   const serviceEvents = options.serviceEvents || defaultServiceEvents.concat(events)
 
   return {
     ...options,
     events,
     methods,
+    externalMethods,
     serviceEvents
   }
 }

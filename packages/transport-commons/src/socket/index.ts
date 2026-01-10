@@ -1,4 +1,10 @@
-import { Application, getServiceOptions, Params, RealTimeConnection } from '@feathersjs/feathers'
+import {
+  Application,
+  getServiceOptions,
+  getExternalMethods,
+  Params,
+  RealTimeConnection
+} from '@feathersjs/feathers'
 import { channels } from '../channels'
 import { routing } from '../routing'
 import { getDispatcher, runMethod } from './utils'
@@ -43,9 +49,9 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
     done.then((provider) =>
       provider.on('connection', (connection: any) => {
         const methodHandlers = Object.keys(app.services).reduce((result, name) => {
-          const { methods } = getServiceOptions(app.service(name))
+          const externalMethods = getExternalMethods(getServiceOptions(app.service(name)))
 
-          methods.forEach((method) => {
+          externalMethods.forEach((method) => {
             if (!result[method]) {
               result[method] = (...args: any[]) => {
                 const [path, ...rest] = args
