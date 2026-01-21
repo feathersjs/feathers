@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@source "../../../node_modules/daisy-ui-kit/app/components/*.{vue,js}";
+@source "../../../node_modules/@feathersdev/websites/app/components/*.{vue,js}";
+@source "../../../node_modules/@feathersdev/websites/app/layouts/*.{vue,js}";
+@source "../../components/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../layouts/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../pages/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../plugins/**/*.{js,ts,mjs}";
+@source "../../composables/**/*.{js,ts,mjs}";
+@source "../../utils/**/*.{js,ts,mjs}";
+@source "../../{A,a}pp.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../{E,e}rror.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../app.config.{js,ts,mjs}";
+@source "../../../content/**/*.{md,vue}";
+
+@layer base {
+  @media (min-width: 640px) {
+    html {
+      font-size: 18px;
+    }
+  }
+}
+
+@plugin "daisyui/theme" {
+  name: "feathers";
+  default: true;
+  prefersdark: false;
+  color-scheme: dark;
+
+  --color-base-100: oklch(3.6% 0.01 270);
+  --color-base-200: oklch(15% 19% 307);
+  --color-base-300: oklch(35% 44% 287);
+  --color-base-content: oklch(93.3% 0.01 260);
+  --color-primary: oklch(48% 39% 348);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(60% 44% 272);
+  --color-secondary-content: oklch(0% 0 0);
+  --color-accent: oklch(34.1% 0.13 297.4);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(20.1% 0.05 260.7);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(56.8% 0.14 255.1);
+  --color-info-content: oklch(94.5% 0.01 230);
+  --color-success: oklch(77.1% 0.13 149.9);
+  --color-success-content: oklch(94.5% 0.01 230);
+  --color-warning: oklch(89.5% 0.17 97.7);
+  --color-warning-content: oklch(94.5% 0.01 230);
+  --color-error: oklch(64.1% 0.21 29.3);
+  --color-error-content: oklch(94.5% 0.01 230);
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* Card */
+  --card-fs: 1rem;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+
+  --invert-logo: 0;
+}
+
+html {
+  background-color: var(--color-base-200);
+}
+
+html,
+body,
+#__nuxt {
+  font-family: Poppins, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a,
+.prose h5 a,
+.prose h6 a {
+  text-decoration: none !important;
+}

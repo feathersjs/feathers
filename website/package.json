@@ -1,0 +1,43 @@
+{
+  "name": "feathersjs.com",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev --port 3009",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@feathersdev/websites": "file:feathersdev-websites-0.0.1.tgz",
+    "@formkit/auto-animate": "^0.9.0",
+    "@nuxt/content": "^3.10.0",
+    "@nuxt/eslint": "^1.12.1",
+    "@nuxt/fonts": "^0.12.1",
+    "@nuxt/icon": "^2.2.0",
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/scripts": "^0.13.2",
+    "@nuxt/test-utils": "^3.23.0",
+    "@unhead/vue": "^2.1.2",
+    "@vueuse/core": "^14.1.0",
+    "@vueuse/integrations": "^14.1.0",
+    "better-sqlite3": "^12.6.0",
+    "daisy-ui-kit": "5.0.2",
+    "nuxt": "^4.2.2",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@iconify-json/feather": "^1.2.1",
+    "@iconify-json/heroicons": "^1.2.3",
+    "@iconify-json/heroicons-outline": "^1.2.1",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.18",
+    "daisyui": "^5.5.14",
+    "eslint": "^9.39.2",
+    "globby": "^16.1.0",
+    "shiki": "^3.21.0",
+    "tailwindcss": "^4.1.18"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Help",
+  "items": [
+    {
+      "title": "Getting Help",
+      "path": "/docs/help"
+    },
+    {
+      "title": "FAQ",
+      "path": "/docs/help/faq"
+    }
+  ]
+}

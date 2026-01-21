@@ -1,0 +1,141 @@
+{
+  "title": "Guides",
+  "items": [
+    {
+      "title": "Getting Started",
+      "path": "/docs/guides/basics/starting",
+      "children": [
+        {
+          "title": "Quick Start",
+          "path": "/docs/guides/basics/starting"
+        },
+        {
+          "title": "Creating an App",
+          "path": "/docs/guides/basics/generator"
+        },
+        {
+          "title": "Authentication",
+          "path": "/docs/guides/basics/authentication"
+        },
+        {
+          "title": "Services",
+          "path": "/docs/guides/basics/services"
+        },
+        {
+          "title": "Hooks",
+          "path": "/docs/guides/basics/hooks"
+        },
+        {
+          "title": "Schemas",
+          "path": "/docs/guides/basics/schemas"
+        },
+        {
+          "title": "Logging In",
+          "path": "/docs/guides/basics/login"
+        }
+      ]
+    },
+    {
+      "title": "Frontend",
+      "path": "/docs/guides/frontend/javascript",
+      "children": [
+        {
+          "title": "JavaScript",
+          "path": "/docs/guides/frontend/javascript"
+        }
+      ]
+    },
+    {
+      "title": "CLI Reference",
+      "path": "/docs/guides/cli",
+      "children": [
+        {
+          "title": "Overview",
+          "path": "/docs/guides/cli"
+        },
+        {
+          "title": "default.json",
+          "path": "/docs/guides/cli/default.json"
+        },
+        {
+          "title": "custom-environment-variables.json",
+          "path": "/docs/guides/cli/custom-environment-variables"
+        },
+        {
+          "title": "app.ts",
+          "path": "/docs/guides/cli/app"
+        },
+        {
+          "title": "authentication.ts",
+          "path": "/docs/guides/cli/authentication"
+        },
+        {
+          "title": "channels.ts",
+          "path": "/docs/guides/cli/channels"
+        },
+        {
+          "title": "client.ts",
+          "path": "/docs/guides/cli/client"
+        },
+        {
+          "title": "configuration.ts",
+          "path": "/docs/guides/cli/configuration"
+        },
+        {
+          "title": "declarations.ts",
+          "path": "/docs/guides/cli/declarations"
+        },
+        {
+          "title": "logger.ts",
+          "path": "/docs/guides/cli/logger"
+        },
+        {
+          "title": "validators.ts",
+          "path": "/docs/guides/cli/validators"
+        },
+        {
+          "title": "databases.ts",
+          "path": "/docs/guides/cli/databases"
+        },
+        {
+          "title": "service.ts",
+          "path": "/docs/guides/cli/service"
+        },
+        {
+          "title": "service.class.ts",
+          "path": "/docs/guides/cli/service.class"
+        },
+        {
+          "title": "service.schemas.ts",
+          "path": "/docs/guides/cli/service.schemas"
+        },
+        {
+          "title": "service.shared.ts",
+          "path": "/docs/guides/cli/service.shared"
+        },
+        {
+          "title": "hook.ts",
+          "path": "/docs/guides/cli/hook"
+        },
+        {
+          "title": "log-error.ts",
+          "path": "/docs/guides/cli/log-error"
+        }
+      ]
+    },
+    {
+      "title": "Migrating",
+      "path": "/docs/guides/whats-new",
+      "children": [
+        {
+          "title": "What's New",
+          "path": "/docs/guides/whats-new"
+        },
+        {
+          "title": "Migration Guide",
+          "path": "/docs/guides/migrating"
+        }
+      ]
+    }
+  ]
+}
