@@ -3,7 +3,7 @@ const { openSearch } = useGlobalSearch()
 </script>
 
 <template>
-  <Flex col class="relative">
+  <Flex col class="relative text-primary-content">
     <Logo class="sm:hidden mt-3 max-w-8/12 pl-4" />
 
     <Navbar class="pt-0 sm:pt-3">
