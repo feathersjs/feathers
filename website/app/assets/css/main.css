@@ -2,9 +2,9 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
-@source "../../../node_modules/daisy-ui-kit/app/components/*.{vue,js}";
-@source "../../../node_modules/@feathersdev/websites/app/components/*.{vue,js}";
-@source "../../../node_modules/@feathersdev/websites/app/layouts/*.{vue,js}";
+@source "../../../../node_modules/daisy-ui-kit/app/components/*.{vue,js}";
+@source "../../../../node_modules/@feathersdev/websites/app/components/**/*.{vue,js}";
+@source "../../../../node_modules/@feathersdev/websites/app/layouts/*.{vue,js}";
 @source "../../components/**/*.{vue,js,jsx,mjs,ts,tsx}";
 @source "../../layouts/**/*.{vue,js,jsx,mjs,ts,tsx}";
 @source "../../pages/**/*.{vue,js,jsx,mjs,ts,tsx}";
