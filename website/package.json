@@ -12,6 +12,7 @@
     "@feathersdev/websites": "file:feathersdev-websites-0.0.1.tgz",
     "@formkit/auto-animate": "^0.9.0",
     "@iconify-json/material-symbols": "^1.2.52",
+    "@iconify-json/mdi": "^1.2.3",
     "@nuxt/content": "^3.10.0",
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/fonts": "^0.12.1",
