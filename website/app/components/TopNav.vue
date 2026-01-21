@@ -25,6 +25,7 @@ const { openSearch } = useGlobalSearch()
           <Icon name="heroicons:magnifying-glass" class="w-5 h-5" />
           <span class="hidden lg:inline">Search</span>
         </Button>
+        <ThemeToggle />
         <Button
           ghost
           circle
