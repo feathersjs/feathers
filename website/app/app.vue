@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const { isSearchOpen, openSearch } = useGlobalSearch()
 
+// Theme from cookie (SSR-compatible)
+const colorMode = useCookie<'light' | 'dark'>('color-mode', {
+  default: () => 'light'
+})
+const dataTheme = computed(() => (colorMode.value === 'dark' ? 'feathers-dark' : 'feathers-light'))
+
 // Global keyboard shortcut for search (Cmd+K / Ctrl+K)
 onMounted(() => {
   const handleKeydown = (event: KeyboardEvent) => {
@@ -26,14 +32,14 @@ useHead({
   title: defaultTitle,
   htmlAttrs: {
     lang: 'en',
-    'data-theme': 'feathers',
+    'data-theme': dataTheme
   },
   meta: [
     {
       name: 'viewport',
-      content: 'width=device-width, initial-scale=1',
-    },
-  ],
+      content: 'width=device-width, initial-scale=1'
+    }
+  ]
 })
 
 useSeoMeta({
@@ -48,7 +54,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterTitle: defaultTitle,
   twitterDescription: defaultDescription,
-  twitterImage: defaultImage,
+  twitterImage: defaultImage
 })
 </script>
 
