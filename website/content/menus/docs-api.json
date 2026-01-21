@@ -3,7 +3,8 @@
   "items": [
     {
       "title": "Core",
-      "path": "/docs/api/application",
+      "icon": "material-symbols:hub-outline",
+      "iconClasses": "text-primary text-xl",
       "children": [
         {
           "title": "Application",
@@ -29,7 +30,8 @@
     },
     {
       "title": "Transports",
-      "path": "/docs/api/configuration",
+      "icon": "material-symbols:swap-horiz",
+      "iconClasses": "text-secondary text-xl",
       "children": [
         {
           "title": "Configuration",
@@ -59,7 +61,8 @@
     },
     {
       "title": "Authentication",
-      "path": "/docs/api/authentication",
+      "icon": "material-symbols:lock-outline",
+      "iconClasses": "text-accent text-xl",
       "children": [
         {
           "title": "Overview",
@@ -93,7 +96,8 @@
     },
     {
       "title": "Client",
-      "path": "/docs/api/client",
+      "icon": "material-symbols:devices-outline",
+      "iconClasses": "text-info text-xl",
       "children": [
         {
           "title": "Feathers Client",
@@ -115,7 +119,8 @@
     },
     {
       "title": "Schema",
-      "path": "/docs/api/schema",
+      "icon": "material-symbols:schema-outline",
+      "iconClasses": "text-warning text-xl",
       "children": [
         {
           "title": "Overview",
@@ -141,7 +146,8 @@
     },
     {
       "title": "Databases",
-      "path": "/docs/api/databases/adapters",
+      "icon": "material-symbols:database-outline",
+      "iconClasses": "text-error text-xl",
       "children": [
         {
           "title": "Adapters",

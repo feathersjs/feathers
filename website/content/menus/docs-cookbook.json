@@ -3,7 +3,8 @@
   "items": [
     {
       "title": "General",
-      "path": "/docs/cookbook/general/scaling",
+      "icon": "material-symbols:menu-book-outline",
+      "iconClasses": "text-primary text-xl",
       "children": [
         {
           "title": "Scaling",
@@ -13,7 +14,8 @@
     },
     {
       "title": "Authentication",
-      "path": "/docs/cookbook/authentication/anonymous",
+      "icon": "material-symbols:lock-outline",
+      "iconClasses": "text-accent text-xl",
       "children": [
         {
           "title": "Anonymous",
@@ -51,7 +53,8 @@
     },
     {
       "title": "Express",
-      "path": "/docs/cookbook/express/file-uploading",
+      "icon": "material-symbols:train-outline",
+      "iconClasses": "text-secondary text-xl",
       "children": [
         {
           "title": "File Uploads",
@@ -65,7 +68,8 @@
     },
     {
       "title": "Deployment",
-      "path": "/docs/cookbook/deploy/docker",
+      "icon": "material-symbols:cloud-upload-outline",
+      "iconClasses": "text-info text-xl",
       "children": [
         {
           "title": "Docker",

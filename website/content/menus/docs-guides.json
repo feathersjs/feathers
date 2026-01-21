@@ -3,7 +3,8 @@
   "items": [
     {
       "title": "Getting Started",
-      "path": "/docs/guides/basics/starting",
+      "icon": "material-symbols:rocket-launch-outline",
+      "iconClasses": "text-primary text-xl",
       "children": [
         {
           "title": "Quick Start",
@@ -37,7 +38,8 @@
     },
     {
       "title": "Frontend",
-      "path": "/docs/guides/frontend/javascript",
+      "icon": "material-symbols:web",
+      "iconClasses": "text-secondary text-xl",
       "children": [
         {
           "title": "JavaScript",
@@ -47,7 +49,8 @@
     },
     {
       "title": "CLI Reference",
-      "path": "/docs/guides/cli",
+      "icon": "material-symbols:terminal",
+      "iconClasses": "text-accent text-xl",
       "children": [
         {
           "title": "Overview",
@@ -125,7 +128,8 @@
     },
     {
       "title": "Migrating",
-      "path": "/docs/guides/whats-new",
+      "icon": "material-symbols:upgrade",
+      "iconClasses": "text-warning text-xl",
       "children": [
         {
           "title": "What's New",

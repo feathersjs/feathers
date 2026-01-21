@@ -2,12 +2,19 @@
   "title": "Help",
   "items": [
     {
-      "title": "Getting Help",
-      "path": "/docs/help"
-    },
-    {
-      "title": "FAQ",
-      "path": "/docs/help/faq"
+      "title": "Resources",
+      "icon": "material-symbols:help-outline",
+      "iconClasses": "text-primary text-xl",
+      "children": [
+        {
+          "title": "Getting Help",
+          "path": "/docs/help"
+        },
+        {
+          "title": "FAQ",
+          "path": "/docs/help/faq"
+        }
+      ]
     }
   ]
 }
