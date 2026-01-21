@@ -4,36 +4,36 @@ const route = useRoute()
 
 // Determine which menu to load based on the current route
 function getMenuName(path: string) {
-  if (path.startsWith('/docs/guides')) return 'docs-guides'
-  if (path.startsWith('/docs/api')) return 'docs-api'
-  if (path.startsWith('/docs/cookbook')) return 'docs-cookbook'
-  if (path.startsWith('/docs/help')) return 'docs-help'
-  return 'docs-guides' // default
+  if (path.startsWith('/guides')) return 'guides'
+  if (path.startsWith('/api')) return 'api'
+  if (path.startsWith('/cookbook')) return 'cookbook'
+  if (path.startsWith('/help')) return 'help'
+  return 'guides' // default
 }
 
 const menuName = computed(() => getMenuName(route.path))
 
 // Load all menus at once to avoid hydration issues
-const { data: guidesMenu } = await useAsyncData('menu-docs-guides', () =>
-  queryCollection('menus').where('stem', '==', 'menus/docs-guides').first()
+const { data: guidesMenu } = await useAsyncData('menu-guides', () =>
+  queryCollection('menus').where('stem', '==', 'menus/guides').first()
 )
-const { data: apiMenu } = await useAsyncData('menu-docs-api', () =>
-  queryCollection('menus').where('stem', '==', 'menus/docs-api').first()
+const { data: apiMenu } = await useAsyncData('menu-api', () =>
+  queryCollection('menus').where('stem', '==', 'menus/api').first()
 )
-const { data: cookbookMenu } = await useAsyncData('menu-docs-cookbook', () =>
-  queryCollection('menus').where('stem', '==', 'menus/docs-cookbook').first()
+const { data: cookbookMenu } = await useAsyncData('menu-cookbook', () =>
+  queryCollection('menus').where('stem', '==', 'menus/cookbook').first()
 )
-const { data: helpMenu } = await useAsyncData('menu-docs-help', () =>
-  queryCollection('menus').where('stem', '==', 'menus/docs-help').first()
+const { data: helpMenu } = await useAsyncData('menu-help', () =>
+  queryCollection('menus').where('stem', '==', 'menus/help').first()
 )
 
 const currentMenu = computed(() => {
   switch (menuName.value) {
-    case 'docs-api':
+    case 'api':
       return apiMenu.value
-    case 'docs-cookbook':
+    case 'cookbook':
       return cookbookMenu.value
-    case 'docs-help':
+    case 'help':
       return helpMenu.value
     default:
       return guidesMenu.value

@@ -3,7 +3,7 @@ const { openSearch } = useGlobalSearch()
 </script>
 
 <template>
-  <Flex col class="relative text-primary-content">
+  <Flex col class="relative">
     <Logo class="sm:hidden mt-3 max-w-8/12 pl-4" />
 
     <Navbar class="pt-0 sm:pt-3">
@@ -13,10 +13,10 @@ const { openSearch } = useGlobalSearch()
 
       <NavbarCenter>
         <Flex row items-center class="gap-6 rounded-box bg-base-100/10 p-3 sm:px-12">
-          <NuxtLink to="/docs/guides/basics/starting">Guides</NuxtLink>
-          <NuxtLink to="/docs/api">API</NuxtLink>
-          <NuxtLink to="/docs/cookbook">Cookbook</NuxtLink>
-          <NuxtLink to="/docs/help">Help</NuxtLink>
+          <NuxtLink to="/guides">Guides</NuxtLink>
+          <NuxtLink to="/api">API</NuxtLink>
+          <NuxtLink to="/cookbook">Cookbook</NuxtLink>
+          <NuxtLink to="/help">Help</NuxtLink>
         </Flex>
       </NavbarCenter>
 

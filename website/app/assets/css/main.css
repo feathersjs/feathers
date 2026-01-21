@@ -161,3 +161,8 @@ body,
 .prose h6 a {
   text-decoration: none !important;
 }
+
+/* Code block styling - use dark background regardless of theme */
+.prose pre {
+  background-color: oklch(15% 0.01 285) !important;
+}

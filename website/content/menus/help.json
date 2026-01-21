@@ -8,11 +8,11 @@
       "children": [
         {
           "title": "Getting Help",
-          "path": "/docs/help"
+          "path": "/help"
         },
         {
           "title": "FAQ",
-          "path": "/docs/help/faq"
+          "path": "/help/faq"
         }
       ]
     }

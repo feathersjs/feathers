@@ -8,7 +8,7 @@
       "children": [
         {
           "title": "Scaling",
-          "path": "/docs/cookbook/general/scaling"
+          "path": "/cookbook/general/scaling"
         }
       ]
     },
@@ -19,35 +19,35 @@
       "children": [
         {
           "title": "Anonymous",
-          "path": "/docs/cookbook/authentication/anonymous"
+          "path": "/cookbook/authentication/anonymous"
         },
         {
           "title": "API Key",
-          "path": "/docs/cookbook/authentication/apiKey"
+          "path": "/cookbook/authentication/apiKey"
         },
         {
           "title": "Auth0",
-          "path": "/docs/cookbook/authentication/auth0"
+          "path": "/cookbook/authentication/auth0"
         },
         {
           "title": "Facebook",
-          "path": "/docs/cookbook/authentication/facebook"
+          "path": "/cookbook/authentication/facebook"
         },
         {
           "title": "Google",
-          "path": "/docs/cookbook/authentication/google"
+          "path": "/cookbook/authentication/google"
         },
         {
           "title": "Firebase",
-          "path": "/docs/cookbook/authentication/firebase"
+          "path": "/cookbook/authentication/firebase"
         },
         {
           "title": "Stateless JWT",
-          "path": "/docs/cookbook/authentication/stateless"
+          "path": "/cookbook/authentication/stateless"
         },
         {
           "title": "Revoking JWTs",
-          "path": "/docs/cookbook/authentication/revoke-jwt"
+          "path": "/cookbook/authentication/revoke-jwt"
         }
       ]
     },
@@ -58,11 +58,11 @@
       "children": [
         {
           "title": "File Uploads",
-          "path": "/docs/cookbook/express/file-uploading"
+          "path": "/cookbook/express/file-uploading"
         },
         {
           "title": "View Engine SSR",
-          "path": "/docs/cookbook/express/view-engine"
+          "path": "/cookbook/express/view-engine"
         }
       ]
     },
@@ -73,7 +73,7 @@
       "children": [
         {
           "title": "Docker",
-          "path": "/docs/cookbook/deploy/docker"
+          "path": "/cookbook/deploy/docker"
         }
       ]
     }

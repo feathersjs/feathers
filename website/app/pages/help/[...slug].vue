@@ -8,7 +8,7 @@ if (route.path.includes('.html')) {
 
 const { data: page } = await useAsyncData(
   () => pathWithoutHtml.value,
-  () => queryCollection('docs').path(route.path).first()
+  () => queryCollection('help').path(route.path).first()
 )
 
 definePageMeta({

@@ -8,31 +8,31 @@
       "children": [
         {
           "title": "Quick Start",
-          "path": "/docs/guides/basics/starting"
+          "path": "/guides/basics/starting"
         },
         {
           "title": "Creating an App",
-          "path": "/docs/guides/basics/generator"
+          "path": "/guides/basics/generator"
         },
         {
           "title": "Authentication",
-          "path": "/docs/guides/basics/authentication"
+          "path": "/guides/basics/authentication"
         },
         {
           "title": "Services",
-          "path": "/docs/guides/basics/services"
+          "path": "/guides/basics/services"
         },
         {
           "title": "Hooks",
-          "path": "/docs/guides/basics/hooks"
+          "path": "/guides/basics/hooks"
         },
         {
           "title": "Schemas",
-          "path": "/docs/guides/basics/schemas"
+          "path": "/guides/basics/schemas"
         },
         {
           "title": "Logging In",
-          "path": "/docs/guides/basics/login"
+          "path": "/guides/basics/login"
         }
       ]
     },
@@ -43,7 +43,7 @@
       "children": [
         {
           "title": "JavaScript",
-          "path": "/docs/guides/frontend/javascript"
+          "path": "/guides/frontend/javascript"
         }
       ]
     },
@@ -54,75 +54,75 @@
       "children": [
         {
           "title": "Overview",
-          "path": "/docs/guides/cli"
+          "path": "/guides/cli"
         },
         {
           "title": "default.json",
-          "path": "/docs/guides/cli/default.json"
+          "path": "/guides/cli/default.json"
         },
         {
           "title": "custom-environment-variables.json",
-          "path": "/docs/guides/cli/custom-environment-variables"
+          "path": "/guides/cli/custom-environment-variables"
         },
         {
           "title": "app.ts",
-          "path": "/docs/guides/cli/app"
+          "path": "/guides/cli/app"
         },
         {
           "title": "authentication.ts",
-          "path": "/docs/guides/cli/authentication"
+          "path": "/guides/cli/authentication"
         },
         {
           "title": "channels.ts",
-          "path": "/docs/guides/cli/channels"
+          "path": "/guides/cli/channels"
         },
         {
           "title": "client.ts",
-          "path": "/docs/guides/cli/client"
+          "path": "/guides/cli/client"
         },
         {
           "title": "configuration.ts",
-          "path": "/docs/guides/cli/configuration"
+          "path": "/guides/cli/configuration"
         },
         {
           "title": "declarations.ts",
-          "path": "/docs/guides/cli/declarations"
+          "path": "/guides/cli/declarations"
         },
         {
           "title": "logger.ts",
-          "path": "/docs/guides/cli/logger"
+          "path": "/guides/cli/logger"
         },
         {
           "title": "validators.ts",
-          "path": "/docs/guides/cli/validators"
+          "path": "/guides/cli/validators"
         },
         {
           "title": "databases.ts",
-          "path": "/docs/guides/cli/databases"
+          "path": "/guides/cli/databases"
         },
         {
           "title": "service.ts",
-          "path": "/docs/guides/cli/service"
+          "path": "/guides/cli/service"
         },
         {
           "title": "service.class.ts",
-          "path": "/docs/guides/cli/service.class"
+          "path": "/guides/cli/service.class"
         },
         {
           "title": "service.schemas.ts",
-          "path": "/docs/guides/cli/service.schemas"
+          "path": "/guides/cli/service.schemas"
         },
         {
           "title": "service.shared.ts",
-          "path": "/docs/guides/cli/service.shared"
+          "path": "/guides/cli/service.shared"
         },
         {
           "title": "hook.ts",
-          "path": "/docs/guides/cli/hook"
+          "path": "/guides/cli/hook"
         },
         {
           "title": "log-error.ts",
-          "path": "/docs/guides/cli/log-error"
+          "path": "/guides/cli/log-error"
         }
       ]
     },
@@ -133,11 +133,11 @@
       "children": [
         {
           "title": "What's New",
-          "path": "/docs/guides/whats-new"
+          "path": "/guides/whats-new"
         },
         {
           "title": "Migration Guide",
-          "path": "/docs/guides/migrating"
+          "path": "/guides/migrating"
         }
       ]
     }

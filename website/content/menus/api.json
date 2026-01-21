@@ -8,23 +8,23 @@
       "children": [
         {
           "title": "Application",
-          "path": "/docs/api/application"
+          "path": "/api/application"
         },
         {
           "title": "Services",
-          "path": "/docs/api/services"
+          "path": "/api/services"
         },
         {
           "title": "Hooks",
-          "path": "/docs/api/hooks"
+          "path": "/api/hooks"
         },
         {
           "title": "Events",
-          "path": "/docs/api/events"
+          "path": "/api/events"
         },
         {
           "title": "Errors",
-          "path": "/docs/api/errors"
+          "path": "/api/errors"
         }
       ]
     },
@@ -35,27 +35,27 @@
       "children": [
         {
           "title": "Configuration",
-          "path": "/docs/api/configuration"
+          "path": "/api/configuration"
         },
         {
           "title": "HTTP",
-          "path": "/docs/api/http"
+          "path": "/api/http"
         },
         {
           "title": "Koa",
-          "path": "/docs/api/koa"
+          "path": "/api/koa"
         },
         {
           "title": "Express",
-          "path": "/docs/api/express"
+          "path": "/api/express"
         },
         {
           "title": "Socket.io",
-          "path": "/docs/api/socketio"
+          "path": "/api/socketio"
         },
         {
           "title": "Channels",
-          "path": "/docs/api/channels"
+          "path": "/api/channels"
         }
       ]
     },
@@ -66,31 +66,31 @@
       "children": [
         {
           "title": "Overview",
-          "path": "/docs/api/authentication"
+          "path": "/api/authentication"
         },
         {
           "title": "Service",
-          "path": "/docs/api/authentication/service"
+          "path": "/api/authentication/service"
         },
         {
           "title": "Hook",
-          "path": "/docs/api/authentication/hook"
+          "path": "/api/authentication/hook"
         },
         {
           "title": "Strategies",
-          "path": "/docs/api/authentication/strategy"
+          "path": "/api/authentication/strategy"
         },
         {
           "title": "JWT",
-          "path": "/docs/api/authentication/jwt"
+          "path": "/api/authentication/jwt"
         },
         {
           "title": "Local",
-          "path": "/docs/api/authentication/local"
+          "path": "/api/authentication/local"
         },
         {
           "title": "OAuth",
-          "path": "/docs/api/authentication/oauth"
+          "path": "/api/authentication/oauth"
         }
       ]
     },
@@ -101,19 +101,19 @@
       "children": [
         {
           "title": "Feathers Client",
-          "path": "/docs/api/client"
+          "path": "/api/client"
         },
         {
           "title": "REST Client",
-          "path": "/docs/api/client/rest"
+          "path": "/api/client/rest"
         },
         {
           "title": "Socket.io Client",
-          "path": "/docs/api/client/socketio"
+          "path": "/api/client/socketio"
         },
         {
           "title": "Authentication",
-          "path": "/docs/api/authentication/client"
+          "path": "/api/authentication/client"
         }
       ]
     },
@@ -124,23 +124,23 @@
       "children": [
         {
           "title": "Overview",
-          "path": "/docs/api/schema"
+          "path": "/api/schema"
         },
         {
           "title": "TypeBox",
-          "path": "/docs/api/schema/typebox"
+          "path": "/api/schema/typebox"
         },
         {
           "title": "JSON Schema",
-          "path": "/docs/api/schema/schema"
+          "path": "/api/schema/schema"
         },
         {
           "title": "Validators",
-          "path": "/docs/api/schema/validators"
+          "path": "/api/schema/validators"
         },
         {
           "title": "Resolvers",
-          "path": "/docs/api/schema/resolvers"
+          "path": "/api/schema/resolvers"
         }
       ]
     },
@@ -151,27 +151,27 @@
       "children": [
         {
           "title": "Adapters",
-          "path": "/docs/api/databases/adapters"
+          "path": "/api/databases/adapters"
         },
         {
           "title": "Common API",
-          "path": "/docs/api/databases/common"
+          "path": "/api/databases/common"
         },
         {
           "title": "Querying",
-          "path": "/docs/api/databases/querying"
+          "path": "/api/databases/querying"
         },
         {
           "title": "MongoDB",
-          "path": "/docs/api/databases/mongodb"
+          "path": "/api/databases/mongodb"
         },
         {
           "title": "SQL (Knex)",
-          "path": "/docs/api/databases/knex"
+          "path": "/api/databases/knex"
         },
         {
           "title": "Memory",
-          "path": "/docs/api/databases/memory"
+          "path": "/api/databases/memory"
         }
       ]
     }

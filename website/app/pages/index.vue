@@ -15,9 +15,9 @@ const feathersProduct = {
   slug: 'feathers',
   icon: 'feathersdev:feathers',
   logo: '/img/logo-feathers-white.svg',
-  link: '/docs/guides/basics/starting',
+  link: '/guides/basics/starting',
   meta: {
-    docLink: '/docs/api',
+    docLink: '/api',
     birdImage: '/img/bird-yellow.svg',
     planetImage: '/img/planet-yellow.svg'
   }
