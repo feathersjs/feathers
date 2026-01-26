@@ -25,6 +25,41 @@
         {
           "title": "Errors",
           "path": "/api/errors"
+        },
+        {
+          "title": "Channels",
+          "path": "/api/channels"
+        },
+        {
+          "title": "Authentication",
+          "path": "/api/authentication"
+        }
+      ]
+    },
+    {
+      "title": "Platforms",
+      "icon": "material-symbols:deployed-code-outline",
+      "iconClasses": "text-warning text-xl",
+      "children": [
+        {
+          "title": "Node.js",
+          "path": "/api/nodejs"
+        },
+        {
+          "title": "Deno",
+          "path": "/api/deno"
+        },
+        {
+          "title": "Bun",
+          "path": "/api/bun"
+        },
+        {
+          "title": "Cloudflare",
+          "path": "/api/cloudflare"
+        },
+        {
+          "title": "Browser",
+          "path": "/api/browser"
         }
       ]
     },
@@ -34,63 +69,8 @@
       "iconClasses": "text-secondary text-xl",
       "children": [
         {
-          "title": "Configuration",
-          "path": "/api/configuration"
-        },
-        {
           "title": "HTTP",
           "path": "/api/http"
-        },
-        {
-          "title": "Koa",
-          "path": "/api/koa"
-        },
-        {
-          "title": "Express",
-          "path": "/api/express"
-        },
-        {
-          "title": "Socket.io",
-          "path": "/api/socketio"
-        },
-        {
-          "title": "Channels",
-          "path": "/api/channels"
-        }
-      ]
-    },
-    {
-      "title": "Authentication",
-      "icon": "material-symbols:lock-outline",
-      "iconClasses": "text-accent text-xl",
-      "children": [
-        {
-          "title": "Overview",
-          "path": "/api/authentication"
-        },
-        {
-          "title": "Service",
-          "path": "/api/authentication/service"
-        },
-        {
-          "title": "Hook",
-          "path": "/api/authentication/hook"
-        },
-        {
-          "title": "Strategies",
-          "path": "/api/authentication/strategy"
-        },
-        {
-          "title": "JWT",
-          "path": "/api/authentication/jwt"
-        },
-        {
-          "title": "Local",
-          "path": "/api/authentication/local"
-        },
-        {
-          "title": "OAuth",
-          "path": "/api/authentication/oauth"
         }
       ]
     },
@@ -110,68 +90,6 @@
         {
           "title": "Socket.io Client",
           "path": "/api/client/socketio"
-        },
-        {
-          "title": "Authentication",
-          "path": "/api/authentication/client"
-        }
-      ]
-    },
-    {
-      "title": "Schema",
-      "icon": "material-symbols:schema-outline",
-      "iconClasses": "text-warning text-xl",
-      "children": [
-        {
-          "title": "Overview",
-          "path": "/api/schema"
-        },
-        {
-          "title": "TypeBox",
-          "path": "/api/schema/typebox"
-        },
-        {
-          "title": "JSON Schema",
-          "path": "/api/schema/schema"
-        },
-        {
-          "title": "Validators",
-          "path": "/api/schema/validators"
-        },
-        {
-          "title": "Resolvers",
-          "path": "/api/schema/resolvers"
-        }
-      ]
-    },
-    {
-      "title": "Databases",
-      "icon": "material-symbols:database-outline",
-      "iconClasses": "text-error text-xl",
-      "children": [
-        {
-          "title": "Adapters",
-          "path": "/api/databases/adapters"
-        },
-        {
-          "title": "Common API",
-          "path": "/api/databases/common"
-        },
-        {
-          "title": "Querying",
-          "path": "/api/databases/querying"
-        },
-        {
-          "title": "MongoDB",
-          "path": "/api/databases/mongodb"
-        },
-        {
-          "title": "SQL (Knex)",
-          "path": "/api/databases/knex"
-        },
-        {
-          "title": "Memory",
-          "path": "/api/databases/memory"
         }
       ]
     }

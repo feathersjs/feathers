@@ -18,7 +18,7 @@ const feathersProduct = {
   link: '/guides/basics/starting',
   meta: {
     docLink: '/api',
-    birdImage: '/img/bird-yellow.svg',
+    birdImage: '/img/eagle-space.svg',
     planetImage: '/img/planet-yellow.svg'
   }
 }

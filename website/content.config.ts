@@ -34,10 +34,6 @@ export default defineContentConfig({
     ecosystem: defineCollection({
       type: 'page',
       source: 'ecosystem/**/*.md'
-    }),
-    comparison: defineCollection({
-      type: 'page',
-      source: '{comparison,feathers-vs-*}.md'
     })
   }
 })

@@ -14,7 +14,6 @@ For more information
 
 - [Read about the philosophy behind Feathers and where it came from](https://blog.feathersjs.com/why-we-built-the-best-web-framework-you-ve-probably-never-heard-of-until-now-176afc5c6aac)
 - [Learn about the high level design patterns behind Feathers](https://blog.feathersjs.com/design-patterns-for-modern-web-apis-1f046635215)
-- [See how Feathers compares to others](https://feathersjs.com/comparison)
 
 ## Is Feathers production ready?
 
