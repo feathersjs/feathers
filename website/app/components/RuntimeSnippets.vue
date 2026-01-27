@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import nodejsSnippet from '~/snippets/runtimes/nodejs.ts?raw'
+import denoSnippet from '~/snippets/runtimes/deno.ts?raw'
+import bunSnippet from '~/snippets/runtimes/bun.ts?raw'
+import cloudflareSnippet from '~/snippets/runtimes/cloudflare.ts?raw'
+
 const tabs = [
   {
     id: 'nodejs',
@@ -23,77 +28,10 @@ const tabs = [
 ]
 
 const snippets: Record<string, string> = {
-  nodejs: `\`\`\`ts
-import { createServer } from 'node:http'
-import { feathers } from 'feathers'
-import { createHandler, toNodeHandler } from 'feathers/http'
-
-const app = feathers()
-
-app.use('messages', {
-  async find() {
-    return [{ id: 1, text: 'Hello world' }]
-  }
-})
-
-const handler = createHandler(app)
-const server = createServer(toNodeHandler(handler))
-
-server.listen(3030)
-\`\`\``,
-  deno: `\`\`\`ts
-import { feathers } from 'feathers'
-import { createHandler } from 'feathers/http'
-
-const app = feathers()
-
-app.use('messages', {
-  async find() {
-    return [{ id: 1, text: 'Hello world' }]
-  }
-})
-
-const handler = createHandler(app)
-
-Deno.serve({ port: 3030 }, handler)
-\`\`\``,
-  bun: `\`\`\`ts
-import { feathers } from 'feathers'
-import { createHandler } from 'feathers/http'
-
-const app = feathers()
-
-app.use('messages', {
-  async find() {
-    return [{ id: 1, text: 'Hello world' }]
-  }
-})
-
-const handler = createHandler(app)
-
-Bun.serve({
-  port: 3030,
-  fetch: handler
-})
-\`\`\``,
-  cloudflare: `\`\`\`ts
-import { feathers } from 'feathers'
-import { createHandler } from 'feathers/http'
-
-const app = feathers()
-
-app.use('messages', {
-  async find() {
-    return [{ id: 1, text: 'Hello world' }]
-  }
-})
-
-const handler = createHandler(app)
-
-export default {
-  fetch: handler
-}
-\`\`\``
+  nodejs: '```ts\n' + nodejsSnippet + '\n```',
+  deno: '```ts\n' + denoSnippet + '\n```',
+  bun: '```ts\n' + bunSnippet + '\n```',
+  cloudflare: '```ts\n' + cloudflareSnippet + '\n```'
 }
 </script>
 
