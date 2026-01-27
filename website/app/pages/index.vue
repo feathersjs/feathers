@@ -1,16 +1,19 @@
 <script setup lang="ts">
+import type { Product } from '~~/content.config.schema'
+import HeroProduct from '../components/HeroProduct.vue'
+
 definePageMeta({
   layout: 'page'
 })
 
-const feathersProduct = {
+const feathersProduct: Product = {
   title: 'Feathers JS',
   published: true,
   highlight: true,
   shortName: 'Feathers',
-  description: 'A full-stack web framework',
+  description: 'The universal web framework',
   longDescription:
-    'Feathers is a full-stack web-framework for creating APIs and real-time applications with TypeScript or JavaScript. Feathers can interact with any backend technology, supports many databases out of the box and works with any frontend technology like React, VueJS, Angular, React Native, Android or iOS.',
+    'The only web framework with a universal interface. Realtime by default. Type-safe from server to client. Transport agnostic. Runs on every web runtime. Any database. Any frontend framework.',
   menuDescription: 'The API and real-time application framework',
   slug: 'feathers',
   icon: 'feathersdev:feathers',
@@ -23,10 +26,32 @@ const feathersProduct = {
   }
 }
 
+const runtimes = [
+  {
+    icon: 'logos:nodejs-icon',
+    title: 'Node.js',
+    description: 'The original and most mature runtime. Full support for all Feathers features.'
+  },
+  {
+    icon: 'logos:deno',
+    title: 'Deno',
+    description: 'Secure by default with built-in TypeScript support. No configuration needed.'
+  },
+  {
+    icon: 'logos:bun',
+    title: 'Bun',
+    description: 'Blazing fast JavaScript runtime with native TypeScript and JSX support.'
+  },
+  {
+    icon: 'logos:cloudflare-workers-icon',
+    title: 'Cloudflare Workers',
+    description: 'Deploy to the edge with serverless functions that run globally.'
+  }
+]
+
 useSeoMeta({
-  title: 'FeathersJS - The API and Real-time Application Framework',
-  description:
-    'Build prototypes in minutes and production-ready apps in days. Feathers is a lightweight web-framework for creating APIs and real-time applications with TypeScript or JavaScript.'
+  title: `${feathersProduct.shortName} - ${feathersProduct.description}`,
+  description: feathersProduct.longDescription
 })
 </script>
 
@@ -36,10 +61,10 @@ useSeoMeta({
     <div
       class="bg-[url('/img/top_background.svg')] bg-no-repeat bg-cover bg-center text-primary-content max-w-screen overflow-x-hidden"
     >
-      <div class="relative mx-auto max-w-[82rem] lg:drawer-open md:pt-16 px-4">
+      <div class="relative mx-auto max-w-328 lg:drawer-open md:pt-16 px-4">
         <HeroProduct
           :product="feathersProduct"
-          bird-classes="relative w-[250px] sm:w-[260px] lg:w-[412px] lg:top-24 transition-all duration-500 ease-in-out floating"
+          bird-classes="relative w-[200px] sm:w-[220px] lg:w-[350px] lg:top-24 transition-all duration-500 ease-in-out floating"
           planet-classes="absolute w-[318px] lg:w-[550px] transition-all duration-500 ease-in-out -bottom-[calc(100%-14rem)] -right-60 sm:-right-20 md:-right-40 lg:top-0 lg:-right-88 planet-wobble"
         />
       </div>
@@ -47,38 +72,28 @@ useSeoMeta({
     </div>
 
     <!-- Features Section -->
-    <section class="bg-base-200 max-w-[82rem] mx-auto -mt-64 rounded-4xl p-6 pt-12 lg:p-12">
+    <section class="bg-base-200 max-w-328 mx-auto -mt-64 rounded-4xl p-6 pt-12 lg:p-12">
       <h2 class="text-3xl font-bold text-center mb-12">Why Feathers?</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h3 class="card-title">Real-time by Default</h3>
-            <p>
-              Every Feathers service is real-time enabled out of the box. Use REST, WebSockets, or both at the
-              same time.
-            </p>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h3 class="card-title">Universal</h3>
-            <p>
-              Works with any backend, supports multiple databases, and runs on Node.js, Deno, Bun, and in the
-              browser.
-            </p>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h3 class="card-title">TypeScript First</h3>
-            <p>
-              Full TypeScript support with type-safe services, hooks, and schema validation using your
-              favorite validation library.
-            </p>
-          </div>
-        </div>
+
+      <Features />
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+        <Hover3D v-for="runtime in runtimes" :key="runtime.title">
+          <Card class="bg-base-100 shadow-xl h-full">
+            <CardBody class="items-center text-center">
+              <div class="text-5xl mb-4">
+                <Icon :name="runtime.icon" />
+              </div>
+              <CardTitle>{{ runtime.title }}</CardTitle>
+              <Text class="opacity-70" sm>{{ runtime.description }}</Text>
+            </CardBody>
+          </Card>
+        </Hover3D>
       </div>
     </section>
+
+    <!-- Feathers Explained Section -->
+    <FeathersExplained />
   </div>
 </template>
 
