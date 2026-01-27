@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import nodejsSnippet from '~/snippets/runtimes/nodejs.ts?raw'
-import denoSnippet from '~/snippets/runtimes/deno.ts?raw'
-import bunSnippet from '~/snippets/runtimes/bun.ts?raw'
-import cloudflareSnippet from '~/snippets/runtimes/cloudflare.ts?raw'
+import nodejsSnippet from '~/snippets/nodejs.ts?raw'
+import denoSnippet from '~/snippets/deno.ts?raw'
+import bunSnippet from '~/snippets/bun.ts?raw'
+import cloudflareSnippet from '~/snippets/cloudflare.ts?raw'
 
 const tabs = [
   {
