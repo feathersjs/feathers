@@ -26,29 +26,6 @@ const feathersProduct: Product = {
   }
 }
 
-const runtimes = [
-  {
-    icon: 'logos:nodejs-icon',
-    title: 'Node.js',
-    description: 'The original and most mature runtime. Full support for all Feathers features.'
-  },
-  {
-    icon: 'logos:deno',
-    title: 'Deno',
-    description: 'Secure by default with built-in TypeScript support. No configuration needed.'
-  },
-  {
-    icon: 'logos:bun',
-    title: 'Bun',
-    description: 'Blazing fast JavaScript runtime with native TypeScript and JSX support.'
-  },
-  {
-    icon: 'logos:cloudflare-workers-icon',
-    title: 'Cloudflare Workers',
-    description: 'Deploy to the edge with serverless functions that run globally.'
-  }
-]
-
 useSeoMeta({
   title: `${feathersProduct.shortName} - ${feathersProduct.description}`,
   description: feathersProduct.longDescription
@@ -73,27 +50,12 @@ useSeoMeta({
 
     <!-- Features Section -->
     <section class="bg-base-200 max-w-328 mx-auto -mt-64 rounded-4xl p-6 pt-12 lg:p-12">
-      <h2 class="text-3xl font-bold text-center mb-12">Why Feathers?</h2>
+      <RuntimeSnippets />
 
-      <Features />
+      <Features class="mt-24" />
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-        <Hover3D v-for="runtime in runtimes" :key="runtime.title">
-          <Card class="bg-base-100 shadow-xl h-full">
-            <CardBody class="items-center text-center">
-              <div class="text-5xl mb-4">
-                <Icon :name="runtime.icon" />
-              </div>
-              <CardTitle>{{ runtime.title }}</CardTitle>
-              <Text class="opacity-70" sm>{{ runtime.description }}</Text>
-            </CardBody>
-          </Card>
-        </Hover3D>
-      </div>
+      <FeathersExplained />
     </section>
-
-    <!-- Feathers Explained Section -->
-    <FeathersExplained />
   </div>
 </template>
 

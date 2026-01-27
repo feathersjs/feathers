@@ -26,8 +26,7 @@ const cards = [
 
 <template>
   <section class="max-w-328 mx-auto py-16 px-6 lg:px-12">
-    <Text block center class="opacity-70 mb-2">Learning and Resources</Text>
-    <h2 class="text-3xl font-bold text-center mb-12">Feathers JS Explained</h2>
+    <SectionHeader label="Learning and Resources" title="Feathers JS Explained" />
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <Card v-for="card in cards" :key="card.title" class="bg-base-100">

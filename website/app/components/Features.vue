@@ -1,5 +1,6 @@
 <template>
   <section class="max-w-328 mx-auto mt-12 p-6 lg:p-12">
+    <SectionHeader title="Why Feathers?" />
     <Flex wrap justify-center class="gap-6">
       <Hover3D>
         <Card class="bg-base-100 shadow-xl w-72">
