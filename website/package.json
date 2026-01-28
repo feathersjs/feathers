@@ -9,7 +9,7 @@
     "preview": "nuxt preview"
   },
   "dependencies": {
-    "@feathersdev/websites": "file:feathersdev-websites-0.0.1.tgz",
+    "@feathersdev/websites": "^0.0.1",
     "@formkit/auto-animate": "^0.9.0",
     "@iconify-json/material-symbols": "^1.2.52",
     "@iconify-json/mdi": "^1.2.3",
