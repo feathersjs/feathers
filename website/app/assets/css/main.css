@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@source "../../../../node_modules/daisy-ui-kit/app/components/*.{vue,js}";
+@source "../../../../node_modules/@feathersdev/websites/app/components/**/*.{vue,js}";
+@source "../../../../node_modules/@feathersdev/websites/app/layouts/*.{vue,js}";
+@source "../../components/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../layouts/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../pages/**/*.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../plugins/**/*.{js,ts,mjs}";
+@source "../../composables/**/*.{js,ts,mjs}";
+@source "../../utils/**/*.{js,ts,mjs}";
+@source "../../{A,a}pp.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../{E,e}rror.{vue,js,jsx,mjs,ts,tsx}";
+@source "../../app.config.{js,ts,mjs}";
+@source "../../../content/**/*.{md,vue}";
+
+@layer base {
+  @media (min-width: 640px) {
+    html {
+      font-size: 18px;
+    }
+  }
+}
+
+/* Feathers Light Theme (default)
+   Hex to oklch conversions:
+   #FFFFFF -> oklch(100% 0 0)
+   #F8F8F8 -> oklch(98% 0 0)
+   #EEEEEE -> oklch(94% 0 0)
+   #18181B -> oklch(21% 0.006 285)
+   #EC5F62 -> oklch(63% 0.18 20)
+   #8c4fff -> oklch(55% 0.27 295)
+   #EA591E -> oklch(60% 0.2 40)
+   #5823D5 -> oklch(45% 0.25 290)
+   #8D80DA -> oklch(62% 0.12 285)
+   #72C174 -> oklch(72% 0.14 145)
+   #FFB656 -> oklch(82% 0.15 70)
+   #FF4347 -> oklch(62% 0.24 25)
+*/
+@plugin "daisyui/theme" {
+  name: 'feathers-light';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(98% 0 0);
+  --color-base-300: oklch(94% 0 0);
+  --color-base-content: oklch(21% 0.006 285);
+  --color-primary: oklch(63% 0.18 20);
+  --color-primary-content: oklch(98% 0.019 200.873);
+  --color-secondary: oklch(55% 0.27 295);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(60% 0.2 40);
+  --color-accent-content: oklch(97% 0.014 308.299);
+  --color-neutral: oklch(45% 0.25 290);
+  --color-neutral-content: oklch(97% 0.021 166.113);
+  --color-info: oklch(62% 0.12 285);
+  --color-info-content: oklch(97% 0.013 236.62);
+  --color-success: oklch(72% 0.14 145);
+  --color-success-content: oklch(98% 0.014 180.72);
+  --color-warning: oklch(82% 0.15 70);
+  --color-warning-content: oklch(98% 0.026 102.212);
+  --color-error: oklch(62% 0.24 25);
+  --color-error-content: oklch(97% 0.014 343.198);
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Feathers Dark Theme (prefers-dark)
+   Hex to oklch conversions:
+   #10062A -> oklch(12.5% 0.06 285)
+   #1D0B4A -> oklch(18.5% 0.12 290)
+   #260E64 -> oklch(23% 0.16 290)
+   #C0AAF3 -> oklch(77% 0.1 290) (used for secondary, not base-content)
+   #EC5F62 -> oklch(63% 0.18 20)
+   #EA591E -> oklch(60% 0.2 40)
+   #5823D5 -> oklch(45% 0.25 290)
+   #8D80DA -> oklch(62% 0.12 285)
+   #72C174 -> oklch(72% 0.14 145)
+   #F2C666 -> oklch(84% 0.13 85)
+   #FF4347 -> oklch(62% 0.24 25)
+*/
+@plugin "daisyui/theme" {
+  name: 'feathers-dark';
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(12.5% 0.06 285);
+  --color-base-200: oklch(18.5% 0.12 290);
+  --color-base-300: oklch(23% 0.16 290);
+  --color-base-content: oklch(95% 0.01 290);
+  --color-primary: oklch(63% 0.18 20);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(77% 0.1 290);
+  --color-secondary-content: oklch(15% 0.05 290);
+  --color-accent: oklch(60% 0.2 40);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(45% 0.25 290);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(62% 0.12 285);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(72% 0.14 145);
+  --color-success-content: oklch(15% 0.05 145);
+  --color-warning: oklch(84% 0.13 85);
+  --color-warning-content: oklch(15% 0.05 85);
+  --color-error: oklch(62% 0.24 25);
+  --color-error-content: oklch(100% 0 0);
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.28125rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+
+html {
+  background-color: var(--color-base-200);
+}
+
+html,
+body,
+#__nuxt {
+  font-family: Poppins, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a,
+.prose h5 a,
+.prose h6 a {
+  text-decoration: none !important;
+}
+
+/* Code block styling - use dark background regardless of theme */
+.prose pre {
+  background-color: oklch(15% 0.01 285) !important;
+}

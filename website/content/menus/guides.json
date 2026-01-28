@@ -1,0 +1,66 @@
+{
+  "title": "Guides",
+  "items": [
+    {
+      "title": "Getting Started",
+      "icon": "material-symbols:rocket-launch-outline",
+      "iconClasses": "text-primary text-xl",
+      "children": [
+        {
+          "title": "Quick Start",
+          "path": "/guides/basics/starting"
+        },
+        {
+          "title": "Creating an App",
+          "path": "/guides/basics/generator"
+        },
+        {
+          "title": "Authentication",
+          "path": "/guides/basics/authentication"
+        },
+        {
+          "title": "Services",
+          "path": "/guides/basics/services"
+        },
+        {
+          "title": "Hooks",
+          "path": "/guides/basics/hooks"
+        },
+        {
+          "title": "Schemas",
+          "path": "/guides/basics/schemas"
+        },
+        {
+          "title": "Logging In",
+          "path": "/guides/basics/login"
+        }
+      ]
+    },
+    {
+      "title": "Frontend",
+      "icon": "material-symbols:web",
+      "iconClasses": "text-secondary text-xl",
+      "children": [
+        {
+          "title": "JavaScript",
+          "path": "/guides/frontend/javascript"
+        }
+      ]
+    },
+    {
+      "title": "Migrating",
+      "icon": "material-symbols:upgrade",
+      "iconClasses": "text-warning text-xl",
+      "children": [
+        {
+          "title": "What's New",
+          "path": "/guides/whats-new"
+        },
+        {
+          "title": "Migration Guide",
+          "path": "/guides/migrating"
+        }
+      ]
+    }
+  ]
+}

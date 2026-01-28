@@ -1,0 +1,97 @@
+{
+  "title": "API",
+  "items": [
+    {
+      "title": "Core",
+      "icon": "material-symbols:hub-outline",
+      "iconClasses": "text-primary text-xl",
+      "children": [
+        {
+          "title": "Application",
+          "path": "/api/application"
+        },
+        {
+          "title": "Services",
+          "path": "/api/services"
+        },
+        {
+          "title": "Hooks",
+          "path": "/api/hooks"
+        },
+        {
+          "title": "Events",
+          "path": "/api/events"
+        },
+        {
+          "title": "Errors",
+          "path": "/api/errors"
+        },
+        {
+          "title": "Channels",
+          "path": "/api/channels"
+        },
+        {
+          "title": "Authentication",
+          "path": "/api/authentication"
+        }
+      ]
+    },
+    {
+      "title": "Platforms",
+      "icon": "material-symbols:deployed-code-outline",
+      "iconClasses": "text-warning text-xl",
+      "children": [
+        {
+          "title": "Node.js",
+          "path": "/api/nodejs"
+        },
+        {
+          "title": "Deno",
+          "path": "/api/deno"
+        },
+        {
+          "title": "Bun",
+          "path": "/api/bun"
+        },
+        {
+          "title": "Cloudflare",
+          "path": "/api/cloudflare"
+        },
+        {
+          "title": "Browser",
+          "path": "/api/browser"
+        }
+      ]
+    },
+    {
+      "title": "Transports",
+      "icon": "material-symbols:swap-horiz",
+      "iconClasses": "text-secondary text-xl",
+      "children": [
+        {
+          "title": "HTTP",
+          "path": "/api/http"
+        }
+      ]
+    },
+    {
+      "title": "Client",
+      "icon": "material-symbols:devices-outline",
+      "iconClasses": "text-info text-xl",
+      "children": [
+        {
+          "title": "Feathers Client",
+          "path": "/api/client"
+        },
+        {
+          "title": "REST Client",
+          "path": "/api/client/rest"
+        },
+        {
+          "title": "Socket.io Client",
+          "path": "/api/client/socketio"
+        }
+      ]
+    }
+  ]
+}

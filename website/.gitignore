@@ -1,0 +1,32 @@
+# Nuxt dev/build outputs
+.nuxt
+.output
+.data
+dist
+
+# Node modules
+node_modules
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package manager
+*.tgz

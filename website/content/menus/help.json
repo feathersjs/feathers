@@ -1,0 +1,20 @@
+{
+  "title": "Help",
+  "items": [
+    {
+      "title": "Resources",
+      "icon": "material-symbols:help-outline",
+      "iconClasses": "text-primary text-xl",
+      "children": [
+        {
+          "title": "Getting Help",
+          "path": "/help"
+        },
+        {
+          "title": "FAQ",
+          "path": "/help/faq"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Cookbook",
+  "items": [
+    {
+      "title": "General",
+      "icon": "material-symbols:menu-book-outline",
+      "iconClasses": "text-primary text-xl",
+      "children": [
+        {
+          "title": "Scaling",
+          "path": "/cookbook/general/scaling"
+        }
+      ]
+    },
+    {
+      "title": "Authentication",
+      "icon": "material-symbols:lock-outline",
+      "iconClasses": "text-accent text-xl",
+      "children": [
+        {
+          "title": "Anonymous",
+          "path": "/cookbook/authentication/anonymous"
+        },
+        {
+          "title": "API Key",
+          "path": "/cookbook/authentication/apiKey"
+        },
+        {
+          "title": "Auth0",
+          "path": "/cookbook/authentication/auth0"
+        },
+        {
+          "title": "Facebook",
+          "path": "/cookbook/authentication/facebook"
+        },
+        {
+          "title": "Google",
+          "path": "/cookbook/authentication/google"
+        },
+        {
+          "title": "Firebase",
+          "path": "/cookbook/authentication/firebase"
+        },
+        {
+          "title": "Stateless JWT",
+          "path": "/cookbook/authentication/stateless"
+        },
+        {
+          "title": "Revoking JWTs",
+          "path": "/cookbook/authentication/revoke-jwt"
+        }
+      ]
+    },
+    {
+      "title": "Express",
+      "icon": "material-symbols:train-outline",
+      "iconClasses": "text-secondary text-xl",
+      "children": [
+        {
+          "title": "File Uploads",
+          "path": "/cookbook/express/file-uploading"
+        },
+        {
+          "title": "View Engine SSR",
+          "path": "/cookbook/express/view-engine"
+        }
+      ]
+    },
+    {
+      "title": "Deployment",
+      "icon": "material-symbols:cloud-upload-outline",
+      "iconClasses": "text-info text-xl",
+      "children": [
+        {
+          "title": "Docker",
+          "path": "/cookbook/deploy/docker"
+        }
+      ]
+    }
+  ]
+}

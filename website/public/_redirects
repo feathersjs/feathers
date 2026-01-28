@@ -1,0 +1,20 @@
+# CLI guides redirect to eagle.feathersjs.com
+/guides/cli/* https://eagle.feathersjs.com/guides/cli/:splat 301
+/guides/cli https://eagle.feathersjs.com/guides/cli 301
+
+# Schema API redirect to eagle.feathersjs.com
+/api/schema/* https://eagle.feathersjs.com/api/schema/:splat 301
+/api/schema https://eagle.feathersjs.com/api/schema 301
+
+# Databases API redirect to eagle.feathersjs.com
+/api/databases/* https://eagle.feathersjs.com/api/databases/:splat 301
+/api/databases https://eagle.feathersjs.com/api/databases 301
+
+# Legacy framework integrations redirect to eagle.feathersjs.com
+/api/koa https://eagle.feathersjs.com/api/koa 301
+/api/express https://eagle.feathersjs.com/api/express 301
+/api/configuration https://eagle.feathersjs.com/api/configuration 301
+/api/socketio https://eagle.feathersjs.com/api/socketio 301
+
+# Authentication subpages redirect to eagle.feathersjs.com
+/api/authentication/* https://eagle.feathersjs.com/api/authentication/:splat 301
