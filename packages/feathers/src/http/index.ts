@@ -136,19 +136,37 @@ export function createHandler(
     const id = __id === null ? null : decodeURIComponent(__id)
     // If the request has a method override header, use it instead of the request method.
     const methodOverride = headers[utils.METHOD_HEADER]
-    // Get the service method for the request.
-    const method = utils.getServiceMethod(request.method, id, methodOverride)
+
+    // Check if this is a custom method path with specific HTTP method
+    const routeMethod = lookup.method
+    const routeHttpMethod = lookup.httpMethod
+
+    // Determine the service method to call
+    let method: string
+    if (routeMethod) {
+      // Custom path route - verify HTTP method matches
+      if (routeHttpMethod && request.method.toUpperCase() !== routeHttpMethod) {
+        throw new MethodNotAllowed(`Method ${request.method} not allowed for this endpoint.`)
+      }
+      method = routeMethod
+    } else {
+      // Standard route - use HTTP verb mapping or header override
+      method = utils.getServiceMethod(request.method, id, methodOverride)
+    }
+
     // Get the methods supported by the service.
-    const { methods } = getServiceOptions(service)
+    const { methods, methodOptions } = getServiceOptions(service)
 
     // If the service does not support the requested method, throw an error.
     if (methods && !methods.includes(method)) {
       throw new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`)
     }
 
-    // Create the arguments for the service method.
-    const createArguments =
-      utils.argumentsFor[method as keyof typeof utils.argumentsFor] || utils.argumentsFor.default
+    // Check if the method is internal only (external: false)
+    const methodConfig = methodOptions?.[method]
+    if (methodConfig?.external === false) {
+      throw new MethodNotAllowed(`Method \`${method}\` is not available externally.`)
+    }
 
     // Create the params object
     const serviceParams: HttpParams<any> = {
@@ -159,10 +177,20 @@ export function createHandler(
       ...params
     }
 
+    // Build arguments based on method config or defaults
+    let args: any[]
+    if (methodConfig?.args) {
+      // Use custom args from method config
+      args = utils.buildMethodArguments(methodConfig.args, { id, data, params: serviceParams })
+    } else {
+      // Fall back to standard argument builders
+      const createArguments =
+        utils.argumentsFor[method as keyof typeof utils.argumentsFor] || utils.argumentsFor.default
+      args = createArguments({ id, data, params: serviceParams })
+    }
+
     // Create the hook context.
     const hookContext = createContext(service, method)
-    // Run the service method.
-    const args = createArguments({ id, data, params: serviceParams })
     const context = await (service as any)[method](...args, hookContext)
 
     if (context.result instanceof Response) {

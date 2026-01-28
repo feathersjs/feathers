@@ -1,5 +1,3 @@
-
-
 # Services
 
 Services are the heart of every Feathers application. Services are objects or instances of [classes](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) that implement [certain methods](#service-methods). Feathers itself will also add some [additional methods and functionality](#feathers-functionality) to its services.
@@ -216,7 +214,11 @@ When calling [app.listen](application#listenport) or [app.setup](application#set
 
 ## Custom Methods
 
-A custom method is any other service method you want to expose publicly. A custom method **must have** the signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with [hooks](./hooks) (including authentication) and must be `async` or return a Promise.
+A custom method is any other service method you want to expose publicly. Custom methods can be used with [hooks](./hooks) (including authentication) and must be `async` or return a Promise.
+
+### Basic Custom Methods
+
+By default, custom methods have the signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)).
 
 In order to register a public custom method, the names of _all methods_ have to be passed as the `methods` option when registering the service with [app.use()](./application#usepath-service--options)
 
@@ -257,6 +259,234 @@ See the [REST client](./client/rest) and [Socket.io client](./client/socketio) c
 ::warning[Important]
 When passing the `methods` option **all methods** you want to expose, including standard service methods, must be listed. This allows to completely disable standard service method you might not want to expose. The `methods` option only applies to external access (via a transport like HTTP or websockets). All methods continue to be available internally on the server.
 ::
+
+### Enhanced Custom Methods with @method Decorator
+
+For more control over custom methods, you can use the `@method` decorator to configure:
+
+- **Different argument signatures** (not just `(data, params)`)
+- **Different HTTP verbs** (GET, PUT, PATCH, DELETE instead of just POST)
+- **Clean URL paths** (e.g., `/messages/123/status` instead of using `X-Service-Method` header)
+- **Internal-only methods** (hooks run but not exposed via HTTP)
+
+```ts
+import { feathers, method, hooks } from '@feathersjs/feathers'
+import type { Id, Params } from '@feathersjs/feathers'
+
+class MessageService {
+  messages = [
+    { id: '1', text: 'Hello', status: 'active' },
+    { id: '2', text: 'World', status: 'archived' }
+  ]
+
+  // Standard CRUD - no decorator needed
+  async find(params: Params) {
+    return this.messages
+  }
+
+  async get(id: Id, params: Params) {
+    return this.messages.find((m) => m.id === id)
+  }
+
+  // Custom: GET with id, clean URL path
+  @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+  async status(id: Id, params: Params) {
+    const msg = this.messages.find((m) => m.id === id)
+    return { id, status: msg?.status }
+  }
+
+  // Custom: POST with id, clean URL path
+  @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
+  async archive(id: Id, params: Params) {
+    const msg = this.messages.find((m) => m.id === id)
+    if (msg) msg.status = 'archived'
+    return msg
+  }
+
+  // Custom: GET without id (like find but different)
+  @method({ args: ['params'], http: 'GET', path: 'stats' })
+  async stats(params: Params) {
+    return {
+      total: this.messages.length,
+      active: this.messages.filter((m) => m.status === 'active').length
+    }
+  }
+
+  // Internal only - hooks run, not exposed via HTTP
+  @method({ args: ['data', 'params'], external: false })
+  async internalProcess(data: any, params: Params) {
+    return { processed: data }
+  }
+}
+
+const app = feathers()
+app.use('messages', new MessageService())
+```
+
+With the configuration above:
+
+| Method            | HTTP Request                 | Service Call             |
+| ----------------- | ---------------------------- | ------------------------ |
+| `status`          | `GET /messages/123/status`   | `status('123', params)`  |
+| `archive`         | `POST /messages/123/archive` | `archive('123', params)` |
+| `stats`           | `GET /messages/stats`        | `stats(params)`          |
+| `internalProcess` | Not accessible               | Only callable internally |
+
+### MethodOptions Interface
+
+```ts
+interface MethodOptions {
+  // Argument signature - default for custom methods: ['data', 'params']
+  // Special names: 'id' (from URL), 'data' (from body), 'params' (params object)
+  // Other names: pulled from params.route[name]
+  args?: ('id' | 'data' | 'params' | string)[]
+
+  // HTTP method - default: 'POST' for custom methods
+  http?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+
+  // Custom path pattern - if not set, uses X-Service-Method header
+  path?: string
+
+  // If false, method is internal only - hooks run but not exposed
+  // Default: true
+  external?: boolean
+
+  // Event name to emit on successful method call
+  event?: string
+}
+```
+
+### Argument Resolution
+
+When building method arguments from a request:
+
+| Arg name         | Source                |
+| ---------------- | --------------------- |
+| `'id'`           | URL `:id` placeholder |
+| `'data'`         | Request body          |
+| `'params'`       | The params object     |
+| Any other string | `params.route[name]`  |
+
+Example with custom route params:
+
+```ts
+@method({ args: ['userId', 'messageId', 'params'], http: 'GET', path: ':userId/:messageId' })
+async getMessageForUser(userId: Id, messageId: Id, params: Params) {
+  // GET /messages/user-123/msg-456
+  // → getMessageForUser('user-123', 'msg-456', params)
+}
+```
+
+### Three Ways to Configure Method Options
+
+**1. `@method` Decorator (recommended for TypeScript)**
+
+```ts
+@method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+async status(id: Id, params: Params) { }
+```
+
+**2. Static Property (works in plain JS)**
+
+```js
+class MessageService {
+  static methods = {
+    status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+    archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' }
+  }
+
+  async status(id, params) {}
+  async archive(id, params) {}
+}
+```
+
+**3. `app.use()` Options (explicit override)**
+
+```ts
+app.use('messages', new MessageService(), {
+  methods: {
+    find: true,
+    get: true,
+    status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+    archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' }
+  }
+})
+```
+
+### Configuration Precedence
+
+When multiple configuration sources exist, they are merged in this order (highest priority first):
+
+1. `app.use()` options
+2. `@method` decorator on the method
+3. Static `methods` property on service class
+4. Default standard method config (find, get, create, etc.)
+5. Default custom method config: `{ args: ['data', 'params'], http: 'POST', external: true }`
+
+### Client Configuration
+
+For the client to use the correct HTTP verbs and paths for custom methods, you can use `buildMethodConfig()` to extract method configuration from your service classes:
+
+```ts
+// server: src/client.ts
+import { buildMethodConfig, type InferServiceTypes } from '@feathersjs/feathers'
+import { MessageService } from './services/messages.service'
+import { UserService } from './services/users.service'
+
+const services = {
+  messages: MessageService,
+  users: UserService
+}
+
+// Derive runtime config and types from service classes
+export const serviceMethods = buildMethodConfig(services)
+export type ServiceTypes = InferServiceTypes<typeof services>
+```
+
+```ts
+// client
+import { feathers, fetchClient } from '@feathersjs/feathers'
+import { serviceMethods, type ServiceTypes } from 'my-server/client'
+
+const connection = fetchClient(fetch, {
+  baseUrl: 'http://localhost:3030',
+  methods: serviceMethods
+})
+
+const app = feathers<ServiceTypes>().configure(connection)
+
+// Fully typed, correct HTTP verbs and paths
+await app.service('messages').status('123') // GET /messages/123/status
+await app.service('messages').archive('123') // POST /messages/123/archive
+await app.service('messages').stats() // GET /messages/stats
+```
+
+::warning[Important]
+The keys in the `services` object passed to `buildMethodConfig()` must match the actual service paths used with `app.use()`. For services registered at non-standard paths, use the full path as the key:
+
+```ts
+// Server registers services at custom paths
+app.use('api/v1/messages', new MessageService())
+app.use('users/:userId/messages', new UserMessageService())
+
+// Client config must use matching paths
+const services = {
+  'api/v1/messages': MessageService,
+  'users/:userId/messages': UserMessageService
+}
+
+export const serviceMethods = buildMethodConfig(services)
+```
+
+```ts
+// Client usage with custom paths
+await app.service('api/v1/messages').status('123')
+await app.service('users/:userId/messages').find({ route: { userId: '456' } })
+```
+
+::
+
+If no method config is provided to the client, custom methods fall back to the header approach (`POST` with `X-Service-Method` header).
 
 ## Feathers functionality
 

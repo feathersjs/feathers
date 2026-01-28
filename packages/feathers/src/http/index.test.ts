@@ -148,6 +148,24 @@ describe('http test', () => {
     expect(error.name).toBe('MethodNotAllowed')
   })
 
+  it('errors when calling method with external: false', async () => {
+    const res = await fetch(`http://localhost:${TEST_PORT}/internal`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Service-Method': 'internalProcess'
+      },
+      body: JSON.stringify({ data: 'test' })
+    })
+
+    expect(res.status).toBe(405)
+    expect(res.headers.get('content-type')).toBe('application/json')
+
+    const error = await res.json()
+    expect(error.message).toBe('Method `internalProcess` is not available externally.')
+    expect(error.name).toBe('MethodNotAllowed')
+  })
+
   describe('CORS and returning reponses', () => {
     it('returns a custom response', async () => {
       const res = await fetch(`http://localhost:${TEST_PORT}/test`)
@@ -314,4 +332,90 @@ describe('http test', () => {
   })
 
   restTests('http', 'todos', TEST_PORT)
+
+  describe('custom method paths', () => {
+    it('GET :id/status - returns status with id argument', async () => {
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/1/status`)
+
+      expect(res.status).toBe(200)
+
+      const result = await res.json()
+      expect(result).toEqual({ id: '1', status: 'active' })
+    })
+
+    it('GET stats - returns stats without id', async () => {
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/stats`)
+
+      expect(res.status).toBe(200)
+
+      const result = await res.json()
+      expect(result).toHaveProperty('total')
+      expect(result).toHaveProperty('active')
+    })
+
+    it('POST :id/archive - calls archive with id', async () => {
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/2/archive`, {
+        method: 'POST'
+      })
+
+      expect(res.status).toBe(200)
+
+      const result = await res.json()
+      expect(result.id).toBe('2')
+      expect(result.status).toBe('archived')
+    })
+
+    it('POST :id/update-status - calls with id, data, params', async () => {
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/1/update-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: 'pending' })
+      })
+
+      expect(res.status).toBe(200)
+
+      const result = await res.json()
+      expect(result.id).toBe('1')
+      expect(result.status).toBe('pending')
+    })
+
+    it('rejects wrong HTTP method for custom path', async () => {
+      // status is GET only
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/1/status`, {
+        method: 'POST'
+      })
+
+      expect(res.status).toBe(405)
+
+      const error = await res.json()
+      expect(error.name).toBe('MethodNotAllowed')
+    })
+
+    it('standard routes still work alongside custom paths', async () => {
+      // Standard find
+      const findRes = await fetch(`http://localhost:${TEST_PORT}/custom`)
+      expect(findRes.status).toBe(200)
+      const findResult = await findRes.json()
+      expect(Array.isArray(findResult)).toBe(true)
+
+      // Standard get
+      const getRes = await fetch(`http://localhost:${TEST_PORT}/custom/1`)
+      expect(getRes.status).toBe(200)
+      const getResult = await getRes.json()
+      expect(getResult.id).toBe('1')
+    })
+
+    it('literal path takes precedence over placeholder', async () => {
+      // /custom/stats should match stats method, not get('stats')
+      const res = await fetch(`http://localhost:${TEST_PORT}/custom/stats`)
+
+      expect(res.status).toBe(200)
+
+      const result = await res.json()
+      // stats returns { total, active }, get would return undefined
+      expect(result).toHaveProperty('total')
+    })
+  })
 })

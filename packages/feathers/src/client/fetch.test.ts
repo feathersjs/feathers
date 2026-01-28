@@ -210,4 +210,57 @@ describe('fetch REST connector', function () {
   })
 
   clientTests(app, 'todos')
+
+  describe('custom method paths with client config', () => {
+    // Create a client with method configuration
+    const customConnection = fetchClient(fetch, {
+      baseUrl,
+      methods: {
+        custom: {
+          status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+          stats: { args: ['params'], http: 'GET', path: 'stats' },
+          archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' },
+          updateStatus: { args: ['id', 'data', 'params'], http: 'POST', path: ':id/update-status' }
+        }
+      }
+    })
+    const customApp = feathers<TestServiceTypes>().configure(customConnection)
+    const customService = customApp.service('custom') as any
+
+    it('GET :id/status - client uses correct verb and path', async () => {
+      const result = await customService.status('1', {})
+
+      expect(result.id).toBe('1')
+      expect(result.status).toBeDefined()
+    })
+
+    it('GET stats - client calls without id', async () => {
+      const result = await customService.stats({})
+
+      expect(result).toHaveProperty('total')
+      expect(result).toHaveProperty('active')
+    })
+
+    it('POST :id/archive - client sends POST to path', async () => {
+      const result = await customService.archive('1', {})
+
+      expect(result.id).toBe('1')
+    })
+
+    it('POST :id/update-status - client sends id, data, params', async () => {
+      const result = await customService.updateStatus('1', { status: 'updated-via-client' }, {})
+
+      expect(result.id).toBe('1')
+      expect(result.status).toBe('updated-via-client')
+    })
+
+    it('falls back to header-based method when no path config', async () => {
+      // todoService doesn't have method config, so custom methods fall back
+      const todoService = customApp.service('todos') as any
+      const result = await todoService.customMethod({ text: 'Test' }, {})
+
+      expect(result.data.text).toBe('Test')
+      expect(result.method).toBe('customMethod')
+    })
+  })
 })

@@ -1,6 +1,6 @@
 import qs from 'qs'
 import type { Application, Query } from '../declarations.js'
-import { FetchClient, ProxiedFetchClient } from './fetch.js'
+import { FetchClient, ProxiedFetchClient, ClientMethodsConfig } from './fetch.js'
 import { sseClient, SseClientOptions } from './sse.js'
 import { defaultServiceEvents } from '../service.js'
 
@@ -8,19 +8,43 @@ export * from './fetch.js'
 export * from './types.js'
 export * from './sse.js'
 
+/**
+ * Service method configuration for the client.
+ * Maps service names to their method configurations.
+ */
+export type ServiceMethodsConfig = Record<string, ClientMethodsConfig>
+
 export type ClientOptions = {
   baseUrl?: string
   Service?: typeof FetchClient
   stringify?: (query: Query) => string
   sse?: string | SseClientOptions
+  /**
+   * Method configuration for custom methods on each service.
+   * Allows the client to use correct HTTP verbs and paths.
+   *
+   * @example
+   * ```ts
+   * const client = fetchClient(fetch, {
+   *   baseUrl: 'http://localhost:3030',
+   *   methods: {
+   *     messages: {
+   *       status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+   *       archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' }
+   *     }
+   *   }
+   * })
+   * ```
+   */
+  methods?: ServiceMethodsConfig
 }
 
 export function fetchClient(connection: typeof fetch, options: ClientOptions = {}) {
-  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient } = options
+  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient, methods = {} } = options
   const events = options.sse ? defaultServiceEvents : undefined
   const sseOptions = typeof options.sse === 'string' ? { path: options.sse } : options.sse
   const defaultService = function (name: string) {
-    return new Service({ baseUrl, name, connection, stringify, events })
+    return new Service({ baseUrl, name, connection, stringify, events, methods: methods[name] })
   }
   const initialize = (_app: Application) => {
     const app = _app as Application & { rest: typeof fetch }

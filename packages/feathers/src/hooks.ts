@@ -9,7 +9,7 @@ import {
 } from './hooks/index.js'
 import {
   Service,
-  ServiceOptions,
+  NormalizedServiceOptions,
   HookContext,
   FeathersService,
   HookMap,
@@ -178,15 +178,23 @@ export class FeathersHookManager<A> extends HookManager {
   }
 }
 
-export function hookMixin<A>(this: A, service: FeathersService<A>, path: string, options: ServiceOptions) {
+export function hookMixin<A>(
+  this: A,
+  service: FeathersService<A>,
+  path: string,
+  options: NormalizedServiceOptions
+) {
   if (typeof service.hooks === 'function') {
     return service
   }
 
   const hookMethods = getHookMethods(service, options)
+  const { methodOptions } = options
 
   const serviceMethodHooks = hookMethods.reduce((res, method) => {
-    const params = (defaultServiceArguments as any)[method] || ['data', 'params']
+    // Get args from method options, fallback to default service arguments, then to ['data', 'params']
+    const methodConfig = methodOptions[method]
+    const params = methodConfig?.args || (defaultServiceArguments as any)[method] || ['data', 'params']
 
     res[method] = new FeathersHookManager<A>(this, method).params(...params).props({
       app: this,

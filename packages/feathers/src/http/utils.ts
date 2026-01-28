@@ -54,6 +54,27 @@ export const argumentsFor = {
   default: ({ data, params }: ServiceParams) => [data, params]
 }
 
+/**
+ * Builds method arguments based on the args config.
+ * Special arg names: 'id', 'data', 'params'
+ * Other names are pulled from params.route
+ */
+export function buildMethodArguments(args: string[], { id, data, params }: ServiceParams): any[] {
+  return args.map((arg) => {
+    switch (arg) {
+      case 'id':
+        return id
+      case 'data':
+        return data
+      case 'params':
+        return params
+      default:
+        // Pull from route params
+        return params.route?.[arg]
+    }
+  })
+}
+
 export function getStatusCode(context: HookContext, body: any, location: string | string[]) {
   const { http = {} } = context
 

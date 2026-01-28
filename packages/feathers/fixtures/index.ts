@@ -1,7 +1,7 @@
 import { createServer } from 'node:http'
 import { TestService } from './fixture.js'
 
-import { feathers, Application, Params } from '../src/index.js'
+import { feathers, Application, Params, method } from '../src/index.js'
 import { createHandler, SseService } from '../src/http/index.js'
 import { toNodeHandler } from '../src/http/node.js'
 
@@ -107,12 +107,72 @@ export class ResponseTestService {
   }
 }
 
+export class InternalTestService {
+  async find(_params: Params) {
+    return [{ id: 1, name: 'Public' }]
+  }
+
+  @method({ args: ['data', 'params'], external: false })
+  async internalProcess(data: any, _params: Params) {
+    return { processed: data, internal: true }
+  }
+}
+
+export class CustomPathService {
+  messages: { id: string; text: string; status: string }[] = [
+    { id: '1', text: 'Hello', status: 'active' },
+    { id: '2', text: 'World', status: 'archived' }
+  ]
+
+  async find(_params: Params) {
+    return this.messages
+  }
+
+  async get(id: string, _params: Params) {
+    return this.messages.find((m) => m.id === id)
+  }
+
+  @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+  async status(id: string, _params: Params) {
+    const msg = this.messages.find((m) => m.id === id)
+    return { id, status: msg?.status || 'unknown' }
+  }
+
+  @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
+  async archive(id: string, _params: Params) {
+    const msg = this.messages.find((m) => m.id === id)
+    if (msg) {
+      msg.status = 'archived'
+    }
+    return msg
+  }
+
+  @method({ args: ['params'], http: 'GET', path: 'stats' })
+  async stats(_params: Params) {
+    return {
+      total: this.messages.length,
+      active: this.messages.filter((m) => m.status === 'active').length
+    }
+  }
+
+  @method({ args: ['id', 'data', 'params'], http: 'POST', path: ':id/update-status' })
+  async updateStatus(id: string, data: { status: string }, _params: Params) {
+    const msg = this.messages.find((m) => m.id === id)
+    if (msg) {
+      msg.status = data.status
+    }
+    return msg
+  }
+}
+
 export type TestServiceTypes = {
   todos: TestService
   uploads: UploadService
   streaming: StreamingService
   test: ResponseTestService
   sse: SseService
+  internal: InternalTestService
+  custom: CustomPathService
 }
 
 export type TestApplication = Application<TestServiceTypes>
@@ -131,6 +191,8 @@ export function getApp(): TestApplication {
   })
   app.use('test', new ResponseTestService())
   app.use('sse', new SseService())
+  app.use('internal', new InternalTestService())
+  app.use('custom', new CustomPathService())
 
   return app
 }

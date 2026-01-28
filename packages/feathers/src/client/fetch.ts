@@ -2,6 +2,10 @@ import { Params, Id, Query, NullableId } from '../declarations.js'
 import { BadRequest, Unavailable, convert, errors } from '../errors.js'
 import { _, stripSlashes } from '../commons.js'
 import { protectedProperties } from '../service.js'
+import type { ClientMethodConfig, ClientMethodsConfig } from '../method.js'
+
+// Re-export for backwards compatibility
+export type { ClientMethodConfig, ClientMethodsConfig }
 
 function toError(error: Error & { code: string }, status?: number) {
   if (error.code === 'ECONNREFUSED') {
@@ -21,6 +25,11 @@ interface FetchClientSettings {
   connection: typeof fetch
   stringify: (query: Query) => string
   events?: string[]
+  /**
+   * Method configuration for custom methods.
+   * Allows the client to use correct HTTP verbs and paths.
+   */
+  methods?: ClientMethodsConfig
 }
 
 export type RequestOptions = Omit<RequestInit, 'body'> & { url: string; body?: unknown }
@@ -31,6 +40,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   connection: typeof fetch
   stringify: (query: Query) => string
   events?: string[]
+  methods?: ClientMethodsConfig
 
   constructor(settings: FetchClientSettings) {
     this.name = stripSlashes(settings.name)
@@ -38,6 +48,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
     this.base = `${settings.baseUrl}/${this.name}`
     this.stringify = settings.stringify
     this.events = settings.events
+    this.methods = settings.methods
   }
 
   makeUrl(query: Query, id?: string | number | null, route?: { [key: string]: string }) {
@@ -113,7 +124,43 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
     return response.json()
   }
 
-  callCustomMethod(method: string, body: unknown, params: FetchClientParams) {
+  /**
+   * Makes URL for a custom method with a path pattern.
+   * Replaces :id with the id value and other placeholders with route params.
+   */
+  makeCustomUrl(path: string, query: Query, id?: string | number | null, route?: { [key: string]: string }) {
+    // Replace :id with the actual id value
+    let resolvedPath = path
+    if (id !== null && id !== undefined) {
+      resolvedPath = resolvedPath.replace(/:id\b/, encodeURIComponent(String(id)))
+    }
+
+    // Replace other route params
+    if (route) {
+      Object.keys(route).forEach((key) => {
+        resolvedPath = resolvedPath.replace(`:${key}`, route[key])
+      })
+    }
+
+    const url = `${this.base}/${resolvedPath}`
+    return url + this.getQuery(query || {})
+  }
+
+  /**
+   * Calls a custom service method.
+   * If method config is available, uses the correct HTTP verb and path.
+   * Otherwise falls back to POST with X-Service-Method header.
+   */
+  callCustomMethod(method: string, ...args: any[]) {
+    const methodConfig = this.methods?.[method]
+
+    if (methodConfig?.path) {
+      // Use configured HTTP verb and path
+      return this.callWithPath(method, methodConfig, args)
+    }
+
+    // Fall back to header-based custom method (backwards compatible)
+    const [body, params = {}] = args as [unknown, FetchClientParams]
     return this.request(
       {
         url: this.makeUrl(params?.query, null, params?.route),
@@ -121,6 +168,37 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
         headers: {
           'X-Service-Method': method
         },
+        body
+      },
+      params
+    )
+  }
+
+  /**
+   * Calls a custom method using the configured path and HTTP verb.
+   */
+  protected callWithPath(_method: string, config: ClientMethodConfig, args: any[]) {
+    const { http = 'POST', path, args: argNames = ['data', 'params'] } = config
+
+    // Build argument map
+    const argMap: { id?: Id; data?: unknown; params?: FetchClientParams } = {}
+    argNames.forEach((name, index) => {
+      if (name === 'id') argMap.id = args[index]
+      else if (name === 'data') argMap.data = args[index]
+      else if (name === 'params') argMap.params = args[index] || {}
+    })
+
+    const params = argMap.params || {}
+    const url = this.makeCustomUrl(path!, params.query, argMap.id, params.route)
+
+    // Only include body for methods that support it
+    const hasBody = ['POST', 'PUT', 'PATCH'].includes(http!)
+    const body = hasBody ? argMap.data : undefined
+
+    return this.request(
+      {
+        url,
+        method: http!,
         body
       },
       params
@@ -302,8 +380,9 @@ export class ProxiedFetchClient<
           !prop.startsWith('Symbol(') &&
           !protectedProperties.includes(prop)
         ) {
-          return function (data: any, params?: P) {
-            return target.callCustomMethod(prop, data, params)
+          // Pass all arguments to callCustomMethod
+          return function (...args: any[]) {
+            return target.callCustomMethod(prop, ...args)
           }
         }
 

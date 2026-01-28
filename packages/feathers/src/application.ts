@@ -155,12 +155,12 @@ export class Feathers<Services, Settings>
 
     const {
       params: colonParams,
-      data: { service, params: dataParams }
+      data: { service, params: dataParams, method, httpMethod }
     } = result
 
     const params = dataParams ? { ...dataParams, ...colonParams } : colonParams
 
-    return { service, params }
+    return { service, params, method, httpMethod }
   }
 
   protected _setup() {
@@ -277,6 +277,25 @@ export class Feathers<Services, Settings>
 
     this.routes.insert(path, routerParams)
     this.routes.insert(`${path}/:__id`, routerParams)
+
+    // Register routes for custom method paths
+    const { methodOptions } = serviceOptions
+    for (const [methodName, methodConfig] of Object.entries(methodOptions)) {
+      if (methodConfig.path && methodConfig.external !== false) {
+        // Convert :id in path to :__id for consistency with standard routes
+        const customPath = methodConfig.path.replace(/:id\b/g, ':__id')
+        const fullPath = `${path}/${customPath}`
+
+        this.routes.insert(fullPath, {
+          ...routerParams,
+          method: methodName,
+          httpMethod: methodConfig.http || 'POST'
+        })
+
+        debug(`Registered custom path \`${fullPath}\` for method \`${methodName}\``)
+      }
+    }
+
     this.services[location] = protoService
 
     // If we ran setup already, set this service up explicitly, this will not `await`

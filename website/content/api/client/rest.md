@@ -287,7 +287,7 @@ Streaming uploads are only supported with the REST/HTTP transport. Socket.io doe
 
 ### Custom Methods
 
-On the client, [custom service methods](../services#custom-methods) registered using the `methods` option when registering the service via `restClient.service()`:
+On the client, [custom service methods](../services#custom-methods) can be called using the `methods` option when registering the service:
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
@@ -328,6 +328,77 @@ client.service('myservice').myCustomMethod(data, params)
 
 ::note
 Just like on the server _all_ methods you want to use have to be listed in the `methods` option.
+::
+
+### Custom Method Paths and HTTP Verbs
+
+When the server uses the `@method` decorator to configure custom methods with specific HTTP verbs and paths, the client can be configured to use the correct routing instead of the default `POST` with `X-Service-Method` header.
+
+#### Using buildMethodConfig (Recommended)
+
+The easiest way is to use `buildMethodConfig()` on the server to extract method configuration from your service classes, then pass it to the client:
+
+```ts
+// server: src/client.ts
+import { buildMethodConfig, type InferServiceTypes } from '@feathersjs/feathers'
+import { MessageService } from './services/messages.service'
+
+const services = { messages: MessageService }
+
+export const serviceMethods = buildMethodConfig(services)
+export type ServiceTypes = InferServiceTypes<typeof services>
+```
+
+```ts
+// client
+import { feathers, fetchClient } from '@feathersjs/feathers'
+import { serviceMethods, type ServiceTypes } from 'my-server/client'
+
+const connection = fetchClient(fetch, {
+  baseUrl: 'http://localhost:3030',
+  methods: serviceMethods
+})
+
+const app = feathers<ServiceTypes>().configure(connection)
+
+// Uses correct HTTP verbs and paths automatically
+await app.service('messages').status('123') // GET /messages/123/status
+await app.service('messages').archive('123') // POST /messages/123/archive
+await app.service('messages').stats() // GET /messages/stats
+```
+
+#### Manual Configuration
+
+You can also configure method paths manually:
+
+```ts
+import { feathers, fetchClient } from '@feathersjs/feathers'
+
+const connection = fetchClient(fetch, {
+  baseUrl: 'http://localhost:3030',
+  methods: {
+    messages: {
+      status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+      archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' },
+      stats: { args: ['params'], http: 'GET', path: 'stats' }
+    }
+  }
+})
+
+const app = feathers().configure(connection)
+```
+
+The `args` array tells the client how to map method arguments:
+
+| Arg name      | Source                                      |
+| ------------- | ------------------------------------------- |
+| `'id'`        | First positional argument, used in URL path |
+| `'data'`      | Request body (for POST, PUT, PATCH)         |
+| `'params'`    | Service params (query, headers, etc.)       |
+| Other strings | Taken from `params.route[name]`             |
+
+::note
+If no method config is provided, custom methods fall back to the header approach (`POST` with `X-Service-Method` header), which remains fully supported for backwards compatibility.
 ::
 
 ### Connecting to multiple servers
@@ -574,7 +645,11 @@ With a [database adapters](../databases/adapters) the [`multi` option](../databa
 
 ### Custom methods
 
-[Custom service methods](../services#custom-methods) can be called directly via HTTP by sending a POST request and setting the `X-Service-Method` header to the method you want to call:
+[Custom service methods](../services#custom-methods) can be called via HTTP in two ways:
+
+#### Header-based (Default)
+
+Send a POST request with the `X-Service-Method` header:
 
 ```
 POST /messages
@@ -593,6 +668,49 @@ curl -H "Content-Type: application/json" -H "X-Service-Method: myCustomMethod" -
 ```
 
 This will call `messages.myCustomMethod({ message: 'Hello world' }, {})`.
+
+#### Path-based (with @method decorator)
+
+When a custom method is configured with the `@method` decorator with a `path` option, it can be called using clean URLs with the configured HTTP verb:
+
+```ts
+// Server service
+class MessageService {
+  @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+  async status(id: Id, params: Params) { ... }
+
+  @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
+  async archive(id: Id, params: Params) { ... }
+
+  @method({ args: ['params'], http: 'GET', path: 'stats' })
+  async stats(params: Params) { ... }
+}
+```
+
+HTTP requests:
+
+| Method    | HTTP Request                 | Service Call             |
+| --------- | ---------------------------- | ------------------------ |
+| `status`  | `GET /messages/123/status`   | `status('123', params)`  |
+| `archive` | `POST /messages/123/archive` | `archive('123', params)` |
+| `stats`   | `GET /messages/stats`        | `stats(params)`          |
+
+Via CURL:
+
+```bash
+# GET with id
+curl http://localhost:3030/messages/123/status
+
+# POST with id
+curl -X POST http://localhost:3030/messages/123/archive
+
+# GET without id
+curl http://localhost:3030/messages/stats
+```
+
+::note
+The router matches literal path segments before placeholders. So `/messages/stats` (literal) matches the `stats` method, not `get('stats')`.
+::
 
 ### Route placeholders
 

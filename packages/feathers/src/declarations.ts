@@ -22,6 +22,69 @@ export interface Paginated<T> {
 }
 
 /**
+ * Argument name for method configuration.
+ * Special names: 'id', 'data', 'params' have built-in meaning.
+ * Other strings are pulled from params.route[name].
+ */
+export type MethodArg = 'id' | 'data' | 'params' | (string & {})
+
+/**
+ * HTTP methods supported for custom method routing.
+ */
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+
+/**
+ * Configuration options for a service method.
+ */
+export interface MethodOptions {
+  /**
+   * Argument signature for the method.
+   * Special names: 'id' (from URL), 'data' (from body), 'params' (params object).
+   * Other names are pulled from params.route[name].
+   * Default for custom methods: ['data', 'params']
+   */
+  args?: MethodArg[]
+
+  /**
+   * HTTP method for routing.
+   * Default: 'POST' for custom methods
+   */
+  http?: HttpMethod
+
+  /**
+   * Custom path pattern for HTTP routing (e.g., ':id/status').
+   * Supports placeholders like :id, :userId, etc.
+   * If not set, uses X-Service-Method header (backwards compatible).
+   */
+  path?: string
+
+  /**
+   * If false, method is internal only - hooks run but not exposed via HTTP/sockets.
+   * Default: true
+   */
+  external?: boolean
+
+  /**
+   * Event name to emit on successful method call.
+   * If not set, no event is emitted for custom methods.
+   */
+  event?: string
+}
+
+/**
+ * Method configuration can be a boolean (true = default options, false = disabled)
+ * or a full MethodOptions object.
+ */
+export type MethodConfig = boolean | MethodOptions
+
+/**
+ * Map of method names to their configuration.
+ */
+export type MethodsConfig<MethodTypes = string> = {
+  [K in MethodTypes extends string ? MethodTypes : string]?: MethodConfig
+}
+
+/**
  * Options that can be passed when registering a service via `app.use(name, service, options)`
  */
 export interface ServiceOptions<MethodTypes = string> {
@@ -30,9 +93,11 @@ export interface ServiceOptions<MethodTypes = string> {
    */
   events?: string[] | readonly string[]
   /**
-   * A list of service methods that should be available __externally__ to clients
+   * Service methods configuration. Can be:
+   * - An array of method names (backwards compatible): ['find', 'get', 'myMethod']
+   * - An object with method configurations: { find: true, myMethod: { args: ['id', 'params'] } }
    */
-  methods?: MethodTypes[] | readonly MethodTypes[]
+  methods?: MethodTypes[] | readonly MethodTypes[] | MethodsConfig<MethodTypes>
   /**
    * Provide a full list of events that this service should emit to clients.
    * Unlike the `events` option, this will not be merged with the default events.
@@ -42,6 +107,20 @@ export interface ServiceOptions<MethodTypes = string> {
    * Initial data to always add as route params to this service.
    */
   routeParams?: { [key: string]: any }
+  /**
+   * Normalized method options (set internally after service registration).
+   * Maps method names to their full MethodOptions.
+   */
+  methodOptions?: Record<string, MethodOptions>
+}
+
+/**
+ * Service options after normalization. The `methods` property is always a string array
+ * and `methodOptions` contains the full method configurations.
+ */
+export interface NormalizedServiceOptions extends Omit<ServiceOptions, 'methods'> {
+  methods: string[]
+  methodOptions: Record<string, MethodOptions>
 }
 
 export interface ClientService<
@@ -197,7 +276,11 @@ export interface RealTimeConnection {
  */
 export type CustomMethod<T = any, R = T, P extends Params = Params> = (data: T, params?: P) => Promise<R>
 
-export type ServiceMixin<A> = (service: FeathersService<A>, path: string, options: ServiceOptions) => void
+export type ServiceMixin<A> = (
+  service: FeathersService<A>,
+  path: string,
+  options: NormalizedServiceOptions
+) => void
 
 export type ServiceGenericType<S> = S extends ServiceInterface<infer T> ? T : any
 export type ServiceGenericData<S> = S extends ServiceInterface<infer _T, infer D> ? D : any
@@ -206,6 +289,15 @@ export type ServiceGenericParams<S> = S extends ServiceInterface<infer _T, infer
 export interface RouteLookup {
   service: Service
   params: { [key: string]: any }
+  /**
+   * The method name to call (set for custom method paths).
+   * If not set, the method is determined from the HTTP verb.
+   */
+  method?: string
+  /**
+   * The HTTP method this route responds to (for custom method paths).
+   */
+  httpMethod?: string
 }
 
 export interface FeathersApplication<Services = any, Settings = any> {

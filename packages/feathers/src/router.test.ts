@@ -193,6 +193,46 @@ describe('routing', () => {
       assert.strictEqual(r.lookup('hello/yes/they/here'), null)
     })
 
+    it('routes custom method paths alongside standard service routes', () => {
+      const r = new Router<{ service: string; method?: string }>()
+
+      // Standard service routes (like app.use adds)
+      r.insert('/messages', { service: 'messages' })
+      r.insert('/messages/:__id', { service: 'messages' })
+
+      // Custom method paths
+      r.insert('/messages/:__id/status', { service: 'messages', method: 'status' })
+      r.insert('/messages/stats', { service: 'messages', method: 'stats' })
+
+      // Test standard find
+      const find = r.lookup('/messages')
+      assert.deepStrictEqual(find, {
+        params: {},
+        data: { service: 'messages' }
+      })
+
+      // Test standard get
+      const get = r.lookup('/messages/123')
+      assert.deepStrictEqual(get, {
+        params: { __id: '123' },
+        data: { service: 'messages' }
+      })
+
+      // Test custom path with id
+      const status = r.lookup('/messages/123/status')
+      assert.deepStrictEqual(status, {
+        params: { __id: '123' },
+        data: { service: 'messages', method: 'status' }
+      })
+
+      // Test literal path (stats) - should NOT be confused with get('stats')
+      const stats = r.lookup('/messages/stats')
+      assert.deepStrictEqual(stats, {
+        params: {},
+        data: { service: 'messages', method: 'stats' }
+      })
+    })
+
     it('works with different placeholders in different paths (#2327)', () => {
       const r = new Router<string>()
 
