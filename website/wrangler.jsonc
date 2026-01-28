@@ -1,0 +1,9 @@
+{
+  "name": "feathers-v6",
+  "compatibility_date": "2026-01-27",
+  "main": ".output/server/index.mjs",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".output/public"
+  }
+}

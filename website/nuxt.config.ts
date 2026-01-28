@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   extends: ['@feathersdev/websites'],
 
+  nitro: {
+    preset: 'cloudflare-module'
+  },
+
   app: {
     head: {
       title: 'FeathersJS',
