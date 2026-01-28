@@ -1,5 +1,3 @@
-
-
 # Feathers Client
 
 One of the most notable features of Feathers is that it can also be used as the client. In contrast with most other frameworks, it isn't a separate library; instead you get the exact same functionality with a client and on a server. This means you can use [services](./services) and [hooks](./hooks) and configure plugins. By default, a Feathers client automatically creates services that talk to a Feathers server.
@@ -126,12 +124,8 @@ For non-CommonJS formats (like AMD) version of Feathers and its client modules t
 
 ## @feathersjs/client
 
-<Badges>
-
-[![npm version](https://img.shields.io/npm/v/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/client)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/client/CHANGELOG)
-
-</Badges>
+::badges{npm="@feathersjs/client" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/client/CHANGELOG.md"}
+::
 
 ```
 npm install @feathersjs/client --save

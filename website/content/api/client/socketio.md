@@ -1,15 +1,9 @@
-
-
 # Socket.io Client
 
 ## socketio-client
 
-<Badges>
-
-[![npm version](https://img.shields.io/npm/v/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/socketio-client)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/socketio-client/CHANGELOG)
-
-</Badges>
+::badges{npm="@feathersjs/socketio-client" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/socketio-client/CHANGELOG.md"}
+::
 
 ```
 npm install @feathersjs/socketio-client socket.io-client --save

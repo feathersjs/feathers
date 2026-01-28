@@ -1,5 +1,3 @@
-
-
 # REST Client
 
 The following chapter describes the use of
@@ -9,12 +7,8 @@ The following chapter describes the use of
 
 ## rest-client
 
-<Badges>
-
-[![npm version](https://img.shields.io/npm/v/@feathersjs/client.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/rest-client)
-[![Changelog](https://img.shields.io/badge/changelog-.md-blue.svg?style=flat-square)](https://github.com/feathersjs/feathers/blob/dove/packages/rest-client/CHANGELOG)
-
-</Badges>
+::badges{npm="@feathersjs/rest-client" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/rest-client/CHANGELOG.md"}
+::
 
 ```
 npm install @feathersjs/rest-client --save
@@ -236,10 +230,10 @@ class UploadService {
   async create(stream: ReadableStream, params: Params) {
     const filename = params.headers['x-filename']
     const contentType = params.headers['content-type']
-    
+
     // Pipe directly to storage - no buffering
     await storage.upload(filename, stream, { contentType })
-    
+
     return { filename, uploaded: true }
   }
 }
