@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const $emit = defineEmits(['close'])
 const route = useRoute()
+const sidebarRef = ref<HTMLElement | null>(null)
 
 // Determine which menu to load based on the current route
 function getMenuName(path: string) {
@@ -39,10 +40,25 @@ const currentMenu = computed(() => {
       return guidesMenu.value
   }
 })
+
+// Scroll sidebar to show the active menu item
+onMounted(() => {
+  setTimeout(() => {
+    const sidebar = sidebarRef.value
+    const activeItem = sidebar?.querySelector('.menu-active') as HTMLElement | null
+    if (sidebar && activeItem) {
+      const containerRect = sidebar.getBoundingClientRect()
+      const itemRect = activeItem.getBoundingClientRect()
+      const scrollTop =
+        itemRect.top - containerRect.top + sidebar.scrollTop - containerRect.height / 2 + itemRect.height / 2
+      sidebar.scrollTo({ top: scrollTop, behavior: 'smooth' })
+    }
+  }, 500)
+})
 </script>
 
 <template>
-  <div class="relative menu w-60 bg-base-200 text-base-content h-full overflow-y-auto">
+  <div ref="sidebarRef" class="relative menu w-60 bg-base-200 text-base-content h-full overflow-y-auto">
     <div class="relative z-10">
       <Flex justify-end class="absolute right-2 lg:hidden z-20 top-4">
         <Button square ghost @click="$emit('close')">
