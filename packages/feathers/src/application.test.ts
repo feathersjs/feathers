@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import { feathers, Feathers, getServiceOptions, Id, version } from '../src/index.js'
+import { feathers, Feathers, getServiceOptions, Id, version, method } from '../src/index.js'
 
 describe('Feathers application', () => {
   it('initializes', () => {
@@ -561,6 +561,88 @@ describe('Feathers application', () => {
       assert.deepStrictEqual(result4, {
         message: 'This is another test'
       })
+    })
+  })
+
+  describe('route conflicts', () => {
+    it('throws when custom method path conflicts with another service custom method', () => {
+      const app = feathers()
+
+      class MessageService {
+        @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+        async status(id: Id) {
+          return { id, status: 'message' }
+        }
+      }
+
+      class NotificationService {
+        // Same path pattern - this would conflict with messages/:id/status
+        @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+        async status(id: Id) {
+          return { id, status: 'notification' }
+        }
+      }
+
+      app.use('messages', new MessageService())
+      app.use('notifications', new NotificationService())
+
+      // These have different base paths, so they should NOT conflict
+      assert.ok(app.service('messages'))
+      assert.ok(app.service('notifications'))
+    })
+
+    it('throws when custom method path conflicts with another service base path', () => {
+      const app = feathers()
+
+      // Register a nested service first
+      app.use('messages/archived', {
+        async find() {
+          return []
+        }
+      })
+
+      // Now try to register a service with a custom method that would conflict
+      class MessageService {
+        async find() {
+          return []
+        }
+
+        @method({ args: ['params'], http: 'GET', path: 'archived' })
+        async archived() {
+          return []
+        }
+      }
+
+      assert.throws(
+        () => app.use('messages', new MessageService()),
+        /Path 'messages\/archived' for method 'archived' conflicts with another service/
+      )
+    })
+
+    it('allows different custom method paths on the same service', () => {
+      const app = feathers()
+
+      class MessageService {
+        @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
+        async status(id: Id) {
+          return { id, status: 'active' }
+        }
+
+        @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
+        async archive(id: Id) {
+          return { id, archived: true }
+        }
+
+        @method({ args: ['params'], http: 'GET', path: 'stats' })
+        async stats() {
+          return { total: 100 }
+        }
+      }
+
+      // Should not throw
+      app.use('messages', new MessageService())
+
+      assert.ok(app.service('messages'))
     })
   })
 })

@@ -269,6 +269,10 @@ For more control over custom methods, you can use the `@method` decorator to con
 - **Clean URL paths** (e.g., `/messages/123/status` instead of using `X-Service-Method` header)
 - **Internal-only methods** (hooks run but not exposed via HTTP)
 
+::info[Note]
+There are two alternatives to the `@method` decorator. See the next sections.
+::
+
 ```ts
 import { feathers, method, hooks } from '@feathersjs/feathers'
 import type { Id, Params } from '@feathersjs/feathers'

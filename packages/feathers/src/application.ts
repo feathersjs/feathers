@@ -286,11 +286,28 @@ export class Feathers<Services, Settings>
         const customPath = methodConfig.path.replace(/:id\b/g, ':__id')
         const fullPath = `${path}/${customPath}`
 
-        this.routes.insert(fullPath, {
-          ...routerParams,
-          method: methodName,
-          httpMethod: methodConfig.http || 'POST'
-        })
+        // The router.insert() will throw if an exact path already exists.
+        // This catches duplicate custom method paths and conflicts with other services.
+        try {
+          this.routes.insert(fullPath, {
+            ...routerParams,
+            method: methodName,
+            httpMethod: methodConfig.http || 'POST'
+          })
+        } catch (error: any) {
+          if (error.message?.includes('already exists')) {
+            // Check what's already registered at this path to give a better error message
+            const existingRoute = this.routes.lookup(fullPath)
+            const existingMethod = existingRoute?.data?.method
+              ? `method '${existingRoute.data.method}'`
+              : 'another service'
+            throw new Error(
+              `Path '${fullPath}' for method '${methodName}' conflicts with ${existingMethod}. ` +
+                `Custom method paths must be unique.`
+            )
+          }
+          throw error
+        }
 
         debug(`Registered custom path \`${fullPath}\` for method \`${methodName}\``)
       }
