@@ -1,10 +1,10 @@
-import { beforeAll, describe, it, expect } from 'vitest'
+import { beforeAll, describe, it, expect, vi } from 'vitest'
 import { feathers } from '../index.js'
 import { clientTests } from '../../fixtures/client.js'
 import { NotAcceptable, NotFound, MethodNotAllowed, BadRequest } from '../errors.js'
 
 import { getApp, createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
-import { fetchClient } from './index.js'
+import { fetchClient, FetchClient } from './index.js'
 
 describe('fetch REST connector', function () {
   const port = 8888
@@ -210,4 +210,136 @@ describe('fetch REST connector', function () {
   })
 
   clientTests(app, 'todos')
+})
+
+describe('FetchClient.handleEventStream', () => {
+  /**
+   * Creates a mock Response with a ReadableStream that emits chunks
+   * simulating TCP fragmentation of SSE data
+   */
+  function createChunkedSSEResponse(chunks: string[]): Response {
+    const encoder = new TextEncoder()
+    let chunkIndex = 0
+
+    const stream = new ReadableStream({
+      pull(controller) {
+        if (chunkIndex < chunks.length) {
+          controller.enqueue(encoder.encode(chunks[chunkIndex]))
+          chunkIndex++
+        } else {
+          controller.close()
+        }
+      }
+    })
+
+    return new Response(stream, {
+      headers: { 'content-type': 'text/event-stream' }
+    })
+  }
+
+  it('handles SSE events split across chunks', async () => {
+    // Simulate TCP fragmentation where JSON is split mid-object
+    const chunks = ['data: {"message":"Hel', 'lo"}\n\ndata: {"message":" wor', 'ld"}\n\n']
+
+    const client = new FetchClient({
+      name: 'test',
+      baseUrl: 'http://localhost',
+      connection: fetch,
+      stringify: (q) => ''
+    })
+
+    const response = createChunkedSSEResponse(chunks)
+    const messages: any[] = []
+
+    for await (const data of client.handleEventStream(response)) {
+      messages.push(data)
+    }
+
+    expect(messages).toHaveLength(2)
+    expect(messages[0]).toEqual({ message: 'Hello' })
+    expect(messages[1]).toEqual({ message: ' world' })
+  })
+
+  it('handles multiple events in a single chunk', async () => {
+    const chunks = ['data: {"a":1}\n\ndata: {"b":2}\n\ndata: {"c":3}\n\n']
+
+    const client = new FetchClient({
+      name: 'test',
+      baseUrl: 'http://localhost',
+      connection: fetch,
+      stringify: (q) => ''
+    })
+
+    const response = createChunkedSSEResponse(chunks)
+    const messages: any[] = []
+
+    for await (const data of client.handleEventStream(response)) {
+      messages.push(data)
+    }
+
+    expect(messages).toHaveLength(3)
+    expect(messages[0]).toEqual({ a: 1 })
+    expect(messages[1]).toEqual({ b: 2 })
+    expect(messages[2]).toEqual({ c: 3 })
+  })
+
+  it('handles event split at delimiter boundary', async () => {
+    // Split right at the \n\n boundary
+    const chunks = ['data: {"first":true}\n', '\ndata: {"second":true}\n\n']
+
+    const client = new FetchClient({
+      name: 'test',
+      baseUrl: 'http://localhost',
+      connection: fetch,
+      stringify: (q) => ''
+    })
+
+    const response = createChunkedSSEResponse(chunks)
+    const messages: any[] = []
+
+    for await (const data of client.handleEventStream(response)) {
+      messages.push(data)
+    }
+
+    expect(messages).toHaveLength(2)
+    expect(messages[0]).toEqual({ first: true })
+    expect(messages[1]).toEqual({ second: true })
+  })
+
+  it('handles multi-byte UTF-8 characters split across chunks', async () => {
+    // UTF-8 encoding of emoji can be split across chunks
+    const fullMessage = 'data: {"emoji":"🎉"}\n\n'
+    const bytes = new TextEncoder().encode(fullMessage)
+    // Split in the middle of the emoji (which is 4 bytes in UTF-8)
+    const chunk1 = bytes.slice(0, 18) // cuts into the emoji
+    const chunk2 = bytes.slice(18)
+
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(chunk1)
+        controller.enqueue(chunk2)
+        controller.close()
+      }
+    })
+
+    const response = new Response(stream, {
+      headers: { 'content-type': 'text/event-stream' }
+    })
+
+    const client = new FetchClient({
+      name: 'test',
+      baseUrl: 'http://localhost',
+      connection: fetch,
+      stringify: (q) => ''
+    })
+
+    const messages: any[] = []
+
+    for await (const data of client.handleEventStream(response)) {
+      messages.push(data)
+    }
+
+    expect(messages).toHaveLength(1)
+    expect(messages[0]).toEqual({ emoji: '🎉' })
+  })
 })
