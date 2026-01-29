@@ -1,12 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  method,
-  getMethodOptions,
-  getAllMethodOptions,
-  getClientMethodConfig,
-  buildMethodConfig,
-  METHOD_OPTIONS
-} from './method.js'
+import { method, getMethodOptions, getAllMethodOptions, clientMethods, METHOD_OPTIONS } from './method.js'
 import type { MethodOptions } from './declarations.js'
 
 describe('@method decorator', () => {
@@ -19,7 +12,7 @@ describe('@method decorator', () => {
 
     class TestService {
       @method(options)
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
     }
@@ -33,17 +26,17 @@ describe('@method decorator', () => {
   it('works with multiple decorated methods', () => {
     class TestService {
       @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
       @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
-      async archive(id: string, params: any) {
+      async archive(_id: string, _params: unknown) {
         return { archived: true }
       }
 
       @method({ args: ['params'], http: 'GET', path: 'stats' })
-      async stats(params: any) {
+      async stats(_params: unknown) {
         return { total: 100 }
       }
     }
@@ -72,7 +65,7 @@ describe('@method decorator', () => {
   it('supports external: false option', () => {
     class TestService {
       @method({ args: ['data', 'params'], external: false })
-      async internalProcess(data: any, params: any) {
+      async internalProcess(data: unknown, _params: unknown) {
         return data
       }
     }
@@ -88,7 +81,7 @@ describe('@method decorator', () => {
   it('supports event option', () => {
     class TestService {
       @method({ args: ['data', 'params'], event: 'processed' })
-      async process(data: any, params: any) {
+      async process(data: unknown, _params: unknown) {
         return data
       }
     }
@@ -104,7 +97,7 @@ describe('@method decorator', () => {
   it('supports custom route params in args', () => {
     class TestService {
       @method({ args: ['userId', 'messageId', 'params'], http: 'GET', path: ':userId/:messageId' })
-      async getMessageForUser(userId: string, messageId: string, params: any) {
+      async getMessageForUser(userId: string, messageId: string, _params: unknown) {
         return { userId, messageId }
       }
     }
@@ -121,7 +114,7 @@ describe('@method decorator', () => {
   it('accepts empty options (defaults)', () => {
     class TestService {
       @method()
-      async customMethod(data: any, params: any) {
+      async customMethod(data: unknown, _params: unknown) {
         return data
       }
     }
@@ -142,11 +135,11 @@ describe('getMethodOptions', () => {
 
     class TestService {
       @method(options)
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
-      async noDecorator(data: any, params: any) {
+      async noDecorator(data: unknown, _params: unknown) {
         return data
       }
     }
@@ -165,11 +158,11 @@ describe('getMethodOptions', () => {
         archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' } as MethodOptions
       }
 
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
-      async archive(id: string, params: any) {
+      async archive(_id: string, _params: unknown) {
         return { archived: true }
       }
     }
@@ -202,7 +195,7 @@ describe('getMethodOptions', () => {
       }
 
       @method(decoratorOptions)
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
     }
@@ -218,16 +211,16 @@ describe('getAllMethodOptions', () => {
   it('collects all method options from decorated methods', () => {
     class TestService {
       @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
       @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
-      async archive(id: string, params: any) {
+      async archive(_id: string, _params: unknown) {
         return { archived: true }
       }
 
-      async noDecorator(data: any, params: any) {
+      async noDecorator(data: unknown, _params: unknown) {
         return data
       }
     }
@@ -248,11 +241,11 @@ describe('getAllMethodOptions', () => {
         archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' } as MethodOptions
       }
 
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
-      async archive(id: string, params: any) {
+      async archive(_id: string, _params: unknown) {
         return { archived: true }
       }
     }
@@ -273,11 +266,11 @@ describe('getAllMethodOptions', () => {
       }
 
       @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
-      async status(id: string, params: any) {
+      async status(_id: string, _params: unknown) {
         return { status: 'active' }
       }
 
-      async archive(id: string, params: any) {
+      async archive(_id: string, _params: unknown) {
         return { archived: true }
       }
     }
@@ -292,164 +285,163 @@ describe('getAllMethodOptions', () => {
   })
 })
 
-describe('getClientMethodConfig', () => {
-  it('extracts client config from decorated methods with paths', () => {
-    class MessageService {
-      @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
-      async status(id: string, params: any) {
-        return { status: 'active' }
+describe('clientMethods', () => {
+  it('filters and prepares method configs for client use', () => {
+    const config = clientMethods({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+        archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' },
+        stats: { args: ['params'], http: 'GET', path: 'stats' },
+        internalProcess: { args: ['data', 'params'], external: false }, // should be filtered
+        noPath: { args: ['data', 'params'] } // should be filtered (no path)
+      },
+      users: {
+        me: { args: ['params'], http: 'GET', path: 'me' }
       }
-
-      @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
-      async archive(id: string, params: any) {
-        return { archived: true }
-      }
-
-      @method({ args: ['params'], http: 'GET', path: 'stats' })
-      async stats(params: any) {
-        return { total: 100 }
-      }
-
-      // This method has no path, so it should NOT be included
-      @method({ args: ['data', 'params'], external: false })
-      async internalProcess(data: any, params: any) {
-        return data
-      }
-
-      // Standard method - no decorator
-      async find(params: any) {
-        return []
-      }
-    }
-
-    const config = getClientMethodConfig(MessageService)
-
-    expect(config).toEqual({
-      status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
-      archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' },
-      stats: { args: ['params'], http: 'GET', path: 'stats' }
     })
 
-    // Should not include internalProcess (no path) or find (no decorator)
-    expect(config.internalProcess).toBeUndefined()
-    expect(config.find).toBeUndefined()
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+        archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' },
+        stats: { args: ['params'], http: 'GET', path: 'stats' }
+      },
+      users: {
+        me: { args: ['params'], http: 'GET', path: 'me' }
+      }
+    })
   })
 
-  it('extracts client config from static methods property', () => {
-    class MessageService {
-      static methods = {
-        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' } as MethodOptions,
-        archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' } as MethodOptions,
-        internal: { args: ['data', 'params'], external: false } as MethodOptions // no path
+  it('filters out internal methods (external: false)', () => {
+    const config = clientMethods({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+        internal: { args: ['data', 'params'], external: false, path: ':id/internal' }
       }
-
-      async status(id: string, params: any) {
-        return { status: 'active' }
-      }
-
-      async archive(id: string, params: any) {
-        return { archived: true }
-      }
-
-      async internal(data: any, params: any) {
-        return data
-      }
-    }
-
-    const config = getClientMethodConfig(MessageService)
-
-    expect(config).toEqual({
-      status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
-      archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' }
     })
 
-    // Should not include internal (no path)
-    expect(config.internal).toBeUndefined()
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
+      }
+    })
+    expect(config.messages.internal).toBeUndefined()
   })
 
-  it('returns empty object for services without custom paths', () => {
-    class SimpleService {
-      async find(params: any) {
-        return []
+  it('filters out methods without paths', () => {
+    const config = clientMethods({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' },
+        noPath: { args: ['data', 'params'] } // no path
       }
+    })
 
-      async get(id: string, params: any) {
-        return { id }
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
       }
+    })
+  })
 
-      @method({ args: ['data', 'params'], external: false })
-      async internalOnly(data: any, params: any) {
-        return data
+  it('skips boolean configs', () => {
+    const config = clientMethods({
+      messages: {
+        find: true, // boolean - skip
+        get: true, // boolean - skip
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
       }
-    }
+    })
 
-    const config = getClientMethodConfig(SimpleService)
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
+      }
+    })
+  })
+
+  it('excludes services with no valid methods', () => {
+    const config = clientMethods({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
+      },
+      simple: {
+        find: true,
+        get: true
+      }
+    })
+
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
+      }
+    })
+    expect(config.simple).toBeUndefined()
+  })
+
+  it('returns empty object when no services have custom paths', () => {
+    const config = clientMethods({
+      a: { find: true },
+      b: { get: true, internal: { args: ['data', 'params'], external: false } }
+    })
 
     expect(config).toEqual({})
   })
 
-  it('only includes args, http, and path in client config', () => {
-    class MessageService {
-      @method({
-        args: ['id', 'params'],
-        http: 'GET',
-        path: ':id/status',
-        external: true,
-        event: 'statusChecked'
-      })
-      async status(id: string, params: any) {
-        return { status: 'active' }
+  it('strips server-only properties (external, event)', () => {
+    const config = clientMethods({
+      messages: {
+        status: {
+          args: ['id', 'params'],
+          http: 'GET',
+          path: ':id/status',
+          external: true,
+          event: 'statusChecked'
+        }
       }
-    }
+    })
 
-    const config = getClientMethodConfig(MessageService)
-
-    // Should only have args, http, path - not external or event
-    expect(config.status).toEqual({
+    expect(config.messages.status).toEqual({
       args: ['id', 'params'],
       http: 'GET',
       path: ':id/status'
     })
-    expect((config.status as any).external).toBeUndefined()
-    expect((config.status as any).event).toBeUndefined()
+    expect((config.messages.status as any).external).toBeUndefined()
+    expect((config.messages.status as any).event).toBeUndefined()
   })
-})
 
-describe('buildMethodConfig', () => {
-  it('builds config from multiple service classes', () => {
-    class MessageService {
-      @method({ args: ['id', 'params'], http: 'GET', path: ':id/status' })
-      async status(id: string, params: any) {
-        return { status: 'active' }
+  it('handles undefined service methods gracefully', () => {
+    const config = clientMethods({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
+      },
+      users: undefined
+    })
+
+    expect(config).toEqual({
+      messages: {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
       }
+    })
+  })
 
-      @method({ args: ['id', 'params'], http: 'POST', path: ':id/archive' })
-      async archive(id: string, params: any) {
-        return { archived: true }
+  it('works with static methods from service classes', () => {
+    class MessageService {
+      static methods = {
+        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' } as MethodOptions,
+        archive: { args: ['id', 'params'], http: 'POST', path: ':id/archive' } as MethodOptions
       }
     }
 
     class UserService {
-      @method({ args: ['params'], http: 'GET', path: 'me' })
-      async me(params: any) {
-        return { id: 1, name: 'Current User' }
+      static methods = {
+        me: { args: ['params'], http: 'GET', path: 'me' } as MethodOptions
       }
     }
 
-    class SimpleService {
-      // No custom paths
-      async find(params: any) {
-        return []
-      }
-    }
-
-    const services = {
-      messages: MessageService,
-      users: UserService,
-      simple: SimpleService
-    }
-
-    const config = buildMethodConfig(services)
+    const config = clientMethods({
+      messages: MessageService.methods,
+      users: UserService.methods
+    })
 
     expect(config).toEqual({
       messages: {
@@ -458,53 +450,6 @@ describe('buildMethodConfig', () => {
       },
       users: {
         me: { args: ['params'], http: 'GET', path: 'me' }
-      }
-    })
-
-    // SimpleService should not be included (no custom paths)
-    expect(config.simple).toBeUndefined()
-  })
-
-  it('returns empty object when no services have custom paths', () => {
-    class ServiceA {
-      async find(params: any) {
-        return []
-      }
-    }
-
-    class ServiceB {
-      async get(id: string, params: any) {
-        return { id }
-      }
-    }
-
-    const services = {
-      a: ServiceA,
-      b: ServiceB
-    }
-
-    const config = buildMethodConfig(services)
-
-    expect(config).toEqual({})
-  })
-
-  it('works with static methods property', () => {
-    class MessageService {
-      static methods = {
-        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' } as MethodOptions
-      }
-
-      async status(id: string, params: any) {
-        return { status: 'active' }
-      }
-    }
-
-    const services = { messages: MessageService }
-    const config = buildMethodConfig(services)
-
-    expect(config).toEqual({
-      messages: {
-        status: { args: ['id', 'params'], http: 'GET', path: ':id/status' }
       }
     })
   })

@@ -1,7 +1,15 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
 import { hooks } from '../src/hooks/index.js'
-import { feathers, ServiceInterface, Application, HookContext, NextFunction } from '../src/index.js'
+import {
+  feathers,
+  ServiceInterface,
+  Application,
+  HookContext,
+  NextFunction,
+  Id,
+  Params
+} from '../src/index.js'
 
 interface Todo {
   id: number
@@ -65,7 +73,65 @@ hooks(TodoService, {
   create: [myHook]
 })
 
+// Service with custom methods for type testing
+interface MessageStatus {
+  id: string
+  status: 'active' | 'archived'
+}
+
+class MessageService {
+  async find(_params?: Params) {
+    return [{ id: '1', text: 'Hello' }]
+  }
+
+  async get(id: Id, _params?: Params) {
+    return { id: String(id), text: 'Hello' }
+  }
+
+  // Custom method with different signature
+  async status(id: Id, _params?: Params): Promise<MessageStatus> {
+    return { id: String(id), status: 'active' }
+  }
+
+  // Custom method with data
+  async archive(id: Id, _params?: Params): Promise<{ id: string; archived: boolean }> {
+    return { id: String(id), archived: true }
+  }
+}
+
+interface ServicesWithCustomMethods {
+  messages: MessageService
+}
+
 describe('Feathers typings', () => {
+  it('custom methods are properly typed on services', async () => {
+    const app = feathers<ServicesWithCustomMethods>()
+    app.use('messages', new MessageService())
+
+    const service = app.service('messages')
+
+    // Standard methods are typed
+    const messages = await service.find()
+    assert.ok(Array.isArray(messages))
+
+    const message = await service.get('1')
+    assert.ok(message.id)
+    assert.ok(message.text)
+
+    // Custom methods are typed with correct signatures
+    const status: MessageStatus = await service.status('1')
+    assert.strictEqual(status.status, 'active')
+
+    const archived = await service.archive('1')
+    assert.strictEqual(archived.archived, true)
+
+    // TypeScript ensures correct return types (this is a compile-time check)
+    const _statusType: 'active' | 'archived' = status.status
+    const _archivedType: boolean = archived.archived
+    assert.ok(_statusType)
+    assert.ok(typeof _archivedType === 'boolean')
+  })
+
   it('initializes the app with proper types', async () => {
     const app: MainApp = feathers<Services, Configuration>()
     const app2 = feathers<Record<string, unknown>, Configuration>()

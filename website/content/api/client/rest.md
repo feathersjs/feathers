@@ -332,21 +332,29 @@ Just like on the server _all_ methods you want to use have to be listed in the `
 
 ### Custom Method Paths and HTTP Verbs
 
-When the server uses the `@method` decorator to configure custom methods with specific HTTP verbs and paths, the client can be configured to use the correct routing instead of the default `POST` with `X-Service-Method` header.
+When the server uses the `@method` decorator or `static methods` property to configure custom methods with specific HTTP verbs and paths, the client can be configured to use the correct routing instead of the default `POST` with `X-Service-Method` header.
 
-#### Using buildMethodConfig (Recommended)
+#### Using clientMethods (Recommended)
 
-The easiest way is to use `buildMethodConfig()` on the server to extract method configuration from your service classes, then pass it to the client:
+Use the `clientMethods()` helper on the server to prepare method configuration from your service classes' `static methods` property:
 
 ```ts
 // server: src/client.ts
-import { buildMethodConfig, type InferServiceTypes } from '@feathersjs/feathers'
+import { clientMethods } from '@feathersjs/feathers'
 import { MessageService } from './services/messages.service'
+import { UserService } from './services/users.service'
 
-const services = { messages: MessageService }
+// Export method configuration for client
+export const serviceMethods = clientMethods({
+  messages: MessageService.methods,
+  users: UserService.methods
+})
 
-export const serviceMethods = buildMethodConfig(services)
-export type ServiceTypes = InferServiceTypes<typeof services>
+// Export types separately
+export type ServiceTypes = {
+  messages: MessageService
+  users: UserService
+}
 ```
 
 ```ts
@@ -354,18 +362,20 @@ export type ServiceTypes = InferServiceTypes<typeof services>
 import { feathers, fetchClient } from '@feathersjs/feathers'
 import { serviceMethods, type ServiceTypes } from 'my-server/client'
 
-const connection = fetchClient(fetch, {
-  baseUrl: 'http://localhost:3030',
-  methods: serviceMethods
-})
-
-const app = feathers<ServiceTypes>().configure(connection)
+const app = feathers<ServiceTypes>().configure(
+  fetchClient(fetch, {
+    baseUrl: 'http://localhost:3030',
+    methods: serviceMethods
+  })
+)
 
 // Uses correct HTTP verbs and paths automatically
 await app.service('messages').status('123') // GET /messages/123/status
 await app.service('messages').archive('123') // POST /messages/123/archive
 await app.service('messages').stats() // GET /messages/stats
 ```
+
+The `clientMethods()` helper filters out internal methods (`external: false`) and methods without paths, and strips server-only properties.
 
 #### Manual Configuration
 

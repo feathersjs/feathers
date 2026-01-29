@@ -429,22 +429,25 @@ When multiple configuration sources exist, they are merged in this order (highes
 
 ### Client Configuration
 
-For the client to use the correct HTTP verbs and paths for custom methods, you can use `buildMethodConfig()` to extract method configuration from your service classes:
+For the client to use the correct HTTP verbs and paths for custom methods, use the `clientMethods()` helper to prepare the method configuration. This filters out internal methods and strips server-only properties.
 
 ```ts
 // server: src/client.ts
-import { buildMethodConfig, type InferServiceTypes } from '@feathersjs/feathers'
+import { clientMethods } from '@feathersjs/feathers'
 import { MessageService } from './services/messages.service'
 import { UserService } from './services/users.service'
 
-const services = {
-  messages: MessageService,
+// Export method configuration for client (uses static methods property)
+export const serviceMethods = clientMethods({
+  messages: MessageService.methods,
+  users: UserService.methods
+})
+
+// Export types separately
+export type ServiceTypes = {
+  messages: MessageService
   users: UserService
 }
-
-// Derive runtime config and types from service classes
-export const serviceMethods = buildMethodConfig(services)
-export type ServiceTypes = InferServiceTypes<typeof services>
 ```
 
 ```ts
@@ -452,12 +455,12 @@ export type ServiceTypes = InferServiceTypes<typeof services>
 import { feathers, fetchClient } from '@feathersjs/feathers'
 import { serviceMethods, type ServiceTypes } from 'my-server/client'
 
-const connection = fetchClient(fetch, {
-  baseUrl: 'http://localhost:3030',
-  methods: serviceMethods
-})
-
-const app = feathers<ServiceTypes>().configure(connection)
+const app = feathers<ServiceTypes>().configure(
+  fetchClient(fetch, {
+    baseUrl: 'http://localhost:3030',
+    methods: serviceMethods
+  })
+)
 
 // Fully typed, correct HTTP verbs and paths
 await app.service('messages').status('123') // GET /messages/123/status
@@ -465,8 +468,14 @@ await app.service('messages').archive('123') // POST /messages/123/archive
 await app.service('messages').stats() // GET /messages/stats
 ```
 
+The `clientMethods()` helper:
+
+- Filters out methods with `external: false` (internal-only methods)
+- Filters out methods without a `path` (standard CRUD uses automatic routing)
+- Strips server-only properties (`external`, `event`) - only keeps `args`, `http`, `path`
+
 ::warning[Important]
-The keys in the `services` object passed to `buildMethodConfig()` must match the actual service paths used with `app.use()`. For services registered at non-standard paths, use the full path as the key:
+The keys in the object passed to `clientMethods()` must match the actual service paths used with `app.use()`. For services registered at non-standard paths, use the full path as the key:
 
 ```ts
 // Server registers services at custom paths
@@ -474,12 +483,10 @@ app.use('api/v1/messages', new MessageService())
 app.use('users/:userId/messages', new UserMessageService())
 
 // Client config must use matching paths
-const services = {
-  'api/v1/messages': MessageService,
-  'users/:userId/messages': UserMessageService
-}
-
-export const serviceMethods = buildMethodConfig(services)
+export const serviceMethods = clientMethods({
+  'api/v1/messages': MessageService.methods,
+  'users/:userId/messages': UserMessageService.methods
+})
 ```
 
 ```ts
