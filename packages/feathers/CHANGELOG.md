@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.5...v6.0.0-pre.6) (2026-01-29)
+
+### Bug Fixes
+
+- **client:** Buffer SSE stream chunks before parsing ([#3643](https://github.com/feathersjs/feathers/issues/3643)) ([e3cc58c](https://github.com/feathersjs/feathers/commit/e3cc58c3a59f1bd0044d13f79d1326878f3857b5))
+
+### Features
+
+- v6 initial website ([#3641](https://github.com/feathersjs/feathers/issues/3641)) ([b539643](https://github.com/feathersjs/feathers/commit/b53964381233bee7fcb9e50b77508164aa756bb5))
+
 # [6.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.4...v6.0.0-pre.5) (2025-12-20)
 
 **Note:** Version bump only for package feathers

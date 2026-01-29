@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.6](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.5...v6.0.0-pre.6) (2026-01-29)
+
+### Bug Fixes
+
+- **client:** Buffer SSE stream chunks before parsing ([#3643](https://github.com/feathersjs/feathers/issues/3643)) ([e3cc58c](https://github.com/feathersjs/feathers/commit/e3cc58c3a59f1bd0044d13f79d1326878f3857b5))
+- **website:** add Badges component and update markdown syntax ([7c45c1c](https://github.com/feathersjs/feathers/commit/7c45c1c3ae00c45803767088f720c4c2c3fc4c78))
+- **website:** update search collections and add ThemeToggle component ([1a8bb35](https://github.com/feathersjs/feathers/commit/1a8bb3546dda247337b724f7e83d24de15b5c915))
+
+### Features
+
+- v6 initial website ([#3641](https://github.com/feathersjs/feathers/issues/3641)) ([b539643](https://github.com/feathersjs/feathers/commit/b53964381233bee7fcb9e50b77508164aa756bb5))
+- **website:** add scroll-aware table of contents and sidebar navigation ([5194823](https://github.com/feathersjs/feathers/commit/51948237e637b89eb9fc3fdd1144267effc7f7e8))
+
 # [6.0.0-pre.5](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.4...v6.0.0-pre.5) (2025-12-20)
 
 **Note:** Version bump only for package feathers
