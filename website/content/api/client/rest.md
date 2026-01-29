@@ -285,6 +285,73 @@ If no `Content-Type` header is specified, streaming requests default to `applica
 Streaming uploads are only supported with the REST/HTTP transport. Socket.io does not support streaming request bodies.
 ::
 
+### Streaming Responses (SSE)
+
+When a service returns an [async generator or async iterable](../http#async-iterators-sse), the server sends the response as Server-Sent Events (SSE). The REST client automatically detects this and returns an async iterable that you can consume with `for await...of`:
+
+```ts
+// Server - service returns an async generator
+class ChatService {
+  async *create(data: { prompt: string }) {
+    const stream = await ai.generateStream(data.prompt)
+
+    for await (const chunk of stream) {
+      yield { type: 'text', content: chunk }
+    }
+  }
+}
+
+// Client - consume the stream
+const response = app.service('chat').create({ prompt: 'Hello' })
+
+for await (const chunk of response) {
+  console.log(chunk.content) // Streams in real-time
+}
+```
+
+This is useful for:
+
+- **AI/LLM responses** - Stream tokens as they're generated
+- **Progress updates** - Report status during long-running operations
+- **Live data feeds** - Push data to clients as it becomes available
+
+```ts
+// Example: Streaming AI chat with status updates
+class AIChatService {
+  async *create(data: { messages: Message[] }, params: Params) {
+    yield { type: 'status', text: 'Thinking...' }
+
+    const stream = await llm.chat(data.messages)
+
+    for await (const token of stream) {
+      yield { type: 'text', text: token }
+    }
+
+    yield { type: 'done' }
+  }
+}
+
+// Client
+let fullResponse = ''
+
+for await (const event of app.service('ai-chat').create({ messages })) {
+  if (event.type === 'status') {
+    showStatus(event.text)
+  } else if (event.type === 'text') {
+    fullResponse += event.text
+    updateUI(fullResponse)
+  }
+}
+```
+
+::note[Automatic buffering]
+The client automatically handles SSE stream buffering, correctly parsing events even when they arrive split across network chunks. This ensures reliable streaming regardless of network conditions.
+::
+
+::warning[REST only]
+Streaming responses are only supported with the REST/HTTP transport. For real-time updates over Socket.io, use [channels and events](../channels) instead.
+::
+
 ### Custom Methods
 
 On the client, [custom service methods](../services#custom-methods) registered using the `methods` option when registering the service via `restClient.service()`:
