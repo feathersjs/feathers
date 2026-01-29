@@ -1,17 +1,15 @@
-
-
 # Hooks
 
-Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST), websockets or any other transport Feathers supports. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they use a database or not.
+Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) or any other transport Feathers supports. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they use a database or not.
 
-Hooks are commonly used to handle things like permissions, validation, logging, [authentication](./authentication/hook), [data schemas and resolvers](./schema/index), sending notifications and more. This pattern keeps your application logic flexible, composable, and easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
+Hooks are commonly used to handle things like permissions, validation, logging, authentication, sending notifications and more. This pattern keeps your application logic flexible, composable, and easier to trace through and debug.
 
 ## Quick Example
 
 The following example logs the runtime of any service method on the `messages` service and adds `createdAt` property before saving the data to the database:
 
 ```ts
-import { feathers, type HookContext, type NextFunction } from '@feathersjs/feathers'
+import { feathers, type HookContext, type NextFunction } from 'feathers'
 
 const app = feathers()
 
@@ -41,10 +39,6 @@ app.service('messages').hooks({
   }
 })
 ```
-
-::note
-While it is always possible to add properties like `createdAt` in the above example via hooks, the preferred way to make data modifications like this in Feathers 5 is via [schemas and resolvers](./schema/index).
-::
 
 ## Hook functions
 
@@ -125,7 +119,7 @@ app.service('messages').hooks({
 
 ### Setting `context.result`
 
-When `context.result` is set in an `around` hook before calling `await next()` or in a `before` hook, the original [service method](./services) call will be skipped. All other hooks will still execute in their normal order. The following example always returns the currently [authenticated user](./authentication/service) instead of the actual user for all `get` method calls:
+When `context.result` is set in an `around` hook before calling `await next()` or in a `before` hook, the original [service method](./services) call will be skipped. All other hooks will still execute in their normal order. The following example always returns the current user instead of the actual user for all `get` method calls:
 
 ```js
 app.service('users').hooks({
