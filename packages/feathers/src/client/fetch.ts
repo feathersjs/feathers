@@ -130,6 +130,7 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
   async *handleEventStream(res: Response) {
     const reader = res.body.getReader()
     const decoder = new TextDecoder()
+    let buffer = ''
 
     while (true) {
       const { value, done } = await reader.read()
@@ -139,11 +140,17 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
       }
 
       if (value) {
-        const text = decoder.decode(value)
-        const eventChunks = text.split('\n\n').filter(Boolean)
+        buffer += decoder.decode(value, { stream: true })
 
-        for (const chunk of eventChunks) {
-          const lines = chunk.split('\n')
+        // SSE events are separated by \n\n
+        const events = buffer.split('\n\n')
+        // Keep the last potentially incomplete event in the buffer
+        buffer = events.pop() || ''
+
+        for (const event of events) {
+          if (!event.trim()) continue
+
+          const lines = event.split('\n')
           const dataLine = lines.find((line) => line.startsWith('data: '))
 
           if (dataLine) {
