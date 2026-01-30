@@ -223,12 +223,12 @@ export default {
       // collapsible: true,
       items: [
         {
-          text: "What's new?",
-          link: '/guides/whats-new.md'
+          text: 'Migrating from v5',
+          link: '/guides/migrating.md'
         },
         {
-          text: 'Migration guide',
-          link: '/guides/migrating.md'
+          text: 'Migrating from v4',
+          link: '/guides/migrating-v4.md'
         }
       ]
     }

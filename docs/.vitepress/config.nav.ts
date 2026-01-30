@@ -1,7 +1,7 @@
 import { releases } from './meta'
 // import { version } from '../package.json'
 
-const version = 5
+const version = '6-compat'
 
 export default [
   { text: 'Guides', link: '/guides/' },
@@ -15,12 +15,20 @@ export default [
         link: releases
       },
       {
-        text: 'Crow v4 ',
-        link: 'https://crow.docs.feathersjs.com'
+        text: 'v6',
+        link: 'https://feathersjs.com'
       },
       {
-        text: 'Buzzard v3 ',
-        link: 'https://buzzard.docs.feathersjs.com'
+        text: 'Eagle (v6-compat)',
+        link: 'https://eagle.feathersjs.com'
+      },
+      {
+        text: 'Dove (v5)',
+        link: 'https://dove.feathersjs.com'
+      },
+      {
+        text: 'Crow (v4)',
+        link: 'https://crow.docs.feathersjs.com'
       }
     ]
   },

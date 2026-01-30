@@ -30,8 +30,10 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   useEstimatedDocumentCount?: boolean
 }
 
-export interface MongoDBAdapterParams<Q = AdapterQuery>
-  extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<
+  Q,
+  Partial<MongoDBAdapterOptions>
+> {
   pipeline?: Document[]
   mongodb?:
     | BulkWriteOptions
@@ -71,7 +73,7 @@ export class MongoDbAdapter<
       return id
     }
 
-    if (this.id === '_id' && ObjectId.isValid(id)) {
+    if (this.id === '_id' && ObjectId.isValid(id.toString())) {
       id = new ObjectId(id.toString())
     }
 

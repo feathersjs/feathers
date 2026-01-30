@@ -15,7 +15,7 @@ export default function init(schema?: Schema<any> | Validator) {
 
     const configuration: { [key: string]: unknown } = { ...config }
 
-    debug(`Initializing configuration for ${config.util.getEnv('NODE_ENV')} environment`)
+    debug(`Initializing configuration for ${process.env.NODE_ENV} environment`)
 
     Object.keys(configuration).forEach((name) => {
       const value = configuration[name]
