@@ -261,7 +261,7 @@ describe('Feathers MongoDB Service', () => {
       const results = await peopleService.find({
         paginate: false,
         query: {
-          _id: new ObjectId(person._id)
+          _id: new ObjectId(person._id.toString())
         }
       })
 

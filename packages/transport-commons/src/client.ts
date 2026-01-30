@@ -58,9 +58,11 @@ interface ServiceOptions {
 
 export type SocketService<T = any, D = Partial<any>, P extends Params = Params> = Service<T, D, P>
 
-export class Service<T = any, D = Partial<T>, P extends Params = Params>
-  implements ServiceInterface<T, D, P>
-{
+export class Service<T = any, D = Partial<T>, P extends Params = Params> implements ServiceInterface<
+  T,
+  D,
+  P
+> {
   events: string[]
   path: string
   connection: any

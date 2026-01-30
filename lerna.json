@@ -7,10 +7,11 @@
       "hoist": true
     },
     "publish": {
-      "allowBranch": ["crow", "dove"],
+      "allowBranch": ["eagle"],
       "message": "chore(release): publish %s",
       "conventionalCommits": true,
-      "createRelease": "github"
+      "createRelease": "github",
+      "tagVersionPrefix": "compat-"
     }
   },
   "ignoreChanges": [
