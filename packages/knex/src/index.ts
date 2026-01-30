@@ -10,11 +10,11 @@ export * from './error-handler'
 export * as transaction from './hooks'
 
 export class KnexService<
-    Result = any,
-    Data = Partial<Result>,
-    ServiceParams extends Params<any> = KnexAdapterParams,
-    PatchData = Partial<Data>
-  >
+  Result = any,
+  Data = Partial<Result>,
+  ServiceParams extends Params<any> = KnexAdapterParams,
+  PatchData = Partial<Data>
+>
   extends KnexAdapter<Result, Data, ServiceParams, PatchData>
   implements ServiceMethods<Result | Paginated<Result>, Data, ServiceParams, PatchData>
 {

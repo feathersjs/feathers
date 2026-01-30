@@ -31,8 +31,10 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   useEstimatedDocumentCount?: boolean
 }
 
-export interface MongoDBAdapterParams<Q = AdapterQuery>
-  extends AdapterParams<Q, Partial<MongoDBAdapterOptions>> {
+export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<
+  Q,
+  Partial<MongoDBAdapterOptions>
+> {
   pipeline?: Document[]
   mongodb?:
     | BulkWriteOptions

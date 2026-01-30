@@ -26,8 +26,7 @@ export abstract class AdapterBase<
   ServiceParams extends AdapterParams = AdapterParams,
   Options extends AdapterServiceOptions = AdapterServiceOptions,
   IdType = Id
-> implements InternalServiceMethods<Result, Data, PatchData, ServiceParams, IdType>
-{
+> implements InternalServiceMethods<Result, Data, PatchData, ServiceParams, IdType> {
   options: Options
 
   constructor(options: Options) {

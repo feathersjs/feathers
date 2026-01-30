@@ -22,9 +22,11 @@ interface RestClientSettings {
   options: any
 }
 
-export abstract class Base<T = any, D = Partial<T>, P extends Params = RestClientParams>
-  implements ServiceInterface<T, D, P>
-{
+export abstract class Base<
+  T = any,
+  D = Partial<T>,
+  P extends Params = RestClientParams
+> implements ServiceInterface<T, D, P> {
   name: string
   base: string
   connection: any
