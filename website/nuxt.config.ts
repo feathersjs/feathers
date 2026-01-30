@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   extends: ['@feathersdev/websites'],
 
+  modules: ['daisy-ui-kit/nuxt'],
+
   app: {
     head: {
       title: 'FeathersJS',
@@ -18,5 +20,9 @@ export default defineNuxtConfig({
 
   devServer: {
     port: 3009
+  },
+
+  nitro: {
+    preset: 'cloudflare-module'
   }
 })
