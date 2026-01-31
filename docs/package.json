@@ -13,13 +13,13 @@
   "dependencies": {
     "@vueuse/core": "^14.1.0",
     "date-fns": "^4.1.0",
-    "element-plus": "^2.13.1",
+    "element-plus": "^2.13.2",
     "query-string": "^9.3.1",
-    "shiki": "^3.21.0",
+    "shiki": "^3.22.0",
     "vue": "^3.5.27"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.35",
+    "@feathersjs/generators": "^5.0.39",
     "@iconify-json/carbon": "^1.2.18",
     "@types/node": "^25.1.0",
     "@unocss/preset-typography": "^66.6.0",
