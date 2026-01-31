@@ -11,35 +11,35 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@vueuse/core": "^14.0.0",
+    "@vueuse/core": "^14.1.0",
     "date-fns": "^4.1.0",
-    "element-plus": "^2.11.7",
+    "element-plus": "^2.13.2",
     "query-string": "^9.3.1",
-    "shiki": "^3.15.0",
-    "vue": "^3.5.24"
+    "shiki": "^3.21.0",
+    "vue": "^3.5.27"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.35",
-    "@iconify-json/carbon": "^1.2.14",
-    "@types/node": "^24.10.0",
-    "@unocss/preset-typography": "^66.5.5",
-    "@unocss/reset": "^66.5.5",
-    "@unocss/transformer-directives": "^66.5.5",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@feathersjs/generators": "^5.0.37",
+    "@iconify-json/carbon": "^1.2.18",
+    "@types/node": "^25.1.0",
+    "@unocss/preset-typography": "^66.6.0",
+    "@unocss/reset": "^66.6.0",
+    "@unocss/transformer-directives": "^66.6.0",
+    "@vitejs/plugin-vue": "^6.0.3",
     "esno": "^4.8.0",
     "fast-glob": "^3.3.3",
     "flexsearch": "^0.7.31",
     "https-localhost": "^4.7.1",
     "markdown-it": "^14.1.0",
-    "sass": "^1.93.3",
-    "sitemap": "^8.0.2",
-    "unocss": "^66.5.5",
-    "unplugin-auto-import": "^20.2.0",
-    "unplugin-vue-components": "^30.0.0",
-    "vite-plugin-pwa": "^1.1.0",
+    "sass": "^1.97.3",
+    "sitemap": "^9.0.0",
+    "unocss": "^66.6.0",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^31.0.0",
+    "vite-plugin-pwa": "^1.2.0",
     "vitepress": "^1.6.4",
     "vitepress-plugin-google-analytics": "^1.0.2",
     "vitepress-plugin-search": "^1.0.4-alpha.22",
-    "workbox-window": "^7.3.0"
+    "workbox-window": "^7.4.0"
   }
 }

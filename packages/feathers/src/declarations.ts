@@ -318,8 +318,7 @@ export interface FeathersApplication<Services = any, Settings = any> {
 // This needs to be an interface instead of a type
 // so that the declaration can be extended by other modules
 export interface Application<Services = any, Settings = any>
-  extends FeathersApplication<Services, Settings>,
-    EventEmitter {}
+  extends FeathersApplication<Services, Settings>, EventEmitter {}
 
 export type Id = number | string
 export type NullableId = Id | null
