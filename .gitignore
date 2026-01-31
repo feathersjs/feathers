@@ -43,3 +43,8 @@ packages/**/lib
 **/build/*.tgz
 *.sqlite
 docs/.vitepress/cache
+
+# Website (uses pnpm independently)
+website/node_modules
+website/.nuxt
+website/.output

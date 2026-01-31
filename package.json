@@ -24,7 +24,6 @@
     "node": ">= 22"
   },
   "workspaces": [
-    "website",
     "packages/*"
   ],
   "scripts": {
