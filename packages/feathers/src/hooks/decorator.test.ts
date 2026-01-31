@@ -87,7 +87,7 @@ describe('feathers/hooks chainable decorator', () => {
         .params('id', 'params')
         .props({ service: 'messages' })
         .defaults(() => ({ timestamp: 99999 })))
-      async status(id: string, params: any) {
+      async status(id: string, _params: any) {
         return { id, status: 'active' }
       }
     }
@@ -246,7 +246,7 @@ describe('hookMixin respects @hooks().params()', () => {
           await next()
         }
       ])
-      async create(data: any, params?: any) {
+      async create(data: any, _params?: any) {
         return data
       }
     }
@@ -328,7 +328,7 @@ describe('hookMixin respects @hooks().params()', () => {
         .params('id', 'options')
         .props({ serviceName: 'status' })
         .defaults(() => ({ timestamp: 99999 })))
-      async check(id: string, options?: any) {
+      async check(id: string, _options?: any) {
         return { id, status: 'ok' }
       }
     }
