@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import assert from 'assert'
 import { HookContext, hooks, middleware, NextFunction } from './index.js'
+import { feathers } from '../index.js'
 
 describe('feathers/hooks chainable decorator', () => {
   it('supports @hooks([]).params() chainable syntax', async () => {
@@ -201,5 +202,155 @@ describe('feathers/hooks decorator', () => {
 
   it('error cases', () => {
     expect(() => hooks([])({}, 'test', { value: 'not a function' })).toThrow('Can not apply hooks.')
+  })
+})
+
+describe('hookMixin respects @hooks().params()', () => {
+  it('uses custom params from @hooks().params() instead of defaults', async () => {
+    let capturedCtx: HookContext | null = null
+
+    class MessageService {
+      @(hooks([
+        async (ctx: HookContext, next: NextFunction) => {
+          capturedCtx = ctx
+          await next()
+        }
+      ]).params('message', 'options'))
+      async create(message: string, options?: any) {
+        return { message, options }
+      }
+    }
+
+    const app = feathers().use('messages', new MessageService(), {
+      methods: ['create']
+    })
+
+    const result = await app.service('messages').create('Hello world', { notify: true })
+
+    expect(result).toEqual({ message: 'Hello world', options: { notify: true } })
+    expect(capturedCtx).not.toBeNull()
+    // The context should have message and options, NOT the default data/params
+    expect(capturedCtx!.message).toBe('Hello world')
+    expect(capturedCtx!.options).toEqual({ notify: true })
+    // These should be undefined since we're using custom params
+    expect(capturedCtx!.data).toBeUndefined()
+  })
+
+  it('falls back to default params when @hooks().params() is not used', async () => {
+    let capturedCtx: HookContext | null = null
+
+    class MessageService {
+      @hooks([
+        async (ctx: HookContext, next: NextFunction) => {
+          capturedCtx = ctx
+          await next()
+        }
+      ])
+      async create(data: any, params?: any) {
+        return data
+      }
+    }
+
+    const app = feathers().use('messages', new MessageService(), {
+      methods: ['create']
+    })
+
+    const result = await app.service('messages').create({ text: 'Hello' }, { user: 'test' })
+
+    expect(result).toEqual({ text: 'Hello' })
+    expect(capturedCtx).not.toBeNull()
+    // Should use default create params: data, params
+    expect(capturedCtx!.data).toEqual({ text: 'Hello' })
+    expect(capturedCtx!.params).toEqual({ user: 'test' })
+  })
+
+  it('respects custom params for custom methods', async () => {
+    let capturedCtx: HookContext | null = null
+
+    class NotificationService {
+      @(hooks([
+        async (ctx: HookContext, next: NextFunction) => {
+          capturedCtx = ctx
+          await next()
+        }
+      ]).params('userId', 'message', 'priority'))
+      async notify(userId: string, message: string, priority: number) {
+        return { userId, message, priority, sent: true }
+      }
+    }
+
+    const app = feathers().use('notifications', new NotificationService(), {
+      methods: ['notify']
+    })
+
+    const result = await app.service('notifications').notify('user123', 'You have mail', 1)
+
+    expect(result).toEqual({ userId: 'user123', message: 'You have mail', priority: 1, sent: true })
+    expect(capturedCtx).not.toBeNull()
+    expect(capturedCtx!.userId).toBe('user123')
+    expect(capturedCtx!.message).toBe('You have mail')
+    expect(capturedCtx!.priority).toBe(1)
+  })
+
+  it('allows hooks to modify custom params before method execution', async () => {
+    class GreetingService {
+      @(hooks([
+        async (ctx: HookContext, next: NextFunction) => {
+          // Modify the name before method runs
+          ctx.name = ctx.name.toUpperCase()
+          await next()
+        }
+      ]).params('name'))
+      async greet(name: string) {
+        return `Hello, ${name}!`
+      }
+    }
+
+    const app = feathers().use('greetings', new GreetingService(), {
+      methods: ['greet']
+    })
+
+    const result = await app.service('greetings').greet('david')
+
+    expect(result).toBe('Hello, DAVID!')
+  })
+
+  it('works with chained params, props, and defaults on registered service', async () => {
+    let capturedCtx: HookContext | null = null
+
+    class StatusService {
+      @(hooks([
+        async (ctx: HookContext, next: NextFunction) => {
+          capturedCtx = ctx
+          await next()
+        }
+      ])
+        .params('id', 'options')
+        .props({ serviceName: 'status' })
+        .defaults(() => ({ timestamp: 99999 })))
+      async check(id: string, options?: any) {
+        return { id, status: 'ok' }
+      }
+    }
+
+    const app = feathers().use('status', new StatusService(), {
+      methods: ['check']
+    })
+
+    const result = await app.service('status').check('server-1', { verbose: true })
+
+    expect(result).toEqual({ id: 'server-1', status: 'ok' })
+    expect(capturedCtx).not.toBeNull()
+    // Custom params
+    expect(capturedCtx!.id).toBe('server-1')
+    expect(capturedCtx!.options).toEqual({ verbose: true })
+    // Props from .props()
+    expect(capturedCtx!.serviceName).toBe('status')
+    // Defaults from .defaults()
+    expect(capturedCtx!.timestamp).toBe(99999)
+    // Service-level props added by hookMixin
+    expect(capturedCtx!.app).toBe(app)
+    expect(capturedCtx!.path).toBe('status')
+    expect(capturedCtx!.method).toBe('check')
   })
 })

@@ -1,5 +1,6 @@
 import {
   getManager,
+  setManager,
   HookContextData,
   HookManager,
   HookMap as BaseHookMap,
@@ -185,23 +186,67 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
 
   const hookMethods = getHookMethods(service, options)
 
+  // Feathers-specific props to add to all method contexts
+  const feathersProps: HookContextData = {
+    app: this,
+    path,
+    service,
+    event: null,
+    type: 'around',
+    get statusCode() {
+      return (this as any).http?.status
+    },
+    set statusCode(value: number) {
+      ;(this as any).http = (this as any).http || {}
+      ;(this as any).http.status = value
+    }
+  }
+
   const serviceMethodHooks = hookMethods.reduce((res, method) => {
+    // Check if the method already has params configured via @hooks().params()
+    const existingManager = getManager((service as any)[method])
+    const existingParams = existingManager?.getParams()
+
+    // If the method already has custom params from a decorator, we need to
+    // enhance the existing wrapper with Feathers context. We do this by:
+    // 1. Creating a FeathersHookManager as a parent (for collectMiddleware)
+    // 2. Regenerating the Context class with Feathers props on the prototype
+    if (existingParams && existingManager) {
+      const wrapper = (service as any)[method]
+      // Set up FeathersHookManager as parent for middleware collection
+      const feathersManager = new FeathersHookManager<A>(this, method)
+      setManager(wrapper, feathersManager)
+      // Add Feathers props directly to the existing Context prototype
+      const contextProto = wrapper.Context?.prototype
+      if (contextProto) {
+        Object.defineProperties(contextProto, {
+          app: { value: this, enumerable: true, writable: true },
+          path: { value: path, enumerable: true, writable: true },
+          method: { value: method, enumerable: true, writable: true },
+          service: { value: service, enumerable: true, writable: true },
+          event: { value: null, enumerable: true, writable: true },
+          type: { value: 'around', enumerable: true, writable: true },
+          statusCode: {
+            enumerable: true,
+            get() {
+              return this.http?.status
+            },
+            set(value: number) {
+              this.http = this.http || {}
+              this.http.status = value
+            }
+          }
+        })
+      }
+      return res
+    }
+
+    // Use default params for this method
     const params = (defaultServiceArguments as any)[method] || ['data', 'params']
 
     res[method] = new FeathersHookManager<A>(this, method).params(...params).props({
-      app: this,
-      path,
-      method,
-      service,
-      event: null,
-      type: 'around',
-      get statusCode() {
-        return this.http?.status
-      },
-      set statusCode(value: number) {
-        this.http = this.http || {}
-        this.http.status = value
-      }
+      ...feathersProps,
+      method
     })
 
     return res
