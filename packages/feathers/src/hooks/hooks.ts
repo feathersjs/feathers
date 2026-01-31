@@ -147,23 +147,14 @@ function createChainableDecorator(manager: HookManager): ChainableHookDecorator 
     throw new Error('Can not apply hooks.')
   }
 
-  decorator.params = (...params: string[]): ChainableHookDecorator => {
-    const clone = manager.clone()
-    clone._params = params
-    return createChainableDecorator(clone)
-  }
+  decorator.params = (...params: string[]): ChainableHookDecorator =>
+    createChainableDecorator(manager.clone().params(...params))
 
-  decorator.props = (props: HookContextData): ChainableHookDecorator => {
-    const clone = manager.clone()
-    clone._props = clone._props ? { ...clone._props, ...props } : { ...props }
-    return createChainableDecorator(clone)
-  }
+  decorator.props = (props: HookContextData): ChainableHookDecorator =>
+    createChainableDecorator(manager.clone().props(props))
 
-  decorator.defaults = (defaults: HookDefaultsInitializer): ChainableHookDecorator => {
-    const clone = manager.clone()
-    clone._defaults = defaults
-    return createChainableDecorator(clone)
-  }
+  decorator.defaults = (defaults: HookDefaultsInitializer): ChainableHookDecorator =>
+    createChainableDecorator(manager.clone().defaults(defaults))
 
   return decorator as ChainableHookDecorator
 }
