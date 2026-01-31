@@ -3,6 +3,8 @@ import {
   convertOptions,
   HookContext,
   HookContextData,
+  HookDefaultsInitializer,
+  HookManager,
   HookOptions,
   setManager,
   setMiddleware
@@ -102,10 +104,31 @@ export function objectHooks(obj: any, hooks: HookMap | AsyncMiddleware[]) {
   return obj
 }
 
-export const hookDecorator = (managerOrMiddleware?: HookOptions) => {
-  return (target: any, context: DecoratorContext) => {
-    const manager = convertOptions(managerOrMiddleware)
+/**
+ * A chainable decorator that can be used with or without chaining.
+ *
+ * @example
+ * // Without chaining
+ * @hooks([middleware])
+ * async myMethod() {}
+ *
+ * @example
+ * // With chaining
+ * @hooks([]).params('id', 'data')
+ * async myMethod(id: string, data: any) {}
+ */
+export interface ChainableHookDecorator {
+  // Callable as a decorator
+  (target: any, context: DecoratorContext): any
 
+  // Chainable methods that return a new decorator
+  params(...params: string[]): ChainableHookDecorator
+  props(props: HookContextData): ChainableHookDecorator
+  defaults(defaults: HookDefaultsInitializer): ChainableHookDecorator
+}
+
+function createChainableDecorator(manager: HookManager): ChainableHookDecorator {
+  const decorator = (target: any, context: DecoratorContext) => {
     if (context.kind === 'class') {
       setManager(target.prototype, manager)
       return target
@@ -116,4 +139,42 @@ export const hookDecorator = (managerOrMiddleware?: HookOptions) => {
 
     throw new Error('Can not apply hooks.')
   }
+
+  // Add chainable methods
+  decorator.params = (...params: string[]) => {
+    const newManager = new HookManager()
+    newManager._parent = manager._parent
+    newManager._middleware = manager._middleware
+    newManager._props = manager._props ? { ...manager._props } : null
+    newManager._defaults = manager._defaults
+    newManager._params = params
+    return createChainableDecorator(newManager)
+  }
+
+  decorator.props = (props: HookContextData) => {
+    const newManager = new HookManager()
+    newManager._parent = manager._parent
+    newManager._middleware = manager._middleware
+    newManager._params = manager._params
+    newManager._defaults = manager._defaults
+    newManager._props = manager._props ? { ...manager._props, ...props } : { ...props }
+    return createChainableDecorator(newManager)
+  }
+
+  decorator.defaults = (defaults: HookDefaultsInitializer) => {
+    const newManager = new HookManager()
+    newManager._parent = manager._parent
+    newManager._middleware = manager._middleware
+    newManager._params = manager._params
+    newManager._props = manager._props ? { ...manager._props } : null
+    newManager._defaults = defaults
+    return createChainableDecorator(newManager)
+  }
+
+  return decorator as ChainableHookDecorator
+}
+
+export const hookDecorator = (managerOrMiddleware?: HookOptions): ChainableHookDecorator => {
+  const manager = convertOptions(managerOrMiddleware)
+  return createChainableDecorator(manager)
 }

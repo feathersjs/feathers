@@ -1,6 +1,6 @@
 import { AsyncMiddleware } from './compose.js'
 import { HookContext, HookContextConstructor, HookContextData, HookManager, HookOptions } from './base.js'
-import { functionHooks, hookDecorator, HookMap, objectHooks } from './hooks.js'
+import { ChainableHookDecorator, functionHooks, hookDecorator, HookMap, objectHooks } from './hooks.js'
 
 export * from './hooks.js'
 export * from './compose.js'
@@ -68,9 +68,21 @@ export function hooks<O>(obj: O | (new (...args: any[]) => O), hookMap: HookMap<
 
 /**
  * Decorate a class method with hooks.
+ * Returns a chainable decorator that supports .params(), .props(), and .defaults()
+ *
+ * @example
+ * // Without chaining
+ * @hooks([middleware])
+ * async myMethod() {}
+ *
+ * @example
+ * // With chaining for custom params
+ * @hooks([]).params('id', 'data')
+ * async myMethod(id: string, data: any) {}
+ *
  * @param manager The hooks settings
  */
-export function hooks<_T = any>(manager?: HookOptions): any
+export function hooks<_T = any>(manager?: HookOptions): ChainableHookDecorator
 
 // Fallthrough to actual implementation
 export function hooks(...args: any[]) {
