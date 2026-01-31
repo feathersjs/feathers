@@ -42,6 +42,9 @@
     "test": "npm run lint && npm run compile && c8 lerna run test --ignore @feathersjs/tests",
     "generate:package": "pinion run generators/package.ts"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.0.0"
+  },
   "devDependencies": {
     "@featherscloud/pinion": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
