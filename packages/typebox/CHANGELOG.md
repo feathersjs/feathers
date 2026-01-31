@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 6.0.0-pre.0 (2026-01-31)
+
+### Bug Fixes
+
+- **authentication:** Ensure authentication.entity configuration can be null ([#3136](https://github.com/feathersjs/feathers/issues/3136)) ([c47349b](https://github.com/feathersjs/feathers/commit/c47349b9dcf2067b7b572c5463b15b2a8fbda972))
+- **configuration:** Add pool and connection object to SQL database default configuration ([#3023](https://github.com/feathersjs/feathers/issues/3023)) ([092c749](https://github.com/feathersjs/feathers/commit/092c749d43f7da4d019576d1210fe7d3719a44a2))
+- **core:** Update to latest feathersjs/hooks ([#3434](https://github.com/feathersjs/feathers/issues/3434)) ([1499ccc](https://github.com/feathersjs/feathers/commit/1499ccc41fb3ebba97b2c84e0cb19bc48ad3c651))
+- **dependencies:** Update all dependencies ([#3139](https://github.com/feathersjs/feathers/issues/3139)) ([f24276e](https://github.com/feathersjs/feathers/commit/f24276e9a909e2e58a0730c730258ce1f70f4028))
+- **dependencies:** Update all dependencies ([#3545](https://github.com/feathersjs/feathers/issues/3545)) ([221b92b](https://github.com/feathersjs/feathers/commit/221b92bb0ee5d54fb1036742968797cb02e56da2))
+- **dependencies:** Update all dependencies ([#3625](https://github.com/feathersjs/feathers/issues/3625)) ([2698e4e](https://github.com/feathersjs/feathers/commit/2698e4e2996fbf479d82435938d907bc3d5b583a))
+- **dependencies:** Update dependencies ([#3571](https://github.com/feathersjs/feathers/issues/3571)) ([ad611cb](https://github.com/feathersjs/feathers/commit/ad611cb6ffb1dc31d603ba5817331318c5a23217))
+- **knex:** Get by id and transactions should work with params.knex ([#3146](https://github.com/feathersjs/feathers/issues/3146)) ([b172b5e](https://github.com/feathersjs/feathers/commit/b172b5ea9b461642874eb7d2ba01dc4cfc275155))
+- **knex:** Update all dependencies and Knex peer ([#3308](https://github.com/feathersjs/feathers/issues/3308)) ([d2f9860](https://github.com/feathersjs/feathers/commit/d2f986036c4741cce2339d8abbcc6b2eb037a12a))
+- Make sure all Readme files are up to date ([#3154](https://github.com/feathersjs/feathers/issues/3154)) ([a5f0b38](https://github.com/feathersjs/feathers/commit/a5f0b38bbf2a11486415a39533bcc6c67fb51e3e))
+- **schema:** Allow $in and $nin queries to work for arrays ([#3352](https://github.com/feathersjs/feathers/issues/3352)) ([677c214](https://github.com/feathersjs/feathers/commit/677c214a353a7f9a1f90649b9bbec4d0d6517a6f))
+- **schema:** Allow query schemas with no properties, error on unsupported types ([#2904](https://github.com/feathersjs/feathers/issues/2904)) ([b66c734](https://github.com/feathersjs/feathers/commit/b66c734357478f51b2d38fa7f3eee08640cea26e))
+- **schema:** Fix TypeBox extension value query syntax inference ([#3010](https://github.com/feathersjs/feathers/issues/3010)) ([f1c7a76](https://github.com/feathersjs/feathers/commit/f1c7a76586bbb8aed66ef866c3dcd666d79f3a24))
+- **typebox:** Add TRecord to getValidator arg1 type ([#3488](https://github.com/feathersjs/feathers/issues/3488)) ([ffbcc0a](https://github.com/feathersjs/feathers/commit/ffbcc0ad0c361f77171f9ad6224006727644433a))
+- **typebox:** Allow default value in StringEnum ([#3281](https://github.com/feathersjs/feathers/issues/3281)) ([25af09a](https://github.com/feathersjs/feathers/commit/25af09ad065e72768bf88bc8b529b68f2ca4da17))
+- **typebox:** Allow nested or in and queries ([#3029](https://github.com/feathersjs/feathers/issues/3029)) ([39e0b78](https://github.com/feathersjs/feathers/commit/39e0b785238b809aa9b4dea9b95efc3c188c9baa))
+- **typebox:** allow TUnion<TObject[]> inside getValidator ([#3262](https://github.com/feathersjs/feathers/issues/3262)) ([cf9df96](https://github.com/feathersjs/feathers/commit/cf9df96c1011fcf13e9c6d652b06036bb0aac1c3))
+- **typebox:** Implement custom TypeBuilder for backwards compatibility ([#3150](https://github.com/feathersjs/feathers/issues/3150)) ([962bd87](https://github.com/feathersjs/feathers/commit/962bd87217212320b1a68f6556a16b8a6b8f757c))
+- **typebox:** Improve query syntax defaults ([#2888](https://github.com/feathersjs/feathers/issues/2888)) ([59f3cdc](https://github.com/feathersjs/feathers/commit/59f3cdca6376e34fe39a7b91db837d0325aeb5db))
+- **typebox:** Revert to TypeBox 0.25 ([#3183](https://github.com/feathersjs/feathers/issues/3183)) ([cacedf5](https://github.com/feathersjs/feathers/commit/cacedf59e3d2df836777f0cd06ab1b2484ed87c5))
+- **typebox:** Upgrade to TypeBox 0.26.0 ([#3113](https://github.com/feathersjs/feathers/issues/3113)) ([d1d9598](https://github.com/feathersjs/feathers/commit/d1d95984dd94d2b9305e7338421f84f9c4f733fd))
+- Update all dependencies ([#3024](https://github.com/feathersjs/feathers/issues/3024)) ([283dc47](https://github.com/feathersjs/feathers/commit/283dc4798d85584bc031e6e54b83b4ea77d1edd0))
+- Update all dependencies ([#3613](https://github.com/feathersjs/feathers/issues/3613)) ([5136bbd](https://github.com/feathersjs/feathers/commit/5136bbd2e2eeb4e6579e07c9e914006629542363))
+- Update dependencies ([#3584](https://github.com/feathersjs/feathers/issues/3584)) ([119fa4e](https://github.com/feathersjs/feathers/commit/119fa4e1ade8b0078aa235083d566e2538b3a084))
+
+### Features
+
+- **cli:** Improve generated schema definitions ([#2783](https://github.com/feathersjs/feathers/issues/2783)) ([474a9fd](https://github.com/feathersjs/feathers/commit/474a9fda2107e9bcf357746320a8e00cda8182b6))
+- ES module v5 compatibility layer for v6 ([#3607](https://github.com/feathersjs/feathers/issues/3607)) ([1dfff88](https://github.com/feathersjs/feathers/commit/1dfff8832eedca895eeaafd7f3acf0f8a27be23c))
+- **generators:** Move core code generators to shared generators package ([#2982](https://github.com/feathersjs/feathers/issues/2982)) ([0328d22](https://github.com/feathersjs/feathers/commit/0328d2292153870bc43958f73d2c6f288a8cec17))
+- **schema:** Add schema helper for handling Object ids ([#3058](https://github.com/feathersjs/feathers/issues/3058)) ([1393bed](https://github.com/feathersjs/feathers/commit/1393bed81a9ee814de6aab0e537af83e667591a2))
+- **schema:** Add StringEnum to TypeBox module ([#2827](https://github.com/feathersjs/feathers/issues/2827)) ([65d3665](https://github.com/feathersjs/feathers/commit/65d36656f50a48f633fa3fcabaea10521d04bf1c))
+- **schema:** Allow to add additional operators to the query syntax ([#2941](https://github.com/feathersjs/feathers/issues/2941)) ([f324940](https://github.com/feathersjs/feathers/commit/f324940d5795b41e8c6fc113defb0beb7ab03a0a))
+- **schema:** Make schemas validation library independent and add TypeBox support ([#2772](https://github.com/feathersjs/feathers/issues/2772)) ([44172d9](https://github.com/feathersjs/feathers/commit/44172d99b566d11d9ceda04f1d0bf72b6d05ce76))
+- Update to Typebox v1 ([#3616](https://github.com/feathersjs/feathers/issues/3616)) ([077dcc2](https://github.com/feathersjs/feathers/commit/077dcc2cece0ede6f92388dd39be4dcaeed203eb))
+- Upgrade to latest TypeBox ([#3612](https://github.com/feathersjs/feathers/issues/3612)) ([4def62e](https://github.com/feathersjs/feathers/commit/4def62efaaf093cb33e44a3f82169149422af987))
+
+### BREAKING CHANGES
+
+- All packages are now ES modules only
+
 ## [5.0.39](https://github.com/feathersjs/feathers/compare/v5.0.38...v5.0.39) (2026-01-31)
 
 **Note:** Version bump only for package @feathersjs/typebox

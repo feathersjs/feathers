@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "5.0.39",
+  "version": "6.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "type": "module",
@@ -52,11 +52,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.39",
-    "@feathersjs/commons": "^5.0.39",
-    "@feathersjs/errors": "^5.0.39",
-    "@feathersjs/feathers": "^5.0.39",
-    "@feathersjs/transport-commons": "^5.0.39",
+    "@feathersjs/authentication": "^6.0.0-pre.0",
+    "@feathersjs/commons": "^6.0.0-pre.0",
+    "@feathersjs/errors": "^6.0.0-pre.0",
+    "@feathersjs/feathers": "^6.0.0-pre.0",
+    "@feathersjs/transport-commons": "^6.0.0-pre.0",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
     "compression": "^1.8.1",
@@ -64,8 +64,8 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.39",
-    "@feathersjs/tests": "^5.0.39",
+    "@feathersjs/authentication-local": "^6.0.0-pre.0",
+    "@feathersjs/tests": "^6.0.0-pre.0",
     "@types/lodash": "^4.17.23",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.1.0",

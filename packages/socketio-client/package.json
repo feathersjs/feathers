@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/socketio-client",
   "description": "The client for Socket.io through feathers-socketio",
-  "version": "5.0.39",
+  "version": "6.0.0-pre.0",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "type": "module",
@@ -54,14 +54,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/feathers": "^5.0.39",
-    "@feathersjs/transport-commons": "^5.0.39"
+    "@feathersjs/feathers": "^6.0.0-pre.0",
+    "@feathersjs/transport-commons": "^6.0.0-pre.0"
   },
   "devDependencies": {
-    "@feathersjs/commons": "^5.0.39",
-    "@feathersjs/memory": "^5.0.39",
-    "@feathersjs/socketio": "^5.0.39",
-    "@feathersjs/tests": "^5.0.39",
+    "@feathersjs/commons": "^6.0.0-pre.0",
+    "@feathersjs/memory": "^6.0.0-pre.0",
+    "@feathersjs/socketio": "^6.0.0-pre.0",
+    "@feathersjs/tests": "^6.0.0-pre.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.1.0",
     "mocha": "^11.7.5",
