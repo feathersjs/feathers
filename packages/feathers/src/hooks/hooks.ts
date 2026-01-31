@@ -117,9 +117,13 @@ export function objectHooks(obj: any, hooks: HookMap | AsyncMiddleware[]) {
  * @hooks([]).params('id', 'data')
  * async myMethod(id: string, data: any) {}
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyFunction = (...args: any[]) => any
+
 export interface ChainableHookDecorator {
-  // Callable as a decorator
-  (target: any, context: DecoratorContext): any
+  // Callable as a class or method decorator
+  <T extends AnyFunction>(target: T, context: ClassDecoratorContext): T
+  <T extends AnyFunction>(target: T, context: ClassMethodDecoratorContext): T
 
   // Chainable methods that return a new decorator
   params(...params: string[]): ChainableHookDecorator
@@ -128,47 +132,37 @@ export interface ChainableHookDecorator {
 }
 
 function createChainableDecorator(manager: HookManager): ChainableHookDecorator {
-  const decorator = (target: any, context: DecoratorContext) => {
+  const decorator = <T extends AnyFunction>(
+    target: T,
+    context: ClassDecoratorContext | ClassMethodDecoratorContext
+  ): T => {
     if (context.kind === 'class') {
-      setManager(target.prototype, manager)
+      setManager((target as any).prototype, manager)
       return target
     } else if (context.kind === 'method') {
       const method = String(context.name)
-      return functionHooks(target, manager.props({ method }))
+      return functionHooks(target, manager.props({ method })) as T
     }
 
     throw new Error('Can not apply hooks.')
   }
 
-  // Add chainable methods
-  decorator.params = (...params: string[]) => {
-    const newManager = new HookManager()
-    newManager._parent = manager._parent
-    newManager._middleware = manager._middleware
-    newManager._props = manager._props ? { ...manager._props } : null
-    newManager._defaults = manager._defaults
-    newManager._params = params
-    return createChainableDecorator(newManager)
+  decorator.params = (...params: string[]): ChainableHookDecorator => {
+    const clone = manager.clone()
+    clone._params = params
+    return createChainableDecorator(clone)
   }
 
-  decorator.props = (props: HookContextData) => {
-    const newManager = new HookManager()
-    newManager._parent = manager._parent
-    newManager._middleware = manager._middleware
-    newManager._params = manager._params
-    newManager._defaults = manager._defaults
-    newManager._props = manager._props ? { ...manager._props, ...props } : { ...props }
-    return createChainableDecorator(newManager)
+  decorator.props = (props: HookContextData): ChainableHookDecorator => {
+    const clone = manager.clone()
+    clone._props = clone._props ? { ...clone._props, ...props } : { ...props }
+    return createChainableDecorator(clone)
   }
 
-  decorator.defaults = (defaults: HookDefaultsInitializer) => {
-    const newManager = new HookManager()
-    newManager._parent = manager._parent
-    newManager._middleware = manager._middleware
-    newManager._params = manager._params
-    newManager._props = manager._props ? { ...manager._props } : null
-    newManager._defaults = defaults
-    return createChainableDecorator(newManager)
+  decorator.defaults = (defaults: HookDefaultsInitializer): ChainableHookDecorator => {
+    const clone = manager.clone()
+    clone._defaults = defaults
+    return createChainableDecorator(clone)
   }
 
   return decorator as ChainableHookDecorator

@@ -128,6 +128,20 @@ export class HookManager {
     return this
   }
 
+  /**
+   * Creates a shallow clone of this HookManager with copies of all configuration.
+   * Useful for creating modified versions without mutating the original.
+   */
+  clone(): this {
+    const clone = new (this.constructor as new () => this)()
+    clone._parent = this._parent
+    clone._middleware = this._middleware
+    clone._params = this._params
+    clone._props = this._props ? { ...this._props } : null
+    clone._defaults = this._defaults
+    return clone
+  }
+
   getDefaults(self: any, args: any[], context: HookContext): HookContextData | null {
     const defaults = typeof this._defaults === 'function' ? this._defaults(self, args, context) : null
     const previous = this._parent?.getDefaults(self, args, context)

@@ -35,8 +35,8 @@ import { hooks, HookContext, NextFunction } from '@feathersjs/feathers'
 class NotificationService {
   @(hooks([
     async (context: HookContext, next: NextFunction) => {
-      console.log(context.userId)   // 'user123'
-      console.log(context.message)  // 'Hello!'
+      console.log(context.userId) // 'user123'
+      console.log(context.message) // 'Hello!'
       console.log(context.priority) // 1
       await next()
     }
@@ -81,9 +81,9 @@ All chainable methods can be combined:
 class StatusService {
   @(hooks([
     async (context: HookContext, next: NextFunction) => {
-      console.log(context.id)          // from params
+      console.log(context.id) // from params
       console.log(context.serviceName) // from props
-      console.log(context.timestamp)   // from defaults
+      console.log(context.timestamp) // from defaults
       await next()
     }
   ])
@@ -109,13 +109,13 @@ class MessageService {
       // Custom params from decorator
       console.log(context.recipientId)
       console.log(context.content)
-      
+
       // Feathers context (automatically added)
       console.log(context.app)
-      console.log(context.path)    // 'messages'
+      console.log(context.path) // 'messages'
       console.log(context.service)
-      console.log(context.method)  // 'send'
-      
+      console.log(context.method) // 'send'
+
       await next()
     }
   ]).params('recipientId', 'content'))

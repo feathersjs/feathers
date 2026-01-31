@@ -148,6 +148,51 @@ export function createContext(service: Service, method: string, data: HookContex
   return createContext(data) as HookContext
 }
 
+/**
+ * Creates property descriptors for Feathers-specific context properties.
+ * Used to add app, path, service, method, etc. to hook contexts.
+ */
+function createFeathersContextProps<A>(
+  app: A,
+  path: string,
+  method: string,
+  service: FeathersService<A>
+): PropertyDescriptorMap {
+  return {
+    app: { value: app, enumerable: true, writable: true },
+    path: { value: path, enumerable: true, writable: true },
+    method: { value: method, enumerable: true, writable: true },
+    service: { value: service, enumerable: true, writable: true },
+    event: { value: null, enumerable: true, writable: true },
+    type: { value: 'around', enumerable: true, writable: true },
+    statusCode: {
+      enumerable: true,
+      get(this: HookContext) {
+        return this.http?.status
+      },
+      set(this: HookContext, value: number) {
+        this.http = this.http || {}
+        this.http.status = value
+      }
+    }
+  }
+}
+
+/**
+ * Converts PropertyDescriptorMap to HookContextData for use with HookManager.props()
+ */
+function propsFromDescriptors(descriptors: PropertyDescriptorMap): HookContextData {
+  const props: HookContextData = {}
+  for (const [key, descriptor] of Object.entries(descriptors)) {
+    if ('value' in descriptor) {
+      props[key] = descriptor.value
+    } else {
+      Object.defineProperty(props, key, descriptor)
+    }
+  }
+  return props
+}
+
 export class FeathersHookManager<A> extends HookManager {
   constructor(
     public app: A,
@@ -186,23 +231,9 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
 
   const hookMethods = getHookMethods(service, options)
 
-  // Feathers-specific props to add to all method contexts
-  const feathersProps: HookContextData = {
-    app: this,
-    path,
-    service,
-    event: null,
-    type: 'around',
-    get statusCode() {
-      return (this as any).http?.status
-    },
-    set statusCode(value: number) {
-      ;(this as any).http = (this as any).http || {}
-      ;(this as any).http.status = value
-    }
-  }
-
   const serviceMethodHooks = hookMethods.reduce((res, method) => {
+    const feathersContextProps = createFeathersContextProps(this, path, method, service)
+
     // Check if the method already has params configured via @hooks().params()
     const existingManager = getManager((service as any)[method])
     const existingParams = existingManager?.getParams()
@@ -210,33 +241,15 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
     // If the method already has custom params from a decorator, we need to
     // enhance the existing wrapper with Feathers context. We do this by:
     // 1. Creating a FeathersHookManager as a parent (for collectMiddleware)
-    // 2. Regenerating the Context class with Feathers props on the prototype
+    // 2. Adding Feathers props to the existing Context prototype
     if (existingParams && existingManager) {
       const wrapper = (service as any)[method]
-      // Set up FeathersHookManager as parent for middleware collection
       const feathersManager = new FeathersHookManager<A>(this, method)
       setManager(wrapper, feathersManager)
-      // Add Feathers props directly to the existing Context prototype
+
       const contextProto = wrapper.Context?.prototype
       if (contextProto) {
-        Object.defineProperties(contextProto, {
-          app: { value: this, enumerable: true, writable: true },
-          path: { value: path, enumerable: true, writable: true },
-          method: { value: method, enumerable: true, writable: true },
-          service: { value: service, enumerable: true, writable: true },
-          event: { value: null, enumerable: true, writable: true },
-          type: { value: 'around', enumerable: true, writable: true },
-          statusCode: {
-            enumerable: true,
-            get() {
-              return this.http?.status
-            },
-            set(value: number) {
-              this.http = this.http || {}
-              this.http.status = value
-            }
-          }
-        })
+        Object.defineProperties(contextProto, feathersContextProps)
       }
       return res
     }
@@ -244,10 +257,9 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
     // Use default params for this method
     const params = (defaultServiceArguments as any)[method] || ['data', 'params']
 
-    res[method] = new FeathersHookManager<A>(this, method).params(...params).props({
-      ...feathersProps,
-      method
-    })
+    res[method] = new FeathersHookManager<A>(this, method)
+      .params(...params)
+      .props(propsFromDescriptors(feathersContextProps))
 
     return res
   }, {} as BaseHookMap)
