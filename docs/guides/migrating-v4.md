@@ -17,9 +17,6 @@ npm install
 
 You can see the migration steps necessary for the Feathers chat [here for Javascript](https://github.com/feathersjs/feathers-chat/compare/dove-pre) and [here for TypeScript](https://github.com/feathersjs/feathers-chat-ts/compare/dove-pre).
 
-## New Features
-
-There are so many new features in this release that they got their own page! Read about the new features on the [What's New in v5](./whats-new.md) page.
 
 ## Core SQL and MongoDB
 
