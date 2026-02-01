@@ -6,6 +6,13 @@
     "binding": "ASSETS",
     "directory": ".output/public"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "feathers-v6-content",
+      "database_id": "8388425b-e103-4d60-ba31-ab226f75b1bb"
+    }
+  ],
   "observability": {
     "enabled": false,
     "head_sampling_rate": 1,
