@@ -5,5 +5,11 @@
   "assets": {
     "binding": "ASSETS",
     "directory": ".output/public"
+  },
+  "observability": {
+    "logs": {
+      "enabled": false,
+      "invocation_logs": true
+    }
   }
 }
