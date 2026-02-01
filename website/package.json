@@ -2,6 +2,15 @@
   "name": "feathersjs.com",
   "type": "module",
   "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild",
+      "sharp",
+      "@parcel/watcher",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "dev": "nuxt dev --port 3000",
     "build": "nuxt build",
