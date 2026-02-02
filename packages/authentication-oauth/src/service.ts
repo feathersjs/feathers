@@ -170,7 +170,11 @@ export class OAuthService {
 
     session.redirect = redirect
     session.query = restQuery
-    session.headers = headers
+    // Only store the referer header needed for origin validation
+    // Storing all headers exposes sensitive internal proxy headers in the session cookie
+    session.headers = {
+      referer: headers?.referer
+    }
 
     return this.handler('GET', handlerParams, {})
   }

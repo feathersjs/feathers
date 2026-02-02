@@ -72,7 +72,18 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     if (Array.isArray(origins)) {
       const referer = params?.headers?.referer || origins[0]
-      const allowedOrigin = origins.find((current) => referer.toLowerCase().startsWith(current.toLowerCase()))
+
+      // Parse the referer to get its origin for proper comparison
+      let refererOrigin: string
+      try {
+        refererOrigin = new URL(referer).origin
+      } catch {
+        throw new NotAuthenticated(`Invalid referer "${referer}".`)
+      }
+
+      // Compare full origins instead of using startsWith to prevent bypass
+      // via domains like target.com.attacker.com
+      const allowedOrigin = origins.find((current) => refererOrigin.toLowerCase() === current.toLowerCase())
 
       if (!allowedOrigin) {
         throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
@@ -93,6 +104,13 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     if (!redirect) {
       return null
+    }
+
+    // Validate redirect parameter to prevent open redirect via URL authority injection
+    // Reject characters that could change the URL's authority: @, //, \
+    // e.g., @attacker.com would make https://target.com@attacker.com redirect to attacker.com
+    if (queryRedirect && /[@\\]|^\/\/|\/\//.test(queryRedirect)) {
+      throw new NotAuthenticated('Invalid redirect path.')
     }
 
     const redirectUrl = `${redirect}${queryRedirect}`
