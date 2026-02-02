@@ -81,8 +81,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
         throw new NotAuthenticated(`Invalid referer "${referer}".`)
       }
 
-      // Compare full origins instead of using startsWith to prevent bypass
-      // via domains like target.com.attacker.com
+      // Compare full origins
       const allowedOrigin = origins.find((current) => refererOrigin.toLowerCase() === current.toLowerCase())
 
       if (!allowedOrigin) {
