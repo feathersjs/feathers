@@ -1,20 +1,28 @@
 #!/usr/bin/env node
-'use strict';
+'use strict'
 
-import path from 'path'
-import { existsSync } from 'fs'
-import { mkdir } from 'fs/promises'
-import { Command, commandRunner, chalk } from '@feathersjs/cli'
+import path from 'node:path'
+import { existsSync } from 'node:fs'
+import { mkdir } from 'node:fs/promises'
+import { Command } from 'commander'
+import { generate, getContext } from '../lib/index.js'
+
+const color = {
+  green: (text) => `\x1b[32m${text}\x1b[0m`,
+  red: (text) => `\x1b[31m${text}\x1b[0m`,
+  grey: (text) => `\x1b[90m${text}\x1b[0m`
+}
 
 const program = new Command()
-const generateApp = commandRunner('app')
 
 program
-  .name('npm init feathers')
-  .description(`Create a new Feathers application 🕊️
+  .name('npm create feathers')
+  .description(
+    `Create a new Feathers application 🕊️
 
-${chalk.grey('npm init feathers myapp')}
-`)
+${color.grey('npm create feathers myapp')}
+`
+  )
   .argument('<name>', 'The name of your new application')
   // .version(version)
   .showHelpAfterError()
@@ -28,21 +36,23 @@ ${chalk.grey('npm init feathers myapp')}
 
       await mkdir(cwd)
 
-      await generateApp({
+      const ctx = getContext({
         name,
         cwd,
         ...options
       })
 
+      await generate(ctx)
+
       console.log(`
 
-${chalk.green('Hooray')}! Your Feathers app is ready to go! 🚀
-Go to the ${chalk.grey(name)} folder to get started.
+${color.green('Hooray')}! Your Feathers app is ready to go! 🚀
+Go to the ${color.grey(name)} folder to get started.
 
-To learn more visit ${chalk.grey('https://feathersjs.com/guides')}
+To learn more visit ${color.grey('https://feathersjs.com/guides')}
 `)
     } catch (error) {
-      console.error(`${chalk.red('Error')}: ${error.message}`)
+      console.error(`${color.red('Error')}: ${error.message}`)
       process.exit(1)
     }
   })
