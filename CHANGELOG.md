@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.40](https://github.com/feathersjs/feathers/compare/v5.0.39...v5.0.40) (2026-02-03)
+
+### Bug Fixes
+
+- **oauth:** Patch open redirect and origin validation ([#3653](https://github.com/feathersjs/feathers/issues/3653)) ([ee19a0a](https://github.com/feathersjs/feathers/commit/ee19a0ae9bc2ebf23b1fe598a1f7361981b65401))
+
 ## [5.0.39](https://github.com/feathersjs/feathers/compare/v5.0.38...v5.0.39) (2026-01-31)
 
 **Note:** Version bump only for package @feathersjs/feathers
