@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.19](https://github.com/feathersjs/databases/compare/v4.5.18...v4.5.19) (2026-02-07)
+
+
+### Bug Fixes
+
+* **crow:** Crow update minor dependencies ([#3655](https://github.com/feathersjs/databases/issues/3655)) ([5b31e33](https://github.com/feathersjs/databases/commit/5b31e3310b133b7915904cbc6f14c0c5309f3370))
+
+
+
+
+
 ## [4.5.16](https://github.com/feathersjs/databases/compare/v4.5.15...v4.5.16) (2023-02-24)
 
 **Note:** Version bump only for package @feathersjs/adapter-tests

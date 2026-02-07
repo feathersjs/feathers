@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.19](https://github.com/feathersjs/feathers/compare/v4.5.18...v4.5.19) (2026-02-07)
+
+
+### Bug Fixes
+
+* **crow:** Crow update minor dependencies ([#3655](https://github.com/feathersjs/feathers/issues/3655)) ([5b31e33](https://github.com/feathersjs/feathers/commit/5b31e3310b133b7915904cbc6f14c0c5309f3370))
+
+
+
+
+
 ## [4.5.17](https://github.com/feathersjs/feathers/compare/v4.5.16...v4.5.17) (2023-07-17)
 
 
