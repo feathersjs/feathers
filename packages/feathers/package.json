@@ -55,12 +55,12 @@
   },
   "dependencies": {
     "@feathersjs/commons": "^4.5.16",
-    "debug": "^4.3.3",
+    "debug": "^4.4.3",
     "events": "^3.3.0",
     "uberproto": "^2.0.6"
   },
   "devDependencies": {
-    "mocha": "^9.1.3"
+    "mocha": "^9.2.2"
   },
   "gitHead": "d0e9600002975296ab8de926acd317d0a73fce5c"
 }
