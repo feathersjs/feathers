@@ -1,71 +1,81 @@
 // @ts-ignore
-import getProfile from 'grant-profile/lib/client';
-import querystring from 'querystring';
-import Debug from 'debug';
+import getProfile from "grant-profile/lib/client";
+import querystring from "querystring";
+import Debug from "debug";
 import {
-  AuthenticationRequest, AuthenticationBaseStrategy, AuthenticationResult
-} from '@feathersjs/authentication';
-import { Params } from '@feathersjs/feathers';
-import { NotAuthenticated } from '@feathersjs/errors';
+  AuthenticationRequest,
+  AuthenticationBaseStrategy,
+  AuthenticationResult,
+} from "@feathersjs/authentication";
+import { Params } from "@feathersjs/feathers";
+import { NotAuthenticated } from "@feathersjs/errors";
 
-const debug = Debug('@feathersjs/authentication-oauth/strategy');
+const debug = Debug("@feathersjs/authentication-oauth/strategy");
 
 export interface OAuthProfile {
-  id?: string|number;
+  id?: string | number;
   [key: string]: any;
 }
 
 export class OAuthStrategy extends AuthenticationBaseStrategy {
-  get configuration () {
-    const { entity, service, entityId, oauth } = this.authentication.configuration;
+  get configuration() {
+    const { entity, service, entityId, oauth } =
+      this.authentication.configuration;
     const config = oauth[this.name];
 
     return {
       entity,
       service,
       entityId,
-      ...config
+      ...config,
     };
   }
 
-  get entityId (): string {
+  get entityId(): string {
     const { entityService } = this;
 
     return this.configuration.entityId || (entityService && entityService.id);
   }
 
-  async getEntityQuery (profile: OAuthProfile, _params: Params) {
+  async getEntityQuery(profile: OAuthProfile, _params: Params) {
     return {
-      [`${this.name}Id`]: profile.sub || profile.id
+      [`${this.name}Id`]: profile.sub || profile.id,
     };
   }
 
-  async getEntityData (profile: OAuthProfile, _existingEntity: any, _params: Params) {
+  async getEntityData(
+    profile: OAuthProfile,
+    _existingEntity: any,
+    _params: Params,
+  ) {
     return {
-      [`${this.name}Id`]: profile.sub || profile.id
+      [`${this.name}Id`]: profile.sub || profile.id,
     };
   }
 
   /* istanbul ignore next */
-  async getProfile (data: AuthenticationRequest, _params: Params) {
-    const config = this.app.get('grant');
+  async getProfile(data: AuthenticationRequest, _params: Params) {
+    const config = this.app.get("grant");
     const provider = config[data.strategy];
 
-    debug('getProfile of oAuth profile from grant-profile with', data);
+    debug("getProfile of oAuth profile from grant-profile with", data);
 
     return getProfile(provider, data);
   }
 
-  async getCurrentEntity (params: Params) {
+  async getCurrentEntity(params: Params) {
     const { authentication } = params;
     const { entity } = this.configuration;
 
     if (authentication && authentication.strategy) {
-      debug('getCurrentEntity with authentication', authentication);
+      debug("getCurrentEntity with authentication", authentication);
 
       const { strategy } = authentication;
-      const authResult = await this.authentication
-        .authenticate(authentication, params, strategy);
+      const authResult = await this.authentication.authenticate(
+        authentication,
+        params,
+        strategy,
+      );
 
       return authResult[entity];
     }
@@ -73,52 +83,64 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return null;
   }
 
-  async getRedirect (data: AuthenticationResult|Error, params?: Params): Promise<string | null> {
-    const queryRedirect = (params && params.redirect) || '';
+  async getRedirect(
+    data: AuthenticationResult | Error,
+    params?: Params,
+  ): Promise<string | null> {
+    const queryRedirect = (params && params.redirect) || "";
     const { redirect } = this.authentication.configuration.oauth;
 
     if (!redirect) {
       return null;
     }
 
+    if (queryRedirect && /[@\\]|^\/\/|\/\//.test(queryRedirect)) {
+      throw new NotAuthenticated("Invalid redirect path.");
+    }
+
     const redirectUrl = redirect + queryRedirect;
-    const separator = redirect.endsWith('?') ? '' :
-      (redirect.indexOf('#') !== -1 ? '?' : '#');
+    const separator = redirect.endsWith("?")
+      ? ""
+      : redirect.indexOf("#") !== -1
+        ? "?"
+        : "#";
     const authResult: AuthenticationResult = data;
-    const query = authResult.accessToken ? {
-      access_token: authResult.accessToken
-    } : {
-      error: data.message || 'OAuth Authentication not successful'
-    };
+    const query = authResult.accessToken
+      ? {
+          access_token: authResult.accessToken,
+        }
+      : {
+          error: data.message || "OAuth Authentication not successful",
+        };
 
     return redirectUrl + separator + querystring.stringify(query);
   }
 
-  async findEntity (profile: OAuthProfile, params: Params) {
+  async findEntity(profile: OAuthProfile, params: Params) {
     const query = await this.getEntityQuery(profile, params);
 
-    debug('findEntity with query', query);
+    debug("findEntity with query", query);
 
     const result = await this.entityService.find({
       ...params,
-      query
+      query,
     });
-    const [ entity = null ] = result.data ? result.data : result;
+    const [entity = null] = result.data ? result.data : result;
 
-    debug('findEntity returning', entity);
+    debug("findEntity returning", entity);
 
     return entity;
   }
 
-  async createEntity (profile: OAuthProfile, params: Params) {
+  async createEntity(profile: OAuthProfile, params: Params) {
     const data = await this.getEntityData(profile, null, params);
 
-    debug('createEntity with data', data);
+    debug("createEntity with data", data);
 
     return this.entityService.create(data, params);
   }
 
-  async updateEntity (entity: any, profile: OAuthProfile, params: Params) {
+  async updateEntity(entity: any, profile: OAuthProfile, params: Params) {
     const id = entity[this.entityId];
     const data = await this.getEntityData(profile, entity, params);
 
@@ -127,12 +149,12 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return this.entityService.patch(id, data, params);
   }
 
-  async getEntity (result: any, params: Params) {
+  async getEntity(result: any, params: Params) {
     const { entityService } = this;
     const { entityId = entityService.id, entity } = this.configuration;
 
     if (!entityId || result[entityId] === undefined) {
-      throw new NotAuthenticated('Could not get oAuth entity');
+      throw new NotAuthenticated("Could not get oAuth entity");
     }
 
     if (!params.provider) {
@@ -141,25 +163,30 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     return entityService.get(result[entityId], {
       ...params,
-      [entity]: result
+      [entity]: result,
     });
   }
 
-  async authenticate (authentication: AuthenticationRequest, originalParams: Params) {
+  async authenticate(
+    authentication: AuthenticationRequest,
+    originalParams: Params,
+  ) {
     const entity: string = this.configuration.entity;
     const { provider, ...params } = originalParams;
     const profile = await this.getProfile(authentication, params);
-    const existingEntity = await this.findEntity(profile, params)
-      || await this.getCurrentEntity(params);
+    const existingEntity =
+      (await this.findEntity(profile, params)) ||
+      (await this.getCurrentEntity(params));
 
     debug(`authenticate with (existing) entity`, existingEntity);
 
-    const authEntity = !existingEntity ? await this.createEntity(profile, params)
+    const authEntity = !existingEntity
+      ? await this.createEntity(profile, params)
       : await this.updateEntity(existingEntity, profile, params);
 
     return {
       authentication: { strategy: this.name },
-      [entity]: await this.getEntity(authEntity, originalParams)
+      [entity]: await this.getEntity(authEntity, originalParams),
     };
   }
 }
