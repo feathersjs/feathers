@@ -45,12 +45,12 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"debug": "^4.3.3"
+		"debug": "^4.4.3"
 	},
 	"devDependencies": {
 		"@feathersjs/feathers": "^4.5.17",
-		"express": "^4.17.2",
-		"mocha": "^9.1.3"
+		"express": "^4.22.1",
+		"mocha": "^9.2.2"
 	},
 	"gitHead": "d0e9600002975296ab8de926acd317d0a73fce5c"
 }
