@@ -238,7 +238,7 @@ describe('FetchClient.handleEventStream', () => {
       name: 'test',
       baseUrl: 'http://localhost',
       connection: fetch,
-      stringify: (q) => ''
+      stringify: (_q) => ''
     })
 
     const response = createChunkedSSEResponse(chunks)
@@ -260,7 +260,7 @@ describe('FetchClient.handleEventStream', () => {
       name: 'test',
       baseUrl: 'http://localhost',
       connection: fetch,
-      stringify: (q) => ''
+      stringify: (_q) => ''
     })
 
     const response = createChunkedSSEResponse(chunks)
@@ -284,7 +284,7 @@ describe('FetchClient.handleEventStream', () => {
       name: 'test',
       baseUrl: 'http://localhost',
       connection: fetch,
-      stringify: (q) => ''
+      stringify: (_q) => ''
     })
 
     const response = createChunkedSSEResponse(chunks)
@@ -323,7 +323,7 @@ describe('FetchClient.handleEventStream', () => {
       name: 'test',
       baseUrl: 'http://localhost',
       connection: fetch,
-      stringify: (q) => ''
+      stringify: (_q) => ''
     })
 
     const messages: any[] = []
