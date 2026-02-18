@@ -66,8 +66,7 @@ The following options are available:
 - `events` - A list of [public custom events sent by this service](./events#custom-events)
 
 ```ts
-import { EventEmitter } from 'events'
-import { feathers, type Id } from '@feathersjs/feathers'
+import { feathers, type Id, EventEmitter } from '@feathersjs/feathers'
 
 // Feathers services will always be event emitters
 // but we can also extend it for better type consistency
