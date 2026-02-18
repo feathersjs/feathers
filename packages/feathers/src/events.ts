@@ -11,11 +11,8 @@ function getEvents(self: any): Record<string, Listener[]> {
   return self.__events
 }
 
-export class EventEmitter {
-  __events: Record<string, Listener[]> = {}
-}
-
 export interface EventEmitter {
+  __events: Record<string, Listener[]>
   on(event: string, listener: Listener): this
   addListener(event: string, listener: Listener): this
   once(event: string, listener: Listener): this
@@ -26,6 +23,15 @@ export interface EventEmitter {
   listenerCount(event: string): number
   listeners(event: string): Listener[]
 }
+
+interface EventEmitterConstructor {
+  new (): EventEmitter
+  prototype: EventEmitter
+}
+
+export const EventEmitter = function (this: EventEmitter) {
+  this.__events = {}
+} as unknown as EventEmitterConstructor
 
 EventEmitter.prototype.on = function (event: string, listener: Listener) {
   const events = getEvents(this)
