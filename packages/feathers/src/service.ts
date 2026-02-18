@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from './event-emitter.js'
 import { createSymbol } from './commons.js'
 import { ServiceOptions } from './declarations.js'
 
