@@ -42,7 +42,7 @@ export interface EventEmitter {
   listeners(type: string): Listener[]
   rawListeners(type: string): Listener[]
   listenerCount(type: string): number
-  eventNames(): string[]
+  eventNames(): (string | symbol)[]
 }
 
 export interface EventEmitterConstructor {
@@ -402,8 +402,8 @@ function listenerCount(this: EventEmitter, type: string): number {
   return 0
 }
 
-EventEmitter.prototype.eventNames = function eventNames(): string[] {
-  return this._eventsCount > 0 ? (Object.keys(this._events!) as string[]) : []
+EventEmitter.prototype.eventNames = function eventNames(): (string | symbol)[] {
+  return this._eventsCount > 0 ? Reflect.ownKeys(this._events!) : []
 }
 
 function arrayClone(arr: Listener[], n: number): Listener[] {
@@ -427,21 +427,39 @@ function unwrapListeners(arr: Listener[]): Listener[] {
 
 EventEmitter.once = function once(emitter: EventEmitter, name: string): Promise<any[]> {
   return new Promise((resolve, reject) => {
+    const et = emitter as any
+    const isEventEmitter = typeof et.on === 'function'
+
     function errorListener(err: Error) {
-      emitter.removeListener(name, resolver)
+      if (isEventEmitter) {
+        emitter.removeListener(name, resolver)
+      } else if (typeof et.removeEventListener === 'function') {
+        et.removeEventListener(name, resolver)
+      }
       reject(err)
     }
 
     function resolver(...args: any[]) {
-      if (typeof emitter.removeListener === 'function') {
-        emitter.removeListener('error', errorListener)
+      if (isEventEmitter) {
+        if (typeof emitter.removeListener === 'function') {
+          emitter.removeListener('error', errorListener)
+        }
+      } else if (typeof et.removeEventListener === 'function') {
+        et.removeEventListener('error', errorListener)
       }
       resolve(args)
     }
 
-    emitter.once(name, resolver)
-    if (name !== 'error') {
-      emitter.once('error', errorListener)
+    if (isEventEmitter) {
+      emitter.once(name, resolver)
+      if (name !== 'error') {
+        emitter.once('error', errorListener)
+      }
+    } else {
+      et.addEventListener(name, resolver, { once: true })
+      if (name !== 'error') {
+        et.addEventListener('error', errorListener, { once: true })
+      }
     }
   })
 }
