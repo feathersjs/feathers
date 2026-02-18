@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
 import assert from 'assert'
-import { EventEmitter } from 'events'
+import { EventEmitter } from './event-emitter.js'
 
 import { feathers } from '../src/index.js'
 

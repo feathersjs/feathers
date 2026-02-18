@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from './event-emitter.js'
 import { NextFunction } from './hooks/index.js'
 import { HookContext, FeathersService } from './declarations.js'
 import { getServiceOptions, defaultEventMap } from './service.js'
