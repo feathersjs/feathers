@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from './events.js'
 import { HOOKS, hooks, middleware } from './hooks/index.js'
 
 import { stripSlashes } from './commons.js'

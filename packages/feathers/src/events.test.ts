@@ -1,8 +1,212 @@
-import { describe, it } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import assert from 'assert'
-import { EventEmitter } from 'events'
-
+import { EventEmitter } from '../src/events.js'
 import { feathers } from '../src/index.js'
+
+describe('EventEmitter', () => {
+  it('on and emit', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.on('test', callback)
+    emitter.emit('test', 'a', 'b')
+
+    expect(callback).toHaveBeenCalledWith('a', 'b')
+  })
+
+  it('emit returns false when no listeners', () => {
+    const emitter = new EventEmitter()
+    expect(emitter.emit('test')).toBe(false)
+  })
+
+  it('emit returns true when listeners exist', () => {
+    const emitter = new EventEmitter()
+    emitter.on('test', () => {})
+    expect(emitter.emit('test')).toBe(true)
+  })
+
+  it('addListener is an alias for on', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.addListener('test', callback)
+    emitter.emit('test', 'data')
+
+    expect(callback).toHaveBeenCalledWith('data')
+  })
+
+  it('once fires only once', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.once('test', callback)
+    emitter.emit('test', 'first')
+    emitter.emit('test', 'second')
+
+    expect(callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledWith('first')
+  })
+
+  it('off removes a listener', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.on('test', callback)
+    emitter.off('test', callback)
+    emitter.emit('test')
+
+    expect(callback).not.toHaveBeenCalled()
+  })
+
+  it('removeListener removes a listener', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.on('test', callback)
+    emitter.removeListener('test', callback)
+    emitter.emit('test')
+
+    expect(callback).not.toHaveBeenCalled()
+  })
+
+  it('removeListener can remove a once listener by original reference', () => {
+    const emitter = new EventEmitter()
+    const callback = vi.fn()
+
+    emitter.once('test', callback)
+    emitter.removeListener('test', callback)
+    emitter.emit('test')
+
+    expect(callback).not.toHaveBeenCalled()
+  })
+
+  it('removeAllListeners for a specific event', () => {
+    const emitter = new EventEmitter()
+    const cb1 = vi.fn()
+    const cb2 = vi.fn()
+    const cb3 = vi.fn()
+
+    emitter.on('a', cb1)
+    emitter.on('a', cb2)
+    emitter.on('b', cb3)
+
+    emitter.removeAllListeners('a')
+    emitter.emit('a')
+    emitter.emit('b')
+
+    expect(cb1).not.toHaveBeenCalled()
+    expect(cb2).not.toHaveBeenCalled()
+    expect(cb3).toHaveBeenCalled()
+  })
+
+  it('removeAllListeners with no argument removes all', () => {
+    const emitter = new EventEmitter()
+    const cb1 = vi.fn()
+    const cb2 = vi.fn()
+
+    emitter.on('a', cb1)
+    emitter.on('b', cb2)
+
+    emitter.removeAllListeners()
+    emitter.emit('a')
+    emitter.emit('b')
+
+    expect(cb1).not.toHaveBeenCalled()
+    expect(cb2).not.toHaveBeenCalled()
+  })
+
+  it('listenerCount returns correct count', () => {
+    const emitter = new EventEmitter()
+
+    expect(emitter.listenerCount('test')).toBe(0)
+
+    emitter.on('test', () => {})
+    emitter.on('test', () => {})
+    expect(emitter.listenerCount('test')).toBe(2)
+  })
+
+  it('listeners returns a copy of the listener array', () => {
+    const emitter = new EventEmitter()
+    const cb = () => {}
+
+    emitter.on('test', cb)
+
+    const result = emitter.listeners('test')
+    expect(result).toEqual([cb])
+    expect(result).not.toBe((emitter as any).__events['test'])
+  })
+
+  it('listeners returns empty array for unknown event', () => {
+    const emitter = new EventEmitter()
+    expect(emitter.listeners('nope')).toEqual([])
+  })
+
+  it('multiple listeners fire in order', () => {
+    const emitter = new EventEmitter()
+    const order: number[] = []
+
+    emitter.on('test', () => order.push(1))
+    emitter.on('test', () => order.push(2))
+    emitter.on('test', () => order.push(3))
+    emitter.emit('test')
+
+    expect(order).toEqual([1, 2, 3])
+  })
+
+  it('removing a listener during emit does not skip others', () => {
+    const emitter = new EventEmitter()
+    const cb1 = vi.fn(() => emitter.removeListener('test', cb1))
+    const cb2 = vi.fn()
+
+    emitter.on('test', cb1)
+    emitter.on('test', cb2)
+    emitter.emit('test')
+
+    expect(cb1).toHaveBeenCalledTimes(1)
+    expect(cb2).toHaveBeenCalledTimes(1)
+  })
+
+  it('works as a base class', () => {
+    class MyService extends EventEmitter {
+      value = 42
+    }
+
+    const svc = new MyService()
+    const callback = vi.fn()
+
+    svc.on('created', callback)
+    svc.emit('created', { id: 1 })
+
+    expect(callback).toHaveBeenCalledWith({ id: 1 })
+    expect(svc.value).toBe(42)
+  })
+
+  it('prototype methods can be mixed in via Object.assign', () => {
+    const obj: any = {}
+    Object.assign(obj, EventEmitter.prototype)
+
+    const callback = vi.fn()
+    obj.on('test', callback)
+    obj.emit('test', 'hello')
+
+    expect(callback).toHaveBeenCalledWith('hello')
+  })
+
+  it('chaining works on all mutating methods', () => {
+    const emitter = new EventEmitter()
+    const cb = () => {}
+
+    const result = emitter
+      .on('a', cb)
+      .addListener('b', cb)
+      .once('c', cb)
+      .off('a', cb)
+      .removeListener('b', cb)
+      .removeAllListeners('c')
+
+    expect(result).toBe(emitter)
+  })
+})
 
 describe('Service events', () => {
   it('app is an event emitter', async () => {

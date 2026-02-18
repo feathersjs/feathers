@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events'
 import { createSymbol } from './commons.js'
 import { ServiceOptions } from './declarations.js'
 
@@ -24,7 +23,17 @@ export const defaultEventMap = {
 export const defaultServiceEvents = Object.values(defaultEventMap)
 
 export const protectedMethods = Object.keys(Object.prototype)
-  .concat(Object.keys(EventEmitter.prototype))
+  .concat([
+    'on',
+    'addListener',
+    'once',
+    'off',
+    'removeListener',
+    'removeAllListeners',
+    'emit',
+    'listenerCount',
+    'listeners'
+  ])
   .concat([
     'all',
     'around',

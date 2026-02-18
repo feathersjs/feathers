@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from './events.js'
 import type { Router } from './router.js'
 import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
@@ -537,7 +537,7 @@ export type Publisher<T = any, A = Application, S = any> = (
   context: HookContext<A, S>
 ) => Channel | Channel[] | void | Promise<Channel | Channel[] | void>
 
-export interface Channel {
+export interface Channel extends EventEmitter {
   connections: RealTimeConnection[]
   data: any
   length: number

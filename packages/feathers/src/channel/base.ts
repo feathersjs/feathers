@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from '../events.js'
 import { RealTimeConnection } from '../declarations.js'
 
 export class Channel extends EventEmitter {
