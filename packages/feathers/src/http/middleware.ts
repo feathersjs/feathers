@@ -1,7 +1,7 @@
 import type { Params, Service, Query } from '../index.js'
 import type { HookContext, NextFunction } from '../hooks/index.js'
 import { BadRequest, FeathersError } from '../errors.js'
-import qs from 'qs'
+import { parse } from '../query-string.js'
 
 interface RouteLookup {
   service: Service
@@ -60,7 +60,7 @@ export function bodyParser() {
   }
 }
 
-export function queryParser(parser: (query: string) => Query = qs.parse) {
+export function queryParser(parser: (query: string) => Query = parse) {
   return async (context: HandlerContext, next: NextFunction) => {
     const { request } = context
     const url = new URL(request.url)
