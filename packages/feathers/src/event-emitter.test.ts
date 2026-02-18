@@ -1,7 +1,7 @@
 import { describe, it, vi, afterEach } from 'vitest'
 import assert from 'assert'
 import { inherits } from 'util'
-import { EventEmitter } from './event-emitter.js'
+import { EventEmitter, type Listener } from './event-emitter.js'
 
 // ---------------------------------------------------------------------------
 // Helpers (replaces common.js mustCall / mustNotCall)
@@ -53,11 +53,11 @@ describe('add-listeners', () => {
   it('emits newListener event and tracks listeners in order', () => {
     const ee = new EventEmitter()
     const events_new_listener_emitted: string[] = []
-    const listeners_new_listener_emitted: Function[] = []
+    const listeners_new_listener_emitted: Listener[] = []
 
     assert.strictEqual(ee.addListener, ee.on)
 
-    ee.on('newListener', function (event: string, listener: Function) {
+    ee.on('newListener', function (event: string, listener: Listener) {
       if (event === 'newListener') return
       events_new_listener_emitted.push(event)
       listeners_new_listener_emitted.push(listener)
@@ -70,7 +70,7 @@ describe('add-listeners', () => {
       assert.strictEqual('b', b)
     }
 
-    ee.once('newListener', function (this: typeof ee, name: string, listener: Function) {
+    ee.once('newListener', function (this: typeof ee, name: string, listener: Listener) {
       assert.strictEqual(name, 'hello')
       assert.strictEqual(listener, hello)
       const listeners = this.listeners('hello')
@@ -372,16 +372,16 @@ describe('events-once', () => {
 
   it('resolves with EventTargetMock', async () => {
     class EventTargetMock {
-      events: Record<string, { listeners: Function[]; options: any }> = {}
+      events: Record<string, { listeners: ((...args: any[]) => any)[]; options: any }> = {}
 
-      addEventListener(name: string, listener: Function, options?: any) {
+      addEventListener(name: string, listener: (...args: any[]) => any, options?: any) {
         if (!(name in this.events)) {
           this.events[name] = { listeners: [], options: options || {} }
         }
         this.events[name].listeners.push(listener)
       }
 
-      removeEventListener(name: string, callback: Function) {
+      removeEventListener(name: string, callback: (...args: any[]) => any) {
         if (!(name in this.events)) return
         const stack = this.events[name].listeners
         for (let i = 0; i < stack.length; i++) {
@@ -465,9 +465,9 @@ describe('listeners-side-effects', () => {
     fl = e.listeners('foo')
 
     assert.ok(Array.isArray(e._events!.foo))
-    assert.strictEqual((e._events!.foo as Function[]).length, 2)
-    assert.strictEqual((e._events!.foo as Function[])[0], assert.fail)
-    assert.strictEqual((e._events!.foo as Function[])[1], assert.ok)
+    assert.strictEqual((e._events!.foo as Listener[]).length, 2)
+    assert.strictEqual((e._events!.foo as Listener[])[0], assert.fail)
+    assert.strictEqual((e._events!.foo as Listener[])[1], assert.ok)
 
     assert.ok(Array.isArray(fl))
     assert.strictEqual(fl.length, 2)
@@ -595,7 +595,7 @@ describe('listeners', () => {
   it('rawListeners() returns wrapped once listeners with .listener property', () => {
     const ee = new EventEmitter()
     ee.on('foo', listener)
-    let wrappedListener = ee.rawListeners('foo')
+    const wrappedListener = ee.rawListeners('foo')
     assert.strictEqual(wrappedListener.length, 1)
     assert.strictEqual(wrappedListener[0], listener)
     assert.notStrictEqual(wrappedListener, ee.rawListeners('foo'))
@@ -873,8 +873,7 @@ describe('once', () => {
 
       ee.once(
         'foo',
-        tracker.mustCall(function () {
-          const params = Array.prototype.slice.call(arguments)
+        tracker.mustCall(function (...params: any[]) {
           const restArgs = args.slice(1)
           assert.ok(Array.isArray(params))
           assert.strictEqual(params.length, restArgs.length)
@@ -1083,7 +1082,7 @@ describe('remove-listeners', () => {
     ee.on('hello', listener1)
     ee.on(
       'removeListener',
-      tracker.mustCall(function (name: string, cb: Function) {
+      tracker.mustCall(function (name: string, cb: Listener) {
         assert.strictEqual(name, 'hello')
         assert.strictEqual(cb, listener1)
       })
@@ -1115,10 +1114,10 @@ describe('remove-listeners', () => {
     ee.on('hello', listener1)
     ee.on('hello', listener2)
 
-    let listeners: Function[]
+    let listeners: Listener[]
     ee.once(
       'removeListener',
-      tracker.mustCall(function (name: string, cb: Function) {
+      tracker.mustCall(function (name: string, cb: Listener) {
         assert.strictEqual(name, 'hello')
         assert.strictEqual(cb, listener1)
         listeners = ee.listeners('hello')
@@ -1135,7 +1134,7 @@ describe('remove-listeners', () => {
 
     ee.once(
       'removeListener',
-      tracker.mustCall(function (name: string, cb: Function) {
+      tracker.mustCall(function (name: string, cb: Listener) {
         assert.strictEqual(name, 'hello')
         assert.strictEqual(cb, listener2)
         listeners = ee.listeners('hello')
@@ -1165,7 +1164,7 @@ describe('remove-listeners', () => {
 
     ee.on(
       'removeListener',
-      tracker.mustCall(function (this: typeof ee, name: string, cb: Function) {
+      tracker.mustCall(function (this: typeof ee, name: string, cb: Listener) {
         if (cb !== remove1) return
         this.removeListener('quux', remove2)
         this.emit('quux')
@@ -1183,10 +1182,10 @@ describe('remove-listeners', () => {
     ee.on('hello', listener1)
     ee.on('hello', listener2)
 
-    let listeners: Function[]
+    let listeners: Listener[]
     ee.once(
       'removeListener',
-      tracker.mustCall(function (name: string, cb: Function) {
+      tracker.mustCall(function (name: string, cb: Listener) {
         assert.strictEqual(name, 'hello')
         assert.strictEqual(cb, listener1)
         listeners = ee.listeners('hello')
@@ -1195,7 +1194,7 @@ describe('remove-listeners', () => {
         assert.strictEqual(listeners[0], listener2)
         ee.once(
           'removeListener',
-          tracker.mustCall(function (name: string, cb: Function) {
+          tracker.mustCall(function (name: string, cb: Listener) {
             assert.strictEqual(name, 'hello')
             assert.strictEqual(cb, listener2)
             listeners = ee.listeners('hello')
@@ -1240,7 +1239,7 @@ describe('remove-listeners', () => {
     ee.once('hello', listener1)
     ee.on(
       'removeListener',
-      tracker.mustCall(function (eventName: string, listener: Function) {
+      tracker.mustCall(function (eventName: string, listener: Listener) {
         assert.strictEqual(eventName, 'hello')
         assert.strictEqual(listener, listener1)
       })
@@ -1251,7 +1250,10 @@ describe('remove-listeners', () => {
 
   it('removeListener returns this', () => {
     const ee = new EventEmitter()
-    assert.strictEqual(ee, ee.removeListener('foo', function () {}))
+    assert.strictEqual(
+      ee,
+      ee.removeListener('foo', function () {})
+    )
   })
 
   it('throws TypeError when removed listener is not a function', () => {
@@ -1371,7 +1373,7 @@ describe('subclass', () => {
   it('subclass can call once/emit/removeAllListeners before EventEmitter.call', () => {
     const tracker = new CallTracker()
 
-    function MyEE(this: any, cb: Function) {
+    function MyEE(this: any, cb: Listener) {
       this.once(1 as any, cb)
       this.emit(1 as any)
       this.removeAllListeners()
