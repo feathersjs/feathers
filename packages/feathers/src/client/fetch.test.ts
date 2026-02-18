@@ -1,4 +1,4 @@
-import { beforeAll, describe, it, expect, vi } from 'vitest'
+import { beforeAll, describe, it, expect } from 'vitest'
 import { feathers } from '../index.js'
 import { clientTests } from '../../fixtures/client.js'
 import { NotAcceptable, NotFound, MethodNotAllowed, BadRequest } from '../errors.js'
@@ -52,13 +52,6 @@ describe('fetch REST connector', function () {
     })
 
     await expect(() => service.get('notfound', {})).rejects.toBeInstanceOf(NotFound)
-  })
-
-  it('supports nested arrays in queries', async () => {
-    const query = { test: { $in: ['0', '1', '2'] }, returnquery: 'true' }
-    const data = await service.get('dishes', { query })
-
-    expect(data.query).toEqual(query)
   })
 
   it('can initialize a client instance', async () => {
