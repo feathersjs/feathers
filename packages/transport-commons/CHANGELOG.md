@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
+
+### Bug Fixes
+
+- **client:** Ensure all client methods require valid ids ([#3661](https://github.com/feathersjs/feathers/issues/3661)) ([bc754d3](https://github.com/feathersjs/feathers/commit/bc754d3666b059b9d93799602dac427cb419ddc6))
+
 ## [5.0.40](https://github.com/feathersjs/feathers/compare/v5.0.39...v5.0.40) (2026-02-03)
 
 **Note:** Version bump only for package @feathersjs/transport-commons
