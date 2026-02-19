@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.7...v6.0.0-pre.8) (2026-02-19)
+
+### Features
+
+- Remove qs dependency ([#3659](https://github.com/feathersjs/feathers/issues/3659)) ([2e787a8](https://github.com/feathersjs/feathers/commit/2e787a8b7d36c653007dce9cd532b50686c8174b))
+- Replace events package with modern TypeScript implementation ([#3658](https://github.com/feathersjs/feathers/issues/3658)) ([6c4deab](https://github.com/feathersjs/feathers/commit/6c4deab262219b41d8e660c7a1b8466c4890fa59))
+
 # [6.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.6...v6.0.0-pre.7) (2026-01-29)
 
 **Note:** Version bump only for package feathers
