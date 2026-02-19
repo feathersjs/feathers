@@ -11,7 +11,10 @@ describe('@feathersjs/authentication-oauth service security', () => {
   })
   let app: Awaited<ReturnType<typeof expressFixture>>
 
-  const fetchErrorResponse = async (url: string, headers?: Record<string, string>): Promise<AxiosResponse> => {
+  const fetchErrorResponse = async (
+    url: string,
+    headers?: Record<string, string>
+  ): Promise<AxiosResponse> => {
     try {
       await req.get(url, { headers })
     } catch (error: any) {
@@ -69,7 +72,13 @@ describe('@feathersjs/authentication-oauth service security', () => {
 
       // Only 'referer' should be stored (if needed for origin validation)
       // Any other headers being stored is a security issue
-      const sensitiveHeaders = ['x-forwarded-for', 'x-internal-api-key', 'x-real-ip', 'authorization', 'cookie']
+      const sensitiveHeaders = [
+        'x-forwarded-for',
+        'x-internal-api-key',
+        'x-real-ip',
+        'authorization',
+        'cookie'
+      ]
       const exposedSensitiveHeaders = sensitiveHeaders.filter((h) => storedHeaderKeys.includes(h))
 
       assert.deepEqual(
