@@ -4,7 +4,7 @@ import type { AppGeneratorContext } from '../commons.js'
 const nodeTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createServer } from 'node:http'
 import { createHandler } from 'feathers/http'
 import { toNodeHandler } from 'feathers/http/node'
-import { app } from './app.ts'
+import { app } from './app.js'
 
 const PORT = process.env.PORT || 3030
 const handler = createHandler(app)
@@ -19,7 +19,7 @@ await app.setup(server)
 `
 
 const denoTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
-import { app } from './app.ts'
+import { app } from './app.js'
 
 const port = Deno.env.get('PORT') || 3030
 
@@ -29,7 +29,7 @@ Deno.serve({ port }, handler)
 `
 
 const bunTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
-import { app } from './app.ts'
+import { app } from './app.js'
 
 const port = Bun.env.PORT || 3030
 const handler = createHandler(app)

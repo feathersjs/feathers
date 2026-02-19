@@ -49,7 +49,7 @@ ${color.grey('npm create feathers myapp')}
 ${color.green('Hooray')}! Your Feathers app is ready to go! 🚀
 Go to the ${color.grey(name)} folder to get started.
 
-To learn more visit ${color.grey('https://feathersjs.com/guides')}
+To learn more visit ${color.grey('https://feathersjs.com')}
 `)
     } catch (error) {
       console.error(`${color.red('Error')}: ${error.message}`)

@@ -61,6 +61,13 @@ export const generate = (ctx: AppGeneratorArguments) =>
             { value: 'yarn', name: 'Yarn' },
             { value: 'pnpm', name: 'pnpm' }
           ]
+        },
+        {
+          name: 'sse',
+          type: 'confirm',
+          when: ctx.sse === undefined,
+          message: 'Enable real-time with Server-Sent Events (SSE)',
+          default: true
         }
       ])
     )
