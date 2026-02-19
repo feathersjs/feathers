@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.9...v6.0.0-pre.10) (2026-02-19)
+
+### Features
+
+- Replace query-string with qs@6-compatible bracket-notation parser ([#3662](https://github.com/feathersjs/feathers/issues/3662)) ([471e571](https://github.com/feathersjs/feathers/commit/471e5717fddc2da73af199e785b5f3b5fc1b5473))
+
 # [6.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.8...v6.0.0-pre.9) (2026-02-19)
 
 **Note:** Version bump only for package feathers
