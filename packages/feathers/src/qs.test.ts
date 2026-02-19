@@ -276,9 +276,7 @@ describe('qs', () => {
       })
 
       it('handles dunder proto payload', () => {
-        const result = parse(
-          'categories[__proto__]=login&categories[__proto__]&categories[length]=42'
-        )
+        const result = parse('categories[__proto__]=login&categories[__proto__]&categories[length]=42')
         // Paths containing __proto__ are dropped, but safe sibling paths survive
         assert.deepStrictEqual(result, { categories: { length: '42' } })
       })
@@ -377,10 +375,7 @@ describe('qs', () => {
     })
 
     it('stringifies deeply nested objects', () => {
-      assert.strictEqual(
-        stringify({ a: { b: { c: 'd' } } }),
-        'a%5Bb%5D%5Bc%5D=d'
-      )
+      assert.strictEqual(stringify({ a: { b: { c: 'd' } } }), 'a%5Bb%5D%5Bc%5D=d')
     })
 
     it('stringifies arrays with indexed bracket notation', () => {
@@ -388,10 +383,7 @@ describe('qs', () => {
     })
 
     it('stringifies nested arrays in objects', () => {
-      assert.strictEqual(
-        stringify({ a: { b: ['c', 'd'] } }),
-        'a%5Bb%5D%5B0%5D=c&a%5Bb%5D%5B1%5D=d'
-      )
+      assert.strictEqual(stringify({ a: { b: ['c', 'd'] } }), 'a%5Bb%5D%5B0%5D=c&a%5Bb%5D%5B1%5D=d')
     })
 
     it('handles null values', () => {
@@ -449,10 +441,7 @@ describe('qs', () => {
 
       it('stringifies $in arrays', () => {
         const result = stringify({ status: { $in: ['active', 'pending'] } })
-        assert.strictEqual(
-          result,
-          'status%5B%24in%5D%5B0%5D=active&status%5B%24in%5D%5B1%5D=pending'
-        )
+        assert.strictEqual(result, 'status%5B%24in%5D%5B0%5D=active&status%5B%24in%5D%5B1%5D=pending')
       })
 
       it('stringifies complex Feathers query', () => {

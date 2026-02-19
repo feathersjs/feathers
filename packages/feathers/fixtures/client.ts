@@ -21,7 +21,9 @@ export function clientTests(app: any, name: string) {
     it('.get and params passing', async () => {
       const query = {
         returnquery: 'true',
-        some: ['thing', '2', 'test']
+        some: 'thing',
+        other: ['one', 'two'],
+        nested: { a: { b: 'object' } }
       }
 
       const todo = await getService().get('0', { query })
