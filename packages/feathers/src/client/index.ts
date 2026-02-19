@@ -1,5 +1,5 @@
-import qs from 'qs'
 import type { Application, Query } from '../declarations.js'
+import { stringify as defaultStringify } from '../query-string.js'
 import { FetchClient, ProxiedFetchClient } from './fetch.js'
 import { sseClient, SseClientOptions } from './sse.js'
 import { defaultServiceEvents } from '../service.js'
@@ -16,7 +16,7 @@ export type ClientOptions = {
 }
 
 export function fetchClient(connection: typeof fetch, options: ClientOptions = {}) {
-  const { stringify = qs.stringify, baseUrl = '', Service = ProxiedFetchClient } = options
+  const { stringify = defaultStringify, baseUrl = '', Service = ProxiedFetchClient } = options
   const events = options.sse ? defaultServiceEvents : undefined
   const sseOptions = typeof options.sse === 'string' ? { path: options.sse } : options.sse
   const defaultService = function (name: string) {

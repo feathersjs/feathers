@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@feathersdev/websites':
-        specifier: ^0.0.3
-        version: 0.0.3(91524550d7a09df383162f2dc4aaa758)
+        specifier: ^0.0.4
+        version: 0.0.4(91524550d7a09df383162f2dc4aaa758)
       '@formkit/auto-animate':
         specifier: ^0.9.0
         version: 0.9.0
@@ -701,8 +701,8 @@ packages:
   '@fastify/accept-negotiator@2.0.1':
     resolution: {integrity: sha512-/c/TW2bO/v9JeEgoD/g1G5GxGeCF1Hafdf79WPmUlgYiBXummY0oX3VVq4yFkKKVBKDNlaDUYoab7g38RpPqCQ==}
 
-  '@feathersdev/websites@0.0.3':
-    resolution: {integrity: sha512-fgIxvA7herCPOzI0i4anle0rTO0TVnXi88HkhphybSuAMupsy/kcmBn7a1/mm6XF6y8HSIB0up737DuRPzhHGg==}
+  '@feathersdev/websites@0.0.4':
+    resolution: {integrity: sha512-uobUvJ9PYve+9AN0eHvN0QzATsxGuHO5umhFH5tU9YkzZpC6pVrQeKDwdA7DaojMT7qzuXVT9wEgOX7Z2CQ66w==}
     peerDependencies:
       '@nuxt/content': ^3.11.0
       '@nuxt/eslint': ^1.13.0
@@ -6818,7 +6818,7 @@ snapshots:
   '@fastify/accept-negotiator@2.0.1':
     optional: true
 
-  '@feathersdev/websites@0.0.3(91524550d7a09df383162f2dc4aaa758)':
+  '@feathersdev/websites@0.0.4(91524550d7a09df383162f2dc4aaa758)':
     dependencies:
       '@formkit/auto-animate': 0.9.0
       '@nuxt/content': 3.11.0(better-sqlite3@12.6.2)(magicast@0.5.1)(valibot@1.2.0(typescript@5.9.3))

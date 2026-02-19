@@ -18,7 +18,7 @@
     "preview": "nuxt preview"
   },
   "dependencies": {
-    "@feathersdev/websites": "^0.0.3",
+    "@feathersdev/websites": "^0.0.4",
     "@formkit/auto-animate": "^0.9.0",
     "@iconify-json/material-symbols": "^1.2.53",
     "@iconify-json/mdi": "^1.2.3",

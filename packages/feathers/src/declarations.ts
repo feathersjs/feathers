@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from './event-emitter.js'
 import type { Router } from './router.js'
 import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
