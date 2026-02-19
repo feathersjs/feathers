@@ -63,7 +63,7 @@
     "@feathersjs/adapter-tests": "^5.0.40",
     "@feathersjs/schema": "^5.0.40",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.1.0",
+    "@types/node": "^25.3.0",
     "knex": "^3.1.0",
     "mocha": "^11.7.5",
     "pg": "^8.18.0",
