@@ -1,7 +1,7 @@
 {
   "name": "feathers",
   "description": "The API and real-time application framework",
-  "version": "6.0.0-pre.8",
+  "version": "6.0.0-pre.9",
   "homepage": "https://feathersjs.com",
   "repository": {
     "type": "git",
@@ -97,5 +97,5 @@
     "typescript": "^5.8.0",
     "vitest": "^3.2.4"
   },
-  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
+  "gitHead": "5796fdf52a5ca94f993fe3c588767b75534d2e09"
 }

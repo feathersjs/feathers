@@ -1,7 +1,7 @@
 {
   "name": "create-feathers",
   "description": "Create a new Feathers application",
-  "version": "6.0.0-pre.8",
+  "version": "6.0.0-pre.9",
   "homepage": "https://feathersjs.com",
   "bin": {
     "create-feathers": "./bin/create-feathers.js"
@@ -50,7 +50,7 @@
   "dependencies": {
     "@feathersjs/cli": "^5.0.34"
   },
-  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5",
+  "gitHead": "5796fdf52a5ca94f993fe3c588767b75534d2e09",
   "devDependencies": {
     "vitest": "^3.2.4"
   }
