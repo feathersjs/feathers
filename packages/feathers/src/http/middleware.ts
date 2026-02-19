@@ -1,7 +1,7 @@
 import type { Params, Service, Query } from '../index.js'
 import type { HookContext, NextFunction } from '../hooks/index.js'
 import { BadRequest, FeathersError } from '../errors.js'
-import { parse } from '../query-string.js'
+import { parse } from '../qs.js'
 
 interface RouteLookup {
   service: Service
