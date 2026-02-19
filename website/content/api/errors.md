@@ -1,20 +1,13 @@
 # Errors
 
-::badges{npm="@feathersjs/errors" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/errors/CHANGELOG.md"}
-::
-
-```
-npm install @feathersjs/errors --save
-```
-
-The `@feathersjs/errors` module contains a set of standard error classes used by all other Feathers modules.
+`feathersjs/errors` contains a set of standard error classes used by all other Feathers modules.
 
 ## Examples
 
 Here are a few ways that you can use them:
 
 ```ts
-import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors'
+import { NotFound, GeneralError, BadRequest } from 'feathers/errors'
 
 // If you were to create an error yourself.
 const notFound = new NotFound('User does not exist')
@@ -67,7 +60,7 @@ The following error types, all of which are instances of `FeathersError`, are av
 - 503: `Unavailable`
 
 ::tip
-All of the Feathers core modules and most plugins and database adapters automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors on validation errors.
+All of the Feathers core modules and most plugins automatically emit the appropriate Feathers errors for you.
 ::
 
 Feathers errors contain the following fields:
@@ -109,13 +102,15 @@ console.log(error.toJSON())
 
 ## Error Handling
 
-It is important to make sure that errors get cleaned up before they go back to the client. [Express error handling middleware](https://docs.feathersjs.com/api/express.html#expresserrorhandler) works only for REST calls. If you want to make sure that ws errors are handled as well, you need to use [application error hooks](hooks#application-hooks) which are called on any service call error.
+It is important to make sure that errors get cleaned up before they go back to the client. If you want to make sure that ws errors are handled as well, you need to use [application error hooks](hooks#application-hooks) which are called on any service call error.
 
 Here is an example error handler you can add to app.hooks errors.
 
 ```js
-const errors = require('@feathersjs/errors')
-const errorHandler = (ctx) => {
+import type { NextFunction, HookContext } from 'feathers'
+import { GeneralError } from 'feathers/errors'
+
+export const errorHandler = (ctx: HookContext) => {
   if (ctx.error) {
     const error = ctx.error
     if (!error.code) {
