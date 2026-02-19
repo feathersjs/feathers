@@ -27,6 +27,64 @@ describe('client', () => {
     assert.ok(service.events)
   })
 
+  it('throws for .get, .update, .patch and .remove with undefined or empty string id', async () => {
+    try {
+      await service.get(undefined)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .get is required')
+    }
+
+    try {
+      await service.get('')
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .get is required')
+    }
+
+    try {
+      await service.update(undefined, testData)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .update is required')
+    }
+
+    try {
+      await service.update('', testData)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .update is required')
+    }
+
+    try {
+      await service.patch(undefined, testData)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .patch is required')
+    }
+
+    try {
+      await service.patch('', testData)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .patch is required')
+    }
+
+    try {
+      await service.remove(undefined)
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .remove is required')
+    }
+
+    try {
+      await service.remove('')
+      assert.ok(false, 'Should never get here')
+    } catch (e: any) {
+      assert.strictEqual(e.message, 'id for .remove is required')
+    }
+  })
+
   it('throws an error when the emitter does not have the method', () => {
     const clientService = new Service({
       name: 'todos',
