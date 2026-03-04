@@ -853,48 +853,33 @@ describe('Feathers MongoDB Service', () => {
     })
 
     it('rejects object as id in get', async () => {
-      await assert.rejects(
-        () => app.service('people').get({ $ne: null } as any),
-        {
-          name: 'BadRequest'
-        }
-      )
+      await assert.rejects(() => app.service('people').get({ $ne: null } as any), {
+        name: 'BadRequest'
+      })
     })
 
     it('rejects object as id in remove', async () => {
-      await assert.rejects(
-        () => app.service('people').remove({ $ne: null } as any),
-        {
-          name: 'BadRequest'
-        }
-      )
+      await assert.rejects(() => app.service('people').remove({ $ne: null } as any), {
+        name: 'BadRequest'
+      })
     })
 
     it('rejects object as id in update', async () => {
-      await assert.rejects(
-        () => app.service('people').update({ $ne: null } as any, { name: 'Hacked' }),
-        {
-          name: 'BadRequest'
-        }
-      )
+      await assert.rejects(() => app.service('people').update({ $ne: null } as any, { name: 'Hacked' }), {
+        name: 'BadRequest'
+      })
     })
 
     it('rejects object as id in patch', async () => {
-      await assert.rejects(
-        () => app.service('people').patch({ $ne: null } as any, { name: 'Hacked' }),
-        {
-          name: 'BadRequest'
-        }
-      )
+      await assert.rejects(() => app.service('people').patch({ $ne: null } as any, { name: 'Hacked' }), {
+        name: 'BadRequest'
+      })
     })
 
     it('rejects regex operator as id', async () => {
-      await assert.rejects(
-        () => app.service('people').get({ $regex: '^' } as any),
-        {
-          name: 'BadRequest'
-        }
-      )
+      await assert.rejects(() => app.service('people').get({ $regex: '^' } as any), {
+        name: 'BadRequest'
+      })
     })
   })
 
