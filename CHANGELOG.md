@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
+
+### Bug Fixes
+
+- **authentication-oauth:** Fix OAuth Callback Account Takeover ([#3663](https://github.com/feathersjs/feathers/issues/3663)) ([d6b0b5c](https://github.com/feathersjs/feathers/commit/d6b0b5cfbaf6f86a63662027c25616c28e54ede1))
+- **mongodb:** Ensure arbitrary objects can't be passed as MongoDB ids ([#3664](https://github.com/feathersjs/feathers/issues/3664)) ([163e664](https://github.com/feathersjs/feathers/commit/163e664f231a57041034c852b80525fc5c8cf68d))
+- Update dependencies ([#3666](https://github.com/feathersjs/feathers/issues/3666)) ([477bf45](https://github.com/feathersjs/feathers/commit/477bf45f9c9dbde77a14a07828aa02300de23ae7))
+
 ## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
 
 ### Bug Fixes

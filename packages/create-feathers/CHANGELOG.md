@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
+
+**Note:** Version bump only for package create-feathers
+
 ## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
 
 **Note:** Version bump only for package create-feathers
