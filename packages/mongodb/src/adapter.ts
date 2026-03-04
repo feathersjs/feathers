@@ -92,6 +92,9 @@ export class MongoDbAdapter<
     const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
     const $limit = getLimit(_limit, options.paginate)
     if (id !== null) {
+      if (typeof id !== 'string' && typeof id !== 'number' && !(id instanceof ObjectId)) {
+        throw new BadRequest(`Invalid id '${JSON.stringify(id)}'`)
+      }
       query.$and = (query.$and || []).concat({
         [this.id]: this.getObjectId(id)
       })

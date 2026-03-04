@@ -2,6 +2,151 @@ import { strict as assert } from 'assert'
 import { expressFixture, TestOAuthStrategy } from './utils/fixture'
 import { AuthenticationService } from '@feathersjs/authentication'
 
+describe('@feathersjs/authentication-oauth/strategy security', () => {
+  let app: Awaited<ReturnType<typeof expressFixture>>
+  let authService: AuthenticationService
+  let strategy: TestOAuthStrategy
+
+  before(async () => {
+    app = await expressFixture(9779, 5116)
+    authService = app.service('authentication')
+    strategy = authService.getStrategy('github') as TestOAuthStrategy
+  })
+
+  after(async () => {
+    await app.teardown()
+  })
+
+  describe('open redirect via URL authority injection', () => {
+    beforeEach(() => {
+      app.get('authentication').oauth.origins = ['https://target.com']
+    })
+
+    afterEach(() => {
+      delete app.get('authentication').oauth.origins
+    })
+
+    it('should reject redirect parameter containing @ character', async () => {
+      // Attack: ?redirect=@attacker.com would result in https://target.com@attacker.com
+      // which browsers parse as username "target.com" and host "attacker.com"
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: '@attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+
+    it('should reject redirect parameter containing // for protocol-relative URLs', async () => {
+      // Attack: ?redirect=//attacker.com would result in https://target.com//attacker.com
+      // which some parsers might interpret as protocol-relative URL
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: '//attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+
+    it('should reject redirect with backslash characters', async () => {
+      // Some browsers treat backslash as forward slash
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: '\\\\attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+  })
+
+  describe('origin validation bypass via startsWith', () => {
+    beforeEach(() => {
+      app.get('authentication').oauth.origins = ['https://target.com']
+    })
+
+    afterEach(() => {
+      delete app.get('authentication').oauth.origins
+    })
+
+    it('should reject referer from domain that shares prefix with allowed origin', async () => {
+      // Attack: attacker registers target.com.attacker.com
+      // startsWith('https://target.com') would incorrectly return true
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              headers: {
+                referer: 'https://target.com.attacker.com/login'
+              }
+            }
+          ),
+        {
+          message: 'Referer "https://target.com.attacker.com/login" is not allowed.'
+        }
+      )
+    })
+
+    it('should reject referer with extra subdomain-like prefix', async () => {
+      // Another variant: target.com-evil.attacker.com
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              headers: {
+                referer: 'https://target.com-evil.attacker.com/login'
+              }
+            }
+          ),
+        {
+          message: 'Referer "https://target.com-evil.attacker.com/login" is not allowed.'
+        }
+      )
+    })
+
+    it('should accept exact origin match with path', async () => {
+      // Legitimate use case should still work
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'https://target.com/some/path'
+          }
+        }
+      )
+      assert.equal(redirect, 'https://target.com#access_token=testing')
+    })
+  })
+})
+
 describe('@feathersjs/authentication-oauth/strategy', () => {
   let app: Awaited<ReturnType<typeof expressFixture>>
   let authService: AuthenticationService

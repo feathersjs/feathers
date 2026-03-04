@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { convert } from '@feathersjs/errors'
+import { BadRequest, convert } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 
@@ -128,6 +128,10 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params> impleme
   }
 
   _get(id: Id, params: Params = {}) {
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .get is required'))
+    }
+
     return this.send<T>('get', id, params.query || {}, params.route || {})
   }
 
@@ -144,17 +148,26 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params> impleme
   }
 
   _update(id: NullableId, data: D, params: Params = {}) {
-    if (typeof id === 'undefined') {
-      return Promise.reject(new Error("id for 'update' can not be undefined"))
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .update is required'))
     }
+
     return this.send<T>('update', id, data, params.query || {}, params.route || {})
   }
 
   update(id: NullableId, data: D, params: Params = {}) {
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .update is required'))
+    }
+
     return this._update(id, data, params)
   }
 
   _patch(id: NullableId, data: D, params: Params = {}) {
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .patch is required'))
+    }
+
     return this.send<T | T[]>('patch', id, data, params.query || {}, params.route || {})
   }
 
@@ -163,6 +176,10 @@ export class Service<T = any, D = Partial<T>, P extends Params = Params> impleme
   }
 
   _remove(id: NullableId, params: Params = {}) {
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .remove is required'))
+    }
+
     return this.send<T | T[]>('remove', id, params.query || {}, params.route || {})
   }
 
