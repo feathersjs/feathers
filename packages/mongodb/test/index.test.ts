@@ -839,6 +839,65 @@ describe('Feathers MongoDB Service', () => {
     })
   })
 
+  describe('NoSQL injection via object id', () => {
+    let target: Person
+
+    beforeEach(async () => {
+      target = await app.service('people').create({ name: 'Target' })
+    })
+
+    afterEach(async () => {
+      try {
+        await app.service('people').remove(target._id)
+      } catch (e: unknown) {}
+    })
+
+    it('rejects object as id in get', async () => {
+      await assert.rejects(
+        () => app.service('people').get({ $ne: null } as any),
+        {
+          name: 'BadRequest'
+        }
+      )
+    })
+
+    it('rejects object as id in remove', async () => {
+      await assert.rejects(
+        () => app.service('people').remove({ $ne: null } as any),
+        {
+          name: 'BadRequest'
+        }
+      )
+    })
+
+    it('rejects object as id in update', async () => {
+      await assert.rejects(
+        () => app.service('people').update({ $ne: null } as any, { name: 'Hacked' }),
+        {
+          name: 'BadRequest'
+        }
+      )
+    })
+
+    it('rejects object as id in patch', async () => {
+      await assert.rejects(
+        () => app.service('people').patch({ $ne: null } as any, { name: 'Hacked' }),
+        {
+          name: 'BadRequest'
+        }
+      )
+    })
+
+    it('rejects regex operator as id', async () => {
+      await assert.rejects(
+        () => app.service('people').get({ $regex: '^' } as any),
+        {
+          name: 'BadRequest'
+        }
+      )
+    })
+  })
+
   testSuite(app, errors, 'people', '_id')
   testSuite(app, errors, 'people-customid', 'customid')
 })
