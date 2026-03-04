@@ -63,7 +63,7 @@
     "@feathersjs/socketio": "^5.0.41",
     "@feathersjs/tests": "^5.0.41",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.3.3",
     "mocha": "^11.7.5",
     "shx": "^0.4.0",
     "socket.io-client": "^4.8.3",
