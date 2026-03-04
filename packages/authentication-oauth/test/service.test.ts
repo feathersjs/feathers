@@ -90,6 +90,69 @@ describe('@feathersjs/authentication-oauth service security', () => {
   })
 })
 
+describe('Account Takeover via OAuth Callback Query Parameter Forgery', () => {
+  const port = 9781
+  const req = axios.create({
+    withCredentials: true,
+    maxRedirects: 0
+  })
+  let app: Awaited<ReturnType<typeof expressFixture>>
+
+  const fetchResponse = async (url: string, headers?: Record<string, string>): Promise<AxiosResponse> => {
+    try {
+      return await req.get(url, { headers })
+    } catch (error: any) {
+      return error.response
+    }
+  }
+
+  before(async () => {
+    app = await expressFixture(port, 5118)
+    // Create an existing user to demonstrate account takeover
+    await app.service('users').create({ email: 'admin@example.com' })
+  })
+
+  after(async () => {
+    await app.teardown()
+  })
+
+  it('should not authenticate when calling callback directly with forged query parameters', async () => {
+    const host = `http://localhost:${port}`
+    // Attack: directly hit the callback endpoint with a forged profile in query params
+    // Without a valid OAuth session, Grant returns no response, so the payload
+    // falls back to params.query which the attacker controls
+    const attackUrl = `${host}/oauth/github/callback?profile[foo]=bar&code=fake&state=fake`
+
+    const response = await fetchResponse(attackUrl)
+
+    // The forged request must NOT return a valid access token.
+    // Currently the vulnerable code falls back to params.query as the auth payload,
+    // allowing the attacker to forge authentication and receive a JWT.
+    const hasAccessToken =
+      response.data?.accessToken ||
+      (response.headers.location && response.headers.location.includes('access_token'))
+
+    assert.ok(!hasAccessToken, `Forged callback request should not return an access token but got one`)
+  })
+
+  it('should not authenticate when callback is called with a targeted profile id', async () => {
+    const host = `http://localhost:${port}`
+    // Attack: forge a specific profile ID to target a known user
+    const attackUrl = `${host}/oauth/github/callback?profile[id]=12345&code=fake&state=fake`
+
+    const response = await fetchResponse(attackUrl)
+
+    const hasAccessToken =
+      response.data?.accessToken ||
+      (response.headers.location && response.headers.location.includes('access_token'))
+
+    assert.ok(
+      !hasAccessToken,
+      `Forged callback request with targeted profile ID should not return an access token`
+    )
+  })
+})
+
 describe('@feathersjs/authentication-oauth service', () => {
   const port = 9778
   const req = axios.create({
