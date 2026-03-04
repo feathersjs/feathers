@@ -70,7 +70,7 @@
     "superagent": "^10.3.0",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
-    "webpack": "^5.105.2",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
     "webpack-merge": "^6.0.1"
   },
