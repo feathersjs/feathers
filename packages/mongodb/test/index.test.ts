@@ -839,6 +839,53 @@ describe('Feathers MongoDB Service', () => {
     })
   })
 
+  describe('disabledOperators in _patch', () => {
+    it('drops $rename by default', async () => {
+      const person = await app.service('people').create({ name: 'Secure', age: 30 })
+
+      const result = await app.service('people').patch(person._id, {
+        name: 'Updated',
+        $rename: { age: 'exposed' }
+      } as any)
+
+      assert.strictEqual(result.name, 'Updated')
+      assert.strictEqual(result.age, 30)
+
+      await app.service('people').remove(person._id)
+    })
+
+    it('allows $push and other operators not in the denylist', async () => {
+      const person = await app.service('people').create({ name: 'PushTest', age: 20 })
+
+      const result = await app.service('people').patch(person._id, {
+        $push: { friends: 'Alice' }
+      } as any)
+
+      assert.strictEqual(result.friends?.length, 1)
+      assert.strictEqual(result.friends[0], 'Alice')
+
+      await app.service('people').remove(person._id)
+    })
+
+    it('drops operators added to disabledOperators', async () => {
+      const person = await app.service('people').create({ name: 'IncTest', age: 25 })
+
+      const result = await app.service('people').patch(
+        person._id,
+        {
+          $inc: { age: 100 }
+        } as any,
+        {
+          adapter: { disabledOperators: ['$rename', '$inc'] }
+        }
+      )
+
+      assert.strictEqual(result.age, 25)
+
+      await app.service('people').remove(person._id)
+    })
+  })
+
   describe('NoSQL injection via object id', () => {
     let target: Person
 

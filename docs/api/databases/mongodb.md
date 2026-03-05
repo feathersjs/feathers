@@ -63,6 +63,7 @@ MongoDB adapter specific options are:
 - `Model {Promise<MongoDBCollection>}` (**required**) - A Promise that resolves with the MongoDB collection instance. This can also be the return value of an `async` function without `await`
 - `disableObjectify {boolean}` (_optional_, default `false`) - This will disable conversion of the id field to a MongoDB ObjectID if you want to e.g. use normal strings
 - `useEstimatedDocumentCount {boolean}` (_optional_, default `false`) - If `true` document counting will rely on `estimatedDocumentCount` instead of `countDocuments`
+- `disabledOperators {string[]}` (_optional_, default `['$rename']`) - A list of [MongoDB update operators](https://www.mongodb.com/docs/manual/reference/operator/update/) to block in `patch` data. See [Securing update operators](#securing-update-operators) for details.
 
 The [common API options](./common.md#options) are:
 
@@ -163,6 +164,52 @@ Note that creating indexes for an existing collection with many entries should b
 ## Querying
 
 Additionally to the [common querying mechanism](./querying.md) this adapter also supports [MongoDB's query syntax](https://www.mongodb.com/docs/manual/tutorial/query-documents/) and the `update` method also supports MongoDB [update operators](https://www.mongodb.com/docs/manual/reference/operator/update/).
+
+## Securing update operators
+
+The `patch` method supports MongoDB [update operators](https://www.mongodb.com/docs/manual/reference/operator/update/) like `$push`, `$inc`, and `$unset` in the data payload. While this is powerful, it can be a security risk if patch data from the client is not properly validated. For example, an authenticated user who can patch their own profile could send:
+
+```ts
+// Escalate privileges by pushing to a roles array
+await app.service('users').patch(userId, { $push: { roles: 'admin' } })
+
+// Expose internal fields by renaming them
+await app.service('users').patch(userId, { $rename: { secretField: 'public' } })
+```
+
+### Schema validation
+
+The primary defense is to use [schema validation](../schema/validators.md) on your patch data. When your schema only allows known fields with known types, unexpected operators will be rejected before they reach the database.
+
+### The `disabledOperators` option
+
+As an additional layer of defense, the `disabledOperators` option blocks specific update operators from being passed through to MongoDB. By default, `$rename` is blocked.
+
+To block additional operators on a service:
+
+```ts
+new MongoDBService({
+  Model: app.get('mongodbClient').then((db) => db.collection('users')),
+  disabledOperators: ['$rename', '$unset', '$inc']
+})
+```
+
+To override per-call via `params.adapter`:
+
+```ts
+service.patch(id, data, {
+  adapter: { disabledOperators: ['$rename', '$unset'] }
+})
+```
+
+To allow all operators (not recommended without schema validation):
+
+```ts
+new MongoDBService({
+  Model: app.get('mongodbClient').then((db) => db.collection('messages')),
+  disabledOperators: []
+})
+```
 
 ## Search
 
