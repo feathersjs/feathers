@@ -86,6 +86,99 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
     })
   })
 
+  describe('open redirect via domain suffix attack', () => {
+    beforeEach(() => {
+      app.get('authentication').oauth.origins = ['https://target.com']
+    })
+
+    afterEach(() => {
+      delete app.get('authentication').oauth.origins
+    })
+
+    it('should reject redirect starting with dot (domain suffix attack)', async () => {
+      // Attack: ?redirect=.attacker.com -> https://target.com.attacker.com
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: '.attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+
+    it('should reject redirect starting with hyphen (domain suffix attack)', async () => {
+      // Attack: ?redirect=-attacker.com -> https://target.com-attacker.com
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: '-attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+
+    it('should reject redirect with bare domain', async () => {
+      // Attack: ?redirect=attacker.com -> https://target.comattacker.com
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              redirect: 'attacker.com',
+              headers: {
+                referer: 'https://target.com/login'
+              }
+            }
+          ),
+        {
+          name: 'NotAuthenticated'
+        }
+      )
+    })
+
+    it('should allow valid relative path redirect', async () => {
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          redirect: '/dashboard',
+          headers: {
+            referer: 'https://target.com/login'
+          }
+        }
+      )
+      assert.equal(redirect, 'https://target.com/dashboard#access_token=testing')
+    })
+
+    it('should allow relative path with query string', async () => {
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          redirect: '/callback?state=abc',
+          headers: {
+            referer: 'https://target.com/login'
+          }
+        }
+      )
+      assert.ok(redirect!.startsWith('https://target.com/callback?state=abc'))
+    })
+  })
+
   describe('origin validation bypass via startsWith', () => {
     beforeEach(() => {
       app.get('authentication').oauth.origins = ['https://target.com']
