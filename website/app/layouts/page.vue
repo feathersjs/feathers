@@ -6,7 +6,6 @@
     <div class="relative pt-0">
       <NuxtPage />
     </div>
-    <MoonSurface />
     <FooterMain />
   </main>
 </template>

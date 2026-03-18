@@ -48,10 +48,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/cli": "^5.0.34"
+    "@feathersjs/cli": "^5.0.42"
   },
   "gitHead": "5796fdf52a5ca94f993fe3c588767b75534d2e09",
   "devDependencies": {
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.0"
   }
 }
