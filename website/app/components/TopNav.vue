@@ -15,7 +15,6 @@ const { openSearch } = useGlobalSearch()
         <Flex row items-center class="gap-6 rounded-box bg-base-100/10 p-3 sm:px-12">
           <NuxtLink to="/guides">Guides</NuxtLink>
           <NuxtLink to="/api">API</NuxtLink>
-          <NuxtLink to="/cookbook">Cookbook</NuxtLink>
           <NuxtLink to="/help">Help</NuxtLink>
         </Flex>
       </NavbarCenter>

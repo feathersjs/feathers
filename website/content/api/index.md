@@ -25,4 +25,4 @@ More details on how to use Feathers on the client
 
 - [Usage](./client) - Feathers client usage in Node, React Native and the browser (also with Webpack and Browserify)
 - [REST](./client/rest) - Feathers client and direct REST API server usage
-- [Socket.io](./client/socketio) - Feathers client and direct Socket.io API server usage
+- [SSE](./client/sse) - Real-time events via Server-Sent Events

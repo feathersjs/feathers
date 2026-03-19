@@ -87,12 +87,12 @@ This section describes the general usage of service methods and how to implement
 
 `params` contain additional information for the service method call. Some properties in `params` can be set by Feathers already. Commonly used are:
 
-- `params.query` - the query parameters from the client, either passed as URL query parameters (see the [REST](./express) chapter) or through websockets (see [Socket.io](./socketio)).
-- `params.provider` - The transport (`rest` or `socketio`) used for this service call. Will be `undefined` for internal calls from the server (unless passed explicitly).
+- `params.query` - the query parameters from the client, passed as URL query parameters (see the [HTTP](./http) chapter).
+- `params.provider` - The transport (`rest`) used for this service call. Will be `undefined` for internal calls from the server (unless passed explicitly).
 - `params.authentication` - The authentication information to use for the [authentication service](./authentication/service)
 - `params.user` - The authenticated user, either set by [Feathers authentication](./authentication/) or passed explicitly.
-- `params.connection` - If the service call has been made by a real-time transport (e.g. through websockets), `params.connection` is the connection object that can be used with [channels](./channels).
-- `params.headers` - The HTTP headers connected to this service call if available. This is either the headers of the REST call or the headers passed when initializing a websocket connection.
+- `params.connection` - If the service call has been made by a real-time transport (e.g. through SSE), `params.connection` is the connection object that can be used with [channels](./channels).
+- `params.headers` - The HTTP headers connected to this service call if available.
 
 ::warning[Important]
 For external calls only `params.query` will be sent between the client and server. This is because other parameters in `params` on the server often contain security critical information (like `params.user` or `params.authentication`).
@@ -252,7 +252,7 @@ const app = feathers<ServiceTypes>()
   })
 ```
 
-See the [REST client](./client/rest) and [Socket.io client](./client/socketio) chapters on how to use those custom methods on the client.
+See the [REST client](./client/rest) chapter on how to use those custom methods on the client.
 
 ::warning[Important]
 When passing the `methods` option **all methods** you want to expose, including standard service methods, must be listed. This allows to completely disable standard service method you might not want to expose. The `methods` option only applies to external access (via a transport like HTTP or websockets). All methods continue to be available internally on the server.

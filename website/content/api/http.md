@@ -336,6 +336,105 @@ data: {"count":2}
 ...
 ```
 
+## SSE Service
+
+The `SseService` provides real-time event streaming to clients using Server-Sent Events. It works with [channels](./channels) to push `created`, `updated`, `patched`, `removed` and [custom events](./events#custom-events) to connected clients over a persistent HTTP connection.
+
+### Setup
+
+Register the `SseService` on a path in your application:
+
+```ts
+import { feathers } from 'feathers'
+import { createHandler } from 'feathers/http'
+import { SseService } from 'feathers/sse'
+
+const app = feathers()
+
+// Register your services
+app.use('messages', new MessageService())
+
+// Register the SSE service
+app.use('sse', new SseService())
+
+// Set up channels
+app.on('connection', (connection) => {
+  app.channel('anonymous').join(connection)
+})
+
+app.publish(() => app.channel('anonymous'))
+
+const handler = createHandler(app)
+```
+
+### How it works
+
+When a client connects to the SSE service via `find`, the service:
+
+1. Registers the client's connection with the application (emitting the `connection` event)
+2. Opens a persistent SSE stream
+3. Sends a `connected` event to confirm the connection
+4. Listens for events published through [channels](./channels) and streams them to the client
+5. Automatically cleans up when the connection is closed
+
+Each event sent to the client includes:
+
+- `event` - The event name (e.g. `created`, `patched`)
+- `data` - The event payload
+- `path` - The service path that emitted the event
+
+### With Node.js
+
+```ts
+import { createServer } from 'node:http'
+import { feathers } from 'feathers'
+import { createHandler } from 'feathers/http'
+import { toNodeHandler } from 'feathers/http/node'
+import { SseService } from 'feathers/sse'
+
+const app = feathers()
+
+app.use('messages', new MessageService())
+app.use('sse', new SseService())
+
+app.on('connection', (connection) => {
+  app.channel('authenticated').join(connection)
+})
+
+app.publish(() => app.channel('authenticated'))
+
+const handler = createHandler(app)
+const server = createServer(toNodeHandler(handler))
+
+server.listen(3030)
+await app.setup(server)
+```
+
+### Client connection
+
+On the client, enable SSE by passing the `sse` option to `fetchClient`. The SSE connection is automatically established during `app.setup()`:
+
+```ts
+import { feathers } from 'feathers'
+import { fetchClient } from 'feathers/client'
+
+const app = feathers()
+
+app.configure(fetchClient(fetch, {
+  baseUrl: 'http://localhost:3030',
+  sse: 'sse' // The path where SseService is registered
+}))
+
+await app.setup()
+
+// Real-time events are now received automatically
+app.service('messages').on('created', (message) => {
+  console.log('New message', message)
+})
+```
+
+For more details on the client-side SSE configuration, see the [SSE client](./client/sse) documentation.
+
 ## CORS
 
 The handler automatically sets CORS headers based on the request's `Origin` header:

@@ -42,7 +42,7 @@ messages.emit('customEvent', {
 
 ## Service Events
 
-Any service automatically emits `created`, `updated`, `patched` and `removed` events when the respective service method returns successfully. This works on the client as well as on the server. Events are not fired until all [hooks](./hooks) have executed. When the client is using [Socket.io](socketio), events will be pushed automatically from the server to all connected clients. This is how Feathers does real-time.
+Any service automatically emits `created`, `updated`, `patched` and `removed` events when the respective service method returns successfully. This works on the client as well as on the server. Events are not fired until all [hooks](./hooks) have executed. When the client is using [SSE](./client/sse), events will be pushed automatically from the server to all connected clients. This is how Feathers does real-time.
 
 ::tip
 To disable sending of events e.g. when updating a large amount of data, set [context.event](./hooks#context-event) to `null` in a hook.
@@ -184,11 +184,8 @@ app.service('payments').hooks({
 })
 ```
 
-Custom events can be [published through channels](./channels#publishing) just like standard events and listened to it in a [Feathers client](./client) or [directly on the socket connection](./client/socketio#listening-to-events):
+Custom events can be [published through channels](./channels#publishing) just like standard events and listened to in a [Feathers client](./client):
 
 ```js
 client.service('payments').on('status', (data) => {})
-
-// or
-socket.on('payments status', (data) => {})
 ```

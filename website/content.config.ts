@@ -23,10 +23,6 @@ export default defineContentConfig({
       type: 'page',
       source: 'api/**/*.md'
     }),
-    cookbook: defineCollection({
-      type: 'page',
-      source: 'cookbook/**/*.md'
-    }),
     help: defineCollection({
       type: 'page',
       source: 'help/**/*.md'
