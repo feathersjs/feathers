@@ -8,7 +8,7 @@ import { NotAuthenticated } from 'feathers/errors'
 // A hook for simple API key authentication. Extend with the functionality needed for your application.
 export async function authenticate(context: HookContext, next: NextFunction) {
   if (context.params?.request) {
-    const apiKey = context.params?.request.headers['x-api-key']
+    const apiKey = context.params?.request.headers.get('x-api-key')
 
     if (apiKey !== 'supersecret') {
       throw new NotAuthenticated('Invalid API key')
