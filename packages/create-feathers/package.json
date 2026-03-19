@@ -42,7 +42,7 @@
     "*.js"
   ],
   "scripts": {
-    "test": "bin/create-feathers.js --help",
+    "test": "vitest run",
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc"
   },
