@@ -43,7 +43,7 @@
             <Text class="opacity-70">
               Built for TypeScript, Feathers provides the structure to create complex applications but is
               flexible enough to not be in the way. With
-              <Link is="NuxtLink" to="/ecosystem/">a large ecosystem of plugins</Link> you can include exactly
+              a large ecosystem of plugins you can include exactly
               what you need. No more, no less.
             </Text>
           </CardBody>

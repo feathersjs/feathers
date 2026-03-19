@@ -27,9 +27,5 @@ export default defineContentConfig({
       type: 'page',
       source: 'help/**/*.md'
     }),
-    ecosystem: defineCollection({
-      type: 'page',
-      source: 'ecosystem/**/*.md'
-    })
   }
 })
