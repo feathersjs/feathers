@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.10...v6.0.0-pre.11) (2026-03-19)
+
+### Features
+
+- npm create feathers for v6 ([#3654](https://github.com/feathersjs/feathers/issues/3654)) ([358c50e](https://github.com/feathersjs/feathers/commit/358c50e780ad055b9feab007124e883d83fd6c44))
+
 # [6.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.9...v6.0.0-pre.10) (2026-02-19)
 
 **Note:** Version bump only for package create-feathers

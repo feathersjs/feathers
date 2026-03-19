@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.11](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.10...v6.0.0-pre.11) (2026-03-19)
+
+### Bug Fixes
+
+- Add CommonJS legacy build for backwards compatibility ([#3674](https://github.com/feathersjs/feathers/issues/3674)) ([9d0cdda](https://github.com/feathersjs/feathers/commit/9d0cddaf3418939c6fc96a2144bb0cbd18157d80))
+- Add SSE disconnect event ([#3673](https://github.com/feathersjs/feathers/issues/3673)) ([b04d785](https://github.com/feathersjs/feathers/commit/b04d7858a10e63d53d2b6f382fac377ff5a8c37c))
+- Improve SSE handling and add documentation ([#3672](https://github.com/feathersjs/feathers/issues/3672)) ([714792d](https://github.com/feathersjs/feathers/commit/714792d6741a3aa3fbe4b01c9dda61af0a3b2257))
+
+### Features
+
+- npm create feathers for v6 ([#3654](https://github.com/feathersjs/feathers/issues/3654)) ([358c50e](https://github.com/feathersjs/feathers/commit/358c50e780ad055b9feab007124e883d83fd6c44))
+
 # [6.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.9...v6.0.0-pre.10) (2026-02-19)
 
 ### Features
