@@ -74,9 +74,14 @@ describe('create-feathers', () => {
       })
     })
 
-    // Wait for the server to respond or fail
-    const response = await Promise.race([waitForServer(PORT), exitPromise])
+    // Wait for the server to be ready
+    await Promise.race([waitForServer(PORT), exitPromise])
 
-    assert.ok(response.ok || response.status === 404, `Server responded with status ${response.status}`)
+    // Make an authenticated request to the messages service
+    const response = await fetch(`http://localhost:${PORT}/messages`, {
+      headers: { 'x-api-key': 'supersecret' }
+    })
+
+    assert.ok(response.ok, `Server responded with status ${response.status}`)
   }, 120000)
 })
