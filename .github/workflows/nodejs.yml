@@ -20,7 +20,7 @@ jobs:
       # Removing node_modules and package-lock.json is a workaround for some Rollup on Linux bug
       - run: |
           rm -rf node_modules package-lock.json
-          npm install --workspace=packages/feathers --workspace=packages/create-feathers
+          npm install
       - run: npm test
         env:
           CI: true
