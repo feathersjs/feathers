@@ -2,7 +2,7 @@
 
 # Channels
 
-On a Feathers server with a real-time transport (like [Socket.io](./socketio)) configured, event channels determine which connected clients to send [real-time events](./events) to and how the sent data should look.
+On a Feathers server with a real-time transport (like [SSE](./client/sse)) configured, event channels determine which connected clients to send [real-time events](./events) to and how the sent data should look.
 
 This chapter describes:
 
@@ -86,7 +86,7 @@ export default function (app: any) {
 
 ## Connections
 
-A connection is an object that represents a real-time connection. It is the same object as `socket.feathers` in a [Socket.io](./socketio#params) middleware. You can add any kind of information to it but most notably, when using [authentication](./authentication/service), it will contain the authenticated user. By default it is located in `connection.user` once the client has authenticated on the socket (usually by calling `app.authenticate()` on the [client](./client)).
+A connection is an object that represents a real-time connection. You can add any kind of information to it but most notably, when using [authentication](./authentication/service), it will contain the authenticated user. By default it is located in `connection.user` once the client has authenticated (usually by calling `app.authenticate()` on the [client](./client)).
 
 We can get access to the `connection` object by listening to `app.on('connection', connection => {})` or `app.on('login', (payload, { connection }) => {})`.
 

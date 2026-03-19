@@ -7,7 +7,6 @@ const sidebarRef = ref<HTMLElement | null>(null)
 function getMenuName(path: string) {
   if (path.startsWith('/guides')) return 'guides'
   if (path.startsWith('/api')) return 'api'
-  if (path.startsWith('/cookbook')) return 'cookbook'
   if (path.startsWith('/help')) return 'help'
   return 'guides' // default
 }
@@ -21,9 +20,6 @@ const { data: guidesMenu } = await useAsyncData('menu-guides', () =>
 const { data: apiMenu } = await useAsyncData('menu-api', () =>
   queryCollection('menus').where('stem', '==', 'menus/api').first()
 )
-const { data: cookbookMenu } = await useAsyncData('menu-cookbook', () =>
-  queryCollection('menus').where('stem', '==', 'menus/cookbook').first()
-)
 const { data: helpMenu } = await useAsyncData('menu-help', () =>
   queryCollection('menus').where('stem', '==', 'menus/help').first()
 )
@@ -32,8 +28,6 @@ const currentMenu = computed(() => {
   switch (menuName.value) {
     case 'api':
       return apiMenu.value
-    case 'cookbook':
-      return cookbookMenu.value
     case 'help':
       return helpMenu.value
     default:

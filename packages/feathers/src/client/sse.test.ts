@@ -9,8 +9,6 @@ describe('SSE client', function () {
 
   let server: any
   let app: Application<TestServiceTypes>
-  let client1: Application<TestServiceTypes>
-  let client2: Application<TestServiceTypes>
 
   beforeAll(async () => {
     app = getApp()
@@ -32,19 +30,6 @@ describe('SSE client', function () {
     })
 
     server = await createTestServer(port, app)
-
-    client1 = feathers<TestServiceTypes>().configure(
-      fetchClient(fetch, {
-        baseUrl: url,
-        sse: 'sse'
-      })
-    )
-    client2 = feathers<TestServiceTypes>().configure(
-      fetchClient(fetch, {
-        baseUrl: url,
-        sse: 'sse'
-      })
-    )
   })
 
   afterAll(async () => {
@@ -53,16 +38,31 @@ describe('SSE client', function () {
 
   it('should stream basic SSE between clients, can abort sse', async () => {
     const events: Todo[] = []
+    const client1 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: 'sse'
+      })
+    )
 
-    client1.service('sse').emit('start')
-
-    const controller = await new Promise<AbortController>((resolve) => {
+    const connectedPromise = new Promise<AbortController>((resolve) => {
       client1.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
+
+    await client1.setup()
+
+    const controller = await connectedPromise
 
     client1.service('todos').on('created', (data: Todo) => {
       events.push(data)
     })
+
+    const client2 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: 'sse'
+      })
+    )
 
     await client2.service('todos').create({ text: 'todo 1', complete: true })
     await Promise.all([
@@ -82,15 +82,23 @@ describe('SSE client', function () {
   })
 
   it('emits AbortController on successful connection', async () => {
-    const params = {
-      query: { message: 'testing' }
-    }
+    const client = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: {
+          path: 'sse',
+          params: { query: { message: 'testing' } }
+        }
+      })
+    )
 
-    client1.service('sse').emit('start', params)
-
-    const controller = await new Promise<AbortController>((resolve) => {
-      client1.service('sse').once('connected', (data: AbortController) => resolve(data))
+    const connectedPromise = new Promise<AbortController>((resolve) => {
+      client.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
+
+    await client.setup()
+
+    const controller = await connectedPromise
 
     controller.abort()
     expect(controller.signal.aborted).toBe(true)
@@ -98,14 +106,32 @@ describe('SSE client', function () {
 
   it('only receive events for their channels', async () => {
     const events: Todo[] = []
+    const client1 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: {
+          path: 'sse',
+          params: { query: { channel: 'client' } }
+        }
+      })
+    )
+    const client2 = feathers<TestServiceTypes>().configure(
+      fetchClient(fetch, {
+        baseUrl: url,
+        sse: {
+          path: 'sse',
+          params: { query: { channel: 'client' } }
+        }
+      })
+    )
 
-    client1.service('sse').emit('start', { query: { channel: 'client' } })
-    client2.service('sse').emit('start', { query: { channel: 'client' } })
-
-    await Promise.all([
+    const connected = Promise.all([
       new Promise((resolve) => client1.service('sse').once('connected', resolve)),
       new Promise((resolve) => client2.service('sse').once('connected', resolve))
     ])
+
+    await Promise.all([client1.setup(), client2.setup()])
+    await connected
 
     client1.service('todos').on('created', (todo: Todo) => events.push(todo))
     client2.service('todos').on('created', (todo: Todo) => events.push(todo))
@@ -144,11 +170,13 @@ describe('SSE client', function () {
         }
       })
     )
-    reconnectClient.service('sse').emit('start')
 
-    await new Promise<AbortController>((resolve) => {
+    const connectedPromise = new Promise<AbortController>((resolve) => {
       reconnectClient.service('sse').once('connected', (data: AbortController) => resolve(data))
     })
+
+    await reconnectClient.setup()
+    await connectedPromise
 
     const disconnectEvent = new Promise<Error>((resolve) => {
       reconnectClient.service('sse').once('disconnected', (error: Error) => resolve(error))

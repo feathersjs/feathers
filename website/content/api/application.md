@@ -168,7 +168,7 @@ app.configure(setupService)
 ## .setup([server])
 
 `app.setup([server]) -> Promise<app>` is used to initialize all services by calling each [services .setup(app, path)](services#setupapp-path) method (if available).
-It will also use the `server` instance passed (e.g. through `http.createServer`). You can register [application setup hooks](./hooks#setup-and-teardown) to e.g. set up database connections and other things required to be initialized on startup in a certain order.
+It will also use the `server` instance passed (e.g. through `http.createServer`) to set up any provider that might require the server instance. You can register [application setup hooks](./hooks#setup-and-teardown) to e.g. set up database connections and other things required to be initialized on startup in a certain order.
 
 Normally `app.setup` will be called automatically when starting the application via [app.listen([port])](#listen-port) but there are cases (like in tests) when it can be called explicitly.
 
@@ -180,7 +180,7 @@ Normally `app.setup` will be called automatically when starting the application 
 
 `app.listen([port]) -> Promise<HTTPServer>` starts the application on the given port. It will set up all configured transports (if any) and then run [app.setup(server)](#setup-server) with the server object and then return the server object.
 
-`listen` will only be available if a server side transport (REST or websocket) has been configured.
+`listen` will only be available if a server side transport (HTTP) has been configured.
 
 ## .set(name, value)
 
