@@ -88,8 +88,8 @@
           "path": "/api/client/rest"
         },
         {
-          "title": "Socket.io Client",
-          "path": "/api/client/socketio"
+          "title": "SSE Client",
+          "path": "/api/client/sse"
         }
       ]
     }

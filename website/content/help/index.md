@@ -12,7 +12,6 @@ Existing resources may already have an answer to your question, so it always mak
 - [FAQ >](./faq)
 - [GitHub issues >](https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Afeathersjs+)
 - [GitHub discussions](https://github.com/feathersjs/feathers/discussions)
-- [Cookbook](/cookbook/)
 - [Blog >](https://blog.feathersjs.com/)
 - [Stack Overflow >](http://stackoverflow.com/questions/tagged/feathersjs)
 

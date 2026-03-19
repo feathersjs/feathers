@@ -233,5 +233,21 @@ describe('SseService', () => {
       const result = await iterator.next()
       expect(result.done).toBe(true)
     })
+
+    it('emits disconnect event when generator is closed', async () => {
+      const generator = await app.service('sse').find(connection)
+      const iterator = generator[Symbol.asyncIterator]()
+
+      await iterator.next() // consume connected event
+
+      const disconnectPromise = new Promise<any>((resolve) => {
+        app.once('disconnect', resolve)
+      })
+
+      await iterator.return()
+
+      const disconnectedConnection = await disconnectPromise
+      expect(disconnectedConnection).toBe(connection)
+    })
   })
 })

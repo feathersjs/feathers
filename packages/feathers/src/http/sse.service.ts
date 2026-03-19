@@ -61,6 +61,7 @@ export class SseService {
       } finally {
         isActive = false
         app.removeListener('publish', publishHandler)
+        app.emit('disconnect', connection)
       }
     }
 

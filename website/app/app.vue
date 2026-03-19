@@ -66,8 +66,8 @@ useSeoMeta({
   <!-- Global Search Modal -->
   <DocsSearchModal
     v-model="isSearchOpen"
-    :collections="['guides', 'api', 'cookbook', 'help', 'ecosystem']"
+    :collections="['guides', 'api', 'help']"
     search-label="Feathers Docs"
-    :popular-paths="['/guides', '/api', '/cookbook', '/help']"
+    :popular-paths="['/guides', '/api', '/help']"
   />
 </template>

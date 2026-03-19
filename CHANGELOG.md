@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-pre.10](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.9...v6.0.0-pre.10) (2026-02-19)
+
+### Features
+
+- Replace query-string with qs@6-compatible bracket-notation parser ([#3662](https://github.com/feathersjs/feathers/issues/3662)) ([471e571](https://github.com/feathersjs/feathers/commit/471e5717fddc2da73af199e785b5f3b5fc1b5473))
+
+# [6.0.0-pre.9](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.8...v6.0.0-pre.9) (2026-02-19)
+
+**Note:** Version bump only for package feathers
+
+# [6.0.0-pre.8](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.7...v6.0.0-pre.8) (2026-02-19)
+
+### Bug Fixes
+
+- **website:** add .npmrc to allow native module builds ([0fbe74d](https://github.com/feathersjs/feathers/commit/0fbe74d439e6096e01bd641729156053454f4b00))
+- **website:** add pnpm.onlyBuiltDependencies to package.json ([47be7fe](https://github.com/feathersjs/feathers/commit/47be7fe4c21fc23791794c1c64ca9d68e04c052e))
+- **website:** enable build scripts in pnpm config ([0cbbd26](https://github.com/feathersjs/feathers/commit/0cbbd26f0050b448cfc9998010f9afeef3c8da49))
+- **website:** enable observability logs in wrangler config ([8c2a2a1](https://github.com/feathersjs/feathers/commit/8c2a2a118c9404638cd76a899571face5572b384))
+- **website:** remove broken links from API index ([a065bdc](https://github.com/feathersjs/feathers/commit/a065bdc3d8f37b4ce4afb776f78ecce58406a5c9))
+- **website:** update @feathersdev/websites to 0.0.4 ([#3652](https://github.com/feathersjs/feathers/issues/3652)) ([197295d](https://github.com/feathersjs/feathers/commit/197295ddee25cae93af1891404751ffa39985be3))
+
+### Features
+
+- Remove qs dependency ([#3659](https://github.com/feathersjs/feathers/issues/3659)) ([2e787a8](https://github.com/feathersjs/feathers/commit/2e787a8b7d36c653007dce9cd532b50686c8174b))
+- Replace events package with modern TypeScript implementation ([#3658](https://github.com/feathersjs/feathers/issues/3658)) ([6c4deab](https://github.com/feathersjs/feathers/commit/6c4deab262219b41d8e660c7a1b8466c4890fa59))
+- **website:** add D1 database binding for content ([9839437](https://github.com/feathersjs/feathers/commit/9839437a1a60cf1261d56cca4d41bf93f1892112))
+- **website:** configure full observability logging in wrangler ([6f1e2c8](https://github.com/feathersjs/feathers/commit/6f1e2c84350b4dfcf931d88825c4a06510c912df))
+
 # [6.0.0-pre.7](https://github.com/feathersjs/feathers/compare/v6.0.0-pre.6...v6.0.0-pre.7) (2026-01-29)
 
 **Note:** Version bump only for package feathers

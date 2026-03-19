@@ -2,7 +2,7 @@
 
 # Hooks
 
-Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST), websockets or any other transport Feathers supports. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they use a database or not.
+Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST) or any other transport Feathers supports. They are also service agnostic, meaning they can be used with ​**any**​ service regardless of whether they use a database or not.
 
 Hooks are commonly used to handle things like permissions, validation, logging, [authentication](./authentication/hook), [data schemas and resolvers](./schema/index), sending notifications and more. This pattern keeps your application logic flexible, composable, and easier to trace through and debug. For more information about the design patterns behind hooks see [this blog post](https://blog.feathersjs.com/api-service-composition-with-hooks-47af13aa6c01).
 
@@ -276,7 +276,7 @@ Streams can only be consumed once. If you need to read the stream content in a h
 
 ### `context.dispatch`
 
-`context.dispatch` is a **writeable, optional** property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead. `context.dispatch` only affects the data sent through a Feathers Transport like [REST](./express) or [Socket.io](./socketio). An internal method call will still get the data set in `context.result`.
+`context.dispatch` is a **writeable, optional** property and contains a "safe" version of the data that should be sent to any client. If `context.dispatch` has not been set `context.result` will be sent to the client instead. `context.dispatch` only affects the data sent through a Feathers Transport like [HTTP](./http). An internal method call will still get the data set in `context.result`.
 
 ::warning[Important]
 `context.dispatch` is used by the `schemaHooks.resolveDispatch` [resolver](./schema/resolvers). Use dispatch resolvers whenever possible to get safe representations external data.

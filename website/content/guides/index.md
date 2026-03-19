@@ -18,8 +18,6 @@ In the next parts we will [generate an application](./basics/generator) and then
 
 [The API documentation >](../api/)
 
-[The cookbook for common tasks and patterns >](../cookbook/)
-
 [The Awesome FeathersJS Ecosystem >](https://github.com/feathersjs/awesome-feathersjs)
 
 [Feathers on YouTube >](https://www.youtube.com/playlist?list=PLwSdIiqnDlf_lb5y1liQK2OW5daXYgKOe)
