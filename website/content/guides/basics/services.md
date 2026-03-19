@@ -108,7 +108,7 @@ Writing all that code yourself for every service is pretty repetitive and cumber
 - [Memory](../../api/databases/memory) for in-memory data
 
 ::tip
-There are also many other community maintained database integrations which you can explore on the [ecosystem page](/ecosystem/?cat=Database&sort=downloads). Since they are not part of Feathers core, they are outside the scope of these guides.
+There are also many other community maintained database integrations. Since they are not part of Feathers core, they are outside the scope of these guides.
 ::
 
 If you went with the default selection, we will use **SQLite** which writes the database to a file and does not require any additional setup. The user service that was created when we [generated authentication](./authentication) is already using it.

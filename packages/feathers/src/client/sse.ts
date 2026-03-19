@@ -1,9 +1,10 @@
-import { Application, Params } from '../declarations.js'
+import { Application, HookContext, NextFunction, Params } from '../declarations.js'
 
 export interface SseClientOptions {
   path: string
   reconnectionDelay?: number
   reconnectionDelayMax?: number
+  params?: Params
 }
 
 export interface ReconnectingEvent {
@@ -21,7 +22,12 @@ function getDelay(attempt: number, reconnectionDelay: number, reconnectionDelayM
 
 export function sseClient(options: SseClientOptions) {
   return (client: Application) => {
-    const { path, reconnectionDelay = 1000, reconnectionDelayMax = 5000 } = options
+    const {
+      path,
+      reconnectionDelay = 1000,
+      reconnectionDelayMax = 5000,
+      params: defaultParams = {}
+    } = options
     const sseService = client.service(path)
 
     let attempt = 0
@@ -94,8 +100,13 @@ export function sseClient(options: SseClientOptions) {
         })
     }
 
-    sseService.on('start', (params: Params = {}) => {
-      connect(params)
+    client.hooks({
+      setup: [
+        async (_context: HookContext, next: NextFunction) => {
+          await next()
+          connect(defaultParams)
+        }
+      ]
     })
   }
 }

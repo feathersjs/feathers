@@ -21,11 +21,11 @@ For directly using a Feathers REST API (via HTTP) without using Feathers on the 
 ::
 
 ::tip
-REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can only be received by using a real-time transport like [Socket.io](./socketio).
+REST client services do emit `created`, `updated`, `patched` and `removed` events but only _locally for their own instance_. Real-time events from other clients can be received by enabling [SSE](./sse).
 ::
 
 ::warning
-A client application can only use **a single transport** (e.g. either REST or Socket.io). Using two transports in the same client application is not necessary.
+A client application can only use **a single transport**. Using multiple transports in the same client application is not necessary.
 ::
 
 ### rest([baseUrl])
@@ -199,7 +199,7 @@ formData.append('files', file3)
 ```
 
 ::warning[REST only]
-FormData and file uploads are only supported with the REST/HTTP transport. Socket.io does not support FormData - attempting to send FormData over websockets will result in an error.
+FormData and file uploads are only supported with the REST/HTTP transport.
 ::
 
 ::note[note]
@@ -282,7 +282,7 @@ If no `Content-Type` header is specified, streaming requests default to `applica
 ::
 
 ::warning[REST only]
-Streaming uploads are only supported with the REST/HTTP transport. Socket.io does not support streaming request bodies.
+Streaming uploads are only supported with the REST/HTTP transport.
 ::
 
 ### Streaming Responses (SSE)
@@ -348,8 +348,8 @@ for await (const event of app.service('ai-chat').create({ messages })) {
 The client automatically handles SSE stream buffering, correctly parsing events even when they arrive split across network chunks. This ensures reliable streaming regardless of network conditions.
 ::
 
-::warning[REST only]
-Streaming responses are only supported with the REST/HTTP transport. For real-time updates over Socket.io, use [channels and events](../channels) instead.
+::note
+Streaming responses use the same SSE mechanism as [real-time events](./sse) but are scoped to a single request/response cycle. For push-based real-time updates across clients, use [channels and events](../channels) with [SSE](./sse).
 ::
 
 ### Custom Methods

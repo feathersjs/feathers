@@ -25,15 +25,14 @@ Deno.serve({ port: 3030 }, handler)
 
 The `createHandler` returns a function with the signature `(request: Request) => Promise<Response>` which is the Web Standard used natively by Deno.
 
-## With Socket.io
+## With SSE
 
-To use real-time functionality with Socket.io in Deno:
+To use real-time functionality with Server-Sent Events in Deno, register the [SSE service](./http#sse-service) and set up [channels](./channels):
 
 ```ts
 import { feathers } from 'feathers'
 import { createHandler } from 'feathers/http'
-import { Server } from 'socket.io'
-import { socketio } from 'feathers/socketio'
+import { SseService } from 'feathers/sse'
 
 const app = feathers()
 
@@ -43,10 +42,12 @@ app.use('messages', {
   }
 })
 
-app.configure(socketio())
+// Register the SSE service for real-time events
+app.use('sse', new SseService())
 
 const handler = createHandler(app)
-const server = Deno.serve({ port: 3030 }, handler)
 
-await app.setup(server)
+Deno.serve({ port: 3030 }, handler)
+
+await app.setup()
 ```
