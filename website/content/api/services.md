@@ -8,7 +8,7 @@ Service methods are pre-defined [CRUD](https://en.wikipedia.org/wiki/Create,_rea
 
 ```ts
 import { feathers } from 'feathers'
-import type { Params, Id, NullableId } from 'feathers'
+import type { Application, Params, Id, NullableId } from 'feathers'
 
 class MyServiceClass {
   async find(params: Params) {
@@ -63,7 +63,7 @@ Service methods must use [async/await](https://developer.mozilla.org/en-US/docs/
 
 Once registered, the service can be retrieved and used via [app.service()](./application#servicepath):
 
-```js
+```ts
 const myService = app.service('my-service')
 
 const items = await myService.find()
@@ -74,7 +74,7 @@ console.log('.get(1)', item)
 ```
 
 ::note
-Although probably the most common use case, a service does not necessarily have to use a database. A custom service can implement any functionality like talking to another API or send an email etc.
+Although probably the most common use case, a service does not necessarily have to use a database. A custom service can implement any functionality like talking to another API or sending an email etc.
 ::
 
 ### params
@@ -82,11 +82,10 @@ Although probably the most common use case, a service does not necessarily have 
 `params` contain additional information for the service method call. Some properties in `params` can be set by Feathers already. Commonly used are:
 
 - `params.query` - the query parameters from the client, passed as URL query parameters (see the [HTTP](./http) chapter).
+- `params.route` - route placeholder parameters (see [HTTP params.route](./http#paramsroute)).
 - `params.provider` - The transport (`rest`) used for this service call. Will be `undefined` for internal calls from the server (unless passed explicitly).
-- `params.authentication` - The authentication information to use for the [authentication service](./authentication/service)
-- `params.user` - The authenticated user, either set by [Feathers authentication](./authentication/) or passed explicitly.
-- `params.connection` - If the service call has been made by a real-time transport (e.g. through SSE), `params.connection` is the connection object that can be used with [channels](./channels).
 - `params.headers` - The HTTP headers connected to this service call if available.
+- `params.connection` - If the service call has been made by a real-time transport (e.g. through SSE), `params.connection` is the connection object that can be used with [channels](./channels).
 
 ::warning[Important]
 For external calls only `params.query` will be sent between the client and server. This is because other parameters in `params` on the server often contain security critical information (like `params.user`).
@@ -145,7 +144,7 @@ app.use('todos', new TodoService())
 A successful `create` method call emits the [`created` service event](./events#created) with the returned data or a separate event for every item if the returned data is an array.
 
 ```ts
-import type { Id, Params } from 'feathers'
+import type { Params } from 'feathers'
 
 type Message = { text: string }
 
@@ -174,9 +173,9 @@ A successful `update` method call emits the [`updated` service event](./events#u
 
 ### .patch(id, data, params)
 
-`patch(id, data, params) -> Promise` - Merges the existing data of the resource identified by `id` with the new `data`. `id` can also be `null` indicating that multiple resources should be patched with `params.query` containing the query criteria.
+`service.patch(id, data, params) -> Promise` - Merges the existing data of the resource identified by `id` with the new `data`. `id` can also be `null` indicating that multiple resources should be patched with `params.query` containing the query criteria.
 
-A successful `patch` method call emits the [`patched` service event](./events#updated-patched) with the returned data. When an array is returned when patching mutiple items, it will send an individual `patched` event for every item in the array.
+A successful `patch` method call emits the [`patched` service event](./events#updated-patched) with the returned data. When an array is returned when patching multiple items, it will send an individual `patched` event for every item in the array.
 
 The method should return with the complete, updated resource data. Implement `patch` additionally (or instead of) `update` if you want to distinguish between partial and full updates and support the `PATCH` HTTP method.
 
@@ -190,7 +189,7 @@ A successful `remove` method call emits the [`removed` service event](./events#r
 
 `service.setup(app, path) -> Promise` is a special method that initializes the service, passing an instance of the Feathers application and the path it has been registered on.
 
-When calling [app.listen](application#listenport) or [app.setup](application#setupserver) all registered services `setup` methods will be called. If a service is registered afterwards, the `setup` method will be called immediately.
+When calling [app.setup](application#setupserver) all registered services `setup` methods will be called. If a service is registered afterwards, the `setup` method will be called immediately.
 
 ### .teardown(app, path)
 
@@ -203,6 +202,7 @@ A custom method is any other service method you want to expose publicly. A custo
 In order to register a public custom method, the names of _all methods_ have to be passed as the `methods` option when registering the service with [app.use()](./application#usepath-service--options)
 
 ```ts
+import { feathers } from 'feathers'
 import type { Id, Params } from 'feathers'
 
 type CustomData = {
@@ -227,11 +227,11 @@ type ServiceTypes = {
 }
 
 const app = feathers<ServiceTypes>()
-  .configure(rest())
-  .use('my-service', new MyService(), {
-    // Pass all methods you want to expose
-    methods: ['get', 'myCustomMethod']
-  })
+
+app.use('my-service', new MyService(), {
+  // Pass all methods you want to expose
+  methods: ['get', 'myCustomMethod']
+})
 ```
 
 See the [REST client](./client/rest) chapter on how to use those custom methods on the client.
