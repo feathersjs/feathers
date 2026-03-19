@@ -106,9 +106,13 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     }
 
     // Validate redirect parameter to prevent open redirect via URL authority injection
-    // Reject characters that could change the URL's authority: @, //, \
-    // e.g., @attacker.com would make https://target.com@attacker.com redirect to attacker.com
-    if (queryRedirect && /[@\\]|^\/\/|\/\//.test(queryRedirect)) {
+    // Only allow relative paths starting with / to prevent:
+    // - @attacker.com -> https://target.com@attacker.com (authority injection)
+    // - .attacker.com -> https://target.com.attacker.com (domain suffix attack)
+    // - -attacker.com -> https://target.com-attacker.com (domain suffix attack)
+    // - //attacker.com -> protocol-relative redirect
+    // - \attacker.com -> backslash redirect
+    if (queryRedirect && (!/^\//.test(queryRedirect) || /[@\\]|\/\//.test(queryRedirect))) {
       throw new NotAuthenticated('Invalid redirect path.')
     }
 
