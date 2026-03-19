@@ -1,6 +1,12 @@
 import { toFile, writeJSON } from '@featherscloud/pinion'
 import type { AppGeneratorContext } from '../commons.js'
 
+const startCommands = {
+  node: 'tsx src/index.ts',
+  deno: 'deno run --unstable-sloppy-imports --allow-net src/index.ts',
+  bun: 'bun src/index.ts'
+}
+
 const packageJson = ({ name, description, packager, platform }: AppGeneratorContext) => ({
   name,
   description,
@@ -12,6 +18,9 @@ const packageJson = ({ name, description, packager, platform }: AppGeneratorCont
   contributors: [] as string[],
   bugs: {},
   type: 'module',
+  scripts: {
+    start: startCommands[platform] || 'echo "No start command available for this platform"'
+  },
   feathers: {
     packager,
     platform

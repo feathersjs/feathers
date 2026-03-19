@@ -28,6 +28,22 @@ const app: Application = feathers<Services, Configuration>()
 ${sse ? `app.use('sse', new SseService())` : ''}
 app.use('messages', new MessageService())
 
+${
+  sse
+    ? `// On a real-time connection, add the connection to the appropriate channel
+app.on('connection', (connection) => {
+  if (connection.user) {
+    app.channel('authenticated').join(connection)
+  } else {
+    app.channel('anonymous').join(connection)
+  }
+})
+
+// Only publish events to authenticated users
+app.publish(() => app.channel('authenticated'))`
+    : ''
+}
+
 export { app }
 `
 

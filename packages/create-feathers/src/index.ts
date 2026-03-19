@@ -1,8 +1,8 @@
 import { sep, dirname } from 'path'
-import { prompt, runGenerators } from '@featherscloud/pinion'
+import { prompt, runGenerators, when } from '@featherscloud/pinion'
 import { fileURLToPath } from 'url'
 
-import type { AppGeneratorArguments } from './commons.js'
+import type { AppGeneratorArguments, AppGeneratorContext } from './commons.js'
 import { initializeBaseContext, install } from './commons.js'
 
 export { getContext } from '@featherscloud/pinion'
@@ -66,7 +66,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           name: 'sse',
           type: 'confirm',
           when: ctx.sse === undefined,
-          message: 'Enable real-time with Server-Sent Events (SSE)',
+          message: 'Enable real-time events?',
           default: true
         }
       ])
@@ -74,15 +74,25 @@ export const generate = (ctx: AppGeneratorArguments) =>
     .then(runGenerators(__dirname, 'templates'))
     .then(initializeBaseContext())
     .then(
-      install(['feathers@pre'], false, (ctx): string => {
-        if (ctx.packager) {
-          return ctx.packager
-        }
+      install(
+        (ctx) => [ctx.platform === 'deno' ? 'npm:feathers@pre' : 'feathers@pre'],
+        false,
+        (ctx): string => {
+          if (ctx.packager) {
+            return ctx.packager
+          }
 
-        if (ctx.platform === 'deno' || ctx.platform === 'bun') {
-          return ctx.platform
-        }
+          if (ctx.platform === 'deno' || ctx.platform === 'bun') {
+            return ctx.platform
+          }
 
-        return 'npm'
-      })
+          return 'npm'
+        }
+      )
+    )
+    .then(
+      when(
+        (ctx) => (ctx as AppGeneratorContext).platform === 'node',
+        install(['tsx'], true, (ctx) => (ctx as AppGeneratorContext).packager)
+      )
     )

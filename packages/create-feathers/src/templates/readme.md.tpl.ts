@@ -7,7 +7,7 @@ const template = ({ name, description }: AppGeneratorContext) => /* md */ `# ${n
 
 ## About
 
-This project uses [Feathers](http://feathersjs.com). The universal web framework.
+This project uses [Feathers](http://feathersjs.com), the universal web framework.
 
 ## Help
 
