@@ -42,16 +42,24 @@
     "*.js"
   ],
   "scripts": {
-    "test": "bin/create-feathers.js --help"
+    "test": "vitest run",
+    "prepublish": "npm run compile",
+    "compile": "shx rm -rf lib/ && tsc"
   },
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@feathersjs/cli": "^5.0.42"
-  },
-  "gitHead": "5796fdf52a5ca94f993fe3c588767b75534d2e09",
+  "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5",
   "devDependencies": {
-    "vitest": "^4.1.0"
+    "@types/node": "^24.1.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@featherscloud/pinion": "^0.5.5",
+    "commander": "^12.1.0",
+    "type-fest": "^0.21.3"
   }
 }
