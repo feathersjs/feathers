@@ -84,11 +84,11 @@
           "path": "/api/client"
         },
         {
-          "title": "REST Client",
-          "path": "/api/client/rest"
+          "title": "HTTP Client",
+          "path": "/api/client/http"
         },
         {
-          "title": "SSE Client",
+          "title": "Real-Time (SSE)",
           "path": "/api/client/sse"
         }
       ]

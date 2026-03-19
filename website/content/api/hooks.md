@@ -1,6 +1,6 @@
 # Hooks
 
-Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP(S) (REST) or any other transport Feathers supports. They are also service agnostic, meaning they can be used with **any** service regardless of whether they use a database or not.
+Hooks are pluggable middleware functions that can be registered **around**, **before**, **after** or on **error**(s) of a [service method](./services). Multiple hook functions can be chained to create complex work-flows. A hook is **transport independent**, which means it does not matter if it has been called internally on the server, through HTTP or any other transport Feathers supports. They are also service agnostic, meaning they can be used with **any** service regardless of whether they use a database or not.
 
 Hooks are commonly used to handle things like permissions, validation, logging, authentication, sending notifications and more. This pattern keeps your application logic flexible, composable, and easier to trace through and debug.
 
@@ -286,7 +286,7 @@ If you want to inspect the hook context, e.g. via `console.log`, the object retu
 
 #### Working with Streams
 
-When using [streaming uploads](./client/rest#streaming-uploads), `context.data` will be a `ReadableStream`. Since streams can only be consumed once, around hooks are the recommended way to work with streaming data. Here are common patterns:
+When using [streaming uploads](./client/http#streaming-uploads), `context.data` will be a `ReadableStream`. Since streams can only be consumed once, around hooks are the recommended way to work with streaming data. Here are common patterns:
 
 **Passing streams through unchanged:**
 

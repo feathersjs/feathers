@@ -249,6 +249,5 @@ describe('SseService', () => {
       const disconnectedConnection = await disconnectPromise
       expect(disconnectedConnection).toBe(connection)
     })
-
   })
 })

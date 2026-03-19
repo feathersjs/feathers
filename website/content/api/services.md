@@ -234,7 +234,7 @@ app.use('my-service', new MyService(), {
 })
 ```
 
-See the [REST client](./client/rest) chapter on how to use those custom methods on the client.
+See the [HTTP API](./client/http#custom-methods) section on how to use those custom methods via HTTP.
 
 ::warning[Important]
 When passing the `methods` option **all methods** you want to expose, including standard service methods, must be listed. This allows to completely disable standard service method you might not want to expose. The `methods` option only applies to external access (e.g. via HTTP). All methods continue to be available internally on the server.
