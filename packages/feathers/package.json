@@ -19,13 +19,34 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
-    "./hooks": "./lib/hooks/index.js",
-    "./commons": "./lib/commons.js",
-    "./errors": "./lib/errors.js",
-    "./client": "./lib/client/index.js",
-    "./http": "./lib/http/index.js",
-    "./http/node": "./lib/http/node.js"
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./hooks": {
+      "import": "./lib/hooks/index.js",
+      "require": "./cjs/hooks/index.js"
+    },
+    "./commons": {
+      "import": "./lib/commons.js",
+      "require": "./cjs/commons.js"
+    },
+    "./errors": {
+      "import": "./lib/errors.js",
+      "require": "./cjs/errors.js"
+    },
+    "./client": {
+      "import": "./lib/client/index.js",
+      "require": "./cjs/client/index.js"
+    },
+    "./http": {
+      "import": "./lib/http/index.js",
+      "require": "./cjs/http/index.js"
+    },
+    "./http/node": {
+      "import": "./lib/http/node.js",
+      "require": "./cjs/http/node.js"
+    }
   },
   "typesVersions": {
     "*": {
@@ -70,7 +91,8 @@
     "LICENSE",
     "README.md",
     "src/**",
-    "lib/**"
+    "lib/**",
+    "cjs/**"
   ],
   "scripts": {
     "write-version": "node -e \"console.log('export default \\'' + require('./package.json').version + '\\'')\" > src/version.ts",
@@ -78,7 +100,7 @@
     "prepublish": "npm run compile",
     "version": "npm run write-version",
     "publish": "npm run reset-version",
-    "compile": "shx rm -rf lib/ && tsc",
+    "compile": "shx rm -rf lib/ cjs/ && tsc && tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > cjs/package.json",
     "dev": "vitest",
     "test": "vitest run --coverage"
   },
