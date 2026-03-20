@@ -58,7 +58,7 @@
     "@feathersjs/errors": "^6.0.0-pre.0",
     "@feathersjs/feathers": "^6.0.0-pre.0",
     "bcryptjs": "^3.0.3",
-    "lodash-es": "^4.17.23"
+    "lodash": "^4.17.23"
   },
   "devDependencies": {
     "@feathersjs/memory": "^6.0.0-pre.0",

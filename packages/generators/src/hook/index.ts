@@ -1,7 +1,8 @@
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { prompt, runGenerators } from '@featherscloud/pinion'
-import { kebabCase, camelCase } from 'lodash-es'
+import _ from 'lodash'
+const { kebabCase, camelCase } = _
 import { checkPreconditions, FeathersBaseContext, initializeBaseContext } from '../commons.js'
 
 // Set __dirname in es module

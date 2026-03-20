@@ -1,5 +1,6 @@
 import { dirname } from 'path'
-import { camelCase, kebabCase, upperFirst, last } from 'lodash-es'
+import _ from 'lodash'
+const { camelCase, kebabCase, upperFirst, last } = _
 import { runGenerator, runGenerators, prompt } from '@featherscloud/pinion'
 import { fileURLToPath } from 'url'
 import chalk from 'chalk'

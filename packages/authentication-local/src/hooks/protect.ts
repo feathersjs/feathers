@@ -1,4 +1,5 @@
-import { omit } from 'lodash-es'
+import _ from 'lodash'
+const { omit } = _
 import type { HookContext, NextFunction } from '@feathersjs/feathers'
 /**
  * @deprecated For reliable safe data representations use Feathers schema dispatch resolvers.

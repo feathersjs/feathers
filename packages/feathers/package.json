@@ -54,7 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "feathers": "^6.0.0-pre.7"
+    "feathers": "^6.0.0-pre.11"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",

@@ -1,5 +1,5 @@
-import { get, set } from 'lodash-es'
-import { cloneDeep } from 'lodash-es'
+import _ from 'lodash'
+const { get, set, cloneDeep } = _
 import { BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
 import type { HookContext, NextFunction } from '@feathersjs/feathers'

@@ -9,8 +9,8 @@ import type {
 import { feathers } from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import type { Request, Response } from 'express'
-import { omit } from 'lodash-es'
-import { extend } from 'lodash-es'
+import _ from 'lodash'
+const { omit, extend } = _
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { Server } from 'http'

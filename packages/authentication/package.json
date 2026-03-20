@@ -61,7 +61,7 @@
     "@feathersjs/transport-commons": "^6.0.0-pre.0",
     "@types/jsonwebtoken": "^9.0.10",
     "jsonwebtoken": "^9.0.3",
-    "lodash-es": "^4.17.23",
+    "lodash": "^4.17.23",
     "long-timeout": "^0.1.1",
     "uuid": "^13.0.0"
   },
