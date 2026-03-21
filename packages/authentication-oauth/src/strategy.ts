@@ -144,11 +144,11 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       return null
     }
 
-    const redirectUrl = `${redirect}${queryRedirect}`
-
     if (queryRedirect) {
       validateRedirectOrigin(redirect, queryRedirect)
     }
+
+    const redirectUrl = `${redirect}${queryRedirect}`
     const separator = redirectUrl.endsWith('?') ? '' : redirect.indexOf('#') !== -1 ? '?' : '#'
     const authResult: AuthenticationResult = data
     const query = authResult.accessToken
