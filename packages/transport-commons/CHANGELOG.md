@@ -88,6 +88,25 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - All packages are now ES modules only
 - **transport-commons:** Removes the old message format and client service timeout
+## [5.0.43](https://github.com/feathersjs/feathers/compare/v5.0.42...v5.0.43) (2026-03-21)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
+## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
+
+### Bug Fixes
+
+- Update dependencies ([#3666](https://github.com/feathersjs/feathers/issues/3666)) ([477bf45](https://github.com/feathersjs/feathers/commit/477bf45f9c9dbde77a14a07828aa02300de23ae7))
+
+## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
+
+### Bug Fixes
+
+- **client:** Ensure all client methods require valid ids ([#3661](https://github.com/feathersjs/feathers/issues/3661)) ([bc754d3](https://github.com/feathersjs/feathers/commit/bc754d3666b059b9d93799602dac427cb419ddc6))
+
+## [5.0.40](https://github.com/feathersjs/feathers/compare/v5.0.39...v5.0.40) (2026-02-03)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
 
 ## [5.0.39](https://github.com/feathersjs/feathers/compare/v5.0.38...v5.0.39) (2026-01-31)
 

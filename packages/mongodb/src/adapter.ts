@@ -28,6 +28,12 @@ export interface MongoDBAdapterOptions extends AdapterServiceOptions {
   Model: Collection | Promise<Collection>
   disableObjectify?: boolean
   useEstimatedDocumentCount?: boolean
+  /**
+   * A list of MongoDB update operators to block in `patch` data.
+   * Defaults to `['$rename']`. Any `$`-prefixed key in this list will be
+   * silently dropped from the update.
+   */
+  disabledOperators?: string[]
 }
 
 export interface MongoDBAdapterParams<Q = AdapterQuery> extends AdapterParams<
@@ -85,6 +91,9 @@ export class MongoDbAdapter<
     const { $select, $sort, $limit: _limit, $skip = 0, ...query } = (params.query || {}) as AdapterQuery
     const $limit = getLimit(_limit, options.paginate)
     if (id !== null) {
+      if (typeof id !== 'string' && typeof id !== 'number' && !(id instanceof ObjectId)) {
+        throw new BadRequest(`Invalid id '${JSON.stringify(id)}'`)
+      }
       query.$and = (query.$and || []).concat({
         [this.id]: this.getObjectId(id)
       })
@@ -400,6 +409,7 @@ export class MongoDbAdapter<
       query,
       filters: { $sort, $select }
     } = this.filterQuery(id, params)
+    const disabledOperators = this.getOptions(params).disabledOperators || ['$rename']
 
     const replacement = Object.keys(data).reduce(
       (current, key) => {
@@ -412,7 +422,7 @@ export class MongoDbAdapter<
             ...current.$set,
             ...value
           }
-        } else {
+        } else if (!disabledOperators.includes(key)) {
           current[key] = value
         }
 

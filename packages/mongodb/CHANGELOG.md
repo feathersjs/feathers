@@ -51,6 +51,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### BREAKING CHANGES
 
 - All packages are now ES modules only
+## [5.0.43](https://github.com/feathersjs/feathers/compare/v5.0.42...v5.0.43) (2026-03-21)
+
+### Bug Fixes
+
+- **mongodb:** Block $rename operator in \_patch data by default (CWE-943) ([#3665](https://github.com/feathersjs/feathers/issues/3665)) ([0526ffd](https://github.com/feathersjs/feathers/commit/0526ffd9a7f41968deb47c676aab9e60e676dbca))
+
+## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
+
+### Bug Fixes
+
+- **mongodb:** Ensure arbitrary objects can't be passed as MongoDB ids ([#3664](https://github.com/feathersjs/feathers/issues/3664)) ([163e664](https://github.com/feathersjs/feathers/commit/163e664f231a57041034c852b80525fc5c8cf68d))
+- Update dependencies ([#3666](https://github.com/feathersjs/feathers/issues/3666)) ([477bf45](https://github.com/feathersjs/feathers/commit/477bf45f9c9dbde77a14a07828aa02300de23ae7))
+
+## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
+
+**Note:** Version bump only for package @feathersjs/mongodb
+
+## [5.0.40](https://github.com/feathersjs/feathers/compare/v5.0.39...v5.0.40) (2026-02-03)
+
+**Note:** Version bump only for package @feathersjs/mongodb
 
 ## [5.0.39](https://github.com/feathersjs/feathers/compare/v5.0.38...v5.0.39) (2026-01-31)
 
