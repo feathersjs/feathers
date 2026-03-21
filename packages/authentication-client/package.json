@@ -66,7 +66,7 @@
     "@feathersjs/socketio": "^5.0.42",
     "@feathersjs/socketio-client": "^5.0.42",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.0",
     "axios": "^1.13.6",
     "mocha": "^11.7.5",
     "shx": "^0.4.0",
