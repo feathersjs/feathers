@@ -57,12 +57,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
     "@feathersjs/express": "^5.0.42",
     "@feathersjs/memory": "^5.0.42",
     "@feathersjs/socketio": "^5.0.42",
     "@feathersjs/tests": "^5.0.42",
-    "babel-loader": "^10.0.0",
+    "babel-loader": "^10.1.1",
     "mocha": "^11.7.5",
     "node-fetch": "^2.6.1",
     "shx": "^0.4.0",
@@ -71,7 +71,7 @@
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
     "webpack": "^5.105.4",
-    "webpack-cli": "^6.0.1",
+    "webpack-cli": "^7.0.2",
     "webpack-merge": "^6.0.1"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
