@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.43](https://github.com/feathersjs/feathers/compare/v5.0.42...v5.0.43) (2026-03-21)
+
+### Bug Fixes
+
+- **authentication-oauth:** prevent open redirect via domain suffix attack ([#3669](https://github.com/feathersjs/feathers/issues/3669)) ([9905f9f](https://github.com/feathersjs/feathers/commit/9905f9fe9fa09334c8ba10fd052fad7cdf195718))
+- **authentication-oauth:** Use actual URL origin comparison for origin check ([#3676](https://github.com/feathersjs/feathers/issues/3676)) ([32f04d0](https://github.com/feathersjs/feathers/commit/32f04d0d0169639294e2f1c28b8994f5d826dc30))
+- **mongodb:** Block $rename operator in \_patch data by default (CWE-943) ([#3665](https://github.com/feathersjs/feathers/issues/3665)) ([0526ffd](https://github.com/feathersjs/feathers/commit/0526ffd9a7f41968deb47c676aab9e60e676dbca))
+
 ## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
 
 ### Bug Fixes

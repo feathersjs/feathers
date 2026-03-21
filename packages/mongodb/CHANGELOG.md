@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.43](https://github.com/feathersjs/feathers/compare/v5.0.42...v5.0.43) (2026-03-21)
+
+### Bug Fixes
+
+- **mongodb:** Block $rename operator in \_patch data by default (CWE-943) ([#3665](https://github.com/feathersjs/feathers/issues/3665)) ([0526ffd](https://github.com/feathersjs/feathers/commit/0526ffd9a7f41968deb47c676aab9e60e676dbca))
+
 ## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
 
 ### Bug Fixes
