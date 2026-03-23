@@ -46,7 +46,7 @@
   "dependencies": {
     "@types/lodash": "^4.17.23",
     "axios": "^1.13.4",
-    "lodash-es": "^4.17.23"
+    "lodash": "^4.17.23"
   },
   "devDependencies": {
     "@feathersjs/feathers": "^6.0.0-pre.0",

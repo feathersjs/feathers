@@ -1,6 +1,6 @@
 import qs from 'qs'
-import type { Params, Id, Query, NullableId, ServiceInterface } from '@feathersjs/feathers'
-import { Unavailable, convert } from '@feathersjs/errors'
+import { Params, Id, Query, NullableId, ServiceInterface } from '@feathersjs/feathers'
+import { BadRequest, Unavailable, convert } from '@feathersjs/errors'
 import { _, stripSlashes } from '@feathersjs/commons'
 
 function toError(error: Error & { code: string }) {
@@ -113,8 +113,8 @@ export abstract class Base<
   }
 
   _get(id: Id, params?: P) {
-    if (typeof id === 'undefined') {
-      return Promise.reject(new Error("id for 'get' can not be undefined"))
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .get is required'))
     }
 
     return this.request(
@@ -148,10 +148,8 @@ export abstract class Base<
   }
 
   _update(id: NullableId, data: D, params?: P) {
-    if (typeof id === 'undefined') {
-      return Promise.reject(
-        new Error("id for 'update' can not be undefined, only 'null' when updating multiple entries")
-      )
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .update is required'))
     }
 
     return this.request(
@@ -170,10 +168,8 @@ export abstract class Base<
   }
 
   _patch(id: NullableId, data: D, params?: P) {
-    if (typeof id === 'undefined') {
-      return Promise.reject(
-        new Error("id for 'patch' can not be undefined, only 'null' when updating multiple entries")
-      )
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .patch is required'))
     }
 
     return this.request(
@@ -192,10 +188,8 @@ export abstract class Base<
   }
 
   _remove(id: NullableId, params?: P) {
-    if (typeof id === 'undefined') {
-      return Promise.reject(
-        new Error("id for 'remove' can not be undefined, only 'null' when removing multiple entries")
-      )
+    if (id === undefined || id === '') {
+      return Promise.reject(new BadRequest('id for .remove is required'))
     }
 
     return this.request(

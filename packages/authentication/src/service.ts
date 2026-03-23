@@ -1,4 +1,5 @@
-import { merge } from 'lodash-es'
+import _ from 'lodash'
+const { merge } = _
 import { NotAuthenticated } from '@feathersjs/errors'
 import '@feathersjs/transport-commons'
 import { createDebug } from '@feathersjs/commons'

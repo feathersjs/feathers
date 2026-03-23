@@ -53,7 +53,7 @@
   "dependencies": {
     "@featherscloud/pinion": "^0.5.5",
     "chalk": "^5.6.2",
-    "lodash-es": "^4.17.23",
+    "lodash": "^4.17.23",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3"
   },

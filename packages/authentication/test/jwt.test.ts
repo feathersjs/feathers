@@ -1,5 +1,6 @@
 import assert from 'assert'
-import { merge } from 'lodash-es'
+import _ from 'lodash'
+const { merge } = _
 import type { Application, Service } from '@feathersjs/feathers'
 import { feathers } from '@feathersjs/feathers'
 import { memory } from '@feathersjs/memory'

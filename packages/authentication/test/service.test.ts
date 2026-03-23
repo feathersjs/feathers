@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import assert from 'assert'
-import { omit } from 'lodash-es'
+import _ from 'lodash'
+const { omit } = _
 import jwt from 'jsonwebtoken'
 import type { Application } from '@feathersjs/feathers'
 import { feathers } from '@feathersjs/feathers'

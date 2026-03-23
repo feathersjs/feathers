@@ -44,25 +44,41 @@ describe('REST client tests', function () {
     }
   })
 
-  it('errors when id property for get, patch, update or remove is undefined', async () => {
+  it('errors when id property for get, patch, update or remove is undefined or empty string', async () => {
     const app = feathers().configure(init('http://localhost:8889').fetch(fetch))
 
     const service = app.service('todos')
 
     await assert.rejects(() => service.get(undefined), {
-      message: "id for 'get' can not be undefined"
+      message: 'id for .get is required'
+    })
+
+    await assert.rejects(() => service.get(''), {
+      message: 'id for .get is required'
     })
 
     await assert.rejects(() => service.remove(undefined), {
-      message: "id for 'remove' can not be undefined, only 'null' when removing multiple entries"
+      message: 'id for .remove is required'
+    })
+
+    await assert.rejects(() => service.remove(''), {
+      message: 'id for .remove is required'
     })
 
     await assert.rejects(() => service.update(undefined, {}), {
-      message: "id for 'update' can not be undefined, only 'null' when updating multiple entries"
+      message: 'id for .update is required'
+    })
+
+    await assert.rejects(() => service.update('', {}), {
+      message: 'id for .update is required'
     })
 
     await assert.rejects(() => service.patch(undefined, {}), {
-      message: "id for 'patch' can not be undefined, only 'null' when updating multiple entries"
+      message: 'id for .patch is required'
+    })
+
+    await assert.rejects(() => service.patch('', {}), {
+      message: 'id for .patch is required'
     })
   })
 

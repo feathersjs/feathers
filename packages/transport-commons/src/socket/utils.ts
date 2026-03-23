@@ -2,7 +2,8 @@ import type { HookContext, Application, RealTimeConnection } from '@feathersjs/f
 import { createContext, getServiceOptions, CombinedChannel } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
-import { isEqual } from 'lodash-es'
+import _ from 'lodash'
+const { isEqual } = _
 
 const debug = createDebug('@feathersjs/transport-commons')
 

@@ -576,6 +576,33 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **package:** Removes adapter tests from @feathersjs/adapter-commons
 - Move database adapter utilities from @feathersjs/commons into its own module
 - This module no longer supports Node.js 0.10
+## [5.0.43](https://github.com/feathersjs/feathers/compare/v5.0.42...v5.0.43) (2026-03-21)
+
+### Bug Fixes
+
+- **authentication-oauth:** prevent open redirect via domain suffix attack ([#3669](https://github.com/feathersjs/feathers/issues/3669)) ([9905f9f](https://github.com/feathersjs/feathers/commit/9905f9fe9fa09334c8ba10fd052fad7cdf195718))
+- **authentication-oauth:** Use actual URL origin comparison for origin check ([#3676](https://github.com/feathersjs/feathers/issues/3676)) ([32f04d0](https://github.com/feathersjs/feathers/commit/32f04d0d0169639294e2f1c28b8994f5d826dc30))
+- **mongodb:** Block $rename operator in \_patch data by default (CWE-943) ([#3665](https://github.com/feathersjs/feathers/issues/3665)) ([0526ffd](https://github.com/feathersjs/feathers/commit/0526ffd9a7f41968deb47c676aab9e60e676dbca))
+
+## [5.0.42](https://github.com/feathersjs/feathers/compare/v5.0.41...v5.0.42) (2026-03-04)
+
+### Bug Fixes
+
+- **authentication-oauth:** Fix OAuth Callback Account Takeover ([#3663](https://github.com/feathersjs/feathers/issues/3663)) ([d6b0b5c](https://github.com/feathersjs/feathers/commit/d6b0b5cfbaf6f86a63662027c25616c28e54ede1))
+- **mongodb:** Ensure arbitrary objects can't be passed as MongoDB ids ([#3664](https://github.com/feathersjs/feathers/issues/3664)) ([163e664](https://github.com/feathersjs/feathers/commit/163e664f231a57041034c852b80525fc5c8cf68d))
+- Update dependencies ([#3666](https://github.com/feathersjs/feathers/issues/3666)) ([477bf45](https://github.com/feathersjs/feathers/commit/477bf45f9c9dbde77a14a07828aa02300de23ae7))
+
+## [5.0.41](https://github.com/feathersjs/feathers/compare/v5.0.40...v5.0.41) (2026-02-19)
+
+### Bug Fixes
+
+- **client:** Ensure all client methods require valid ids ([#3661](https://github.com/feathersjs/feathers/issues/3661)) ([bc754d3](https://github.com/feathersjs/feathers/commit/bc754d3666b059b9d93799602dac427cb419ddc6))
+
+## [5.0.40](https://github.com/feathersjs/feathers/compare/v5.0.39...v5.0.40) (2026-02-03)
+
+### Bug Fixes
+
+- **oauth:** Patch open redirect and origin validation ([#3653](https://github.com/feathersjs/feathers/issues/3653)) ([ee19a0a](https://github.com/feathersjs/feathers/commit/ee19a0ae9bc2ebf23b1fe598a1f7361981b65401))
 
 ## [5.0.39](https://github.com/feathersjs/feathers/compare/v5.0.38...v5.0.39) (2026-01-31)
 

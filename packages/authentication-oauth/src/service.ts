@@ -1,6 +1,6 @@
 import { createDebug } from '@feathersjs/commons'
-import type { HookContext, NextFunction, Params } from '@feathersjs/feathers'
-import { FeathersError, GeneralError } from '@feathersjs/errors'
+import { HookContext, NextFunction, Params } from '@feathersjs/feathers'
+import { FeathersError, GeneralError, NotAuthenticated } from '@feathersjs/errors'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant.js'
@@ -115,7 +115,13 @@ export class OAuthService {
       redirect
     }
 
-    const payload = grant?.response || result?.session?.response || result?.state?.response || params.query
+    const payload = grant?.response || result?.session?.response || result?.state?.response
+
+    if (!payload) {
+      throw new NotAuthenticated(
+        'No valid oAuth response. You must initiate the oAuth flow from the authorize endpoint.'
+      )
+    }
     const authentication = {
       strategy: name,
       ...payload
@@ -170,7 +176,10 @@ export class OAuthService {
 
     session.redirect = redirect
     session.query = restQuery
-    session.headers = headers
+    // Only store the referer header needed for origin validation
+    session.headers = {
+      referer: headers?.referer
+    }
 
     return this.handler('GET', handlerParams, {})
   }

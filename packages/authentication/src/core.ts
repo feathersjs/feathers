@@ -1,4 +1,5 @@
-import { merge } from 'lodash-es'
+import _ from 'lodash'
+const { merge } = _
 import jsonwebtoken, { SignOptions, Secret, VerifyOptions, Algorithm } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 import { NotAuthenticated } from '@feathersjs/errors'

@@ -3,7 +3,8 @@ import { EventEmitter } from 'events'
 import type { Application, Params, RealTimeConnection } from '@feathersjs/feathers'
 import { feathers } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
-import { isPlainObject } from 'lodash-es'
+import _ from 'lodash'
+const { isPlainObject } = _
 
 import { normalizeError, getDispatcher, runMethod } from '../../src/socket/utils.js'
 

@@ -1,5 +1,6 @@
 import assert from 'assert'
-import { omit } from 'lodash-es'
+import _ from 'lodash'
+const { omit } = _
 import type { Application, HookContext } from '@feathersjs/feathers'
 import { resolve } from '@feathersjs/schema'
 

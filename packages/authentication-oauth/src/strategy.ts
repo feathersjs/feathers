@@ -11,6 +11,45 @@ import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
+/**
+ * Validates that appending a user-supplied path to a base URL does not change the origin.
+ * Uses both URL resolution and string concatenation checks to catch all open redirect vectors:
+ * authority injection (@), protocol-relative (//), backslash, and domain suffix attacks.
+ *
+ * @throws NotAuthenticated if the redirect path would change the URL origin
+ */
+function validateRedirectOrigin(baseUrl: string, redirectPath: string) {
+  let allowedOrigin: string
+
+  try {
+    allowedOrigin = new URL(baseUrl).origin
+  } catch {
+    // baseUrl is a relative path (e.g. /home) — no open redirect risk
+    return
+  }
+
+  try {
+    // URL resolution catches protocol-relative (//) and backslash attacks
+    // e.g. new URL('//attacker.com', 'https://target.com') → https://attacker.com
+    const resolvedUrl = new URL(redirectPath, baseUrl)
+
+    if (resolvedUrl.origin !== allowedOrigin) {
+      throw new NotAuthenticated('Invalid redirect path.')
+    }
+
+    // String concatenation check catches domain suffix attacks
+    // e.g. 'https://target.com' + '.evil.com' → https://target.com.evil.com
+    const concatenatedUrl = new URL(`${baseUrl}${redirectPath}`)
+
+    if (concatenatedUrl.origin !== allowedOrigin) {
+      throw new NotAuthenticated('Invalid redirect path.')
+    }
+  } catch (error: any) {
+    if (error instanceof NotAuthenticated) throw error
+    throw new NotAuthenticated('Invalid redirect path.')
+  }
+}
+
 export interface OAuthProfile {
   id?: string | number
   [key: string]: any
@@ -72,7 +111,17 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     if (Array.isArray(origins)) {
       const referer = params?.headers?.referer || origins[0]
-      const allowedOrigin = origins.find((current) => referer.toLowerCase().startsWith(current.toLowerCase()))
+
+      // Parse the referer to get its origin for proper comparison
+      let refererOrigin: string
+      try {
+        refererOrigin = new URL(referer).origin
+      } catch {
+        throw new NotAuthenticated(`Invalid referer "${referer}".`)
+      }
+
+      // Compare full origins
+      const allowedOrigin = origins.find((current) => refererOrigin.toLowerCase() === current.toLowerCase())
 
       if (!allowedOrigin) {
         throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
@@ -93,6 +142,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
     if (!redirect) {
       return null
+    }
+
+    if (queryRedirect) {
+      validateRedirectOrigin(redirect, queryRedirect)
     }
 
     const redirectUrl = `${redirect}${queryRedirect}`
