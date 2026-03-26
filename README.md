@@ -7,6 +7,7 @@
 [![CI](https://github.com/feathersjs/feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/feathers/actions?query=workflow%3ACI)
 [![Download Status](https://img.shields.io/npm/dm/@feathersjs/feathers.svg?style=flat-square)](https://www.npmjs.com/package/@feathersjs/feathers)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/qa8kez8QBx)
+[![Stack Health](https://indiestack.ai/api/badge/health/feathersjs/feathers.svg)](https://indiestack.ai/audit?repo=feathersjs/feathers)
 
 Feathers is a full-stack framework for creating web APIs and real-time applications with TypeScript or JavaScript.
 
