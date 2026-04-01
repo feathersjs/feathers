@@ -67,7 +67,7 @@
     "mocha": "^11.7.5",
     "mongodb-memory-server": "^11.0.1",
     "shx": "^0.4.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }

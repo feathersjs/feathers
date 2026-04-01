@@ -16,11 +16,11 @@
     "element-plus": "^2.13.6",
     "query-string": "^9.3.1",
     "shiki": "^4.0.2",
-    "vue": "^3.5.30"
+    "vue": "^3.5.31"
   },
   "devDependencies": {
-    "@feathersjs/generators": "^5.0.42",
-    "@iconify-json/carbon": "^1.2.19",
+    "@feathersjs/generators": "^5.0.43",
+    "@iconify-json/carbon": "^1.2.20",
     "@types/node": "^25.5.0",
     "@unocss/preset-typography": "^66.6.7",
     "@unocss/reset": "^66.6.7",
@@ -35,7 +35,7 @@
     "sitemap": "^9.0.1",
     "unocss": "^66.6.7",
     "unplugin-auto-import": "^21.0.0",
-    "unplugin-vue-components": "^31.0.0",
+    "unplugin-vue-components": "^32.0.0",
     "vite-plugin-pwa": "^1.2.0",
     "vitepress": "^1.6.4",
     "vitepress-plugin-google-analytics": "^1.0.2",

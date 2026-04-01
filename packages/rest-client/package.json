@@ -67,14 +67,14 @@
     "@types/node": "^25.5.0",
     "@types/node-fetch": "^2.6.13",
     "@types/qs": "^6.15.0",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "mocha": "^11.7.5",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.8.2",
     "shx": "^0.4.0",
     "superagent": "^10.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5"
 }
