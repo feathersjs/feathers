@@ -67,7 +67,7 @@
     "@types/node": "^25.5.0",
     "@types/node-fetch": "^2.6.13",
     "@types/qs": "^6.15.0",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "mocha": "^11.7.5",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.8.2",
