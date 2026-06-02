@@ -75,6 +75,19 @@ export const _ = {
   merge(target: any, source: any) {
     if (_.isObject(target) && _.isObject(source)) {
       Object.keys(source).forEach((key) => {
+        // Skip prototype-chain-mutating keys. `Object.keys` returns
+        // `__proto__` as an own enumerable when the source object came
+        // from `JSON.parse('{"__proto__":...}')`; without this filter
+        // the recursive `_.merge(target[key], source[key])` below
+        // resolves `target['__proto__']` to `Object.prototype` and
+        // writes attacker-controlled keys onto it.
+        if (
+          key === '__proto__' ||
+          key === 'constructor' ||
+          key === 'prototype'
+        ) {
+          return
+        }
         if (_.isObject(source[key])) {
           if (!target[key]) {
             Object.assign(target, { [key]: {} })

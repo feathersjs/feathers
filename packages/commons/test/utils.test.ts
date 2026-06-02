@@ -212,5 +212,25 @@ describe('@feathersjs/commons utils', () => {
 
       assert.equal(_.merge('hello', {}), 'hello')
     })
+
+    it('merge does not mutate Object.prototype via __proto__ keys', () => {
+      // `Object.keys` returns `__proto__` as an own enumerable key when the
+      // source object came from `JSON.parse('{"__proto__":...}')`. Without
+      // the filter in the merge implementation, the recursive call resolves
+      // `target['__proto__']` to `Object.prototype` and writes attacker-
+      // controlled keys onto it (affecting every plain object in the
+      // process).
+      const target = {} as any
+      _.merge(target, JSON.parse('{"__proto__":{"polluted":"X"}}'))
+      assert.strictEqual(({} as any).polluted, undefined)
+      assert.strictEqual((Object.prototype as any).polluted, undefined)
+      assert.strictEqual(target.polluted, undefined)
+
+      // Same protection for `constructor` and `prototype` keys (the rest
+      // of the standard prototype-mutating triad).
+      _.merge(target, JSON.parse('{"constructor":{"prototype":{"polluted2":"Y"}}}'))
+      assert.strictEqual(({} as any).polluted2, undefined)
+      assert.strictEqual((Object.prototype as any).polluted2, undefined)
+    })
   })
 })
