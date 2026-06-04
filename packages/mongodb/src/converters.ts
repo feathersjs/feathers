@@ -57,7 +57,7 @@ export const keywordObjectId = {
         parentData[parentDataProperty] = new ObjectId(value)
         return true
       } catch (error) {
-        throw new Error(`invalid objectid for property "${parentDataProperty}"`)
+        return false
       }
     }
   }
