@@ -213,5 +213,14 @@ describe('feathers/commons utils', () => {
 
       assert.equal(_.merge('hello', {}), 'hello')
     })
+
+    it('merge does not pollute Object.prototype', () => {
+      _.merge({}, JSON.parse('{"__proto__":{"polluted":"x"}}'))
+      _.merge({}, JSON.parse('{"constructor":{"prototype":{"polluted2":"y"}}}'))
+      assert.strictEqual(({} as any).polluted, undefined)
+      assert.strictEqual(({} as any).polluted2, undefined)
+      assert.strictEqual((Object.prototype as any).polluted, undefined)
+      assert.strictEqual((Object.prototype as any).polluted2, undefined)
+    })
   })
 })
