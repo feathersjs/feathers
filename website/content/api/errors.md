@@ -1,20 +1,13 @@
 # Errors
 
-::badges{npm="@feathersjs/errors" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/errors/CHANGELOG.md"}
-::
-
-```
-npm install @feathersjs/errors --save
-```
-
-The `@feathersjs/errors` module contains a set of standard error classes used by all other Feathers modules.
+`feathers/errors` contains a set of standard error classes used by all other Feathers modules.
 
 ## Examples
 
 Here are a few ways that you can use them:
 
 ```ts
-import { NotFound, GeneralError, BadRequest } from '@feathersjs/errors'
+import { NotFound, GeneralError, BadRequest } from 'feathers/errors'
 
 // If you were to create an error yourself.
 const notFound = new NotFound('User does not exist')
@@ -38,7 +31,7 @@ const validationErrors = new BadRequest('Invalid Parameters', {
 })
 
 // You can also omit the error message and we'll put in a default one for you
-const validationErrors = new BadRequest({
+const validationErrors2 = new BadRequest({
   errors: {
     email: 'Invalid Email'
   }
@@ -58,6 +51,7 @@ The following error types, all of which are instances of `FeathersError`, are av
 - 406: `NotAcceptable`
 - 408: `Timeout`
 - 409: `Conflict`
+- 410: `Gone`
 - 411: `LengthRequired`
 - 422: `Unprocessable`
 - 429: `TooManyRequests`
@@ -67,7 +61,7 @@ The following error types, all of which are instances of `FeathersError`, are av
 - 503: `Unavailable`
 
 ::tip
-All of the Feathers core modules and most plugins and database adapters automatically emit the appropriate Feathers errors for you. For example, most of the database adapters will already send `Conflict` or `Unprocessable` errors on validation errors.
+All of the Feathers core modules and most plugins automatically emit the appropriate Feathers errors for you.
 ::
 
 Feathers errors contain the following fields:
@@ -94,7 +88,7 @@ You can create custom errors by extending from the `FeathersError` class and cal
 - `data` - Additional data to include in the error
 
 ```ts
-import { FeathersError } from '@feathersjs/errors'
+import { FeathersError } from 'feathers/errors'
 
 class UnsupportedMediaType extends FeathersError {
   constructor(message: string, data: any) {
@@ -109,33 +103,33 @@ console.log(error.toJSON())
 
 ## Error Handling
 
-It is important to make sure that errors get cleaned up before they go back to the client. [Express error handling middleware](https://docs.feathersjs.com/api/express.html#expresserrorhandler) works only for REST calls. If you want to make sure that ws errors are handled as well, you need to use [application error hooks](hooks#application-hooks) which are called on any service call error.
+It is important to make sure that errors get cleaned up before they go back to the client. You can use [application error hooks](hooks#application-hooks) which are called on any service call error.
 
 Here is an example error handler you can add to app.hooks errors.
 
-```js
-const errors = require('@feathersjs/errors')
-const errorHandler = (ctx) => {
-  if (ctx.error) {
-    const error = ctx.error
+```ts
+import type { HookContext } from 'feathers'
+import { GeneralError } from 'feathers/errors'
+
+const errorHandler = async (context: HookContext) => {
+  if (context.error) {
+    const error = context.error
     if (!error.code) {
-      const newError = new errors.GeneralError('server error')
-      ctx.error = newError
-      return ctx
+      context.error = new GeneralError('server error')
+      return context
     }
     if (error.code === 404 || process.env.NODE_ENV === 'production') {
       error.stack = null
     }
-    return ctx
+    return context
   }
 }
 ```
 
-then add it as an [application level](./application#hooks-hooks) error hook
+Then add it as an [application level](./application#hookshooks) error hook:
 
 ```ts
 app.hooks({
-  //...
   error: {
     all: [errorHandler]
   }

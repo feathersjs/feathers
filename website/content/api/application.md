@@ -1,16 +1,13 @@
 # Application
 
-::badges{npm="@feathersjs/feathers" changelog="https://github.com/feathersjs/feathers/blob/dove/packages/feathers/CHANGELOG.md"}
-::
-
 ```
-npm install @feathersjs/feathers --save
+npm install feathers@pre --save
 ```
 
-The core `@feathersjs/feathers` module provides the ability to initialize a new Feathers application instance. It works in Node, React Native and the browser (see the [client](./client) chapter for more information). Each instance allows for registration and retrieval of [services](./services), [hooks](./hooks), plugin configuration, and getting and setting configuration options. An initialized Feathers application is referred to as the **app object**.
+`import { feathers } from 'feathers'` provides the ability to initialize a new Feathers application instance. It works on all runtimes, React Native and the browser (see the [client](./client) chapter for more information). Each instance allows for registration and retrieval of [services](./services), [hooks](./hooks), plugin configuration, and getting and setting configuration options. An initialized Feathers application is referred to as the **app object**.
 
 ```ts
-import { feathers } from '@feathersjs/feathers'
+import { feathers } from 'feathers'
 
 type ServiceTypes = {
   // Add registered services here
@@ -29,7 +26,7 @@ const app = feathers<ServiceTypes, Configuration>()
 `app.use(path, service [, options]) -> app` allows registering a [service object](./services) on a given `path`.
 
 ```ts
-import { feathers, type Id } from '@feathersjs/feathers'
+import { feathers, type Id } from 'feathers'
 
 class MessageService {
   async get(id: Id) {
@@ -66,7 +63,7 @@ The following options are available:
 - `events` - A list of [public custom events sent by this service](./events#custom-events)
 
 ```ts
-import { feathers, type Id, EventEmitter } from '@feathersjs/feathers'
+import { feathers, type Id, type Params, EventEmitter } from 'feathers'
 
 // Feathers services will always be event emitters
 // but we can also extend it for better type consistency
@@ -118,27 +115,27 @@ const message = await messageService.get('test')
 console.log(message)
 
 messageService.on('created', (message: Message) => {
-  console.log('Created a todo')
+  console.log('Created a message')
 })
 ```
 
 ::note[Note]
-Note that a server side `app.service(path)` only allows the original service name (e.g. `app.service(':userId/messages')`) and does not parse placeholders. To get a service with route paramters use [.lookup](#lookuppath)
+Note that a server side `app.service(path)` only allows the original service name (e.g. `app.service(':userId/messages')`) and does not parse placeholders. To get a service with route parameters use [.lookup](#lookuppath)
 ::
 
 ## .lookup(path)
 
-`app.lookup(path)` allows to look up a full path and will return the `data` (route parameters) and `service` **on the server**.
+`app.lookup(path)` allows to look up a full path and will return the `params` (route parameters) and `service` **on the server**. Returns `null` if no service was found for the path.
 
 ```ts
 const lookup = app.lookup('messages/4321')
 
 // lookup.service -> app.service('messages')
-// lookup.data -> { __id: '4321' }
+// lookup.params -> { __id: '4321' }
 
-// `lookup.dta` needs to be passed as `params.route`
+// `lookup.params` needs to be passed as `params.route`
 lookup.service.find({
-  route: lookup.data
+  route: lookup.params
 })
 ```
 
@@ -170,20 +167,29 @@ app.configure(setupService)
 
 ## .setup([server])
 
-`app.setup([server]) -> Promise<app>` is used to initialize all services by calling each [services .setup(app, path)](services#setupapp-path) method (if available).
-It will also use the `server` instance passed (e.g. through `http.createServer`) to set up any provider that might require the server instance. You can register [application setup hooks](./hooks#setup-and-teardown) to e.g. set up database connections and other things required to be initialized on startup in a certain order.
+`app.setup([server]) -> Promise<app>` is used to initialize all services by calling each [services .setup(app, path)](services#setupapp-path) method (if available). You can register [application setup hooks](./hooks#setup-and-teardown) to e.g. set up database connections and other things required to be initialized on startup in a certain order.
 
-Normally `app.setup` will be called automatically when starting the application via [app.listen([port])](#listen-port) but there are cases (like in tests) when it can be called explicitly.
+```ts
+import { createServer } from 'node:http'
+import { feathers } from 'feathers'
+import { createHandler } from 'feathers/http'
+import { toNodeHandler } from 'feathers/http/node'
+
+const app = feathers()
+// ... configure your app
+
+const handler = createHandler(app)
+const server = createServer(toNodeHandler(handler))
+
+server.listen(3030)
+
+// Initialize all services and pass the server instance
+await app.setup(server)
+```
 
 ## .teardown([server])
 
-`app.teardown([server]) -> Promise<app>` can be called to gracefully shut down the application. When the app has been set up with a server (e.g. by calling `app.listen()`) the server will be closed automatically when calling `app.teardown()`. You can also register [application hooks](./hooks#setup-and-teardown) on teardown to e.g. close database connection etc.
-
-## .listen(port)
-
-`app.listen([port]) -> Promise<HTTPServer>` starts the application on the given port. It will set up all configured transports (if any) and then run [app.setup(server)](#setup-server) with the server object and then return the server object.
-
-`listen` will only be available if a server side transport (HTTP) has been configured.
+`app.teardown([server]) -> Promise<app>` can be called to gracefully shut down the application. You can register [application hooks](./hooks#setup-and-teardown) on teardown to e.g. close database connections etc.
 
 ## .set(name, value)
 
@@ -194,7 +200,7 @@ Normally `app.setup` will be called automatically when starting the application 
 ::
 
 ```ts
-import { feathers } from '@feathersjs/feathers'
+import { feathers } from 'feathers'
 
 type ServiceTypes = {
   // Add services path to type mapping here
@@ -208,13 +214,7 @@ type Configuration = {
 const app = feathers<ServiceTypes, Configuration>()
 
 app.set('port', 3030)
-
-app.listen(app.get('port'))
 ```
-
-::note[Note]
-On the server, settings are usually initialized using [Feathers configuration](configuration).
-::
 
 ## .get(name)
 
@@ -222,7 +222,7 @@ On the server, settings are usually initialized using [Feathers configuration](c
 
 ## .on(eventname, listener)
 
-Provided by the core [NodeJS EventEmitter .on](https://nodejs.org/api/events.html#events_emitter_on_eventname_listener). Registers a `listener` method (`function(data) {}`) for the given `eventname`.
+Provided by the [EventEmitter .on](https://nodejs.org/api/events.html#events_emitter_on_eventname_listener). Registers a `listener` method (`function(data) {}`) for the given `eventname`.
 
 ```js
 app.on('login', (user) => console.log('Logged in', user))
@@ -230,7 +230,7 @@ app.on('login', (user) => console.log('Logged in', user))
 
 ## .emit(eventname, data)
 
-Provided by the core [NodeJS EventEmitter .emit](https://nodejs.org/api/events.html#events_emitter_emit_eventname_args).
+Provided by the [EventEmitter .emit](https://nodejs.org/api/events.html#events_emitter_emit_eventname_args).
 
 ```ts
 type MyEventData = { message: string }
@@ -248,14 +248,14 @@ app.on('myevent', (data: MyEventData) => console.log('myevent happened', data))
 
 ## .removeListener(eventname)
 
-Provided by the core [NodeJS EventEmitter .removeListener](https://nodejs.org/api/events.html#events_emitter_removelistener_eventname_listener). Removes all or the given listener for `eventname`.
+Provided by the [EventEmitter .removeListener](https://nodejs.org/api/events.html#events_emitter_removelistener_eventname_listener). Removes all or the given listener for `eventname`.
 
 ## .mixins
 
 `app.mixins` contains a list of service mixins. A mixin is a callback (`(service, path, options) => {}`) that gets run for every service that is being registered. Adding your own mixins allows to add functionality to every registered service.
 
 ```ts
-import type { Id } from '@feathersjs/feathers'
+import type { Id } from 'feathers'
 
 // Mixins have to be added before registering any services
 app.mixins.push((service: any, path: string) => {
@@ -290,25 +290,9 @@ servicePaths.forEach((path) => {
 To retrieve services use [app.service(path)](#service-path), not `app.services[path]` directly.
 ::
 
-A Feathers [client](client) does not know anything about the server it is connected to. This means that `app.services` will _not_ automatically contain all services available on the server. Instead, the server has to provide the list of its services, e.g. through a [custom service](./services):
-
-```ts
-class InfoService {
-  constructor(public app: Application) {}
-
-  async find() {
-    return {
-      service: Object.keys(this.app.services)
-    }
-  }
-}
-
-app.use('info', new InfoService(app))
-```
-
 ## .defaultService
 
-`app.defaultService` can be a function that returns an instance of a new standard service for `app.service(path)` if there isn't one registered yet. By default it throws a `NotFound` error when you are trying to access a service that doesn't exist.
+`app.defaultService` can be a function that returns an instance of a new standard service for `app.service(path)` if there isn't one registered yet. By default it throws an error when you are trying to access a service that doesn't exist.
 
 ```ts
 import { MemoryService } from '@feathersjs/memory'

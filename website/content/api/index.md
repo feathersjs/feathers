@@ -24,5 +24,5 @@ Expose a Feathers application as an API server
 More details on how to use Feathers on the client
 
 - [Usage](./client) - Feathers client usage in Node, React Native and the browser (also with Webpack and Browserify)
-- [REST](./client/rest) - Feathers client and direct REST API server usage
+- [HTTP](./client/http) - Feathers HTTP client and direct HTTP API server usage
 - [SSE](./client/sse) - Real-time events via Server-Sent Events

@@ -2,17 +2,13 @@
 
 # Quick start
 
-Alright then! Let's learn Feathers. In this quick start guide we'll create our first Feathers app, an API server and a simple website to use it. You'll see how easy it is to get started with Feathers in just a single file without additional boilerplate or tooling. If you want to jump right into creating a complete application you can go to the [Creating An App](./generator) chapter.
+Let's learn Feathers! In this guide we'll build a message API from scratch using Node.js and its built-in SQLite database. You'll see how Feathers makes it easy to create a real-time API with just a few lines of code. If you want to jump right into creating a complete application you can also run `npm create feathers` to generate a new project.
 
 <img style="margin: 2em;" src="/img/main-character-bench.svg" alt="Getting started">
 
-Feathers works with all [currently active NodeJS releases](https://github.com/nodejs/Release#release-schedule). All guides are assuming the languages features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
+Feathers works with all [currently active NodeJS releases](https://github.com/nodejs/Release#release-schedule). This guide uses features from the most current stable NodeJS release which you can get from the [NodeJS website](https://nodejs.org/en/).
 
-::tip
-You can follow this guide on your own computer in the terminal or try the steps out live without installing anything in the [Feathers Quick Start on Stackblitz](https://stackblitz.com/@daffl/collections/feathers-quick-start).
-::
-
-After successful installation, the `node` and `npm` commands should be available on the terminal:
+After installation, the `node` and `npm` commands should be available on the terminal:
 
 ```
 node --version
@@ -29,101 +25,74 @@ Running NodeJS and npm should not require admin or root privileges.
 Let's create a new folder for our application:
 
 ```sh
-mkdir feathers-basics
-cd feathers-basics
+mkdir feathers-messages
+cd feathers-messages
 ```
 
 Since any Feathers application is a Node application, we can create a default [package.json](https://docs.npmjs.com/files/package.json) using `npm`:
 
 ```sh
 npm init --yes
-# Install TypeScript and its NodeJS wrapper
-npm i typescript ts-node @types/node --save-dev
-# Also initialize a TS configuration file that uses modern JavaScript
-npx tsc --init --target es2020
 ```
 
 ## Installing Feathers
 
-Feathers can be installed like any other Node module by installing the [@feathersjs/feathers](https://www.npmjs.com/package/@feathersjs/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with module loaders like Vite, Webpack, and in React Native.
+Feathers can be installed like any other Node module by installing the [feathers](https://www.npmjs.com/package/feathers) package through [npm](https://www.npmjs.com). The same package can also be used with module loaders like Vite or Webpack and in React Native.
 
 ```sh
-npm install @feathersjs/feathers --save
+npm install feathers@pre --save
 ```
-
-::note[note]
-All Feathers core modules are in the `@feathersjs` namespace.
-::
 
 ## Our first app
 
 Now we can create a Feathers application with a simple `messages` service that allows us to create new messages and find all existing ones.
 
-Create a file called `app.ts` with the following content:
+Create a file called `app.mjs` with the following content:
 
-```ts
-import { feathers } from '@feathersjs/feathers'
-
-// This is the interface for the message data
-interface Message {
-  id?: number
-  text: string
-}
+```js
+import { feathers } from 'feathers'
 
 // A messages service that allows us to create new
 // and return all existing messages
 class MessageService {
-  messages: Message[] = []
+  messages = []
 
   async find() {
-    // Just return all our messages
     return this.messages
   }
 
-  async create(data: Pick<Message, 'text'>) {
-    // The new message is the data text with a unique identifier added
-    // using the messages length since it changes whenever we add one
-    const message: Message = {
+  async create(data) {
+    const message = {
       id: this.messages.length,
       text: data.text
     }
 
-    // Add new message to the list
     this.messages.push(message)
 
     return message
   }
 }
 
-// This tells TypeScript what services we are registering
-type ServiceTypes = {
-  messages: MessageService
-}
-
-const app = feathers<ServiceTypes>()
+const app = feathers()
 
 // Register the message service on the Feathers application
 app.use('messages', new MessageService())
 
 // Log every time a new message has been created
-app.service('messages').on('created', (message: Message) => {
+app.service('messages').on('created', (message) => {
   console.log('A new message has been created', message)
 })
 
-// A function that creates messages and then logs
-// all existing messages on the service
+// Create and list messages
 const main = async () => {
-  // Create a new message on our message service
   await app.service('messages').create({
     text: 'Hello Feathers'
   })
 
-  // And another one
   await app.service('messages').create({
     text: 'Hello again'
   })
 
-  // Find all existing messages
   const messages = await app.service('messages').find()
 
   console.log('All messages', messages)
@@ -135,10 +104,8 @@ main()
 We can run it with
 
 ```sh
-npx ts-node app.ts
+node app.mjs
 ```
-
-[Try it out live >](https://stackblitz.com/edit/node-mupbmh?embed=1&file=app.ts&view=editor)
 
 We will see something like this in the terminal:
 
@@ -149,108 +116,67 @@ All messages [ { id: 0, text: 'Hello Feathers' },
   { id: 1, text: 'Hello again' } ]
 ```
 
-Here we implemented only `find` and `create`, but a service can also have a few other methods, specifically `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up some of the most important concepts upon which Feathers is built.
+Here we implemented only `find` and `create`, but a service can also have other methods like `get`, `update`, `patch` and `remove`. We will learn more about service methods and events throughout this guide, but this sums up the most important concepts that Feathers is built on.
 
 ## An API Server
 
-So far we've created a Feathers application, a message service, and are listening to events. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API server. This is where Feathers transports come in.
+So far we've created a Feathers application and a message service. However, this is only a simple NodeJS script that prints some output and then exits. What we really want is to host it as an API server that other clients can talk to.
 
-A transport takes a service like the one we created above and turns it into a server that other clients can talk to, like a website or mobile application.
+Feathers uses the Web Standard `Request`/`Response` API for HTTP handling. On Node.js, we use the `toNodeHandler` adapter to connect it to Node's built-in HTTP server.
 
-In the following example we will take our existing service and use:
+Update `app.mjs` with the following content:
 
-- `@feathersjs/koa` which uses [KoaJS](https://koajs.com/) to automatically turn our services into a REST API
-- `@feathersjs/socketio` which uses Socket.io to do the same as a WebSocket, real-time API (as we will see in a bit this is where the `created` event we saw above comes in handy).
+```js
+import { createServer } from 'node:http'
+import { feathers } from 'feathers'
+import { createHandler } from 'feathers/http'
+import { toNodeHandler } from 'feathers/http/node'
 
-Run:
-
-```sh
-npm install @feathersjs/socketio @feathersjs/koa --save
-```
-
-Then update `app.ts` with the following content:
-
-```ts{2-4,42-55,58-65}
-import { feathers } from '@feathersjs/feathers'
-import { koa, rest, bodyParser, errorHandler, serveStatic } from '@feathersjs/koa'
-import socketio from '@feathersjs/socketio'
-
-// This is the interface for the message data
-interface Message {
-  id?: number
-  text: string
-}
-
-// A messages service that allows us to create new
-// and return all existing messages
 class MessageService {
-  messages: Message[] = []
+  messages = []
 
   async find() {
-    // Just return all our messages
     return this.messages
   }
 
-  async create(data: Pick<Message, 'text'>) {
-    // The new message is the data text with a unique identifier added
-    // using the messages length since it changes whenever we add one
-    const message: Message = {
+  async create(data) {
+    const message = {
       id: this.messages.length,
       text: data.text
     }
 
-    // Add new message to the list
     this.messages.push(message)
 
     return message
   }
 }
 
-// This tells TypeScript what services we are registering
-type ServiceTypes = {
-  messages: MessageService
-}
+const app = feathers()
 
-// Creates an KoaJS compatible Feathers application
-const app = koa<ServiceTypes>(feathers())
-
-// Use the current folder for static file hosting
-app.use(serveStatic('.'))
-// Register the error handle
-app.use(errorHandler())
-// Parse JSON request bodies
-app.use(bodyParser())
-
-// Register REST service handler
-app.configure(rest())
-// Configure Socket.io real-time APIs
-app.configure(socketio())
-// Register our messages service
 app.use('messages', new MessageService())
 
-// Add any new real-time connection to the `everybody` channel
-app.on('connection', (connection) => app.channel('everybody').join(connection))
-// Publish all events to the `everybody` channel
-app.publish((_data) => app.channel('everybody'))
+// Create the HTTP handler and server
+const handler = createHandler(app)
+const server = createServer(toNodeHandler(handler))
 
-// Start the server
-app
-  .listen(3030)
-  .then(() => console.log('Feathers server listening on localhost:3030'))
+// Start the server on port 3030
+server.listen(3030, () => {
+  console.log('Feathers server listening on http://localhost:3030')
+})
 
-// For good measure let's create a message
-// So our API doesn't look so empty
+// Initialize all services
+await app.setup(server)
+
+// Create a message so the API has some data
 app.service('messages').create({
   text: 'Hello world from the server'
 })
 ```
 
-[Try it out live >](https://stackblitz.com/edit/node-zfinli?embed=1&file=app.ts)
-
 We can start the server with
 
 ```sh
-npx ts-node app.ts
+node app.mjs
 ```
 
 ::note
@@ -263,118 +189,162 @@ And in the browser visit
 http://localhost:3030/messages
 ```
 
-to see an array with the one message we created on the server.
+to see an array with the one message we created on the server. We can also create new messages by sending a POST request, for example using `curl` in another terminal:
+
+```sh
+curl -X POST http://localhost:3030/messages \
+  -H "Content-Type: application/json" \
+  -d '{"text": "A new message"}'
+```
+
+Visiting `http://localhost:3030/messages` again will now show both messages.
+
+This is the basic setup of a Feathers API server. The `createHandler` sets up everything needed to handle HTTP requests including error handling, query parsing and body parsing. When used as a REST API, incoming requests get mapped automatically to their corresponding service method:
+
+| Service method                              | HTTP method | Path                  |
+| ------------------------------------------- | ----------- | --------------------- |
+| `service.find({ query: {} })`               | GET         | /messages             |
+| `service.find({ query: { read: true } })`   | GET         | /messages?read=true   |
+| `service.get(1)`                            | GET         | /messages/1           |
+| `service.create(body)`                      | POST        | /messages             |
+| `service.update(1, body)`                   | PUT         | /messages/1           |
+| `service.patch(1, body)`                    | PATCH       | /messages/1           |
+| `service.remove(1)`                         | DELETE      | /messages/1           |
+
+## Using a database
+
+Right now our messages are stored in memory and will be lost when the server restarts. Let's use Node's built-in [SQLite module](https://nodejs.org/api/sqlite.html) to persist our messages in a database.
 
 ::note
-The built-in [JSON viewer in Firefox](https://developer.mozilla.org/en-US/docs/Tools/JSON_viewer) or a browser plugin like [JSON viewer for Chrome](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh) makes it nicer to view JSON responses in the browser.
+Node's built-in SQLite is available from Node.js v22.5.0 and later.
 ::
 
-This is the basic setup of a Feathers API server.
+Update `app.mjs` with the following content:
 
-- The `app.use` calls probably look familiar if you have used something like Koa or Express before.
-- `app.configure` calls set up the Feathers transport to host the API.
-- `app.on('connection')` and `app.publish` are used to set up event channels, which send real-time events to the proper clients (everybody that is connected to our server in this case). You can learn [more about the channels API](../../api/channels) after finishing this guide.
+```js
+import { createServer } from 'node:http'
+import { DatabaseSync } from 'node:sqlite'
+import { feathers } from 'feathers'
+import { createHandler } from 'feathers/http'
+import { toNodeHandler } from 'feathers/http/node'
+import { NotFound } from 'feathers/errors'
 
-## In the browser
+// Open (or create) a SQLite database file
+const db = new DatabaseSync('messages.db')
 
-Now we can look at one of the really cool features of Feathers: **It works the same in a web browser!** This means that we could take [our first app example](#our-first-app) from above and run it just the same in a website. Since we already have a server running, however, let's go a step further and create a Feathers app that talks to our `messages` service on the server using a real-time Socket.io connection.
+// Create the messages table if it doesn't exist
+db.exec(`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    text TEXT NOT NULL
+  )
+`)
 
-In the same folder, add the following `index.html` page:
+class MessageService {
+  async find(params) {
+    const query = params?.query || {}
+    let sql = 'SELECT * FROM messages'
+    const conditions = []
+    const values = []
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Feathers Example</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.46.1/dist/full.css" rel="stylesheet" type="text/css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link rel="stylesheet" href="https://feathersjs.com/feathers-chat.css" />
-  </head>
-  <body data-theme="dracula">
-    <main id="main" class="p-8">
-      <h1 class="font-medium leading-tight text-5xl mt-0 mb-2">Welcome to Feathers</h1>
+    if (query.text) {
+      conditions.push('text = ?')
+      values.push(query.text)
+    }
 
-      <div class="form-control w-full py-2">
-        <form class="input-group overflow-hidden" onsubmit="sendMessage(event)">
-          <input name="message" id="message-text" type="text" class="input input-bordered w-full" />
-          <button type="submit" class="btn">Send</button>
-        </form>
-      </div>
-      <h2 class="pt-1 pb-2 text-lg">Messages</h2>
-    </main>
+    if (conditions.length > 0) {
+      sql += ' WHERE ' + conditions.join(' AND ')
+    }
 
-    <script src="//unpkg.com/@feathersjs/client@^5.0.0/dist/feathers.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-      // Set up socket.io
-      const socket = io('http://localhost:3030')
-      // Initialize a Feathers app
-      const app = feathers()
+    sql += ' ORDER BY id DESC'
 
-      // Register socket.io to talk to our server
-      app.configure(feathers.socketio(socket))
+    if (query.$limit) {
+      sql += ' LIMIT ?'
+      values.push(Number(query.$limit))
+    }
 
-      // Form submission handler that sends a new message
-      async function sendMessage(event) {
-        const messageInput = document.getElementById('message-text')
+    const stmt = db.prepare(sql)
+    return stmt.all(...values)
+  }
 
-        event.preventDefault()
+  async get(id) {
+    const stmt = db.prepare('SELECT * FROM messages WHERE id = ?')
+    const message = stmt.get(id)
 
-        // Create a new message with the input field value
-        await app.service('messages').create({
-          text: messageInput.value
-        })
+    if (!message) {
+      throw new NotFound(`Message ${id} not found`)
+    }
 
-        messageInput.value = ''
-      }
+    return message
+  }
 
-      // Renders a single message on the page
-      function addMessage(message) {
-        document.getElementById('main').innerHTML += `<div class="chat chat-start">
-          <div class="chat-bubble">${message.text}</div>
-        </div>`
-      }
+  async create(data) {
+    const stmt = db.prepare('INSERT INTO messages (text) VALUES (?)')
+    const result = stmt.run(data.text)
 
-      const main = async () => {
-        // Find all existing messages
-        const messages = await app.service('messages').find()
+    return this.get(result.lastInsertRowid)
+  }
 
-        // Add existing messages to the list
-        messages.forEach(addMessage)
+  async patch(id, data) {
+    const existing = await this.get(id)
+    const stmt = db.prepare('UPDATE messages SET text = ? WHERE id = ?')
 
-        // Add any newly created message to the list in real-time
-        app.service('messages').on('created', addMessage)
-      }
+    stmt.run(data.text || existing.text, id)
 
-      main()
-    </script>
-  </body>
-</html>
+    return this.get(id)
+  }
+
+  async remove(id) {
+    const message = await this.get(id)
+    const stmt = db.prepare('DELETE FROM messages WHERE id = ?')
+
+    stmt.run(id)
+
+    return message
+  }
+}
+
+const app = feathers()
+
+app.use('messages', new MessageService())
+
+const handler = createHandler(app)
+const server = createServer(toNodeHandler(handler))
+
+server.listen(3030, () => {
+  console.log('Feathers server listening on http://localhost:3030')
+})
+
+await app.setup(server)
 ```
 
-[Try it out live >](https://stackblitz.com/edit/node-m7cjfd?embed=1&file=index.html)
+Now restart the server with `node app.mjs` and try it out:
 
-Now in the browser if you go to
+```sh
+# Create a message
+curl -X POST http://localhost:3030/messages \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello from SQLite"}'
 
+# List all messages
+curl http://localhost:3030/messages
+
+# Get a single message
+curl http://localhost:3030/messages/1
+
+# Update a message
+curl -X PATCH http://localhost:3030/messages/1 \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Updated message"}'
+
+# Delete a message
+curl -X DELETE http://localhost:3030/messages/1
 ```
-http://localhost:3030
-```
 
-you will see a simple website that allows creating new messages. It is possible to open the page in two tabs and see new messages show up on either side in real-time. You can verify that the messages got created by visiting
-
-```
-http://localhost:3030/messages
-```
-
-You'll see the JSON response including all current messages.
+If you restart the server, your messages will still be there since they are now stored in the `messages.db` SQLite file.
 
 ## What's next?
 
-In this chapter we created our first Feathers application and a service that allows creating new messages, storing them in memory, and retrieving them. We then hosted that service as a REST and real-time API server and used Feathers in the browser to connect to that server and create a website that can send new messages and show all existing messages in real-time.
+In this chapter we created our first Feathers application and a message service, first with in-memory storage and then backed by SQLite. We hosted it as a REST API server where incoming HTTP requests get automatically mapped to service method calls.
 
-Even though we are using just NodeJS and Feathers from scratch without any additional tools, we didn't write a lot of code. In the [next chapter](./generator) we will look at the Feathers CLI which can create a similar Feathers application with a recommended file structure, models, database connections, authentication and more.
+In the [next chapter](./services) we will dive deeper into services and learn more about service methods, events and how data flows through a Feathers application.
