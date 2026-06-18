@@ -2,49 +2,42 @@
 
 # Services
 
-Services are the heart of every Feathers application. You probably remember the service we made in the [quick start](./starting) to create and find messages. In this chapter we will dive more into services and create a database backed service for our chat messages.
+Services are the heart of every Feathers application. You probably remember the message service we created in the [quick start](./starting). In this chapter we will dive deeper into services, their methods and how events work.
 
 ## Feathers services
 
-In Feathers, a service is an object or instance of a class that implements certain methods. Services provide a way for Feathers to interact with different kinds of data sources in a uniform, protocol-independent way.
+In Feathers, a service is an object or instance of a class that implements certain methods. Services provide a way to interact with different kinds of data sources (databases, APIs, file systems) in a uniform, protocol-independent way.
 
-For example, you could use services to read and/or write data to one of the supported databases, interact with the file system, call a third-party API/service (such as MailGun for sending emails, Stripe for processing payments, or OpenWeatherMap for returning weather information), or even read and/or write to a completely different type of database.
-
-A standardized interface allows us to interact with the Database/API/Gnomes inside in a uniform manner across any transport protocol, be it REST, websockets, internally within the application, or Carrier Pigeon 🕊️
-
-Once you write a service method, which usually does not do anything Feathers-specific, you can automatically use it as a REST endpoint or call it through a websocket. Feathers takes care of all the necessary boilerplate, so you can focus on writing the service method itself.
+A standardized interface allows us to interact with any data source in a uniform manner across any transport. Once you write a service method, you can automatically use it as a REST endpoint, through real-time events, or call it internally within the application. Feathers takes care of all the transport boilerplate.
 
 ### Service methods
 
-Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement. Feathers offers a set of general methods that a service can implement, these are:
+Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) methods that a service can implement:
 
-- `find` - Find all data (potentially matching a query)
-- `get` - Get a single data entry by its unique identifier
-- `create` - Create new data
-- `update` - Update an existing data entry by completely replacing it
-- `patch` - Update one or more data entries by merging with the new data
-- `remove` - Remove one or more existing data entries
-- `setup` - Called when the application is started
-- `teardown` - Called when the application is shut down
+- `find(params)` - Find all data (potentially matching a query)
+- `get(id, params)` - Get a single data entry by its unique identifier
+- `create(data, params)` - Create new data
+- `update(id, data, params)` - Replace an existing data entry completely
+- `patch(id, data, params)` - Update one or more data entries by merging with the new data
+- `remove(id, params)` - Remove one or more existing data entries
+- `setup(app, path)` - Called when the application is started
+- `teardown(app, path)` - Called when the application is shut down
 
-Below is an example of Feathers service interface as a class and basic registration on a Feathers application via [app.use(name, service[, options])](../../api/application#use-path-service):
+Below is an example of a Feathers service class:
 
-```ts
-import { feathers } from '@feathersjs/feathers'
-import type { Application, Id, NullableId, Params } from '@feathersjs/feathers'
-
+```js
 class MyService {
-  async find(params: Params) {}
-  async get(id: Id, params: Params) {}
-  async create(data: any, params: Params) {}
-  async update(id: NullableId, data: any, params: Params) {}
-  async patch(id: NullableId, data: any, params: Params) {}
-  async remove(id: NullableId, params: Params) {}
-  async setup(path: string, app: Application) {}
-  async teardown(path: string, app: Application) {}
+  async find(params) {}
+  async get(id, params) {}
+  async create(data, params) {}
+  async update(id, data, params) {}
+  async patch(id, data, params) {}
+  async remove(id, params) {}
+  async setup(app, path) {}
+  async teardown(app, path) {}
 }
 
-const app = feathers<{ myservice: MyService }>()
+const app = feathers()
 
 app.use('myservice', new MyService())
 ```
@@ -53,20 +46,28 @@ The parameters for service methods are:
 
 - `id` - The unique identifier for the data
 - `data` - The data sent by the user (for `create`, `update`, `patch` and custom methods)
-- `params` - Additional parameters, for example the authenticated user or the query
-
-For `setup` and `teardown` (which are only called once on application startup and shutdown) we have
-
-- `path` - The path the service is registered on
-- `app` - The [Feathers application](./../../api/application)
-
-Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services#custom-methods).
+- `params` - Additional parameters for the method call (see below)
 
 ::note
 A service does not have to implement all those methods but must have at least one. For more information about services, service methods, and parameters see the [Service API documentation](../../api/services).
 ::
 
-When used as a REST API, incoming requests get mapped automatically to their corresponding service method like this:
+### params
+
+`params` contain additional information for the service method call. Commonly used are:
+
+- `params.query` - The query parameters from the client (e.g. URL query string)
+- `params.provider` - The transport used for this service call (`'rest'` for HTTP, `undefined` for internal calls)
+- `params.headers` - The HTTP headers of the request
+- `params.route` - Route placeholder parameters
+
+::warning[Important]
+For external calls only `params.query` will be sent between the client and server. Other parameters like `params.user` are set on the server and should never be trusted from the client.
+::
+
+### REST API mapping
+
+When used as a REST API, incoming requests get mapped automatically to their corresponding service method:
 
 | Service method                              | HTTP method | Path                  |
 | ------------------------------------------- | ----------- | --------------------- |
@@ -78,55 +79,108 @@ When used as a REST API, incoming requests get mapped automatically to their cor
 | `service.patch(123, body)`                  | PATCH       | /messages/123         |
 | `service.remove(123)`                       | DELETE      | /messages/123         |
 
-### Service events
+## Service events
 
-A registered service will automatically become a [NodeJS EventEmitter](https://nodejs.org/api/events.html) that sends events with the new data when a service method that modifies data (`create`, `update`, `patch` and `remove`) returns. Events can be listened to with `app.service('messages').on('eventName', data => {})`. Here is a list of the service methods and their corresponding events:
+One of the most powerful features of Feathers services is that they automatically emit events when a method completes. This is the foundation for real-time functionality.
 
-| Service method     | Service event           |
-| ------------------ | ----------------------- |
-| `service.create()` | `service.on('created')` |
-| `service.update()` | `service.on('updated')` |
-| `service.patch()`  | `service.on('patched')` |
-| `service.remove()` | `service.on('removed')` |
+The following events are emitted automatically:
 
-This is how Feathers does real-time.
+| Service method | Event     |
+| -------------- | --------- |
+| `create`       | `created` |
+| `update`       | `updated` |
+| `patch`        | `patched` |
+| `remove`       | `removed` |
+
+We already saw this in the [quick start](./starting) when we listened for the `created` event:
 
 ```js
-app.service('myservice').on('created', (data) => {
-  console.log('Got created event', data)
+app.service('messages').on('created', (message) => {
+  console.log('A new message has been created', message)
 })
 ```
 
-## Database adapters
+Events are not fired until all [hooks](./hooks) have completed. On the server, services can also emit [custom events](../../api/events#custom-events).
 
-Now that we have all those service methods, we could go ahead and implement any kind of custom logic using any backend, similar to what we did in the [quick start guide](./starting). Very often, this means creating, reading, updating and removing data from a database.
+## Registering services
 
-Writing all that code yourself for every service is pretty repetitive and cumbersome, which is why Feathers has a collection of pre-built services for different databases. They offer most of the basic functionality and can always be customized to your needs. Feathers database adapters support a common [usage API](../../api/databases/common), pagination and [querying syntax](../../api/databases/querying) for many popular databases. The following database adapters are maintained as part of Feathers core:
+Services are registered on a Feathers application using `app.use(path, service, options)` and then retrieved using `app.service(path)`:
 
-- [SQL](../../api/databases/knex) for databases like PostgreSQL, SQLite, MySQL, MariaDB, MSSQL
-- [MongoDB](../../api/databases/mongodb) for MongoDB
-- [Memory](../../api/databases/memory) for in-memory data
+```js
+app.use('messages', new MessageService())
 
-::tip
-There are also many other community maintained database integrations. Since they are not part of Feathers core, they are outside the scope of these guides.
-::
-
-If you went with the default selection, we will use **SQLite** which writes the database to a file and does not require any additional setup. The user service that was created when we [generated authentication](./authentication) is already using it.
-
-## Generating a service
-
-In our new `feathers-chat` application, we can create database backed services with the following command:
-
-```sh
-npx feathers generate service
+// Get the service and call methods on it
+const messages = await app.service('messages').find()
 ```
 
-The name for our service is `message` (this is used for variable names etc.) and for the path we use `messages`. Anything else we can confirm with the default:
+::danger
+Always use the service returned by `app.service(path)`, not the service object directly. `app.service()` returns a wrapped version that includes all Feathers functionality like events and hooks.
+::
 
-![feathers generate service prompts](./assets/generate-service.png)
+The `options` object allows you to control which methods are available externally and declare custom events:
 
-This is it, we now have a database backed messages service with authentication enabled.
+```js
+app.use('messages', new MessageService(), {
+  // Only allow find and create from the outside
+  methods: ['find', 'create'],
+  // Declare custom events this service will emit
+  events: ['status']
+})
+```
+
+## Organizing with app.configure
+
+For better code organization, `app.configure(callback)` can be used to split service registration into separate functions or files:
+
+```js
+import { feathers } from 'feathers'
+
+// A function that registers a service
+const messageService = (app) => {
+  app.use('messages', new MessageService())
+}
+
+const app = feathers()
+
+// Register the service using configure
+app.configure(messageService)
+```
+
+This is the pattern used in generated Feathers applications where each service is defined in its own file that exports a configure function.
+
+## Custom methods
+
+In addition to the standard CRUD methods, services can define custom methods. Custom methods must take `(data, params)` as arguments and need to be listed in the `methods` option:
+
+```js
+class MessageService {
+  async find(params) {
+    // ...
+  }
+
+  async create(data, params) {
+    // ...
+  }
+
+  // A custom method
+  async markAsRead(data, params) {
+    // Mark messages as read
+    return { read: true, ids: data.ids }
+  }
+}
+
+app.use('messages', new MessageService(), {
+  methods: ['find', 'create', 'markAsRead']
+})
+
+// Call the custom method
+await app.service('messages').markAsRead({ ids: [1, 2, 3] })
+```
+
+Custom methods can be called via HTTP by setting the `X-Service-Method` header on a POST request.
 
 ## What's next?
 
-In this chapter we learned about services as a Feathers core concept for abstracting data operations. We also saw how a service sends events which we will use later to create real-time applications. After that, we generated a messages service. Next, we will [look at Feathers hooks](./hooks) as a way to create middleware for services.
+In this chapter we learned how Feathers services provide a uniform interface for interacting with data, how they automatically emit events, and how to organize them with `app.configure`. We also saw how services map to a REST API and can be extended with custom methods.
+
+In the [next chapter](./hooks) we will look at hooks, which allow us to add additional functionality to any service method without changing the service itself.

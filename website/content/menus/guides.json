@@ -11,14 +11,6 @@
           "path": "/guides/basics/starting"
         },
         {
-          "title": "Creating an App",
-          "path": "/guides/basics/generator"
-        },
-        {
-          "title": "Authentication",
-          "path": "/guides/basics/authentication"
-        },
-        {
           "title": "Services",
           "path": "/guides/basics/services"
         },
@@ -27,12 +19,8 @@
           "path": "/guides/basics/hooks"
         },
         {
-          "title": "Schemas",
-          "path": "/guides/basics/schemas"
-        },
-        {
-          "title": "Logging In",
-          "path": "/guides/basics/login"
+          "title": "Real-Time",
+          "path": "/guides/basics/real-time"
         }
       ]
     },
