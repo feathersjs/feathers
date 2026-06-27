@@ -55,6 +55,6 @@
     "lerna": "^8.1.2",
     "npm-check-updates": "^16.14.20",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.3"
   }
 }

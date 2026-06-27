@@ -58,7 +58,7 @@
     "@feathersjs/errors": "^5.0.45",
     "@feathersjs/feathers": "^5.0.45",
     "bcryptjs": "^3.0.3",
-    "lodash": "^4.17.23"
+    "lodash": "^4.18.1"
   },
   "devDependencies": {
     "@feathersjs/memory": "^5.0.45",
@@ -66,8 +66,8 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "^4.17.24",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.5.0",
-    "mocha": "^11.7.5",
+    "@types/node": "^26.0.0",
+    "mocha": "^11.7.6",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
