@@ -1,7 +1,7 @@
 {
   "ci": false,
   "packages": ["packages/*"],
-  "version": "5.0.45",
+  "version": "5.0.46",
   "command": {
     "bootstrap": {
       "hoist": true
