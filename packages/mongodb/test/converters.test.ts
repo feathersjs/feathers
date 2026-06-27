@@ -89,7 +89,7 @@ describe('objectid keyword', () => {
     assert.equal(typeof data.otherId, 'string')
   })
 
-  it('fails on invalid objectids', async () => {
+  it('fails validation on invalid objectids', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -104,6 +104,28 @@ describe('objectid keyword', () => {
     }
     assert.equal(typeof data._id, 'string')
 
-    assert.throws(() => validate(data), /invalid objectid for property "_id"/)
+    assert.equal(validate(data), false)
+    assert.equal(validate.errors?.[0].keyword, 'objectid')
+  })
+
+  it('continues validating nullable unions when an objectid branch fails', async () => {
+    const nullableValidator = new Ajv({ coerceTypes: true, useDefaults: true })
+    nullableValidator.addKeyword(keywordObjectId)
+
+    const schema: any = {
+      type: 'object',
+      properties: {
+        refId: {
+          anyOf: [{ type: 'string', objectid: true }, { type: 'null' }],
+          default: null
+        }
+      },
+      additionalProperties: false
+    }
+    const validate = nullableValidator.compile(schema)
+    const data: { refId?: ObjectId | null } = {}
+
+    assert.equal(validate(data), true)
+    assert.equal(data.refId, null)
   })
 })
