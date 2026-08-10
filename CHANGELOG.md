@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.20](https://github.com/feathersjs/feathers/compare/v4.5.19...v4.5.20) (2026-08-10)
+
+
+### Bug Fixes
+
+* **commons:** skip prototype-polluting keys in _.merge ([#3695](https://github.com/feathersjs/feathers/issues/3695)) ([88794cc](https://github.com/feathersjs/feathers/commit/88794cc432ce09e5559780545faa8134359abcce))
+
+
+
+
+
+
 ## [4.5.19](https://github.com/feathersjs/feathers/compare/v4.5.18...v4.5.19) (2026-02-07)
 
 
