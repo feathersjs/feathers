@@ -116,6 +116,27 @@ This is intentional. Schema validation and the legacy sanitizer are alternative 
 - Only add extra operators (for example `$ilike` or `$regex`) when your adapter supports them and your application needs them.
 - Avoid permissive schemas such as `additionalProperties: true` or an open object on external query validation unless you intentionally want clients to send those keys.
 
+#### Keeping adapter sanitization
+
+If you want **both** layers — schema validation and the adapter operator allowlist — pass `{ replaceSanitization: false }`:
+
+```ts
+app.service('messages').hooks({
+  around: {
+    all: [
+      schemaHooks.validateQuery(messageQueryValidator, {
+        // Still run the adapter's built-in $ operator allowlist after schema validation
+        replaceSanitization: false
+      })
+    ]
+  }
+})
+```
+
+With this option, a query must pass the schema **and** only use operators/filters the adapter allows. That is useful for defense in depth, especially with custom or more permissive query schemas. The default remains `replaceSanitization: true` so existing apps that treat the schema as the sole allowlist keep working.
+
+When `replaceSanitization` is `false`, any operator you intentionally allow in the schema (for example `$ilike` or `$regex`) must also be listed on the service's `operators` (or `filters` for top-level keys), or the adapter will reject it.
+
 ```ts
 import { Ajv, schemaHooks } from '@feathersjs/schema'
 import { Type, getValidator } from '@feathersjs/typebox'

@@ -4,7 +4,29 @@ import { VALIDATED } from '@feathersjs/adapter-commons'
 import { Schema, Validator } from '../schema'
 import { DataValidatorMap } from '../json-schema'
 
-export const validateQuery = <H extends HookContext>(schema: Schema<any> | Validator) => {
+/**
+ * Options for {@link validateQuery}.
+ */
+export type ValidateQueryOptions = {
+  /**
+   * When `true` (the default), a successfully validated query replaces the
+   * database adapter's built-in operator and filter allowlist (`sanitizeQuery`
+   * is skipped for that request).
+   *
+   * Set to `false` to keep adapter sanitization after schema validation
+   * (defense in depth). Both layers then apply: the schema must accept the
+   * query, and the adapter must still allow every `$` operator and filter.
+   *
+   * @default true
+   */
+  replaceSanitization?: boolean
+}
+
+export const validateQuery = <H extends HookContext>(
+  schema: Schema<any> | Validator,
+  options: ValidateQueryOptions = {}
+) => {
+  const { replaceSanitization = true } = options
   const validator: Validator = typeof schema === 'function' ? schema : schema.validate.bind(schema)
 
   return async (context: H, next?: NextFunction) => {
@@ -13,7 +35,11 @@ export const validateQuery = <H extends HookContext>(schema: Schema<any> | Valid
     try {
       const query = await validator(data)
 
-      Object.defineProperty(query, VALIDATED, { value: true })
+      // Marking as VALIDATED tells AdapterBase.sanitizeQuery to skip its allowlist.
+      // Opt out with replaceSanitization: false to run both layers.
+      if (replaceSanitization) {
+        Object.defineProperty(query, VALIDATED, { value: true })
+      }
 
       context.params = {
         ...context.params,

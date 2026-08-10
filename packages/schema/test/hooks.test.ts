@@ -1,5 +1,7 @@
 import { createContext } from '@feathersjs/feathers'
 import assert from 'assert'
+import { VALIDATED } from '@feathersjs/adapter-commons'
+import { validateQuery } from '../src'
 import { app, Message, User } from './fixture'
 
 describe('@feathersjs/schema/hooks', () => {
@@ -272,5 +274,31 @@ describe('@feathersjs/schema/hooks', () => {
         ]
       }
     )
+  })
+
+  it('validateQuery marks the query as validated by default', async () => {
+    const hook = validateQuery(async (query) => query)
+    const context: any = {
+      params: {
+        query: { name: 'Dave' }
+      }
+    }
+
+    await hook(context)
+
+    assert.strictEqual((context.params.query as any)[VALIDATED], true)
+  })
+
+  it('validateQuery can keep adapter sanitization with replaceSanitization: false', async () => {
+    const hook = validateQuery(async (query) => query, { replaceSanitization: false })
+    const context: any = {
+      params: {
+        query: { name: 'Dave' }
+      }
+    }
+
+    await hook(context)
+
+    assert.strictEqual((context.params.query as any)[VALIDATED], undefined)
   })
 })
