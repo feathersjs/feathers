@@ -78,6 +78,72 @@ describe('@feathersjs/schema/typebox', () => {
 
       assert.ok(validated)
     })
+
+    it('query syntax can sort by nested extension properties', async () => {
+      const schema = Type.Object({
+        profile: Type.Object({})
+      })
+      const querySchema = querySyntax(schema, {
+        profile: {
+          name: Type.String()
+        }
+      })
+      const validator = new Ajv().compile(querySchema)
+
+      type Query = Static<typeof querySchema>
+
+      const query: Query = {
+        $sort: {
+          'profile.name': 1
+        }
+      }
+
+      const validated = await validator(query)
+
+      assert.ok(validated)
+    })
+
+    it('query syntax can select nested extension properties', async () => {
+      const schema = Type.Object({
+        profile: Type.Object({})
+      })
+      const querySchema = querySyntax(schema, {
+        profile: {
+          name: Type.String()
+        }
+      })
+      const validator = new Ajv().compile(querySchema)
+
+      type Query = Static<typeof querySchema>
+
+      const query: Query = {
+        $select: ['profile.name']
+      }
+
+      const validated = await validator(query)
+
+      assert.ok(validated)
+    })
+
+    it('query syntax does not treat extension operators as sortable properties', async () => {
+      const schema = Type.Object({
+        name: Type.String()
+      })
+      const querySchema = querySyntax(schema, {
+        name: {
+          $ilike: Type.String()
+        }
+      })
+      const validator = new Ajv().compile(querySchema)
+
+      const validated = await validator({
+        $sort: {
+          'name.$ilike': 1
+        }
+      })
+
+      assert.ok(!validated)
+    })
   })
 
   it('$in and $nin works with array type', async () => {

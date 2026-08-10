@@ -54,9 +54,35 @@ export function StringEnum<T extends string[]>(allowedValues: [...T], options?: 
   return Type.Unsafe<T[number]>({ type: 'string', enum: allowedValues, ...options })
 }
 
-const arrayOfKeys = <T extends TObject>(type: T) => {
-  const keys = Object.keys(type.properties)
-  return Type.Unsafe<(keyof T['properties'])[]>({
+type QueryExtensions<T extends TObject> = {
+  [K in keyof T['properties']]?: { [key: string]: TSchema }
+}
+
+type NoQueryExtensions = Record<never, never>
+
+type ExtensionPropertyKeys<X> = {
+  [K in Extract<keyof X, string>]: {
+    [P in Extract<keyof NonNullable<X[K]>, string>]: P extends `$${string}` ? never : `${K}.${P}`
+  }[Extract<keyof NonNullable<X[K]>, string>]
+}[Extract<keyof X, string>]
+
+type QuerySyntaxKey<T extends TObject, X extends QueryExtensions<T>> =
+  | Extract<keyof T['properties'], string>
+  | ExtensionPropertyKeys<X>
+
+const querySyntaxKeys = <T extends TObject, X extends QueryExtensions<T>>(type: T, extensions: X) =>
+  [
+    ...Object.keys(type.properties),
+    ...Object.entries(extensions).flatMap(([property, extension]) =>
+      Object.keys(extension || {})
+        .filter((key) => !key.startsWith('$'))
+        .map((key) => `${property}.${key}`)
+    )
+  ] as QuerySyntaxKey<T, X>[]
+
+const arrayOfKeys = <T extends TObject, X extends QueryExtensions<T>>(type: T, extensions: X) => {
+  const keys = querySyntaxKeys(type, extensions)
+  return Type.Unsafe<QuerySyntaxKey<T, X>[]>({
     type: 'array',
     maxItems: keys.length,
     items: {
@@ -72,8 +98,11 @@ const arrayOfKeys = <T extends TObject>(type: T) => {
  * @param schema The TypeBox object schema
  * @returns The `$sort` syntax schema
  */
-export function sortDefinition<T extends TObject>(schema: T) {
-  const properties = Object.keys(schema.properties).reduce(
+export function sortDefinition<T extends TObject, X extends QueryExtensions<T> = NoQueryExtensions>(
+  schema: T,
+  extensions: X = {} as X
+) {
+  const properties = querySyntaxKeys(schema, extensions).reduce(
     (res, key) => {
       const result = res as any
 
@@ -81,7 +110,7 @@ export function sortDefinition<T extends TObject>(schema: T) {
 
       return result
     },
-    {} as { [K in keyof T['properties']]: TOptional<TInteger> }
+    {} as { [K in QuerySyntaxKey<T, X>]: TOptional<TInteger> }
   )
 
   return Type.Object(properties, { additionalProperties: false })
@@ -133,10 +162,7 @@ type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = Re
  * @param extensions Additional properties to add to a property query
  * @returns The Feathers query syntax schema
  */
-export const queryProperties = <
-  T extends TObject,
-  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
->(
+export const queryProperties = <T extends TObject, X extends QueryExtensions<T> = NoQueryExtensions>(
   definition: T,
   extensions: X = {} as X
 ) => {
@@ -164,10 +190,7 @@ export const queryProperties = <
  * @param options Options for the TypeBox object schema
  * @returns A TypeBox object representing the complete Feathers query syntax for the given properties
  */
-export const querySyntax = <
-  T extends TObject,
-  X extends { [K in keyof T['properties']]?: { [key: string]: TSchema } }
->(
+export const querySyntax = <T extends TObject, X extends QueryExtensions<T> = NoQueryExtensions>(
   type: T,
   extensions: X = {} as X,
   options: ObjectOptions = { additionalProperties: false }
@@ -183,8 +206,8 @@ export const querySyntax = <
           {
             $limit: Type.Number({ minimum: 0 }),
             $skip: Type.Number({ minimum: 0 }),
-            $sort: sortDefinition(type),
-            $select: arrayOfKeys(type),
+            $sort: sortDefinition(type, extensions),
+            $select: arrayOfKeys(type, extensions),
             $and,
             $or
           },
