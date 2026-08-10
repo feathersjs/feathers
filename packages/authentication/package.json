@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "4.5.20",
+  "version": "4.5.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,7 +43,8 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts",
+    "prepublishOnly": "npm run compile"
   },
   "directories": {
     "lib": "lib"
@@ -52,9 +53,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/errors": "^4.5.20",
-    "@feathersjs/feathers": "^4.5.20",
-    "@feathersjs/transport-commons": "^4.5.20",
+    "@feathersjs/errors": "^4.5.21",
+    "@feathersjs/feathers": "^4.5.21",
+    "@feathersjs/transport-commons": "^4.5.21",
     "@types/jsonwebtoken": "^9.0.10",
     "debug": "^4.4.3",
     "jsonwebtoken": "^9.0.3",

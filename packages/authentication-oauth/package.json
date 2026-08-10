@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-oauth",
   "description": "oAuth 1 and 2 authentication for Feathers. Powered by Grant.",
-  "version": "4.5.20",
+  "version": "4.5.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,7 +43,8 @@
     "start": "ts-node test/app",
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
-    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
+    "test": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts",
+    "prepublishOnly": "npm run compile"
   },
   "directories": {
     "lib": "lib"
@@ -52,10 +53,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.5.20",
-    "@feathersjs/errors": "^4.5.20",
-    "@feathersjs/express": "^4.5.20",
-    "@feathersjs/feathers": "^4.5.20",
+    "@feathersjs/authentication": "^4.5.21",
+    "@feathersjs/errors": "^4.5.21",
+    "@feathersjs/express": "^4.5.21",
+    "@feathersjs/feathers": "^4.5.21",
     "debug": "^4.4.3",
     "express-session": "^1.19.0",
     "grant": "^4.7.0",

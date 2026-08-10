@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication-local",
   "description": "Local authentication strategy for @feathers/authentication",
-  "version": "4.5.20",
+  "version": "4.5.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,7 +43,8 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts",
+    "prepublishOnly": "npm run compile"
   },
   "directories": {
     "lib": "lib"
@@ -52,9 +53,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.5.20",
-    "@feathersjs/errors": "^4.5.20",
-    "@feathersjs/feathers": "^4.5.20",
+    "@feathersjs/authentication": "^4.5.21",
+    "@feathersjs/errors": "^4.5.21",
+    "@feathersjs/feathers": "^4.5.21",
     "bcryptjs": "^2.4.3",
     "debug": "^4.4.3",
     "lodash": "^4.17.23"

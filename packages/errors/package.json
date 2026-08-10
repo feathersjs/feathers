@@ -1,56 +1,56 @@
 {
-	"name": "@feathersjs/errors",
-	"description": "Common error types for Feathers apps",
-	"version": "4.5.20",
-	"homepage": "https://feathersjs.com",
-	"main": "lib/index",
-	"types": "index.d.ts",
-	"keywords": [
-		"feathers",
-		"feathers-plugin"
-	],
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/feathersjs/feathers.git"
-	},
-	"author": {
-		"name": "Feathers contributors",
-		"email": "hello@feathersjs.com",
-		"url": "https://feathersjs.com"
-	},
-	"contributors": [],
-	"bugs": {
-		"url": "https://github.com/feathersjs/feathers/issues"
-	},
-	"engines": {
-		"node": ">= 10"
-	},
-	"directories": {
-		"lib": "lib"
-	},
-	"files": [
-		"CHANGELOG.md",
-		"LICENSE",
-		"README.md",
-		"src/**",
-		"lib/**",
-		"*.d.ts",
-		"*.js"
-	],
-	"scripts": {
-		"test": "mocha --config ../../.mocharc.json"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"dependencies": {
-		"debug": "^4.4.3"
-	},
-	"devDependencies": {
-		"@feathersjs/feathers": "^4.5.20",
-		"express": "^4.22.1",
-		"mocha": "^9.2.2"
-	},
-	"gitHead": "d0e9600002975296ab8de926acd317d0a73fce5c"
+  "name": "@feathersjs/errors",
+  "description": "Common error types for Feathers apps",
+  "version": "4.5.21",
+  "homepage": "https://feathersjs.com",
+  "main": "lib/index",
+  "types": "index.d.ts",
+  "keywords": [
+    "feathers",
+    "feathers-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feathersjs/feathers.git"
+  },
+  "author": {
+    "name": "Feathers contributors",
+    "email": "hello@feathersjs.com",
+    "url": "https://feathersjs.com"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/feathersjs/feathers/issues"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "src/**",
+    "lib/**",
+    "*.d.ts",
+    "*.js"
+  ],
+  "scripts": {
+    "test": "mocha --config ../../.mocharc.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "debug": "^4.4.3"
+  },
+  "devDependencies": {
+    "@feathersjs/feathers": "^4.5.21",
+    "express": "^4.22.1",
+    "mocha": "^9.2.2"
+  },
+  "gitHead": "d0e9600002975296ab8de926acd317d0a73fce5c"
 }

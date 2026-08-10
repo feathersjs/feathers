@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/configuration",
   "description": "A small configuration module for your Feathers application.",
-  "version": "4.5.20",
+  "version": "4.5.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -43,7 +43,8 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts",
+    "prepublishOnly": "npm run compile"
   },
   "semistandard": {
     "env": [
@@ -57,7 +58,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/feathers": "^4.5.20",
+    "@feathersjs/feathers": "^4.5.21",
     "config": "^3.3.12",
     "debug": "^4.4.3"
   },

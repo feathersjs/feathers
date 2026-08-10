@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "4.5.20",
+  "version": "4.5.21",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -33,7 +33,8 @@
     "prepublish": "npm run compile",
     "compile": "shx rm -rf lib/ && tsc",
     "test": "npm run compile && npm run mocha",
-    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts"
+    "mocha": "mocha --config ../../.mocharc.ts.json --recursive test/**.test.ts test/**/*.test.ts",
+    "prepublishOnly": "npm run compile"
   },
   "directories": {
     "lib": "lib"
@@ -46,7 +47,7 @@
     "lodash": "^4.17.23"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^4.5.20",
+    "@feathersjs/feathers": "^4.5.21",
     "@types/axios": "^0.14.4",
     "@types/debug": "^4.1.12",
     "@types/lodash": "^4.17.23",
