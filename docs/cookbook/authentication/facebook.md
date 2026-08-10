@@ -44,6 +44,8 @@ The client id (App ID) and secret can be found in the Settings of the [Facebook 
 
 The standard OAuth strategy only returns the default profile fields (`id` and `name`). To get other fields, like the email or profile picture, the [getProfile](../../api/authentication/oauth.md#getprofile-data-params) method of the [OAuth strategy needs to be customized](../../api/authentication/oauth.md#customization) to call the Graph API profile endpoint `https://graph.facebook.com/me` with an HTTP request library like [Axios](https://developers.facebook.com/tools/explorer/) requesting the additional fields.
 
+This `getProfile` pattern (call Graph with the provider access token) is also **required** if you put `"facebook"` in [`authStrategies`](../../api/authentication/service.md#configuration) so clients can authenticate with `{ strategy: 'facebook', accessToken: '...' }` on `POST /authentication`. Never accept a client-supplied `profile` as identity. Browser-only Facebook login via `/oauth/facebook` does not need the provider in `authStrategies`. See [OAuth configuration and security](../../api/authentication/oauth.md#configuration-and-security).
+
 > __Pro tip:__ Facebook API requests can be tested via the [Graph API explorer](https://developers.facebook.com/tools/explorer/).
 
 The following example allows to log in with Facebook in the [chat application from the guide](../../guides/index.md):

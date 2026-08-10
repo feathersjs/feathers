@@ -16,6 +16,7 @@ Update `config/default.json`:
 ```json
 {
   "authentication": {
+    "authStrategies": ["jwt", "firebase"],
     "oauth": {}
   },
   "firebase": {
@@ -27,6 +28,8 @@ Update `config/default.json`:
 
 ```
 > Note: Since Firebase can be used for more than just authentication, we'll store our service account in the root of our config. Otherwise, if preferred, you can store under `authentication.oauth`.
+
+`"firebase"` must be listed in `authStrategies` because clients authenticate with `POST /authentication` (flow #2). That is only safe because `getProfile` below calls `verifyIdToken` — never trust a client-supplied profile. See [OAuth configuration and security](../../api/authentication/oauth.md#configuration-and-security).
 
 ## Authentication Strategy
 

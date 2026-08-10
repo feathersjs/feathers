@@ -63,7 +63,7 @@ The following options are available:
 
 - `secret`: The JWT signing secret.
 - `service`: The path of the entity service
-- `authStrategies`: A list of authentication strategy names to allow on this authentication service to create access tokens.
+- `authStrategies`: A list of authentication strategy names allowed for **external** `create` calls (`POST /authentication` / `app.service('authentication').create`). Typical values are `jwt`, `local`, API keys, and only those custom strategies that accept external credentials. [OAuth](./oauth.md) providers used solely via the `/oauth/<provider>` redirect flow should be [registered](#register-name-strategy) and configured under `authentication.oauth`, but are usually **omitted** from this list. See [OAuth configuration and security](./oauth.md#configuration-and-security).
 - `parseStrategies`: A list of authentication strategies that should be used to parse HTTP requests. Defaults to the same as `authStrategies`.
 - `entity`: The name of the field that will contain the entity after successful authentication. Will also be used to set `params[entity]` (usually `params.user`) when using the [authenticate hook](./hook). Can be `null` if no entity is used (see [stateless tokens](../../cookbook/authentication/stateless.md)).
 - `entityId`: The id property of an entity object. Only necessary if the entity service does not have an `id` property (e.g. when using a custom entity service).
@@ -95,7 +95,7 @@ An authentication service configuration in `config/default.json` can look like t
 
 </BlockQuote>
 
-Additionally to the above configuration, most [strategies](./strategy.md) will look for their own configuration under the name it was registered. An example can be found in the [local strategy configuration](./local.md#configuration).
+Additionally to the above configuration, most [strategies](./strategy.md) will look for their own configuration under the name it was registered. An example can be found in the [local strategy configuration](./local.md#configuration). OAuth provider settings live under `authentication.oauth` (see [OAuth options](./oauth.md#options)), which is separate from `authStrategies`.
 
 ## Authentication flows
 

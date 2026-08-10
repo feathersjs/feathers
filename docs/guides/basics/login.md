@@ -239,7 +239,7 @@ export const authentication = (app: Application) => {
 
 <BlockQuote type="info">
 
-For more information about the OAuth flow and strategy see the [OAuth API documentation](../../api/authentication/oauth.md).
+For more information about the OAuth flow and strategy see the [OAuth API documentation](../../api/authentication/oauth.md). Generated apps keep OAuth providers under `authentication.oauth` and **out** of public `authStrategies` on purpose so browser login uses `/oauth/github` only. See [OAuth configuration and security](../../api/authentication/oauth.md#configuration-and-security).
 
 </BlockQuote>
 
