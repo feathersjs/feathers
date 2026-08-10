@@ -141,7 +141,7 @@ export type Message = FromSchema<
 
 Schema ships with a few helpers to automatically create schemas that comply with the [Feathers query syntax](../databases/querying.md) (like `$gt`, `$ne` etc.).
 
-When those schemas are used with [`validateQuery`](./validators.md#validatequery), they become the full allowlist for client queries: the adapter does not re-apply its built-in `$` operator sanitization. Always set `additionalProperties: false` (as in the examples below) and only allow operators your adapter supports. See [Query validation replaces adapter sanitization](./validators.md#query-validation-replaces-adapter-sanitization).
+When those schemas are used with [`validateQuery`](./validators.md#validatequery), they become the full allowlist for client queries: the adapter does not re-apply its built-in `$` operator sanitization. Always set `additionalProperties: false` (as in the examples below) and only allow operators your adapter supports. Omitting that keyword is not the same as setting it to `false` — Ajv will then accept unknown keys. See [Query validation replaces adapter sanitization](./validators.md#query-validation-replaces-adapter-sanitization).
 
 ### querySyntax
 

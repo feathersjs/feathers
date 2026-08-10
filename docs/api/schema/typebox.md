@@ -83,6 +83,8 @@ type MessageData = Static<typeof messageDataSchema>
 
 Query schemas used with [`validateQuery`](./validators.md#validatequery) define the full set of allowed client query keys and operators. After a successful validation the adapter skips its built-in query sanitization, so treat these schemas as allowlists: use `querySyntax`, set `additionalProperties: false`, and only extend operators your adapter supports. See [Query validation replaces adapter sanitization](./validators.md#query-validation-replaces-adapter-sanitization).
 
+Do not rely on a bare `Type.Object({ ... })` for external query validation. Without `{ additionalProperties: false }`, Ajv accepts unknown keys (including unexpected `$` operators). See [TypeBox and JSON Schema defaults](./validators.md#query-validation-replaces-adapter-sanitization).
+
 ### querySyntax
 
 `querySyntax(definition, extensions, options)` returns a schema to validate the [Feathers query syntax](../databases/querying.md) for all properties in a TypeBox definition. By default it rejects additional properties (`additionalProperties: false`).
@@ -1433,6 +1435,8 @@ Array types support the following options, which can be used simultaneously.
 ##### `additionalProperties`
 
 Specifies if keys other than the ones specified in the schema are allowed to be present in the object.
+
+If you omit this option, TypeBox does not emit `additionalProperties` in the schema. Ajv then follows the JSON Schema default and **allows** unknown keys. For any object that validates external input (especially [query schemas](#query-schemas)), set `additionalProperties: false` explicitly unless you intentionally want open objects.
 
 ##### `maxProperties`
 

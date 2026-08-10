@@ -116,6 +116,31 @@ This is intentional. Schema validation and the legacy sanitizer are alternative 
 - Only add extra operators (for example `$ilike` or `$regex`) when your adapter supports them and your application needs them.
 - Avoid permissive schemas such as `additionalProperties: true` or an open object on external query validation unless you intentionally want clients to send those keys.
 
+<BlockQuote type="warning" label="TypeBox and JSON Schema defaults">
+
+A plain TypeBox object **without** an options argument is **not** a closed allowlist when validated with Ajv:
+
+```ts
+// Permissive under Ajv: unknown keys (including $where, $regex, …) are accepted
+Type.Object({
+  text: Type.String()
+})
+
+// Closed allowlist: unknown keys are rejected
+Type.Object(
+  {
+    text: Type.String()
+  },
+  { additionalProperties: false }
+)
+```
+
+TypeBox only emits `additionalProperties` when you set it. If the keyword is omitted, JSON Schema / Ajv treat extra properties as allowed. The same applies to plain JSON Schema objects that do not set `additionalProperties: false`.
+
+For query schemas, prefer [`querySyntax`](./typebox.md#querysyntax) (it defaults to `additionalProperties: false`) or always pass `{ additionalProperties: false }` on hand-written query objects. This matters especially with `validateQuery`, because a successful validation becomes the full allowlist for the adapter.
+
+</BlockQuote>
+
 #### Keeping adapter sanitization
 
 If you want **both** layers — schema validation and the adapter operator allowlist — pass `{ skipSanitize: false }`:

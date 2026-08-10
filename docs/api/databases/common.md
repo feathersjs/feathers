@@ -48,7 +48,7 @@ Adapters protect external queries in one of two ways. You choose one path per se
 | Built-in sanitization | No `validateQuery` hook (or the query was not validated) | The common query syntax, plus any `operators` / `filters` on the service |
 | Query schema | [`validateQuery`](../schema/validators.md#validatequery) succeeds | **Only** your query schema |
 
-With a query schema, the adapter does not re-run its `$` operator allowlist by default. The schema is the full allowlist. Use `querySyntax` / query helpers and `additionalProperties: false` so unknown operators cannot pass through. To run **both** schema validation and the built-in allowlist, use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization). See [validateQuery](../schema/validators.md#validatequery) for details.
+With a query schema, the adapter does not re-run its `$` operator allowlist by default. The schema is the full allowlist. Use `querySyntax` / query helpers and `additionalProperties: false` so unknown operators cannot pass through. Hand-written TypeBox `Type.Object({ ... })` schemas without that option are permissive under Ajv. To run **both** schema validation and the built-in allowlist, use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization). See [validateQuery](../schema/validators.md#validatequery) for details.
 
 For database specific options see the adapter documentation.
 
