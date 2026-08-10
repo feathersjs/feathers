@@ -83,7 +83,7 @@ type MessageData = Static<typeof messageDataSchema>
 
 Query schemas used with [`validateQuery`](./validators.md#validatequery) define the full set of allowed client query keys and operators. After a successful validation the adapter skips its built-in query sanitization, so treat these schemas as allowlists: use `querySyntax`, set `additionalProperties: false`, and only extend operators your adapter supports. See [Query validation replaces adapter sanitization](./validators.md#query-validation-replaces-adapter-sanitization).
 
-Do not rely on a bare `Type.Object({ ... })` for external query validation. Without `{ additionalProperties: false }`, Ajv accepts unknown keys (including unexpected `$` operators). See [TypeBox and JSON Schema defaults](./validators.md#query-validation-replaces-adapter-sanitization).
+Do not rely on a bare `Type.Object({ ... })` for external query validation. Without `{ additionalProperties: false }`, Ajv accepts unknown keys (including unexpected `$` operators). See the warning under [Query validation replaces adapter sanitization](./validators.md#query-validation-replaces-adapter-sanitization).
 
 ### querySyntax
 

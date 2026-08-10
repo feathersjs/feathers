@@ -41,12 +41,12 @@ The following legacy options are still available but should be avoided:
 
 #### How queries are restricted
 
-Adapters protect external queries in one of two ways. You choose one path per service; they are not combined.
+Adapters protect external queries in one of two ways. By default they are alternatives, not stacked layers.
 
 | Path | When it applies | What defines allowed queries |
 | --- | --- | --- |
-| Built-in sanitization | No `validateQuery` hook (or the query was not validated) | The common query syntax, plus any `operators` / `filters` on the service |
-| Query schema | [`validateQuery`](../schema/validators.md#validatequery) succeeds | **Only** your query schema |
+| Built-in sanitization | No `validateQuery` hook (or the query was not marked validated) | The common query syntax, plus any `operators` / `filters` on the service |
+| Query schema | [`validateQuery`](../schema/validators.md#validatequery) succeeds with default options | **Only** your query schema |
 
 With a query schema, the adapter does not re-run its `$` operator allowlist by default. The schema is the full allowlist. Use `querySyntax` / query helpers and `additionalProperties: false` so unknown operators cannot pass through. Hand-written TypeBox `Type.Object({ ... })` schemas without that option are permissive under Ajv. To run **both** schema validation and the built-in allowlist, use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization). See [validateQuery](../schema/validators.md#validatequery) for details.
 

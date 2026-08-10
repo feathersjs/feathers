@@ -1,6 +1,7 @@
-import { createContext } from '@feathersjs/feathers'
+import { createContext, feathers } from '@feathersjs/feathers'
 import assert from 'assert'
 import { VALIDATED } from '@feathersjs/adapter-commons'
+import { MemoryService } from '@feathersjs/memory'
 import { validateQuery } from '../src'
 import { app, Message, User } from './fixture'
 
@@ -300,5 +301,62 @@ describe('@feathersjs/schema/hooks', () => {
     await hook(context)
 
     assert.strictEqual((context.params.query as any)[VALIDATED], undefined)
+  })
+
+  it('skipSanitize: false still rejects operators outside the adapter allowlist', async () => {
+    const serviceApp = feathers()
+    // Pass-through schema accepts any query; only skipSanitize controls VALIDATED stamping
+    const acceptAnyQuery = async (query: any) => query
+
+    serviceApp.use('/items', new MemoryService())
+    serviceApp.service('items').hooks({
+      before: {
+        find: [validateQuery(acceptAnyQuery, { skipSanitize: false })]
+      }
+    })
+
+    await serviceApp.service('items').create({ name: 'Dave' })
+
+    await assert.rejects(
+      () =>
+        serviceApp.service('items').find({
+          query: {
+            name: {
+              $regex: 'Da.*'
+            }
+          }
+        }),
+      {
+        name: 'BadRequest',
+        message: 'Invalid query parameter $regex'
+      }
+    )
+  })
+
+  it('default validateQuery skips adapter allowlist so non-standard operators can reach the adapter', async () => {
+    const serviceApp = feathers()
+    const acceptAnyQuery = async (query: any) => query
+
+    serviceApp.use('/items', new MemoryService())
+    serviceApp.service('items').hooks({
+      before: {
+        find: [validateQuery(acceptAnyQuery)]
+      }
+    })
+
+    await serviceApp.service('items').create({ name: 'Dave' })
+
+    // $regex is not in the built-in allowlist; with skipSanitize true (default) sanitizeQuery
+    // is skipped so the adapter does not throw Invalid query parameter.
+    const result = await serviceApp.service('items').find({
+      query: {
+        name: {
+          $regex: 'Da.*'
+        }
+      }
+    })
+
+    assert.strictEqual(result.length, 1)
+    assert.strictEqual(result[0].name, 'Dave')
   })
 })
