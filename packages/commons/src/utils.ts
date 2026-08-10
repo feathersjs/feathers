@@ -75,6 +75,11 @@ export const _ = {
   merge (target: any, source: any) {
     if (_.isObject(target) && _.isObject(source)) {
       Object.keys(source).forEach(key => {
+        // Skip prototype-polluting keys (e.g. JSON-parsed `__proto__`)
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return;
+        }
+
         if (_.isObject(source[key])) {
           if (!target[key]) {
             Object.assign(target, { [key]: {} });
