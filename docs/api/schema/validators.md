@@ -118,7 +118,7 @@ This is intentional. Schema validation and the legacy sanitizer are alternative 
 
 #### Keeping adapter sanitization
 
-If you want **both** layers — schema validation and the adapter operator allowlist — pass `{ replaceSanitization: false }`:
+If you want **both** layers — schema validation and the adapter operator allowlist — pass `{ skipSanitize: false }`:
 
 ```ts
 app.service('messages').hooks({
@@ -126,16 +126,16 @@ app.service('messages').hooks({
     all: [
       schemaHooks.validateQuery(messageQueryValidator, {
         // Still run the adapter's built-in $ operator allowlist after schema validation
-        replaceSanitization: false
+        skipSanitize: false
       })
     ]
   }
 })
 ```
 
-With this option, a query must pass the schema **and** only use operators/filters the adapter allows. That is useful for defense in depth, especially with custom or more permissive query schemas. The default remains `replaceSanitization: true` so existing apps that treat the schema as the sole allowlist keep working.
+With this option, a query must pass the schema **and** only use operators/filters the adapter allows. That is useful for defense in depth, especially with custom or more permissive query schemas. The default remains `skipSanitize: true` so existing apps that treat the schema as the sole allowlist keep working.
 
-When `replaceSanitization` is `false`, any operator you intentionally allow in the schema (for example `$ilike` or `$regex`) must also be listed on the service's `operators` (or `filters` for top-level keys), or the adapter will reject it.
+When `skipSanitize` is `false`, any operator you intentionally allow in the schema (for example `$ilike` or `$regex`) must also be listed on the service's `operators` (or `filters` for top-level keys), or the adapter will reject it.
 
 ```ts
 import { Ajv, schemaHooks } from '@feathersjs/schema'

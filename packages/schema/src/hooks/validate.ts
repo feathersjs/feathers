@@ -9,24 +9,24 @@ import { DataValidatorMap } from '../json-schema'
  */
 export type ValidateQueryOptions = {
   /**
-   * When `true` (the default), a successfully validated query replaces the
-   * database adapter's built-in operator and filter allowlist (`sanitizeQuery`
-   * is skipped for that request).
+   * When `true` (the default), a successfully validated query marks the query
+   * so adapters skip their built-in operator and filter allowlist
+   * (`sanitizeQuery`). The schema is then the full allowlist.
    *
-   * Set to `false` to keep adapter sanitization after schema validation
+   * Set to `false` to still run adapter sanitization after schema validation
    * (defense in depth). Both layers then apply: the schema must accept the
    * query, and the adapter must still allow every `$` operator and filter.
    *
    * @default true
    */
-  replaceSanitization?: boolean
+  skipSanitize?: boolean
 }
 
 export const validateQuery = <H extends HookContext>(
   schema: Schema<any> | Validator,
   options: ValidateQueryOptions = {}
 ) => {
-  const { replaceSanitization = true } = options
+  const { skipSanitize = true } = options
   const validator: Validator = typeof schema === 'function' ? schema : schema.validate.bind(schema)
 
   return async (context: H, next?: NextFunction) => {
@@ -36,8 +36,8 @@ export const validateQuery = <H extends HookContext>(
       const query = await validator(data)
 
       // Marking as VALIDATED tells AdapterBase.sanitizeQuery to skip its allowlist.
-      // Opt out with replaceSanitization: false to run both layers.
-      if (replaceSanitization) {
+      // Opt out with skipSanitize: false to run both layers.
+      if (skipSanitize) {
         Object.defineProperty(query, VALIDATED, { value: true })
       }
 

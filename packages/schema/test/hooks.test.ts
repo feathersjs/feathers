@@ -289,8 +289,8 @@ describe('@feathersjs/schema/hooks', () => {
     assert.strictEqual((context.params.query as any)[VALIDATED], true)
   })
 
-  it('validateQuery can keep adapter sanitization with replaceSanitization: false', async () => {
-    const hook = validateQuery(async (query) => query, { replaceSanitization: false })
+  it('validateQuery can keep adapter sanitization with skipSanitize: false', async () => {
+    const hook = validateQuery(async (query) => query, { skipSanitize: false })
     const context: any = {
       params: {
         query: { name: 'Dave' }
