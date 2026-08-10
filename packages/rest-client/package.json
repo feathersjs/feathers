@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/rest-client",
   "description": "REST client services for different Ajax libraries",
-  "version": "5.0.46",
+  "version": "5.0.47",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -60,7 +60,7 @@
     "qs": "^6.15.2"
   },
   "devDependencies": {
-    "@feathersjs/express": "^5.0.46",
+    "@feathersjs/express": "^5.0.47",
     "@feathersjs/memory": "^5.0.46",
     "@feathersjs/tests": "^5.0.46",
     "@types/mocha": "^10.0.10",

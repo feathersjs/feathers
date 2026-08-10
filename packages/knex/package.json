@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/knex",
   "description": "Feathers SQL service adapter using KnexJS",
-  "version": "5.0.46",
+  "version": "5.0.47",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.46",
-    "@feathersjs/schema": "^5.0.46",
+    "@feathersjs/schema": "^5.0.47",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
     "knex": "^3.2.10",
