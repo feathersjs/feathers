@@ -14,7 +14,9 @@ Here are some things that you should be aware of when writing your app to make s
 
 - Make sure to set up proper [event channels](../api/channels.md) so that only clients that are allowed to see them can see real-time updates
 - Use hooks to check security roles to make sure users can only access data they should be permitted to. You can find useful hook utilities in [feathers-hooks-common](https://hooks-common.feathersjs.com/) and [feathers-authentication-hooks](https://github.com/feathersjs-ecosystem/feathers-authentication-hooks/).
-- Restrict the [allowed database queries](../api/databases/querying.md) to only the use cases your application requires by sanitizing `params.query` in a hook.
+- Restrict the [allowed database queries](../api/databases/querying.md) to only the use cases your application requires. Feathers supports two paths (by default they are alternatives; opt into both with `skipSanitize: false`):
+  - **Without** [`validateQuery`](../api/schema/validators.md#validatequery): adapters apply a built-in allowlist of query operators and filters (optionally extended via service `operators` / `filters`).
+  - **With** `validateQuery` (default `skipSanitize: true`): your query schema is the full allowlist. The adapter skips its built-in operator sanitization for validated queries. Use [`querySyntax`](../api/schema/typebox.md#querysyntax) (or the JSON schema helpers) and set `additionalProperties: false` so clients cannot send unexpected `$` operators. A plain TypeBox `Type.Object({ ... })` **without** that flag is permissive under Ajv and is not a closed allowlist. Generated apps already use closed schemas. For defense in depth you can keep both layers with [`validateQuery(schema, { skipSanitize: false })`](../api/schema/validators.md#keeping-adapter-sanitization). See [How queries are restricted](../api/databases/common.md#how-queries-are-restricted).
 - When you explicitly allow multiple element changes, make sure queries are secured properly to limit the items that can be changed.
 
 - Escape any HTML and JavaScript to avoid XSS attacks.

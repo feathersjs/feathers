@@ -245,6 +245,7 @@ describe('Feathers MongoDB Service', () => {
 
     afterEach(async () => {
       peopleService.options.multi = false
+      peopleService.options.disableObjectify = false
 
       try {
         await Promise.all([
@@ -745,17 +746,40 @@ describe('Feathers MongoDB Service', () => {
 
   describe('query validation', () => {
     it('validated queries are not sanitized', async () => {
-      const dave = await app.service('people').create({ name: 'Dave' })
-      const result = await app.service('people').find({
-        query: {
-          name: {
-            $regex: 'Da.*'
-          }
-        }
-      })
-      assert.deepStrictEqual(result, [dave])
+      const people = app.service('people')
+      // Isolate from earlier tests that mutate shared service options
+      const previous = {
+        multi: people.options.multi,
+        disableObjectify: people.options.disableObjectify,
+        paginate: people.options.paginate
+      }
+      people.options.multi = false
+      people.options.disableObjectify = false
+      people.options.paginate = false
 
-      app.service('people').remove(dave._id)
+      try {
+        const name = `Dave-${Date.now()}`
+        const dave = await people.create({ name })
+        assert.ok(dave && dave._id, 'create should return the created person')
+
+        // $regex is not in the default operator allowlist; validateQuery marks the
+        // query as validated so sanitizeQuery skips and $regex reaches MongoDB.
+        const result = await people.find({
+          paginate: false,
+          query: {
+            name: {
+              $regex: '^Dave-'
+            }
+          }
+        })
+        assert.deepStrictEqual(result, [dave])
+
+        await people.remove(dave._id)
+      } finally {
+        people.options.multi = previous.multi
+        people.options.disableObjectify = previous.disableObjectify
+        people.options.paginate = previous.paginate
+      }
     })
   })
 

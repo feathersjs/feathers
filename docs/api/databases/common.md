@@ -36,8 +36,19 @@ The following options are available for all database adapters:
 The following legacy options are still available but should be avoided:
 
 - `events {string[]}` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
-- `operators {string[]}` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Not necessary when using a [query schema](../schema/validators.md#validatequery)
-- `filters {Object}` (_optional_, **deprecated**) - An object of additional top level query filters, e.g. `{ $populate: true }`. Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`. Not necessary when using a [query schema](../schema/validators.md#validatequery)
+- `operators {string[]}` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Prefer a [query schema](../schema/validators.md#validatequery) instead.
+- `filters {Object}` (_optional_, **deprecated**) - An object of additional top level query filters, e.g. `{ $populate: true }`. Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`. Prefer a [query schema](../schema/validators.md#validatequery) instead.
+
+#### How queries are restricted
+
+Adapters protect external queries in one of two ways. By default they are alternatives, not stacked layers.
+
+| Path | When it applies | What defines allowed queries |
+| --- | --- | --- |
+| Built-in sanitization | No `validateQuery` hook (or the query was not marked validated) | The common query syntax, plus any `operators` / `filters` on the service |
+| Query schema | [`validateQuery`](../schema/validators.md#validatequery) succeeds with default options | **Only** your query schema |
+
+With a query schema, the adapter does not re-run its `$` operator allowlist by default. The schema is the full allowlist. Use `querySyntax` / query helpers and `additionalProperties: false` so unknown operators cannot pass through. Hand-written TypeBox `Type.Object({ ... })` schemas without that option are permissive under Ajv. To run **both** schema validation and the built-in allowlist, use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization). See [validateQuery](../schema/validators.md#validatequery) for details.
 
 For database specific options see the adapter documentation.
 

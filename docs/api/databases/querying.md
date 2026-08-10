@@ -12,6 +12,8 @@ When used via REST URLs all query values are strings and may need to be converte
 
 </BlockQuote>
 
+External queries are restricted either by the adapter's built-in operator allowlist or by a [query schema](../schema/validators.md#validatequery) (by default not both at once; see `skipSanitize`). See [How queries are restricted](./common.md#how-queries-are-restricted).
+
 ## Filters
 
 Filters are special properties (starting with a `$`) added at the top level of a query. They can determine page settings, the properties to select and more.

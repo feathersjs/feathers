@@ -95,6 +95,73 @@ app.service('users').hooks({
 
 `schemaHooks.validateQuery` takes a [validation function](#validation-functions) and validates the `query` of a request. It can be used as an `around` or `before` hook. When using the `queryValidator` from the [usage](#usage) section, strings will automatically be converted to the right type using [Ajv's type coercion rules](https://ajv.js.org/coercion.html).
 
+#### Query validation replaces adapter sanitization
+
+Database adapters have a built-in query sanitizer that only allows the [common query syntax](../databases/querying.md) plus any extra `operators` / `filters` you configure on the service. That is the default path when you do **not** use `validateQuery`.
+
+When you use `validateQuery`, you opt into a different path by design:
+
+1. The query is validated against **your** schema.
+2. A successful validation marks the query as validated.
+3. The adapter **skips** its built-in `$` operator and filter allowlist for that request.
+
+Your query schema is then the full allowlist for client queries on that service. Anything the schema accepts can reach the database adapter. Anything it rejects is blocked before the adapter runs.
+
+This is intentional. Schema validation and the legacy sanitizer are alternative ways to define allowed queries, not layers that always run together.
+
+**Write query schemas as allowlists:**
+
+- Prefer [`querySyntax`](./typebox.md#querysyntax) (or the [JSON schema helpers](./schema.md#query-helpers)) so only the common operators are allowed on each property.
+- Set `additionalProperties: false` on query objects so unknown keys (including unexpected `$` operators) are rejected. Generated applications already do this.
+- Only add extra operators (for example `$ilike` or `$regex`) when your adapter supports them and your application needs them.
+- Avoid permissive schemas such as `additionalProperties: true` or an open object on external query validation unless you intentionally want clients to send those keys.
+
+<BlockQuote type="warning" label="TypeBox and JSON Schema defaults">
+
+A plain TypeBox object **without** an options argument is **not** a closed allowlist when validated with Ajv:
+
+```ts
+// Permissive under Ajv: unknown keys (including $where, $regex, …) are accepted
+Type.Object({
+  text: Type.String()
+})
+
+// Closed allowlist: unknown keys are rejected
+Type.Object(
+  {
+    text: Type.String()
+  },
+  { additionalProperties: false }
+)
+```
+
+TypeBox only emits `additionalProperties` when you set it. If the keyword is omitted, JSON Schema / Ajv treat extra properties as allowed. The same applies to plain JSON Schema objects that do not set `additionalProperties: false`.
+
+For query schemas, prefer [`querySyntax`](./typebox.md#querysyntax) (it defaults to `additionalProperties: false`) or always pass `{ additionalProperties: false }` on hand-written query objects. This matters especially with `validateQuery`, because a successful validation becomes the full allowlist for the adapter.
+
+</BlockQuote>
+
+#### Keeping adapter sanitization
+
+If you want **both** layers — schema validation and the adapter operator allowlist — pass `{ skipSanitize: false }`:
+
+```ts
+app.service('messages').hooks({
+  around: {
+    all: [
+      schemaHooks.validateQuery(messageQueryValidator, {
+        // Still run the adapter's built-in $ operator allowlist after schema validation
+        skipSanitize: false
+      })
+    ]
+  }
+})
+```
+
+With this option, a query must pass the schema **and** only use operators/filters the adapter allows. That is useful for defense in depth, especially with custom or more permissive query schemas. The default remains `skipSanitize: true` so existing apps that treat the schema as the sole allowlist keep working.
+
+When `skipSanitize` is `false`, any operator you intentionally allow in the schema (for example `$ilike` or `$regex`) must also be listed on the service's `operators` (or `filters` for top-level keys), or the adapter will reject it.
+
 ```ts
 import { Ajv, schemaHooks } from '@feathersjs/schema'
 import { Type, getValidator } from '@feathersjs/typebox'
