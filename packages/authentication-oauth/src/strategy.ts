@@ -11,6 +11,41 @@ import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1'])
+
+/** Strip IPv6 brackets so `[::1]` and `::1` compare the same. */
+function normalizeHostname(hostname: string) {
+  return hostname.toLowerCase().replace(/^\[|\]$/g, '')
+}
+
+function isLoopbackHost(hostname: string) {
+  return LOOPBACK_HOSTS.has(normalizeHostname(hostname))
+}
+
+/**
+ * Match key for origin allowlisting.
+ * Non-loopback hosts use the full WHATWG origin (scheme + host + port).
+ * Loopback hosts drop the port so local frontends on any port can match a single allowlist entry.
+ */
+function originMatchKey(value: string) {
+  const url = new URL(value)
+  const host = normalizeHostname(url.hostname)
+
+  if (isLoopbackHost(host)) {
+    return `${url.protocol}//${host}`
+  }
+
+  return url.origin.toLowerCase()
+}
+
+function isOriginAllowed(refererOrigin: string, configured: string) {
+  try {
+    return originMatchKey(refererOrigin) === originMatchKey(configured)
+  } catch {
+    return false
+  }
+}
+
 /**
  * Validates that appending a user-supplied path to a base URL does not change the origin.
  * Uses both URL resolution and string concatenation checks to catch all open redirect vectors:
@@ -120,14 +155,15 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
         throw new NotAuthenticated(`Invalid referer "${referer}".`)
       }
 
-      // Compare full origins
-      const allowedOrigin = origins.find((current) => refererOrigin.toLowerCase() === current.toLowerCase())
+      // Exact origin match; loopback hosts also match any port (see originMatchKey).
+      // Always return the referer origin so redirects use the port the client came from.
+      const allowedOrigin = origins.find((current) => isOriginAllowed(refererOrigin, current))
 
       if (!allowedOrigin) {
         throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
       }
 
-      return allowedOrigin
+      return refererOrigin
     }
 
     return redirect
