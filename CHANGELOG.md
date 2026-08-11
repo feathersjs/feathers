@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.48](https://github.com/feathersjs/feathers/compare/v5.0.47...v5.0.48) (2026-08-11)
+
+### Bug Fixes
+
+- **authentication-oauth:** allow any port on loopback OAuth origins ([#3699](https://github.com/feathersjs/feathers/issues/3699)) ([1a58896](https://github.com/feathersjs/feathers/commit/1a58896a1d5b8a0cd54b86eab3751863895789f4)), closes [#3684](https://github.com/feathersjs/feathers/issues/3684)
+
 ## [5.0.47](https://github.com/feathersjs/feathers/compare/v5.0.46...v5.0.47) (2026-08-10)
 
 **Note:** Version bump only for package @feathersjs/feathers

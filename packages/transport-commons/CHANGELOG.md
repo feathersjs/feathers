@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.48](https://github.com/feathersjs/feathers/compare/v5.0.47...v5.0.48) (2026-08-11)
+
+**Note:** Version bump only for package @feathersjs/transport-commons
+
 ## [5.0.46](https://github.com/feathersjs/feathers/compare/v5.0.45...v5.0.46) (2026-06-27)
 
 ### Bug Fixes
