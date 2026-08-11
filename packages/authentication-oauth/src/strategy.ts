@@ -11,7 +11,8 @@ import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
-const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1'])
+// Local machine addresses: match any port when scheme + host are allowlisted.
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '0.0.0.0'])
 
 /** Strip IPv6 brackets so `[::1]` and `::1` compare the same. */
 function normalizeHostname(hostname: string) {
@@ -44,6 +45,15 @@ function isOriginAllowed(refererOrigin: string, configured: string) {
   } catch {
     return false
   }
+}
+
+function originNotAllowedMessage(refererOrigin: string, origins: string[]) {
+  return (
+    `Referer origin "${refererOrigin}" is not allowed. ` +
+    `Configured origins: ${origins.join(', ')}. ` +
+    `Use a full origin (scheme + host + port when non-default). ` +
+    `Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.`
+  )
 }
 
 /**
@@ -152,7 +162,9 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       try {
         refererOrigin = new URL(referer).origin
       } catch {
-        throw new NotAuthenticated(`Invalid referer "${referer}".`)
+        throw new NotAuthenticated(
+          `Invalid referer "${referer}". Expected an absolute URL (e.g. http://localhost:3000).`
+        )
       }
 
       // Exact origin match; loopback hosts also match any port (see originMatchKey).
@@ -160,7 +172,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       const allowedOrigin = origins.find((current) => isOriginAllowed(refererOrigin, current))
 
       if (!allowedOrigin) {
-        throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
+        throw new NotAuthenticated(originNotAllowedMessage(refererOrigin, origins))
       }
 
       return refererOrigin

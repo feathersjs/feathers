@@ -202,7 +202,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "https://target.com.attacker.com/login" is not allowed.'
+          message:
+            'Referer origin "https://target.com.attacker.com" is not allowed. ' +
+            'Configured origins: https://target.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -220,7 +224,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "https://target.com-evil.attacker.com/login" is not allowed.'
+          message:
+            'Referer origin "https://target.com-evil.attacker.com" is not allowed. ' +
+            'Configured origins: https://target.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -305,6 +313,21 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
       assert.equal(redirect, 'http://[::1]:4173#access_token=testing')
     })
 
+    it('should allow any port on 0.0.0.0', async () => {
+      app.get('authentication').oauth.origins = ['http://0.0.0.0:3030']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://0.0.0.0:5173/app'
+          }
+        }
+      )
+
+      assert.equal(redirect, 'http://0.0.0.0:5173#access_token=testing')
+    })
+
     it('should not treat localhost and 127.0.0.1 as the same host', async () => {
       app.get('authentication').oauth.origins = ['http://localhost']
 
@@ -319,7 +342,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "http://127.0.0.1:3000/login" is not allowed.'
+          message:
+            'Referer origin "http://127.0.0.1:3000" is not allowed. ' +
+            'Configured origins: http://localhost. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -338,7 +365,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "https://app.example.com:8443/login" is not allowed.'
+          message:
+            'Referer origin "https://app.example.com:8443" is not allowed. ' +
+            'Configured origins: https://app.example.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -357,7 +388,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "http://localhost:3000/login" is not allowed.'
+          message:
+            'Referer origin "http://localhost:3000" is not allowed. ' +
+            'Configured origins: https://localhost. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -483,7 +518,11 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
           }
         ),
       {
-        message: 'Referer "https://example.com" is not allowed.'
+        message:
+          'Referer origin "https://example.com" is not allowed. ' +
+          'Configured origins: https://feathersjs.com, https://feathers.cloud. ' +
+          'Use a full origin (scheme + host + port when non-default). ' +
+          'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
       }
     )
   })
