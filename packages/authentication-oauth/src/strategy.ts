@@ -11,6 +11,51 @@ import qs from 'qs'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
+// Local machine addresses: match any port when scheme + host are allowlisted.
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '0.0.0.0'])
+
+/** Strip IPv6 brackets so `[::1]` and `::1` compare the same. */
+function normalizeHostname(hostname: string) {
+  return hostname.toLowerCase().replace(/^\[|\]$/g, '')
+}
+
+function isLoopbackHost(hostname: string) {
+  return LOOPBACK_HOSTS.has(normalizeHostname(hostname))
+}
+
+/**
+ * Match key for origin allowlisting.
+ * Non-loopback hosts use the full WHATWG origin (scheme + host + port).
+ * Loopback hosts drop the port so local frontends on any port can match a single allowlist entry.
+ */
+function originMatchKey(value: string) {
+  const url = new URL(value)
+  const host = normalizeHostname(url.hostname)
+
+  if (isLoopbackHost(host)) {
+    return `${url.protocol}//${host}`
+  }
+
+  return url.origin.toLowerCase()
+}
+
+function isOriginAllowed(refererOrigin: string, configured: string) {
+  try {
+    return originMatchKey(refererOrigin) === originMatchKey(configured)
+  } catch {
+    return false
+  }
+}
+
+function originNotAllowedMessage(refererOrigin: string, origins: string[]) {
+  return (
+    `Referer origin "${refererOrigin}" is not allowed. ` +
+    `Configured origins: ${origins.join(', ')}. ` +
+    `Use a full origin (scheme + host + port when non-default). ` +
+    `Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.`
+  )
+}
+
 /**
  * Validates that appending a user-supplied path to a base URL does not change the origin.
  * Uses both URL resolution and string concatenation checks to catch all open redirect vectors:
@@ -117,17 +162,20 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       try {
         refererOrigin = new URL(referer).origin
       } catch {
-        throw new NotAuthenticated(`Invalid referer "${referer}".`)
+        throw new NotAuthenticated(
+          `Invalid referer "${referer}". Expected an absolute URL (e.g. http://localhost:3000).`
+        )
       }
 
-      // Compare full origins
-      const allowedOrigin = origins.find((current) => refererOrigin.toLowerCase() === current.toLowerCase())
+      // Exact origin match; loopback hosts also match any port (see originMatchKey).
+      // Always return the referer origin so redirects use the port the client came from.
+      const allowedOrigin = origins.find((current) => isOriginAllowed(refererOrigin, current))
 
       if (!allowedOrigin) {
-        throw new NotAuthenticated(`Referer "${referer}" is not allowed.`)
+        throw new NotAuthenticated(originNotAllowedMessage(refererOrigin, origins))
       }
 
-      return allowedOrigin
+      return refererOrigin
     }
 
     return redirect

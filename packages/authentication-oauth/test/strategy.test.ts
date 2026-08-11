@@ -202,7 +202,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "https://target.com.attacker.com/login" is not allowed.'
+          message:
+            'Referer origin "https://target.com.attacker.com" is not allowed. ' +
+            'Configured origins: https://target.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -220,7 +224,11 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
             }
           ),
         {
-          message: 'Referer "https://target.com-evil.attacker.com/login" is not allowed.'
+          message:
+            'Referer origin "https://target.com-evil.attacker.com" is not allowed. ' +
+            'Configured origins: https://target.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
         }
       )
     })
@@ -236,6 +244,157 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
         }
       )
       assert.equal(redirect, 'https://target.com#access_token=testing')
+    })
+  })
+
+  describe('loopback origin port matching (#3684)', () => {
+    afterEach(() => {
+      delete app.get('authentication').oauth.origins
+    })
+
+    it('should allow any port on localhost when configured without a port', async () => {
+      app.get('authentication').oauth.origins = ['http://localhost']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://localhost:5173/login'
+          }
+        }
+      )
+
+      // Redirect must use the referer port, not the config string
+      assert.equal(redirect, 'http://localhost:5173#access_token=testing')
+    })
+
+    it('should allow a different loopback port than the configured one', async () => {
+      app.get('authentication').oauth.origins = ['http://localhost:3030']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://localhost:3000/app'
+          }
+        }
+      )
+
+      assert.equal(redirect, 'http://localhost:3000#access_token=testing')
+    })
+
+    it('should allow any port on 127.0.0.1', async () => {
+      app.get('authentication').oauth.origins = ['http://127.0.0.1:8080']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://127.0.0.1:5173/'
+          }
+        }
+      )
+
+      assert.equal(redirect, 'http://127.0.0.1:5173#access_token=testing')
+    })
+
+    it('should allow any port on IPv6 loopback', async () => {
+      app.get('authentication').oauth.origins = ['http://[::1]']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://[::1]:4173/path'
+          }
+        }
+      )
+
+      assert.equal(redirect, 'http://[::1]:4173#access_token=testing')
+    })
+
+    it('should allow any port on 0.0.0.0', async () => {
+      app.get('authentication').oauth.origins = ['http://0.0.0.0:3030']
+
+      const redirect = await strategy.getRedirect(
+        { accessToken: 'testing' },
+        {
+          headers: {
+            referer: 'http://0.0.0.0:5173/app'
+          }
+        }
+      )
+
+      assert.equal(redirect, 'http://0.0.0.0:5173#access_token=testing')
+    })
+
+    it('should not treat localhost and 127.0.0.1 as the same host', async () => {
+      app.get('authentication').oauth.origins = ['http://localhost']
+
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              headers: {
+                referer: 'http://127.0.0.1:3000/login'
+              }
+            }
+          ),
+        {
+          message:
+            'Referer origin "http://127.0.0.1:3000" is not allowed. ' +
+            'Configured origins: http://localhost. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
+        }
+      )
+    })
+
+    it('should still require exact port match for non-loopback hosts', async () => {
+      app.get('authentication').oauth.origins = ['https://app.example.com']
+
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              headers: {
+                referer: 'https://app.example.com:8443/login'
+              }
+            }
+          ),
+        {
+          message:
+            'Referer origin "https://app.example.com:8443" is not allowed. ' +
+            'Configured origins: https://app.example.com. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
+        }
+      )
+    })
+
+    it('should require matching scheme on loopback', async () => {
+      app.get('authentication').oauth.origins = ['https://localhost']
+
+      await assert.rejects(
+        () =>
+          strategy.getRedirect(
+            { accessToken: 'testing' },
+            {
+              headers: {
+                referer: 'http://localhost:3000/login'
+              }
+            }
+          ),
+        {
+          message:
+            'Referer origin "http://localhost:3000" is not allowed. ' +
+            'Configured origins: https://localhost. ' +
+            'Use a full origin (scheme + host + port when non-default). ' +
+            'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
+        }
+      )
     })
   })
 })
@@ -359,7 +518,11 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
           }
         ),
       {
-        message: 'Referer "https://example.com" is not allowed.'
+        message:
+          'Referer origin "https://example.com" is not allowed. ' +
+          'Configured origins: https://feathersjs.com, https://feathers.cloud. ' +
+          'Use a full origin (scheme + host + port when non-default). ' +
+          'Loopback hosts (localhost, 127.0.0.1, ::1, 0.0.0.0) match any port.'
       }
     )
   })
