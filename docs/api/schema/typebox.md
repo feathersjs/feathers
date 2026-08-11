@@ -101,7 +101,7 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$regex` can be added like this:
 
 ```ts
 import { querySyntax } from '@feathersjs/typebox'
@@ -112,10 +112,10 @@ const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdA
 })
 const messageQuerySchema = Type.Intersect(
   [
-    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
+    // This will additionally allow querying for `{ name: { $regex: 'Dav', $options: 'i' } }`
     querySyntax(messageQueryProperties, {
       name: {
-        $ilike: Type.String()
+        $regex: Type.String(), $options: Type.String()
       }
     }),
     // Add additional query properties here
@@ -123,6 +123,18 @@ const messageQuerySchema = Type.Intersect(
   ],
   { additionalProperties: false }
 )
+```
+
+Finally, in the class module, add the operators:
+
+```ts
+export const getOptions = (app: Application): MongoDBAdapterOptions => {
+  return {
+    paginate: app.get('paginate'),
+    Model: app.get('mongodbClient').then((db) => db.collection('example')),
+    operators: ['$regex', '$options'] // add the operators
+  }
+}
 ```
 
 To allow additional query properties outside of the query syntax use the intersection type:
