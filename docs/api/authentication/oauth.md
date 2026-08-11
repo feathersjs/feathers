@@ -56,6 +56,55 @@ The following settings for `app.configure(oauth())` are available:
 - `expressSession` - An Express middleware for handling sessions. By default will use an HTTP cookie that is only available for the oAuth flow. **This normally does not need to be changed.**
 - `koaSession` - A Koa middleware for handling sessions. By default will use an HTTP cookie that is only available for the oAuth flow. **This normally does not need to be changed.**
 
+### Configuration and security
+
+OAuth setup uses three separate pieces. Only the first two are required for the usual browser redirect login:
+
+| Piece | Role |
+| --- | --- |
+| `authentication.register('google', new OAuthStrategy())` | Registers the strategy so the OAuth callback can run it |
+| `authentication.oauth.google` in configuration | Grant provider options (`key`, `secret`, `scope`, …) |
+| `authentication.authStrategies` | Strategy names clients may use on **external** `POST /authentication` |
+
+Browser redirect SSO (`/oauth/<provider>`) only needs **register** + **`authentication.oauth`**. The OAuth callback allows that provider for the internal authentication call after Grant finishes. Provider names do **not** need to be listed in public [`authStrategies`](./service.md#configuration).
+
+The [Feathers generator](../../guides/cli/authentication.md) already follows this pattern: OAuth providers are configured under `authentication.oauth`, while `authStrategies` typically stays `["jwt", "local"]`.
+
+```json
+// Typical safe config for browser-only OAuth (matches the generator)
+{
+  "authentication": {
+    "authStrategies": ["jwt", "local"],
+    "oauth": {
+      "google": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      }
+    }
+  }
+}
+```
+
+```json
+// Unsafe for the default OAuthStrategy when you only need browser SSO.
+// Do not list provider names here unless you implement verified token login (flow #2).
+{
+  "authentication": {
+    "authStrategies": ["jwt", "local", "google", "microsoft"]
+  }
+}
+```
+
+<BlockQuote type="warning" label="Important">
+
+Putting an OAuth provider name (for example `google` or `github`) in [`authStrategies`](./service.md#configuration) exposes that strategy on external `POST /authentication`.
+
+The default [`getProfile`](#getprofile-data-params) implementation returns `data.profile` from the authentication payload. That is safe when the payload is built **server-side** by the OAuth callback after Grant. It is **not** safe to accept a client-supplied `profile` (for example `{ strategy: 'google', profile: { sub: '...' } }`) as proof of identity. A provider `sub` or `id` is an identifier, not a credential.
+
+Only add a provider to `authStrategies` when you intentionally support [flow #2](#flow) (existing provider access token) **and** override `getProfile` to verify that token with the provider. See the [Facebook](../../cookbook/authentication/facebook.md) and [Firebase](../../cookbook/authentication/firebase.md) cookbooks for verified-token patterns.
+
+</BlockQuote>
+
 ### Providers
 
 For specific OAuth provider setup see the following [cookbook](../../cookbook/) guides:
@@ -73,22 +122,29 @@ There are two ways to initiate OAuth authentication:
    - User clicks on link to OAuth URL (`oauth/<provider>`)
    - Gets redirected to provider and authorizes the application
    - Callback to the [OauthStrategy](#oauthstrategy) which
-     - Gets the users profile
+     - Gets the users profile (from the server-side Grant response)
      - Finds or creates the user (entity) for that profile
    - The [AuthenticationService](./service.md) creates an access token for that entity
    - Redirects back to the origin URL including the generated access token
    - The frontend (e.g. the Feathers [authentication client](./client.md)) uses the returned access token to authenticate
 
-2. With an existing access token, e.g. obtained through the Facebook mobile SDK
-   - Authenticate normally through the [authentication service](./service.md) with `{ strategy: '<name>', accessToken: 'oauth access token' }`.
-   - Calls the [OauthStrategy](#oauthstrategy) which
-     - Gets the users profile
-     - Finds or creates the entity for that profile
+   This flow does **not** require the provider name in [`authStrategies`](./service.md#configuration). See [Configuration and security](#configuration-and-security).
+
+2. With an existing provider access token (for example from a mobile SDK)
+
+   - Authenticate through the [authentication service](./service.md) with a request like `{ strategy: '<name>', accessToken: '<provider access token>' }` (some providers use `access_token` or an ID token instead).
+   - The strategy must obtain the user profile by **verifying that token with the provider** (userinfo endpoint, Graph API, ID token verification, and so on).
+   - Finds or creates the entity for that profile
    - Returns the authentication result
 
 <BlockQuote type="warning" label="Important">
 
-If you are attempting to authenticate using an existing oAuth access token, ensure that you have added the strategy (e.g. 'facebook') to the allowed [authStrategies](./service.md#configuration) configuration.
+Flow #2 needs **both** of the following:
+
+1. The strategy name (for example `'facebook'`) in the allowed [`authStrategies`](./service.md#configuration) configuration so clients can call `POST /authentication`.
+2. An overridden [`getProfile`](#getprofile-data-params) that derives identity only from a **verified** provider response. Do not trust a client-supplied `profile` or `sub`.
+
+The default `OAuthStrategy` does not call the provider when given only a client `profile`. Without a verifying `getProfile`, listing the provider in `authStrategies` is a serious security misconfiguration. See the [Facebook](../../cookbook/authentication/facebook.md) cookbook (Graph API with the access token) and the [Firebase](../../cookbook/authentication/firebase.md) cookbook (`verifyIdToken`) for correct patterns.
 
 </BlockQuote>
 
@@ -254,9 +310,15 @@ Here is a [list of all Grant configuration options](https://github.com/simov/gra
 
 `oauthStrategy.getEntityData(profile, existing, params) -> Promise` returns the data to either create a new or update an existing entity. `entity` is either the existing entity or `null` when creating a new entity.
 
+By default this only sets the provider id field (for example `googleId`). Custom strategies often also copy `email` or avatar fields from the profile. Prefer setting sensitive identity fields such as email when **creating** a user, or through an authenticated account-linking step. Avoid blindly rewriting recovery email on every login from profile data.
+
 ### getProfile(data, params)
 
-`oauthStrategy.getProfile(data, params) -> Promise` returns the user profile information from the OAuth provider that was used for the login. `data` is the OAuth callback information which normally contains e.g. the OAuth access token.
+`oauthStrategy.getProfile(data, params) -> Promise` returns the user profile used for the login.
+
+**Default behavior:** returns `data.profile` from the authentication payload. In the browser redirect flow that profile is set **server-side** by the OAuth callback after Grant completes. The default method does **not** call the provider itself.
+
+When authenticating with a client-held provider token ([flow #2](#flow)), override `getProfile` to verify the token with the provider and build the profile from that verified response. Never treat a client-supplied `profile` as verified identity.
 
 ### getRedirect (data)
 
@@ -305,7 +367,10 @@ declare module './declarations' {
 class MyGithubStrategy extends OAuthStrategy {
   async getEntityData(profile: OAuthProfile) {
     // Include the `email` from the GitHub profile when creating
-    // or updating a user that logged in with GitHub
+    // or updating a user that logged in with GitHub.
+    // Profile data is only trustworthy after a real provider flow
+    // (redirect callback or verified token login). Prefer create-time
+    // or authenticated linking if email is a recovery channel.
     const baseData = await super.getEntityData(profile)
 
     return {

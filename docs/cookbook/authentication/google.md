@@ -111,4 +111,6 @@ module.exports = app => {
 ```
 **Important**: googleId, profilePicture and email are properties that should exist on the database model!
 
+Browser Google login uses `/oauth/google`. You do **not** need to add `"google"` to `authentication.authStrategies` for that redirect flow. Only add it if you implement verified provider-token login on `POST /authentication` — see [OAuth configuration and security](../../api/authentication/oauth.md#configuration-and-security).
+
 

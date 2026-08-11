@@ -53,7 +53,7 @@ These options are used directly in the generated application
 
 ### authentication
 
-`authentication` contains the configuration for the authentication service and strategies. See the [authentication service configuration](../../api/authentication/service.md#configuration) for more information. For strategy specific settings refer to the [jwt](../../api/authentication/jwt.md#options), [local](../../api/authentication/local.md#options) and [oAuth](../../api/authentication/oauth.md#options) API documentation.
+`authentication` contains the configuration for the authentication service and strategies. See the [authentication service configuration](../../api/authentication/service.md#configuration) for more information. For strategy specific settings refer to the [jwt](../../api/authentication/jwt.md#options), [local](../../api/authentication/local.md#options) and [oAuth](../../api/authentication/oauth.md#options) API documentation. `authStrategies` lists strategies allowed on external `POST /authentication` (usually `jwt` and `local`). OAuth provider keys live under `authentication.oauth` and are separate from that list — see [OAuth configuration and security](../../api/authentication/oauth.md#configuration-and-security).
 
 ### Databases
 

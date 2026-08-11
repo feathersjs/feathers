@@ -23,6 +23,7 @@ Here are some things that you should be aware of when writing your app to make s
 - Escape any SQL (typically done by the SQL library) to avoid SQL injection.
 - JSON Web Tokens (JWT's) are only signed. They are **not** encrypted. Therefore, the payload can be examined on the client. This is by design. **DO NOT** put anything that should be private in the JWT `payload` unless you encrypt it first.
 - Don't use a weak `secret` for your token service. The generator creates a strong one for you automatically. No need to change it.
+- **OAuth / SSO:** Prefer the browser [redirect flow](../api/authentication/oauth.md#flow) (`/oauth/<provider>`). Register OAuth strategies and configure them under `authentication.oauth`, but do **not** put provider names in [`authStrategies`](../api/authentication/service.md#configuration) unless you intentionally support direct provider-token login **and** verify those tokens in `getProfile`. Never treat a client-supplied provider `profile` or `sub` as proof of identity. Details: [OAuth configuration and security](../api/authentication/oauth.md#configuration-and-security).
 
 ## Technologies used
 
