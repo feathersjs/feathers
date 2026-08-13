@@ -44,14 +44,24 @@ export async function resolveQueryObjectId(value: ObjectIdParam | IdQueryObject<
   return convertedObject
 }
 
+const isObjectId = (value: any): value is ObjectId =>
+  value != null && typeof value === 'object' && value._bsontype === 'ObjectId'
+
 export const keywordObjectId = {
   keyword: 'objectid',
-  type: 'string',
   modifying: true,
   compile(schemaVal: boolean) {
     if (!schemaVal) return () => true
 
-    return function (value: string, obj: any) {
+    return function (value: any, obj: any) {
+      if (isObjectId(value)) {
+        return true
+      }
+
+      if (typeof value !== 'string') {
+        return false
+      }
+
       const { parentData, parentDataProperty } = obj
       try {
         parentData[parentDataProperty] = new ObjectId(value)

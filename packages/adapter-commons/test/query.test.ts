@@ -331,6 +331,72 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         $or: [{ value: { $gte: 10 } }, { name: 'dave' }]
       })
     })
+
+    it('rejects unknown operators in a non-array $or object', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: { $where: '1==1' }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in a non-array $and object', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $and: { $where: '1==1' }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested in an object $select', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $select: {
+              owned: { $function: { body: 'return 1', lang: 'js', args: [] } }
+            }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $function'
+        }
+      )
+    })
+
+    it('allows MongoDB inclusion-style object $select', () => {
+      const { filters } = filterQuery({
+        $select: { name: 1, age: 1 }
+      })
+
+      assert.deepStrictEqual(filters.$select, { name: 1, age: 1 })
+    })
+
+    it('rejects unknown operators nested in a $sort value', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $sort: { score: { $function: { body: 'return 1', lang: 'js', args: [] } } }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $function'
+        }
+      )
+    })
   })
 
   describe('additional filters', () => {

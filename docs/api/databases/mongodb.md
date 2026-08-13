@@ -456,7 +456,7 @@ validator.addKeyword(keywordObjectId)
 
 ### ObjectIdSchema
 
-Both, `@feathersjs/typebox` and `@feathersjs/schema` export an `ObjectIdSchema` helper that creates a schema which can be both, a MongoDB ObjectId or a string that will be converted with the `objectid` keyword:
+Both, `@feathersjs/typebox` and `@feathersjs/schema` export an `ObjectIdSchema` helper that creates a schema which can be a MongoDB ObjectId instance or a string that will be converted with the `objectid` keyword. Arbitrary objects — including query operator documents like `{ $ne: null }` or `{ $where: '…' }` — are not valid ObjectIds.
 
 ```ts
 import { ObjectIdSchema } from '@feathersjs/typebox' // or '@feathersjs/schema'
