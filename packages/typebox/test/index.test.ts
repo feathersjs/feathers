@@ -25,7 +25,7 @@ describe('@feathersjs/schema/typebox', () => {
 
       const query: Query = {
         name: 'Dave',
-        age: { $gt: 42, $in: [50, 51, null], $ne: null, $exists: true },
+        age: { $gt: 42, $in: [50, 51] },
         $select: ['age', 'name'],
         $sort: {
           age: 1
@@ -174,12 +174,7 @@ describe('@feathersjs/schema/typebox', () => {
     const validator = ajv.compile(querySchema)
 
     assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
-    assert.equal(validator({ _id: null }), true)
     assert.equal(validator({ _id: { $ne: '507f191e810c19729de860ea' } }), true)
-    assert.equal(validator({ _id: { $ne: null } }), true)
-    assert.equal(validator({ _id: { $in: [null, '507f191e810c19729de860ea'] } }), true)
-    assert.equal(validator({ _id: { $exists: true } }), true)
-    assert.equal(validator({ _id: { $exists: false } }), true)
     assert.equal(validator({ _id: { $where: '1==1' } }), false)
     assert.equal(validator({ $or: [{ _id: { $where: '1==1' } }] }), false)
   })

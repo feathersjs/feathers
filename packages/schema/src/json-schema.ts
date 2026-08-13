@@ -74,23 +74,14 @@ export type PropertyQuery<D extends JSONSchema, X> = {
         $gte: D
         $lt: D
         $lte: D
-        $ne: {
-          anyOf: [D, { type: 'null' }]
-        }
-        $exists: {
-          type: 'boolean'
-        }
+        $ne: D
         $in: {
           type: 'array'
-          items: {
-            anyOf: [D, { type: 'null' }]
-          }
+          items: D
         }
         $nin: {
           type: 'array'
-          items: {
-            anyOf: [D, { type: 'null' }]
-          }
+          items: D
         }
       } & X
     }
@@ -109,18 +100,9 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
   extensions: X = {} as X
 ) => {
   const definition = _.omit(def, 'default')
-  const orNull = { anyOf: [definition, { type: 'null' }] }
-  const inItems =
-    definition.type === 'array'
-      ? definition
-      : {
-          type: 'array',
-          items: orNull
-        }
-
   return {
     anyOf: [
-      orNull,
+      definition,
       {
         type: 'object',
         additionalProperties: false,
@@ -129,10 +111,21 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
           $gte: definition,
           $lt: definition,
           $lte: definition,
-          $ne: orNull,
-          $exists: { type: 'boolean' },
-          $in: inItems,
-          $nin: inItems,
+          $ne: definition,
+          $in:
+            definition.type === 'array'
+              ? definition
+              : {
+                  type: 'array',
+                  items: definition
+                },
+          $nin:
+            definition.type === 'array'
+              ? definition
+              : {
+                  type: 'array',
+                  items: definition
+                },
           ...extensions
         }
       }

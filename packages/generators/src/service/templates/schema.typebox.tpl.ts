@@ -91,16 +91,7 @@ export const ${camelName}QueryProperties = Type.Pick(${camelName}Schema, [
   }
 ])
 export const ${camelName}QuerySchema = Type.Intersect([
-  querySyntax(${camelName}QueryProperties${
-    type === 'mongodb' && (!isEntityService || authStrategies.includes('local'))
-      ? `, {
-    ${isEntityService ? 'email' : 'text'}: {
-      $regex: Type.String(),
-      $options: Type.String()
-    }
-  }`
-      : ''
-  }),
+  querySyntax(${camelName}QueryProperties),
   // Add additional query properties here
   Type.Object({}, { additionalProperties: false })
 ], { additionalProperties: false })

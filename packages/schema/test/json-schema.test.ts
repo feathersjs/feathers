@@ -56,8 +56,6 @@ describe('@feathersjs/schema/json-schema', () => {
     const validator = new Ajv({ strict: false }).compile(querySchema)
 
     assert.ok(validator(q))
-    assert.ok(validator({ age: { $ne: null } }))
-    assert.ok(validator({ age: { $in: [42, null] } }))
   })
 
   it('$in and $nin works with array definitions', async () => {
@@ -144,12 +142,7 @@ describe('@feathersjs/schema/json-schema', () => {
     const validator = ajv.compile(querySchema)
 
     assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
-    assert.equal(validator({ _id: null }), true)
     assert.equal(validator({ _id: { $ne: '507f191e810c19729de860ea' } }), true)
-    assert.equal(validator({ _id: { $ne: null } }), true)
-    assert.equal(validator({ _id: { $in: [null, '507f191e810c19729de860ea'] } }), true)
-    assert.equal(validator({ _id: { $exists: true } }), true)
-    assert.equal(validator({ _id: { $exists: false } }), true)
     assert.equal(validator({ _id: { $where: '1==1' } }), false)
     assert.equal(validator({ $or: [{ _id: { $where: '1==1' } }] }), false)
   })

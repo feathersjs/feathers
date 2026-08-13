@@ -126,7 +126,7 @@ const messageQuerySchema = Type.Intersect(
 )
 ```
 
-More extension examples (Mongo `$regex`, array operators) are in [querySyntax](../schema/typebox.md#querysyntax). `{ age: null }` and `{ age: { $ne: null } }` are already allowed by the default syntax.
+More extension examples are in [querySyntax](../schema/typebox.md#querysyntax). `{ age: null }` and `{ age: { $ne: null } }` work when the query property type includes `null` (see the `age` field in the adapter tests).
 
 ### $like
 

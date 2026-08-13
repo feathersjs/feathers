@@ -89,26 +89,18 @@ export const getLimit = (_limit: any, paginate?: PaginationParams) => {
 
 export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$or']
 
-// Allowed only inside object `$select` / `$sort` values, not as field operators.
-export const PROJECTION_OPERATORS = ['$meta', '$slice', '$elemMatch']
-
-const projectionList = ({ operators, projectionOperators }: FilterQueryOptions) =>
-  (projectionOperators || []).concat(operators || [])
-
 export const FILTERS: FilterSettings = {
   $skip: (value: any) => parse(value),
-  $sort: (sort: any, options: FilterQueryOptions): { [key: string]: any } => {
+  $sort: (sort: any, { operators }: FilterQueryOptions): { [key: string]: any } => {
     if (typeof sort !== 'object' || Array.isArray(sort)) {
       return sort
     }
-
-    const allowed = projectionList(options)
 
     return Object.keys(sort).reduce(
       (result, key) => {
         result[key] =
           typeof sort[key] === 'object' && sort[key] !== null
-            ? validateQueryProperty(sort[key], allowed)
+            ? validateQueryProperty(sort[key], operators)
             : parse(sort[key])
 
         return result
@@ -117,12 +109,12 @@ export const FILTERS: FilterSettings = {
     )
   },
   $limit: (_limit: any, { paginate }: FilterQueryOptions) => getLimit(_limit, paginate),
-  $select: (select: any, options: FilterQueryOptions) => {
+  $select: (select: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(select)) {
       return select.map((current) => `${current}`)
     }
 
-    return validateQueryProperty(select, projectionList(options))
+    return validateQueryProperty(select, operators)
   },
   $or: (or: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(or)) {
@@ -159,8 +151,7 @@ export function filterQuery(_query: Query, options: FilterQueryOptions = {}) {
       ...FILTERS,
       ...options.filters
     },
-    operators: OPERATORS.concat(options.operators || []),
-    projectionOperators: PROJECTION_OPERATORS.concat(options.projectionOperators || [])
+    operators: OPERATORS.concat(options.operators || [])
   }
 
   return {

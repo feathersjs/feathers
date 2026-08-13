@@ -101,10 +101,10 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-`querySyntax` already allows the [common operators](../databases/querying.md) on each property (`$gt`, `$gte`, `$lt`, `$lte`, `$ne`, `$in`, `$nin`, `$exists`). `$ne`, `$in`, and `$nin` also accept `null` (for example `{ userId: { $ne: null } }`). Anything else — SQL `LIKE`, Mongo `$regex`, geo, array operators — must be added per property. Only add operators your adapter actually supports.
+Additional operators that are [not already in the common query syntax](../databases/querying.md) must be added per property. Only add operators your adapter actually supports.
 
 ```ts
-import { querySyntax, Type, ObjectIdSchema } from '@feathersjs/typebox'
+import { querySyntax, Type } from '@feathersjs/typebox'
 
 const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
   additionalProperties: false
@@ -121,11 +121,6 @@ const messageQuerySchema = Type.Intersect(
       name: {
         $regex: Type.String(),
         $options: Type.String()
-      },
-      tags: {
-        $all: Type.Array(Type.String()),
-        $size: Type.Number(),
-        $elemMatch: Type.Object({}, { additionalProperties: true })
       }
     }),
     Type.Object({}, { additionalProperties: false })
@@ -134,17 +129,11 @@ const messageQuerySchema = Type.Intersect(
 )
 ```
 
-That allows queries such as `{ text: { $like: 'Hello%' } }`, `{ name: { $regex: 'feathers', $options: 'i' } }`, and `{ tags: { $size: 2 } }`.
+That allows `{ text: { $like: 'Hello%' } }` and `{ name: { $regex: 'feathers', $options: 'i' } }`.
 
-Equality to `null` (`{ userId: null }`, SQL `IS NULL`) is already allowed on every query property, including `ObjectIdSchema()`. You do not need to change the create/patch data schema.
+`$ne: null` and `{ userId: null }` are allowed when the **query** property type includes `null` (for example `Type.Union([Type.Number(), Type.Null()])` or `Type.Union([ObjectIdSchema(), Type.Null()])`). That is a field type, not a new operator. Do not change the create/patch data schema unless you also want to store nulls.
 
-`$select: ['text', 'userId']` is already allowed. Object `$select` / `$sort` may use `$meta`, `$slice`, and `$elemMatch` on the adapter sanitizer path. To allow more keys there without making them field operators, set `projectionOperators`. `operators` still works too, but those names also become allowed on fields.
-
-```ts
-new MongoDBService({
-  projectionOperators: ['$custom']
-})
-```
+Mongo `$meta` / `$slice` in object `$select` or `$sort` are not part of the common syntax. On the adapter sanitizer path, list them on the existing service `operators` option if you need them. `querySyntax` `$select` remains a string array.
 
 To allow additional query properties outside of the query syntax use the intersection type:
 

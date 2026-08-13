@@ -245,7 +245,7 @@ querySyntax(messageQueryProperties, {
 })
 ```
 
-`@feathersjs/mongodb` already includes `$regex` and `$options` in its default `operators` list, so those queries also pass adapter sanitization when you are not using a query schema. Generated MongoDB service schemas add the same operators on the primary string field. If you also use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization), keep them in both the schema and `operators`.
+If you also use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization), list them on the service as well: `operators: ['$regex', '$options']`.
 
 ### Full-Text Search
 

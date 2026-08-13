@@ -171,7 +171,7 @@ const userQuery: UserQuery = {
 }
 ```
 
-Additional operators that are [not already in the query syntax](../databases/querying.md) (`$like`, `$regex`, `$all`, …) are added per property. `$ne` / `$in` / `$nin` already accept `null`. Only add operators your adapter supports. See [TypeBox querySyntax](./typebox.md#querysyntax) for the same examples in TypeBox form.
+Additional operators that are [not already in the common query syntax](../databases/querying.md) (`$like`, `$regex`, …) are added per property. Only add operators your adapter supports. See [TypeBox querySyntax](./typebox.md#querysyntax) for more examples.
 
 ```ts
 import { querySyntax } from '@feathersjs/schema'
@@ -184,14 +184,7 @@ export const userQuerySchema = {
   properties: {
     ...querySyntax(userSchema.properties, {
       email: {
-        $ilike: { type: 'string' },
-        $like: { type: 'string' },
-        $regex: { type: 'string' },
-        $options: { type: 'string' }
-      },
-      tags: {
-        $all: { type: 'array', items: { type: 'string' } },
-        $size: { type: 'number' }
+        $ilike: { type: 'string' }
       }
     } as const)
   }
@@ -211,8 +204,6 @@ const userQuery: UserQuery = {
 }
 ```
 
-Equality to `null` (`{ userId: null }`) is already allowed on every query property, including ObjectId fields.
-
 ### queryProperty
 
 `queryProperty` helper takes a definition for a single property and returns a schema that allows the default query operators. This helper supports the operators listed, below. Learn what each one means in the [common query operator](/api/databases/querying#operators) documentation.
@@ -222,7 +213,6 @@ Equality to `null` (`{ userId: null }`) is already allowed on every query proper
 - `$lt`
 - `$lte`
 - `$ne`
-- `$exists`
 - `$in`
 - `$nin`
 
