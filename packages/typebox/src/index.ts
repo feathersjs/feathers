@@ -98,8 +98,11 @@ export function sortDefinition<T extends TObject>(schema: T) {
 export const queryProperty = <T extends TSchema, X extends { [key: string]: TSchema }>(
   def: T,
   extension: X = {} as X
-) =>
-  Type.Optional(
+) => {
+  const orNull = Type.Union([def, Type.Null()])
+  const inItems = def.type === 'array' ? def : Type.Array(orNull)
+
+  return Type.Optional(
     Type.Union([
       def,
       Type.Partial(
@@ -110,10 +113,10 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
               $gte: def,
               $lt: def,
               $lte: def,
-              $ne: def,
+              $ne: orNull,
               $exists: Type.Boolean(),
-              $in: def.type === 'array' ? def : Type.Array(def),
-              $nin: def.type === 'array' ? def : Type.Array(def)
+              $in: inItems,
+              $nin: inItems
             }),
             Type.Object(extension)
           ],
@@ -122,6 +125,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
       )
     ])
   )
+}
 
 type QueryProperty<T extends TSchema, X extends { [key: string]: TSchema }> = ReturnType<
   typeof queryProperty<T, X>
