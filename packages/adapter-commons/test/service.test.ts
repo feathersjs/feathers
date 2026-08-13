@@ -103,6 +103,16 @@ describe('@feathersjs/adapter-commons/service', () => {
       }
     )
 
+    await assert.rejects(
+      () =>
+        service.sanitizeQuery({
+          query: { $or: [[{ $where: '1==1' }]] }
+        }),
+      {
+        message: 'Invalid query parameter $where'
+      }
+    )
+
     assert.deepStrictEqual(
       await service.sanitizeQuery({
         adapter: {

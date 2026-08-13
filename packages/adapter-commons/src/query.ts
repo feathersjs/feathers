@@ -8,6 +8,10 @@ const parse = (value: any) => (typeof value !== 'undefined' ? parseInt(value, 10
 const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor
 
 const validateQueryProperty = (query: any, operators: string[] = []): Query => {
+  if (Array.isArray(query)) {
+    return query.map((value) => validateQueryProperty(value, operators))
+  }
+
   if (!isPlainObject(query)) {
     return query
   }
@@ -17,11 +21,7 @@ const validateQueryProperty = (query: any, operators: string[] = []): Query => {
       throw new BadRequest(`Invalid query parameter ${key}`, query)
     }
 
-    const value = query[key]
-
-    if (isPlainObject(value)) {
-      query[key] = validateQueryProperty(value, operators)
-    }
+    query[key] = validateQueryProperty(query[key], operators)
   }
 
   return {

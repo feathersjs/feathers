@@ -245,6 +245,92 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         $or: [{ value: { $gte: 10 } }]
       })
     })
+
+    it('rejects unknown operators nested one array level under $or', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: [[{ $where: '1==1' }]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested one array level under $and', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $and: [[{ $where: '1==1' }]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in a property value array', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            name: [{ $where: '1==1' }]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested inside an allowed operator array', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            name: { $in: [{ $where: '1==1' }] }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in deeply nested arrays', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: [[[{ $exists: false }]]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $exists'
+        }
+      )
+    })
+
+    it('allows primitive arrays and valid nested objects', () => {
+      const { query, filters } = filterQuery({
+        tags: ['a', 'b'],
+        name: { $in: ['dave', 'alice'] },
+        $or: [{ value: { $gte: 10 } }, { name: 'dave' }]
+      })
+
+      assert.deepStrictEqual(query, {
+        tags: ['a', 'b'],
+        name: { $in: ['dave', 'alice'] }
+      })
+      assert.deepStrictEqual(filters, {
+        $or: [{ value: { $gte: 10 } }, { name: 'dave' }]
+      })
+    })
   })
 
   describe('additional filters', () => {
