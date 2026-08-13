@@ -111,6 +111,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
               $lt: def,
               $lte: def,
               $ne: def,
+              $exists: Type.Boolean(),
               $in: def.type === 'array' ? def : Type.Array(def),
               $nin: def.type === 'array' ? def : Type.Array(def)
             }),

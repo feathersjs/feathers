@@ -143,6 +143,8 @@ describe('@feathersjs/schema/json-schema', () => {
 
     assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
     assert.equal(validator({ _id: { $ne: '507f191e810c19729de860ea' } }), true)
+    assert.equal(validator({ _id: { $exists: true } }), true)
+    assert.equal(validator({ _id: { $exists: false } }), true)
     assert.equal(validator({ _id: { $where: '1==1' } }), false)
     assert.equal(validator({ $or: [{ _id: { $where: '1==1' } }] }), false)
   })

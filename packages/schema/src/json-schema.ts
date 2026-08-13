@@ -75,6 +75,9 @@ export type PropertyQuery<D extends JSONSchema, X> = {
         $lt: D
         $lte: D
         $ne: D
+        $exists: {
+          type: 'boolean'
+        }
         $in: {
           type: 'array'
           items: D
@@ -112,6 +115,7 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
           $lt: definition,
           $lte: definition,
           $ne: definition,
+          $exists: { type: 'boolean' },
           $in:
             definition.type === 'array'
               ? definition

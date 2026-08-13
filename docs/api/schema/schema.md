@@ -215,6 +215,7 @@ const userQuery: UserQuery = {
 - `$lt`
 - `$lte`
 - `$ne`
+- `$exists`
 - `$in`
 - `$nin`
 
