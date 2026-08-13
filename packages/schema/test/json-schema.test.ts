@@ -58,6 +58,38 @@ describe('@feathersjs/schema/json-schema', () => {
     assert.ok(validator(q))
   })
 
+  it('can extend common operators people typically add', async () => {
+    const ajv = new Ajv({ strict: false })
+    ajv.addKeyword(keywordObjectId)
+
+    const querySchema = {
+      type: 'object',
+      additionalProperties: false,
+      properties: querySyntax(
+        {
+          _id: { anyOf: [ObjectIdSchema(), { type: 'null' }] },
+          name: { type: 'string' }
+        },
+        {
+          name: {
+            $regex: { type: 'string' },
+            $options: { type: 'string' },
+            $like: { type: 'string' },
+            $exists: { type: 'boolean' }
+          }
+        }
+      )
+    }
+    const validator = ajv.compile(querySchema)
+
+    assert.equal(validator({ name: { $regex: 'Dav', $options: 'i' } }), true)
+    assert.equal(validator({ name: { $like: 'D%' } }), true)
+    assert.equal(validator({ name: { $exists: true } }), true)
+    assert.equal(validator({ _id: null }), true)
+    assert.equal(validator({ _id: { $ne: null } }), true)
+    assert.equal(validator({ name: { $where: '1==1' } }), false)
+  })
+
   it('$in and $nin works with array definitions', async () => {
     const schema = {
       things: {

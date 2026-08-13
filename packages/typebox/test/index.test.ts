@@ -79,6 +79,37 @@ describe('@feathersjs/schema/typebox', () => {
 
       assert.ok(validated)
     })
+
+    it('can extend common operators people typically add', async () => {
+      const ajv = new Ajv({ strict: false })
+      ajv.addKeyword(keywordObjectId)
+
+      const querySchema = querySyntax(
+        Type.Object(
+          {
+            _id: Type.Union([ObjectIdSchema(), Type.Null()]),
+            name: Type.String()
+          },
+          { additionalProperties: false }
+        ),
+        {
+          name: {
+            $regex: Type.String(),
+            $options: Type.String(),
+            $like: Type.String(),
+            $exists: Type.Boolean()
+          }
+        }
+      )
+      const validator = ajv.compile(querySchema)
+
+      assert.equal(validator({ name: { $regex: 'Dav', $options: 'i' } }), true)
+      assert.equal(validator({ name: { $like: 'D%' } }), true)
+      assert.equal(validator({ name: { $exists: true } }), true)
+      assert.equal(validator({ _id: null }), true)
+      assert.equal(validator({ _id: { $ne: null } }), true)
+      assert.equal(validator({ name: { $where: '1==1' } }), false)
+    })
   })
 
   it('$in and $nin works with array type', async () => {

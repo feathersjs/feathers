@@ -449,6 +449,42 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
     })
   })
 
+  describe('configured operators', () => {
+    it('allows $exists when listed on operators', () => {
+      const { query } = filterQuery({ name: { $exists: true } }, { operators: ['$exists'] })
+
+      assert.deepStrictEqual(query, { name: { $exists: true } })
+    })
+
+    it('allows $regex and $options when listed on operators', () => {
+      const { query } = filterQuery(
+        { name: { $regex: 'Dav', $options: 'i' } },
+        { operators: ['$regex', '$options'] }
+      )
+
+      assert.deepStrictEqual(query, { name: { $regex: 'Dav', $options: 'i' } })
+    })
+
+    it('allows $like when listed on operators', () => {
+      const { query } = filterQuery({ name: { $like: 'D%' } }, { operators: ['$like'] })
+
+      assert.deepStrictEqual(query, { name: { $like: 'D%' } })
+    })
+
+    it('allows $meta in $select and $sort when listed on operators', () => {
+      const { filters } = filterQuery(
+        {
+          $select: { score: { $meta: 'textScore' } },
+          $sort: { score: { $meta: 'textScore' } }
+        },
+        { operators: ['$meta'] }
+      )
+
+      assert.deepStrictEqual(filters.$select, { score: { $meta: 'textScore' } })
+      assert.deepStrictEqual(filters.$sort, { score: { $meta: 'textScore' } })
+    })
+  })
+
   describe('additional operators', () => {
     it('returns query with default and known additional operators', () => {
       const { query } = filterQuery(
