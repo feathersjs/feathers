@@ -384,6 +384,44 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       assert.deepStrictEqual(filters.$select, { name: 1, age: 1 })
     })
 
+    it('allows Mongo projection operators in object $select and $sort', () => {
+      const { filters } = filterQuery({
+        $select: { score: { $meta: 'textScore' }, comments: { $slice: 5 } },
+        $sort: { score: { $meta: 'textScore' } }
+      })
+
+      assert.deepStrictEqual(filters.$select, {
+        score: { $meta: 'textScore' },
+        comments: { $slice: 5 }
+      })
+      assert.deepStrictEqual(filters.$sort, { score: { $meta: 'textScore' } })
+    })
+
+    it('does not allow projection operators as field query operators', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            name: { $meta: 'textScore' }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $meta'
+        }
+      )
+    })
+
+    it('allows extra projection operators via projectionOperators', () => {
+      const { filters } = filterQuery(
+        {
+          $select: { name: { $custom: 1 } }
+        },
+        { projectionOperators: ['$custom'] }
+      )
+
+      assert.deepStrictEqual(filters.$select, { name: { $custom: 1 } })
+    })
+
     it('rejects unknown operators nested in a $sort value', () => {
       assert.throws(
         () => {

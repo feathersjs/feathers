@@ -71,7 +71,8 @@ export class MongoDbAdapter<
 
     super({
       id: '_id',
-      ...options
+      ...options,
+      operators: ['$regex', '$options', ...(options.operators || [])]
     })
   }
 

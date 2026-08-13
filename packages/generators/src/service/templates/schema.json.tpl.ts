@@ -104,7 +104,16 @@ export const ${camelName}QuerySchema = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    ...querySyntax(${camelName}Schema.properties)
+    ...querySyntax(${camelName}Schema.properties${
+      type === 'mongodb' && (!isEntityService || authStrategies.includes('local'))
+        ? `, {
+      ${isEntityService ? 'email' : 'text'}: {
+        $regex: { type: 'string' },
+        $options: { type: 'string' }
+      }
+    }`
+        : ''
+    })
   }
 } as const
 export type ${upperName}Query = FromSchema<typeof ${camelName}QuerySchema>

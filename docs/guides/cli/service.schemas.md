@@ -105,7 +105,7 @@ export const messageQueryValidator = getValidator(messageQuerySchema, queryValid
 export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 ```
 
-To add additional operators like `$like`, `$regex`, or `{ userId: null }` on an ObjectId field, see [querySyntax](../../api/schema/typebox.md#querysyntax). You can also add your own query parameters in the `Type.Object({}, { additionalProperties: false })` definition.
+To add additional operators like `$like` or `$regex`, see [querySyntax](../../api/schema/typebox.md#querysyntax). Generated MongoDB services already allow `$regex` / `$options` on the primary string field. You can also add your own query parameters in the `Type.Object({}, { additionalProperties: false })` definition.
 
 <BlockQuote type="warning" label="Important">
 

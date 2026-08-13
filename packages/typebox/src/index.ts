@@ -104,7 +104,7 @@ export const queryProperty = <T extends TSchema, X extends { [key: string]: TSch
 
   return Type.Optional(
     Type.Union([
-      def,
+      orNull,
       Type.Partial(
         Type.Intersect(
           [

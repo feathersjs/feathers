@@ -211,7 +211,7 @@ const userQuery: UserQuery = {
 }
 ```
 
-To allow `{ userId: null }` on an ObjectId query field, type that **query** property as `anyOf` of `ObjectIdSchema()` and `{ type: 'null' }`. Leave the data schema as a plain ObjectId.
+Equality to `null` (`{ userId: null }`) is already allowed on every query property, including ObjectId fields.
 
 ### queryProperty
 

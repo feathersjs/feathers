@@ -3,6 +3,11 @@ import { Query, Params, Paginated, Id, PaginationParams, PaginationOptions } fro
 export type FilterQueryOptions = {
   filters?: FilterSettings
   operators?: string[]
+  /**
+   * Extra `$` keys allowed only inside object `$select` / `$sort` values
+   * (for example `$meta`, `$slice`). Does not allow those keys as field operators.
+   */
+  projectionOperators?: string[]
   paginate?: PaginationParams
 }
 
@@ -34,6 +39,12 @@ export interface AdapterServiceOptions {
    * @deprecated No longer needed when a query schema is used
    */
   operators?: string[]
+  /**
+   * Extra `$` keys allowed only inside object `$select` / `$sort` values.
+   * Defaults to `$meta`, `$slice`, and `$elemMatch`. Does not allow those
+   * keys as field query operators.
+   */
+  projectionOperators?: string[]
   /**
    * An object of additional top level query filters, e.g. `{ $populate: true }`
    * Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`

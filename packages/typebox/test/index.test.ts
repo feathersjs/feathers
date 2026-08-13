@@ -174,6 +174,7 @@ describe('@feathersjs/schema/typebox', () => {
     const validator = ajv.compile(querySchema)
 
     assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
+    assert.equal(validator({ _id: null }), true)
     assert.equal(validator({ _id: { $ne: '507f191e810c19729de860ea' } }), true)
     assert.equal(validator({ _id: { $ne: null } }), true)
     assert.equal(validator({ _id: { $in: [null, '507f191e810c19729de860ea'] } }), true)

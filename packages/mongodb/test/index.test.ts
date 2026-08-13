@@ -745,6 +745,15 @@ describe('Feathers MongoDB Service', () => {
   })
 
   describe('query validation', () => {
+    it('allows $regex through sanitizeQuery by default', async () => {
+      const people = app.service('people')
+      const query = await people.sanitizeQuery({
+        query: { name: { $regex: '^Dave', $options: 'i' } }
+      })
+
+      assert.deepStrictEqual(query, { name: { $regex: '^Dave', $options: 'i' } })
+    })
+
     it('validated queries are not sanitized', async () => {
       const people = app.service('people')
       // Isolate from earlier tests that mutate shared service options
@@ -762,8 +771,8 @@ describe('Feathers MongoDB Service', () => {
         const dave = await people.create({ name })
         assert.ok(dave && dave._id, 'create should return the created person')
 
-        // $regex is not in the default operator allowlist; validateQuery marks the
-        // query as validated so sanitizeQuery skips and $regex reaches MongoDB.
+        // $regex is a default MongoDB adapter operator and also reaches the
+        // driver when validateQuery marks the query as validated.
         const result = await people.find({
           paginate: false,
           query: {

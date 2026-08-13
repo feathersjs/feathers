@@ -136,25 +136,13 @@ const messageQuerySchema = Type.Intersect(
 
 That allows queries such as `{ text: { $like: 'Hello%' } }`, `{ name: { $regex: 'feathers', $options: 'i' } }`, and `{ tags: { $size: 2 } }`.
 
-To allow **equality** to `null` (`{ userId: null }`, SQL `IS NULL`) on a field whose data type is not nullable — typical for `ObjectIdSchema()` — give the **query** property a null union. Do not change the create/patch data schema.
+Equality to `null` (`{ userId: null }`, SQL `IS NULL`) is already allowed on every query property, including `ObjectIdSchema()`. You do not need to change the create/patch data schema.
 
-```ts
-const messageQueryProperties = Type.Object(
-  {
-    text: Type.String(),
-    createdAt: Type.Number(),
-    userId: Type.Union([ObjectIdSchema(), Type.Null()])
-  },
-  { additionalProperties: false }
-)
-const messageQuerySchema = querySyntax(messageQueryProperties)
-```
-
-`$select: ['text', 'userId']` is already allowed. Object `$select` / `$sort` values with Mongo operators like `$meta` or `$slice` are not part of `querySyntax`. If you need them on the sanitizer path (no query schema, or `skipSanitize: false`), add the names to the service `operators` option:
+`$select: ['text', 'userId']` is already allowed. Object `$select` / `$sort` may use `$meta`, `$slice`, and `$elemMatch` on the adapter sanitizer path. To allow more keys there without making them field operators, set `projectionOperators`. `operators` still works too, but those names also become allowed on fields.
 
 ```ts
 new MongoDBService({
-  operators: ['$meta', '$slice']
+  projectionOperators: ['$custom']
 })
 ```
 

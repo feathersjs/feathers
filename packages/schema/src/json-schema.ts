@@ -120,7 +120,7 @@ export const queryProperty = <T extends JSONSchema, X extends { [key: string]: J
 
   return {
     anyOf: [
-      definition,
+      orNull,
       {
         type: 'object',
         additionalProperties: false,
