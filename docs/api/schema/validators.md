@@ -113,7 +113,7 @@ This is intentional. Schema validation and the legacy sanitizer are alternative 
 
 - Prefer [`querySyntax`](./typebox.md#querysyntax) (or the [JSON schema helpers](./schema.md#query-helpers)) so only the common operators are allowed on each property.
 - Set `additionalProperties: false` on query objects so unknown keys (including unexpected `$` operators) are rejected. Generated applications already do this.
-- Only add extra operators (for example `$ilike` or `$regex`) when your adapter supports them and your application needs them.
+- Only add extra operators (for example `$ilike` or `$regex`) when your adapter supports them and your application needs them. Copy-paste examples: [querySyntax](./typebox.md#querysyntax).
 - Avoid permissive schemas such as `additionalProperties: true` or an open object on external query validation unless you intentionally want clients to send those keys.
 
 <BlockQuote type="warning" label="TypeBox and JSON Schema defaults">

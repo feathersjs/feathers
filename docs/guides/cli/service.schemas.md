@@ -105,7 +105,7 @@ export const messageQueryValidator = getValidator(messageQuerySchema, queryValid
 export const messageQueryResolver = resolve<MessageQuery, HookContext>({})
 ```
 
-To add additional operators like `$like` see the [querySyntax](../../api/schema/typebox.md#querysyntax) documentation. You can also add your own query parameters in the `Type.Object({}, { additionalProperties: false })` definition.
+To add additional operators like `$like`, `$regex`, or `{ userId: null }` on an ObjectId field, see [querySyntax](../../api/schema/typebox.md#querysyntax). You can also add your own query parameters in the `Type.Object({}, { additionalProperties: false })` definition.
 
 <BlockQuote type="warning" label="Important">
 

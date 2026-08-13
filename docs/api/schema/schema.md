@@ -171,7 +171,7 @@ const userQuery: UserQuery = {
 }
 ```
 
-Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+Additional operators that are [not already in the query syntax](../databases/querying.md) (`$like`, `$regex`, `$all`, …) are added per property. `$ne` / `$in` / `$nin` already accept `null`. Only add operators your adapter supports. See [TypeBox querySyntax](./typebox.md#querysyntax) for the same examples in TypeBox form.
 
 ```ts
 import { querySyntax } from '@feathersjs/schema'
@@ -184,9 +184,14 @@ export const userQuerySchema = {
   properties: {
     ...querySyntax(userSchema.properties, {
       email: {
-        $ilike: {
-          type: 'string'
-        }
+        $ilike: { type: 'string' },
+        $like: { type: 'string' },
+        $regex: { type: 'string' },
+        $options: { type: 'string' }
+      },
+      tags: {
+        $all: { type: 'array', items: { type: 'string' } },
+        $size: { type: 'number' }
       }
     } as const)
   }
@@ -205,6 +210,8 @@ const userQuery: UserQuery = {
   }
 }
 ```
+
+To allow `{ userId: null }` on an ObjectId query field, type that **query** property as `anyOf` of `ObjectIdSchema()` and `{ type: 'null' }`. Leave the data schema as a plain ObjectId.
 
 ### queryProperty
 

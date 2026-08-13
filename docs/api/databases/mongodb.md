@@ -215,13 +215,13 @@ new MongoDBService({
 
 <BlockQuote type="warning" label="Important">
 
-Note that in a normal application all MongoDB specific operators have to explicitly be added to the [TypeBox query schema](../schema/typebox.md#query-schemas) or [JSON query schema](../schema/schema.md#querysyntax).
+Note that in a normal application all MongoDB specific operators have to explicitly be added to the [TypeBox query schema](../schema/typebox.md#querysyntax) or [JSON query schema](../schema/schema.md#querysyntax).
 
 </BlockQuote>
 
 There are two ways to perform search queries with MongoDB:
 
-- Perform basic Regular Expression matches using the `$regex` filter.
+- Perform basic Regular Expression matches using the `$regex` operator.
 - Perform full-text search using the `$search` filter.
 
 ### Basic Regex Search
@@ -233,6 +233,19 @@ You can perform basic search using regular expressions with the `$regex` operato
   text: { $regex: 'feathersjs', $options: 'igm' },
 }
 ```
+
+Allow those operators on the properties that need them:
+
+```ts
+querySyntax(messageQueryProperties, {
+  text: {
+    $regex: Type.String(),
+    $options: Type.String()
+  }
+})
+```
+
+If you also use [`validateQuery(schema, { skipSanitize: false })`](../schema/validators.md#keeping-adapter-sanitization), list them on the service as well: `operators: ['$regex', '$options']`.
 
 ### Full-Text Search
 

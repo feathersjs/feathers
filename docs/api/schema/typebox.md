@@ -101,28 +101,61 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+`querySyntax` already allows the [common operators](../databases/querying.md) on each property (`$gt`, `$gte`, `$lt`, `$lte`, `$ne`, `$in`, `$nin`, `$exists`). `$ne`, `$in`, and `$nin` also accept `null` (for example `{ userId: { $ne: null } }`). Anything else — SQL `LIKE`, Mongo `$regex`, geo, array operators — must be added per property. Only add operators your adapter actually supports.
 
 ```ts
-import { querySyntax } from '@feathersjs/typebox'
+import { querySyntax, Type, ObjectIdSchema } from '@feathersjs/typebox'
 
-// Schema for allowed query properties
 const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
   additionalProperties: false
 })
+
 const messageQuerySchema = Type.Intersect(
   [
-    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
     querySyntax(messageQueryProperties, {
+      text: {
+        $like: Type.String(),
+        $notlike: Type.String(),
+        $ilike: Type.String() // PostgreSQL
+      },
       name: {
-        $ilike: Type.String()
+        $regex: Type.String(),
+        $options: Type.String()
+      },
+      tags: {
+        $all: Type.Array(Type.String()),
+        $size: Type.Number(),
+        $elemMatch: Type.Object({}, { additionalProperties: true })
       }
     }),
-    // Add additional query properties here
-    Type.Object({})
+    Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
+```
+
+That allows queries such as `{ text: { $like: 'Hello%' } }`, `{ name: { $regex: 'feathers', $options: 'i' } }`, and `{ tags: { $size: 2 } }`.
+
+To allow **equality** to `null` (`{ userId: null }`, SQL `IS NULL`) on a field whose data type is not nullable — typical for `ObjectIdSchema()` — give the **query** property a null union. Do not change the create/patch data schema.
+
+```ts
+const messageQueryProperties = Type.Object(
+  {
+    text: Type.String(),
+    createdAt: Type.Number(),
+    userId: Type.Union([ObjectIdSchema(), Type.Null()])
+  },
+  { additionalProperties: false }
+)
+const messageQuerySchema = querySyntax(messageQueryProperties)
+```
+
+`$select: ['text', 'userId']` is already allowed. Object `$select` / `$sort` values with Mongo operators like `$meta` or `$slice` are not part of `querySyntax`. If you need them on the sanitizer path (no query schema, or `skipSanitize: false`), add the names to the service `operators` option:
+
+```ts
+new MongoDBService({
+  operators: ['$meta', '$slice']
+})
 ```
 
 To allow additional query properties outside of the query syntax use the intersection type:

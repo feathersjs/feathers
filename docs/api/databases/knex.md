@@ -113,18 +113,20 @@ In addition to the [common querying mechanism](./querying.md), this adapter also
 ```ts
 const messageQuerySchema = Type.Intersect(
   [
-    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
     querySyntax(messageQueryProperties, {
       name: {
-        $ilike: Type.String()
+        $like: Type.String(),
+        $notlike: Type.String(),
+        $ilike: Type.String() // PostgreSQL
       }
     }),
-    // Add additional query properties here
-    Type.Object({})
+    Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
 ```
+
+More extension examples (Mongo `$regex`, `{ userId: null }` on ObjectId fields, array operators) are in [querySyntax](../schema/typebox.md#querysyntax). `{ age: { $ne: null } }` is already allowed by the default syntax. `{ age: null }` needs the query property type to include `null` (for example `Type.Union([Type.Number(), Type.Null()])`).
 
 ### $like
 
