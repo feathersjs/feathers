@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/mongodb",
   "description": "Feathers MongoDB service adapter",
-  "version": "5.0.48",
+  "version": "5.0.49",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -51,17 +51,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^5.0.48",
-    "@feathersjs/commons": "^5.0.48",
-    "@feathersjs/errors": "^5.0.48",
-    "@feathersjs/feathers": "^5.0.48"
+    "@feathersjs/adapter-commons": "^5.0.49",
+    "@feathersjs/commons": "^5.0.49",
+    "@feathersjs/errors": "^5.0.49",
+    "@feathersjs/feathers": "^5.0.49"
   },
   "peerDependencies": {
     "mongodb": "^6.19.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^5.0.48",
-    "@feathersjs/schema": "^5.0.48",
+    "@feathersjs/adapter-tests": "^5.0.49",
+    "@feathersjs/schema": "^5.0.49",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
     "mocha": "^11.7.6",

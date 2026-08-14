@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.49](https://github.com/feathersjs/feathers/compare/v5.0.48...v5.0.49) (2026-08-14)
+
+### Bug Fixes
+
+- **adapter-commons:** validate query operators nested in arrays ([#3700](https://github.com/feathersjs/feathers/issues/3700)) ([304a1aa](https://github.com/feathersjs/feathers/commit/304a1aacd7a4808804d6a16204ea83e72eee669e))
+
 ## [5.0.48](https://github.com/feathersjs/feathers/compare/v5.0.47...v5.0.48) (2026-08-11)
 
 **Note:** Version bump only for package @feathersjs/mongodb
