@@ -747,21 +747,11 @@ describe('Feathers MongoDB Service', () => {
   describe('query validation', () => {
     it('validated queries are not sanitized', async () => {
       const people = app.service('people')
-      // Isolate from earlier tests that mutate shared service options
-      const previous = {
-        multi: people.options.multi,
-        disableObjectify: people.options.disableObjectify,
-        paginate: people.options.paginate
-      }
-      people.options.multi = false
-      people.options.disableObjectify = false
-      people.options.paginate = false
+      const name = `Dave-${Date.now()}`
+      const inserted = await db.collection('people').insertOne({ name })
+      const dave = { _id: inserted.insertedId, name }
 
       try {
-        const name = `Dave-${Date.now()}`
-        const dave = await people.create({ name })
-        assert.ok(dave && dave._id, 'create should return the created person')
-
         // $regex is not in the default operator allowlist; validateQuery marks the
         // query as validated so sanitizeQuery skips and $regex reaches MongoDB.
         const result = await people.find({
@@ -773,12 +763,8 @@ describe('Feathers MongoDB Service', () => {
           }
         })
         assert.deepStrictEqual(result, [dave])
-
-        await people.remove(dave._id)
       } finally {
-        people.options.multi = previous.multi
-        people.options.disableObjectify = previous.disableObjectify
-        people.options.paginate = previous.paginate
+        await db.collection('people').deleteOne({ _id: inserted.insertedId })
       }
     })
   })
