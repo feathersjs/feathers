@@ -137,6 +137,8 @@ describe('objectid keyword', () => {
     assert.equal(validate.errors?.[0].keyword, 'objectid')
     assert.equal(validate({ _id: { $ne: null } }), false)
     assert.equal(validate({ _id: { $regex: '.*' } }), false)
+    assert.equal(validate({ _id: { _bsontype: 'ObjectId' } }), false)
+    assert.equal(validate({ _id: { _bsontype: 'ObjectId', $where: '1==1' } }), false)
   })
 
   it('continues validating nullable unions when an objectid branch fails', async () => {

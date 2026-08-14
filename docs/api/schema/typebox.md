@@ -116,9 +116,7 @@ const messageQuerySchema = Type.Intersect(
       text: {
         $like: Type.String(),
         $notlike: Type.String(),
-        $ilike: Type.String() // PostgreSQL
-      },
-      name: {
+        $ilike: Type.String(), // PostgreSQL
         $regex: Type.String(),
         $options: Type.String()
       }
@@ -129,7 +127,7 @@ const messageQuerySchema = Type.Intersect(
 )
 ```
 
-That allows `{ text: { $like: 'Hello%' } }` and `{ name: { $regex: 'feathers', $options: 'i' } }`.
+That allows `{ text: { $like: 'Hello%' } }` and `{ text: { $regex: 'feathers', $options: 'i' } }`.
 
 `$ne: null` and `{ userId: null }` are allowed when the **query** property type includes `null` (for example `Type.Union([Type.Number(), Type.Null()])` or `Type.Union([ObjectIdSchema(), Type.Null()])`). That is a field type, not a new operator. Do not change the create/patch data schema unless you also want to store nulls.
 
