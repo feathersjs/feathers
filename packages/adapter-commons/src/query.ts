@@ -8,6 +8,10 @@ const parse = (value: any) => (typeof value !== 'undefined' ? parseInt(value, 10
 const isPlainObject = (value: any) => _.isObject(value) && value.constructor === {}.constructor
 
 const validateQueryProperty = (query: any, operators: string[] = []): Query => {
+  if (Array.isArray(query)) {
+    return query.map((value) => validateQueryProperty(value, operators))
+  }
+
   if (!isPlainObject(query)) {
     return query
   }
@@ -17,11 +21,7 @@ const validateQueryProperty = (query: any, operators: string[] = []): Query => {
       throw new BadRequest(`Invalid query parameter ${key}`, query)
     }
 
-    const value = query[key]
-
-    if (isPlainObject(value)) {
-      query[key] = validateQueryProperty(value, operators)
-    }
+    query[key] = validateQueryProperty(query[key], operators)
   }
 
   return {
@@ -91,41 +91,44 @@ export const OPERATORS = ['$in', '$nin', '$lt', '$lte', '$gt', '$gte', '$ne', '$
 
 export const FILTERS: FilterSettings = {
   $skip: (value: any) => parse(value),
-  $sort: (sort: any): { [key: string]: number } => {
+  $sort: (sort: any, { operators }: FilterQueryOptions): { [key: string]: any } => {
     if (typeof sort !== 'object' || Array.isArray(sort)) {
       return sort
     }
 
     return Object.keys(sort).reduce(
       (result, key) => {
-        result[key] = typeof sort[key] === 'object' ? sort[key] : parse(sort[key])
+        result[key] =
+          typeof sort[key] === 'object' && sort[key] !== null
+            ? validateQueryProperty(sort[key], operators)
+            : parse(sort[key])
 
         return result
       },
-      {} as { [key: string]: number }
+      {} as { [key: string]: any }
     )
   },
   $limit: (_limit: any, { paginate }: FilterQueryOptions) => getLimit(_limit, paginate),
-  $select: (select: any) => {
+  $select: (select: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(select)) {
       return select.map((current) => `${current}`)
     }
 
-    return select
+    return validateQueryProperty(select, operators)
   },
   $or: (or: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(or)) {
       return or.map((current) => validateQueryProperty(current, operators))
     }
 
-    return or
+    return validateQueryProperty(or, operators)
   },
   $and: (and: any, { operators }: FilterQueryOptions) => {
     if (Array.isArray(and)) {
       return and.map((current) => validateQueryProperty(current, operators))
     }
 
-    return and
+    return validateQueryProperty(and, operators)
   }
 }
 

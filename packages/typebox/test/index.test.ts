@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { ObjectId as MongoObjectId } from 'mongodb'
+import { keywordObjectId } from '@feathersjs/mongodb'
 import { Ajv } from '@feathersjs/schema'
 import {
   querySyntax,
@@ -78,6 +79,37 @@ describe('@feathersjs/schema/typebox', () => {
 
       assert.ok(validated)
     })
+
+    it('can extend common operators people typically add', async () => {
+      const ajv = new Ajv({ strict: false })
+      ajv.addKeyword(keywordObjectId)
+
+      const querySchema = querySyntax(
+        Type.Object(
+          {
+            _id: Type.Union([ObjectIdSchema(), Type.Null()]),
+            name: Type.String()
+          },
+          { additionalProperties: false }
+        ),
+        {
+          name: {
+            $regex: Type.String(),
+            $options: Type.String(),
+            $like: Type.String(),
+            $exists: Type.Boolean()
+          }
+        }
+      )
+      const validator = ajv.compile(querySchema)
+
+      assert.equal(validator({ name: { $regex: 'Dav', $options: 'i' } }), true)
+      assert.equal(validator({ name: { $like: 'D%' } }), true)
+      assert.equal(validator({ name: { $exists: true } }), true)
+      assert.equal(validator({ _id: null }), true)
+      assert.equal(validator({ _id: { $ne: null } }), true)
+      assert.equal(validator({ name: { $where: '1==1' } }), false)
+    })
   })
 
   it('$in and $nin works with array type', async () => {
@@ -139,6 +171,43 @@ describe('@feathersjs/schema/typebox', () => {
       _id: new MongoObjectId()
     })
     assert.ok(validated2)
+  })
+
+  it('ObjectIdSchema rejects operator objects when the objectid keyword is registered', async () => {
+    const ajv = new Ajv({ strict: false })
+    ajv.addKeyword(keywordObjectId)
+
+    const schema = Type.Object({
+      _id: ObjectIdSchema()
+    })
+    const validator = ajv.compile(schema)
+
+    assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
+    assert.equal(validator({ _id: new MongoObjectId() }), true)
+    assert.equal(validator({ _id: { $where: '1==1' } }), false)
+    assert.equal(validator({ _id: { $regex: '.*' } }), false)
+    assert.equal(validator({ _id: { $ne: null } }), false)
+  })
+
+  it('querySyntax with ObjectIdSchema does not treat operator objects as ids', async () => {
+    const ajv = new Ajv({ strict: false })
+    ajv.addKeyword(keywordObjectId)
+
+    const querySchema = querySyntax(
+      Type.Object(
+        {
+          _id: ObjectIdSchema(),
+          text: Type.String()
+        },
+        { additionalProperties: false }
+      )
+    )
+    const validator = ajv.compile(querySchema)
+
+    assert.equal(validator({ _id: '507f191e810c19729de860ea' }), true)
+    assert.equal(validator({ _id: { $ne: '507f191e810c19729de860ea' } }), true)
+    assert.equal(validator({ _id: { $where: '1==1' } }), false)
+    assert.equal(validator({ $or: [{ _id: { $where: '1==1' } }] }), false)
   })
 
   it('validators', () => {

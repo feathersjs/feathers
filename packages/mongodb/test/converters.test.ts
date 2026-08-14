@@ -108,6 +108,39 @@ describe('objectid keyword', () => {
     assert.equal(validate.errors?.[0].keyword, 'objectid')
   })
 
+  it('accepts ObjectId instances', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        _id: { type: 'object', objectid: true }
+      },
+      additionalProperties: false
+    }
+    const validate = validator.compile(schema)
+    const data = { _id: new ObjectId() }
+
+    assert.equal(validate(data), true)
+    assert.ok(data._id instanceof ObjectId)
+  })
+
+  it('rejects operator objects that are not ObjectId instances', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        _id: { type: 'object', objectid: true }
+      },
+      additionalProperties: false
+    }
+    const validate = validator.compile(schema)
+
+    assert.equal(validate({ _id: { $where: '1==1' } }), false)
+    assert.equal(validate.errors?.[0].keyword, 'objectid')
+    assert.equal(validate({ _id: { $ne: null } }), false)
+    assert.equal(validate({ _id: { $regex: '.*' } }), false)
+    assert.equal(validate({ _id: { _bsontype: 'ObjectId' } }), false)
+    assert.equal(validate({ _id: { _bsontype: 'ObjectId', $where: '1==1' } }), false)
+  })
+
   it('continues validating nullable unions when an objectid branch fails', async () => {
     const nullableValidator = new Ajv({ coerceTypes: true, useDefaults: true })
     nullableValidator.addKeyword(keywordObjectId)

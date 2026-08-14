@@ -171,7 +171,7 @@ const userQuery: UserQuery = {
 }
 ```
 
-Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+Additional operators that are [not already in the common query syntax](../databases/querying.md) (`$like`, `$regex`, …) are added per property. Only add operators your adapter supports. See [TypeBox querySyntax](./typebox.md#querysyntax) for more examples.
 
 ```ts
 import { querySyntax } from '@feathersjs/schema'
@@ -184,9 +184,7 @@ export const userQuerySchema = {
   properties: {
     ...querySyntax(userSchema.properties, {
       email: {
-        $ilike: {
-          type: 'string'
-        }
+        $ilike: { type: 'string' }
       }
     } as const)
   }

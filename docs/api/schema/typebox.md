@@ -101,29 +101,37 @@ const messageQuerySchema = querySyntax(messageQueryProperties)
 type MessageQuery = Static<typeof messageQuerySchema>
 ```
 
-Additional special query properties [that are not already included in the query syntax](../databases/querying.md) like `$ilike` can be added like this:
+Additional operators that are [not already in the common query syntax](../databases/querying.md) must be added per property. Only add operators your adapter actually supports.
 
 ```ts
-import { querySyntax } from '@feathersjs/typebox'
+import { querySyntax, Type } from '@feathersjs/typebox'
 
-// Schema for allowed query properties
 const messageQueryProperties = Type.Pick(messageSchema, ['id', 'text', 'createdAt', 'userId'], {
   additionalProperties: false
 })
+
 const messageQuerySchema = Type.Intersect(
   [
-    // This will additionally allow querying for `{ name: { $ilike: 'Dav%' } }`
     querySyntax(messageQueryProperties, {
-      name: {
-        $ilike: Type.String()
+      text: {
+        $like: Type.String(),
+        $notlike: Type.String(),
+        $ilike: Type.String(), // PostgreSQL
+        $regex: Type.String(),
+        $options: Type.String()
       }
     }),
-    // Add additional query properties here
-    Type.Object({})
+    Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
 ```
+
+That allows `{ text: { $like: 'Hello%' } }` and `{ text: { $regex: 'feathers', $options: 'i' } }`.
+
+`$ne: null` and `{ userId: null }` are allowed when the **query** property type includes `null` (for example `Type.Union([Type.Number(), Type.Null()])` or `Type.Union([ObjectIdSchema(), Type.Null()])`). That is a field type, not a new operator. Do not change the create/patch data schema unless you also want to store nulls.
+
+Mongo `$meta` / `$slice` in object `$select` or `$sort` are not part of the common syntax. On the adapter sanitizer path, list them on the existing service `operators` option if you need them. `querySyntax` `$select` remains a string array.
 
 To allow additional query properties outside of the query syntax use the intersection type:
 

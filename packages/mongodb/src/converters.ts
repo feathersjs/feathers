@@ -44,14 +44,39 @@ export async function resolveQueryObjectId(value: ObjectIdParam | IdQueryObject<
   return convertedObject
 }
 
+const isObjectId = (value: any): value is ObjectId => {
+  if (value == null || typeof value !== 'object') {
+    return false
+  }
+
+  if (value instanceof ObjectId) {
+    return true
+  }
+
+  // Another mongodb/bson copy of ObjectId (instanceof fails across duplicates).
+  // Reject plain JSON such as `{ _bsontype: 'ObjectId' }`.
+  return (
+    value._bsontype === 'ObjectId' &&
+    value.constructor !== Object &&
+    typeof value.toHexString === 'function'
+  )
+}
+
 export const keywordObjectId = {
   keyword: 'objectid',
-  type: 'string',
   modifying: true,
   compile(schemaVal: boolean) {
     if (!schemaVal) return () => true
 
-    return function (value: string, obj: any) {
+    return function (value: any, obj: any) {
+      if (isObjectId(value)) {
+        return true
+      }
+
+      if (typeof value !== 'string') {
+        return false
+      }
+
       const { parentData, parentDataProperty } = obj
       try {
         parentData[parentDataProperty] = new ObjectId(value)

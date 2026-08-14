@@ -245,6 +245,169 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
         $or: [{ value: { $gte: 10 } }]
       })
     })
+
+    it('rejects unknown operators nested one array level under $or', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: [[{ $where: '1==1' }]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested one array level under $and', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $and: [[{ $where: '1==1' }]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in a property value array', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            name: [{ $where: '1==1' }]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested inside an allowed operator array', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            name: { $in: [{ $where: '1==1' }] }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in deeply nested arrays', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: [[[{ $exists: false }]]]
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $exists'
+        }
+      )
+    })
+
+    it('allows primitive arrays and valid nested objects', () => {
+      const { query, filters } = filterQuery({
+        tags: ['a', 'b'],
+        name: { $in: ['dave', 'alice'] },
+        $or: [{ value: { $gte: 10 } }, { name: 'dave' }]
+      })
+
+      assert.deepStrictEqual(query, {
+        tags: ['a', 'b'],
+        name: { $in: ['dave', 'alice'] }
+      })
+      assert.deepStrictEqual(filters, {
+        $or: [{ value: { $gte: 10 } }, { name: 'dave' }]
+      })
+    })
+
+    it('rejects unknown operators in a non-array $or object', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $or: { $where: '1==1' }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators in a non-array $and object', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $and: { $where: '1==1' }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $where'
+        }
+      )
+    })
+
+    it('rejects unknown operators nested in an object $select', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $select: {
+              owned: { $function: { body: 'return 1', lang: 'js', args: [] } }
+            }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $function'
+        }
+      )
+    })
+
+    it('allows MongoDB inclusion-style object $select', () => {
+      const { filters } = filterQuery({
+        $select: { name: 1, age: 1 }
+      })
+
+      assert.deepStrictEqual(filters.$select, { name: 1, age: 1 })
+    })
+
+    it('allows extra operators in object $select when listed on operators', () => {
+      const { filters } = filterQuery(
+        {
+          $select: { score: { $meta: 'textScore' } }
+        },
+        { operators: ['$meta'] }
+      )
+
+      assert.deepStrictEqual(filters.$select, { score: { $meta: 'textScore' } })
+    })
+
+    it('rejects unknown operators nested in a $sort value', () => {
+      assert.throws(
+        () => {
+          filterQuery({
+            $sort: { score: { $function: { body: 'return 1', lang: 'js', args: [] } } }
+          })
+        },
+        {
+          name: 'BadRequest',
+          message: 'Invalid query parameter $function'
+        }
+      )
+    })
   })
 
   describe('additional filters', () => {
@@ -283,6 +446,42 @@ describe('@feathersjs/adapter-commons/filterQuery', () => {
       assert.strictEqual(filters.$unknown, undefined)
       assert.strictEqual(filters.$known, '1')
       assert.strictEqual(filters.$select, 1)
+    })
+  })
+
+  describe('configured operators', () => {
+    it('allows $exists when listed on operators', () => {
+      const { query } = filterQuery({ name: { $exists: true } }, { operators: ['$exists'] })
+
+      assert.deepStrictEqual(query, { name: { $exists: true } })
+    })
+
+    it('allows $regex and $options when listed on operators', () => {
+      const { query } = filterQuery(
+        { name: { $regex: 'Dav', $options: 'i' } },
+        { operators: ['$regex', '$options'] }
+      )
+
+      assert.deepStrictEqual(query, { name: { $regex: 'Dav', $options: 'i' } })
+    })
+
+    it('allows $like when listed on operators', () => {
+      const { query } = filterQuery({ name: { $like: 'D%' } }, { operators: ['$like'] })
+
+      assert.deepStrictEqual(query, { name: { $like: 'D%' } })
+    })
+
+    it('allows $meta in $select and $sort when listed on operators', () => {
+      const { filters } = filterQuery(
+        {
+          $select: { score: { $meta: 'textScore' } },
+          $sort: { score: { $meta: 'textScore' } }
+        },
+        { operators: ['$meta'] }
+      )
+
+      assert.deepStrictEqual(filters.$select, { score: { $meta: 'textScore' } })
+      assert.deepStrictEqual(filters.$sort, { score: { $meta: 'textScore' } })
     })
   })
 
