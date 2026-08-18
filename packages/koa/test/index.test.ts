@@ -2,7 +2,7 @@ import { strict as assert } from 'assert'
 import Koa from 'koa'
 import axios from 'axios'
 import { ApplicationHookMap, feathers, Id } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import { Service, restTests, customDefs } from '@feathersjs/tests'
 import { koa, rest, Application, bodyParser, errorHandler } from '../src'
 
 describe('@feathersjs/koa', () => {
@@ -38,7 +38,7 @@ describe('@feathersjs/koa', () => {
           }
         ]
       },
-      methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod']
+      methods: ['get', 'find', 'create', 'update', 'patch', 'remove', 'customMethod', ...customDefs]
     })
 
     app.hooks({
@@ -170,7 +170,7 @@ describe('@feathersjs/koa', () => {
     await assert.rejects(
       () =>
         axios.post<any>(
-          'http://localhost:8465/no/where',
+          'http://localhost:8465/no/where/good',
           {},
           {
             headers: {
@@ -184,7 +184,7 @@ describe('@feathersjs/koa', () => {
 
         assert.deepStrictEqual(data, {
           name: 'NotFound',
-          message: 'Path /no/where not found',
+          message: 'Path /no/where/good not found',
           code: 404,
           className: 'not-found'
         })
@@ -214,6 +214,6 @@ describe('@feathersjs/koa', () => {
     await app.teardown()
   })
 
-  restTests('Services', 'todo', 8465)
+  restTests('Services', 'todo', 8465, true)
   restTests('Root service', '/', 8465)
 })

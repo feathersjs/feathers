@@ -5,7 +5,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { Server } from 'http'
 import { Request, Response, NextFunction } from 'express'
 import { ApplicationHookMap, feathers, HookContext, Id, Params } from '@feathersjs/feathers'
-import { Service, restTests } from '@feathersjs/tests'
+import { Service, restTests, customDefs } from '@feathersjs/tests'
 import { BadRequest } from '@feathersjs/errors'
 
 import * as express from '../src'
@@ -63,7 +63,7 @@ describe('@feathersjs/express/rest provider', () => {
       const data = { fromHandler: true }
 
       app
-        .configure(rest(null))
+        .configure(rest(undefined))
         .use('/todo', {
           async get(id: Id) {
             return {
@@ -155,7 +155,7 @@ describe('@feathersjs/express/rest provider', () => {
             }
           },
           function (_req: Request, res: Response, next: NextFunction) {
-            res.data = convertHook(res.hook)
+            res.data = convertHook(res.hook as HookContext)
 
             next()
           }
@@ -219,7 +219,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-status').hooks({
           after(hook: HookContext) {
-            hook.http.status = 206
+            if (hook.http) hook.http.status = 206
           }
         })
 
@@ -237,7 +237,7 @@ describe('@feathersjs/express/rest provider', () => {
 
         app.service('hook-headers').hooks({
           after(hook: HookContext) {
-            hook.http.headers = { foo: 'first', bar: ['second', 'third'] }
+            if (hook.http) hook.http.headers = { foo: 'first', bar: ['second', 'third'] }
           }
         })
 
@@ -262,7 +262,7 @@ describe('@feathersjs/express/rest provider', () => {
         app.use(function (error: Error, _req: Request, res: Response, _next: NextFunction) {
           res.status(500)
           res.json({
-            hook: convertHook(res.hook),
+            hook: convertHook(res.hook as HookContext),
             error: {
               message: error.message
             }
@@ -562,7 +562,7 @@ describe('@feathersjs/express/rest provider', () => {
         assert.deepStrictEqual(
           error.response.data,
           {
-            message: 'Method `create` is not supported by this endpoint.'
+            message: 'POST /todo is not supported by this endpoint.'
           },
           'Error serialized as expected'
         )
@@ -594,7 +594,7 @@ describe('@feathersjs/express/rest provider', () => {
         .configure(rest())
         .use('/:appId/:id/todo', {
           async get(id: Id, params: Params) {
-            if (params.query.error) {
+            if (params.query?.error) {
               throw new BadRequest('Not good')
             }
 
@@ -655,6 +655,9 @@ describe('@feathersjs/express/rest provider', () => {
         .use('/todo', new Service(), {
           methods: ['find', 'customMethod']
         })
+        .use('/tasks', new Service(), {
+          methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'customMethod', ...customDefs]
+        })
         .use(errorHandler)
 
       server = await app.listen(4781)
@@ -711,5 +714,7 @@ describe('@feathersjs/express/rest provider', () => {
       await testMethod('create')
       await testMethod('find')
     })
+
+    restTests('Custom Method Routes', 'tasks', 4781, true)
   })
 })

@@ -49,6 +49,7 @@ export const routing = () => (app: Application) => {
   app.unuse = function (path: string) {
     app.routes.remove(path)
     app.routes.remove(`${path}/:__id`)
+    app.routes.remove(`${path}/:__id/:__action`)
     return unuse.call(this, path)
   }
 
@@ -58,5 +59,6 @@ export const routing = () => (app: Application) => {
 
     app.routes.insert(path, { service, params })
     app.routes.insert(`${path}/:__id`, { service, params })
+    app.routes.insert(`${path}/:__id/:__action`, { service, params })
   })
 }

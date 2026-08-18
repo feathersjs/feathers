@@ -21,6 +21,30 @@ export interface Paginated<T> {
 }
 
 /**
+ * The arguments for a service method call
+ */
+export type MethodArgument = 'id' | 'data' | 'params'
+
+/**
+ * The definition of a service method
+ * @property key The name of the method
+ * @property id Whether the method accepts an id as the first parameter
+ * @property data Whether the method accepts data as the first or second parameter (depending on id)
+ * @property route The route that this method should be registered on, true will automatically use the method key & args, false will disable the route
+ * @property routeMethod The HTTP method that this method should be registered on
+ * @property eventName The event name that should be emitted when this method is called
+ */
+export interface MethodDefinition {
+  key: string
+  // args: MethodArgument[]
+  id?: boolean
+  data?: boolean
+  route?: string | boolean
+  routeMethod?: string
+  eventName?: string
+}
+
+/**
  * Options that can be passed when registering a service via `app.use(name, service, options)`
  */
 export interface ServiceOptions<MethodTypes = string> {
@@ -31,7 +55,8 @@ export interface ServiceOptions<MethodTypes = string> {
   /**
    * A list of service methods that should be available __externally__ to clients
    */
-  methods?: MethodTypes[] | readonly MethodTypes[]
+  methods?: (MethodTypes | MethodDefinition)[] | readonly MethodTypes[]
+  serviceMethods?: MethodDefinition[]
   /**
    * Provide a full list of events that this service should emit to clients.
    * Unlike the `events` option, this will not be merged with the default events.

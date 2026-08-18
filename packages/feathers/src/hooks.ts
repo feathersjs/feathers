@@ -17,7 +17,7 @@ import {
   HookFunction,
   HookType
 } from './declarations'
-import { defaultServiceArguments, getHookMethods } from './service'
+import { getServiceMethodArgs, getHookMethods } from './service'
 
 type ConvertedMap = { [type in HookType]: ReturnType<typeof convertHookData> }
 
@@ -186,7 +186,7 @@ export function hookMixin<A>(this: A, service: FeathersService<A>, path: string,
   const hookMethods = getHookMethods(service, options)
 
   const serviceMethodHooks = hookMethods.reduce((res, method) => {
-    const params = (defaultServiceArguments as any)[method] || ['data', 'params']
+    const params = getServiceMethodArgs(method, service)
 
     res[method] = new FeathersHookManager<A>(this, method).params(...params).props({
       app: this,

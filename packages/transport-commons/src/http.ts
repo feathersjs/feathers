@@ -1,6 +1,14 @@
 import { MethodNotAllowed } from '@feathersjs/errors/lib'
-import { HookContext, NullableId, Params } from '@feathersjs/feathers'
+import {
+  HookContext,
+  NullableId,
+  Params,
+  getServiceOptions,
+  getServiceMethodArgs,
+  MethodDefinition
+} from '@feathersjs/feathers'
 import encodeUrl from 'encodeurl'
+import kebabCase from 'lodash/kebabCase'
 
 export const METHOD_HEADER = 'x-service-method'
 
@@ -18,41 +26,58 @@ export const statusCodes = {
   seeOther: 303
 }
 
-export const knownMethods: { [key: string]: string } = {
-  post: 'create',
-  patch: 'patch',
-  put: 'update',
-  delete: 'remove'
+function getMethodRoute(method: MethodDefinition) {
+  const methodRoute = typeof method.route === 'string' ? method.route : kebabCase(method.key)
+  return methodRoute
 }
 
-export function getServiceMethod(_httpMethod: string, id: unknown, headerOverride?: string) {
+export function getServiceMethod(
+  _httpMethod: string,
+  id: unknown,
+  action: unknown,
+  service: any,
+  headerOverride?: string
+) {
   const httpMethod = _httpMethod.toLowerCase()
 
+  const { serviceMethods } = getServiceOptions(service)
   if (httpMethod === 'post' && headerOverride) {
-    return headerOverride
+    const method = serviceMethods.find((method) => method.key === headerOverride)
+    return method
   }
 
-  const mappedMethod = knownMethods[httpMethod]
+  const potentialMethods = serviceMethods.filter(
+    (method) => method.route !== false && method.routeMethod.toLowerCase() === httpMethod.toLowerCase()
+  )
 
-  if (mappedMethod) {
-    return mappedMethod
+  // find the case where the action is the id as the method does not have an id in the args
+  let foundMethod = potentialMethods.find((method) => {
+    const methodRoute = getMethodRoute(method)
+    return !method.id && !action && (id || '') === methodRoute
+  })
+  if (foundMethod) {
+    return foundMethod
   }
 
-  if (httpMethod === 'get') {
-    return id === null ? 'find' : 'get'
+  foundMethod = potentialMethods.find((method) => {
+    const methodRoute = getMethodRoute(method)
+    return method.id && methodRoute === (action || '')
+  })
+  if (foundMethod) {
+    return foundMethod
   }
 
-  throw new MethodNotAllowed(`Method ${_httpMethod} not allowed`)
+  if (!['get', 'post', 'patch', 'put', 'delete'].includes(_httpMethod.toLowerCase())) {
+    throw new MethodNotAllowed(`Method ${_httpMethod} not allowed`)
+  }
+  return null
 }
 
-export const argumentsFor = {
-  get: ({ id, params }: ServiceParams) => [id, params],
-  find: ({ params }: ServiceParams) => [params],
-  create: ({ data, params }: ServiceParams) => [data, params],
-  update: ({ id, data, params }: ServiceParams) => [id, data, params],
-  patch: ({ id, data, params }: ServiceParams) => [id, data, params],
-  remove: ({ id, params }: ServiceParams) => [id, params],
-  default: ({ data, params }: ServiceParams) => [data, params]
+export function argumentsFor(method: MethodDefinition) {
+  return (serviceParams: ServiceParams) => {
+    const args = getServiceMethodArgs(method)
+    return args.map((arg) => serviceParams[arg])
+  }
 }
 
 export function getStatusCode(context: HookContext, body: any, location: string | string[]) {

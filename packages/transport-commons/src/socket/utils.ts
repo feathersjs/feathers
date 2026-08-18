@@ -3,7 +3,8 @@ import {
   Application,
   RealTimeConnection,
   createContext,
-  getServiceOptions
+  getServiceOptions,
+  getServiceMethodArgs
 } from '@feathersjs/feathers'
 import { NotFound, MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import { createDebug } from '@feathersjs/commons'
@@ -104,7 +105,10 @@ export async function runMethod(
       throw new MethodNotAllowed(`Method '${method}' not allowed on service '${path}'`)
     }
 
-    const position = paramsPositions[method] !== undefined ? paramsPositions[method] : DEFAULT_PARAMS_POSITION
+    let position = getServiceMethodArgs(method, service).indexOf('params')
+    if (position < 0) {
+      position = paramsPositions[method] !== undefined ? paramsPositions[method] : DEFAULT_PARAMS_POSITION
+    }
     const query = Object.assign({}, methodArgs[position])
     // `params` have to be re-mapped to the query and added with the route
     const params = Object.assign({ query, route, connection }, connection)

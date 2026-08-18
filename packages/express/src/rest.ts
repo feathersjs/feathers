@@ -22,24 +22,28 @@ const serviceMiddleware = (): RequestHandler => {
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const { service, params: { __id: id = null, ...route } = {} } = req.lookup!
-    const method = http.getServiceMethod(httpMethod, id, methodOverride)
-    const { methods } = getServiceOptions(service)
+    const method = http.getServiceMethod(httpMethod, id, route.__action, service, methodOverride)
 
     debug(`Found service for path ${path}, attempting to run '${method}' service method`)
 
-    if (!methods.includes(method) || defaultServiceMethods.includes(methodOverride)) {
-      const error = new MethodNotAllowed(`Method \`${method}\` is not supported by this endpoint.`)
+    if (!method || defaultServiceMethods.includes(methodOverride)) {
+      if (!methodOverride && id) return next()
+      const error = new MethodNotAllowed(
+        `${
+          methodOverride ? `Method \`${methodOverride || ``}\`` : `${httpMethod} ${path}`
+        } is not supported by this endpoint.`
+      )
       res.statusCode = error.code
       throw error
     }
 
-    const createArguments = http.argumentsFor[method as 'get'] || http.argumentsFor.default
+    const createArguments = http.argumentsFor(method)
     const params = { query, headers, route, ...req.feathers }
     const args = createArguments({ id, data, params })
-    const contextBase = createContext(service, method, { http: {} })
+    const contextBase = createContext(service, method.key, { http: {} })
     res.hook = contextBase
 
-    const context = await (service as any)[method](...args, contextBase)
+    const context = await (service as any)[method.key](...args, contextBase)
     res.hook = context
 
     const response = http.getResponse(context)

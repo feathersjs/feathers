@@ -45,7 +45,7 @@ export function socket({ done, emit, socketMap, socketKey, getParams }: SocketOp
         const methodHandlers = Object.keys(app.services).reduce((result, name) => {
           const { methods } = getServiceOptions(app.service(name))
 
-          methods.forEach((method) => {
+          ;(methods as string[]).forEach((method) => {
             if (!result[method]) {
               result[method] = (...args: any[]) => {
                 const [path, ...rest] = args

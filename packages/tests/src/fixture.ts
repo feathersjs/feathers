@@ -88,10 +88,53 @@ export class Service {
     }
   }
 
+  async customData(data: any, params: any) {
+    return {
+      data,
+      method: 'customData',
+      provider: params.provider
+    }
+  }
+
+  async customIdData(id: any, data: any, params: any) {
+    return {
+      id,
+      data,
+      method: 'customIdData',
+      provider: params.provider
+    }
+  }
+
+  async customId(id: any, params: any) {
+    return {
+      id,
+      method: 'customId',
+      provider: params.provider
+    }
+  }
+
+  async customParams(params: any) {
+    return {
+      query: params.query,
+      method: 'customParams',
+      provider: params.provider
+    }
+  }
+
   async internalMethod() {
     throw new Error('Should never get here')
   }
 }
+
+export const customDefs = [
+  { key: 'customData', route: true },
+  { key: 'customIdData', id: true, route: true },
+  { key: 'customIdData', id: true, route: 'custom', routeMethod: 'POST' },
+  { key: 'customIdData', id: true, data: true, route: 'custom-patch', routeMethod: 'PATCH' },
+  { key: 'customId', id: true, data: false, route: true },
+  { key: 'customParams', id: false, data: false, route: true },
+  { key: 'customParams', id: false, data: false, route: 'stats' }
+]
 
 export const verify = {
   find(data: any) {
