@@ -38,7 +38,9 @@ export function getServiceMethod(_httpMethod: string, id: unknown, headerOverrid
     return mappedMethod
   }
 
-  if (httpMethod === 'get') {
+  // HEAD is semantically a GET without a body (RFC 9110). Map it the same
+  // way so Express/Koa REST endpoints do not 405/500 on HEAD probes.
+  if (httpMethod === 'get' || httpMethod === 'head') {
     return id === null ? 'find' : 'get'
   }
 

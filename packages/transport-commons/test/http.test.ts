@@ -68,6 +68,9 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
   it('getServiceMethod', () => {
     assert.strictEqual(http.getServiceMethod('GET', 2), 'get')
     assert.strictEqual(http.getServiceMethod('GET', null), 'find')
+    assert.strictEqual(http.getServiceMethod('HEAD', 2), 'get')
+    assert.strictEqual(http.getServiceMethod('HEAD', null), 'find')
+    assert.strictEqual(http.getServiceMethod('head', null), 'find')
     assert.strictEqual(http.getServiceMethod('PoST', null), 'create')
     assert.strictEqual(http.getServiceMethod('PoST', null, 'customMethod'), 'customMethod')
     assert.strictEqual(http.getServiceMethod('delete', null), 'remove')
