@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.50](https://github.com/feathersjs/feathers/compare/v5.0.49...v5.0.50) (2026-09-11)
+
+### Bug Fixes
+
+- Update dependencies ([#3703](https://github.com/feathersjs/feathers/issues/3703)) ([4dd36da](https://github.com/feathersjs/feathers/commit/4dd36da8599ace88cc284e6a5f06d6a3e984a883))
+
 ## [5.0.49](https://github.com/feathersjs/feathers/compare/v5.0.48...v5.0.49) (2026-08-14)
 
 **Note:** Version bump only for package @feathersjs/errors

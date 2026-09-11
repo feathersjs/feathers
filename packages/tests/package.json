@@ -2,7 +2,7 @@
   "name": "@feathersjs/tests",
   "private": true,
   "description": "Feathers core module common tests",
-  "version": "5.0.49",
+  "version": "5.0.50",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -49,7 +49,7 @@
     "lodash": "^4.18.1"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^5.0.49",
+    "@feathersjs/feathers": "^5.0.50",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
     "mocha": "^12.0.1",

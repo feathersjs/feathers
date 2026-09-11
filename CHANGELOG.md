@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.50](https://github.com/feathersjs/feathers/compare/v5.0.49...v5.0.50) (2026-09-11)
+
+### Bug Fixes
+
+- **core:** Set version back to development ([ab6f0eb](https://github.com/feathersjs/feathers/commit/ab6f0eb79b746402757f567bc78f3c9f003e91d5))
+- **transport-commons:** map HEAD requests like GET for REST services ([#3701](https://github.com/feathersjs/feathers/issues/3701)) ([fcbf602](https://github.com/feathersjs/feathers/commit/fcbf602c33dd0aac8d13d82a83f538f877ffa6c2))
+- Update dependencies ([#3703](https://github.com/feathersjs/feathers/issues/3703)) ([4dd36da](https://github.com/feathersjs/feathers/commit/4dd36da8599ace88cc284e6a5f06d6a3e984a883))
+
 ## [5.0.49](https://github.com/feathersjs/feathers/compare/v5.0.48...v5.0.49) (2026-08-14)
 
 ### Bug Fixes
