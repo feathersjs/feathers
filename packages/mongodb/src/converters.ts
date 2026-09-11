@@ -56,9 +56,7 @@ const isObjectId = (value: any): value is ObjectId => {
   // Another mongodb/bson copy of ObjectId (instanceof fails across duplicates).
   // Reject plain JSON such as `{ _bsontype: 'ObjectId' }`.
   return (
-    value._bsontype === 'ObjectId' &&
-    value.constructor !== Object &&
-    typeof value.toHexString === 'function'
+    value._bsontype === 'ObjectId' && value.constructor !== Object && typeof value.toHexString === 'function'
   )
 }
 
