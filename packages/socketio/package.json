@@ -65,7 +65,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
     "lodash": "^4.18.1",
-    "mocha": "^11.7.6",
+    "mocha": "^12.0.1",
     "shx": "^0.4.0",
     "socket.io-client": "^4.8.3",
     "typescript": "^5.9.3"

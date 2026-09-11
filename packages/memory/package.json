@@ -58,7 +58,7 @@
     "@feathersjs/feathers": "^5.0.49",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
-    "mocha": "^11.7.6",
+    "mocha": "^12.0.1",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
