@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig",
-  "rootDir": "src",
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts", "src/**/test/**"],
   "compilerOptions": {
-    "outDir": "lib"
+    "rootDir": "src",
+    "outDir": "lib",
+    "types": ["node"]
   }
 }
