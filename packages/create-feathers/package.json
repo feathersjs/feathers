@@ -52,14 +52,14 @@
   "gitHead": "90caf635aec850550b9d37bea2762af959d9e8d5",
   "devDependencies": {
     "@types/node": "^24.1.0",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^5.0.0",
     "shx": "^0.4.0",
-    "typescript": "^5.8.0",
-    "vitest": "^3.2.4"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   },
   "dependencies": {
-    "@featherscloud/pinion": "^0.5.5",
-    "commander": "^12.1.0",
-    "type-fest": "^0.21.3"
+    "@featherscloud/pinion": "^0.5.7",
+    "commander": "^15.0.0",
+    "type-fest": "^5.9.0"
   }
 }
