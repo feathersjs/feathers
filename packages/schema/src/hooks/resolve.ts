@@ -173,7 +173,8 @@ export const resolveExternal =
           {} as Record<string, any>
         )
 
-        return setDispatch(current, currentDispatch)
+        // Nested or concurrent resolutions may have set dispatch while the resolvers were awaited.
+        return getDispatch(current) ?? setDispatch(current, currentDispatch)
       }
 
       const result = await (Array.isArray(data)
@@ -186,7 +187,7 @@ export const resolveExternal =
           }
         : result
 
-      context.dispatch = setDispatch(context.result, dispatch)
+      context.dispatch = getDispatch(context.result) ?? setDispatch(context.result, dispatch)
     }
   }
 

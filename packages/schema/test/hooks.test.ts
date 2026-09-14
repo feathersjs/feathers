@@ -1,8 +1,8 @@
-import { createContext, feathers } from '@feathersjs/feathers'
+import { createContext, feathers, HookContext } from '@feathersjs/feathers'
 import assert from 'assert'
 import { VALIDATED } from '@feathersjs/adapter-commons'
 import { MemoryService } from '@feathersjs/memory'
-import { validateQuery } from '../src'
+import { getDispatch, resolve, resolveExternal, validateQuery } from '../src'
 import { app, Message, User } from './fixture'
 
 describe('@feathersjs/schema/hooks', () => {
@@ -195,6 +195,116 @@ describe('@feathersjs/schema/hooks', () => {
 
     await service.find()
     assert.deepStrictEqual(await service.find(), [{ message: 'Hello' }])
+  })
+
+  for (const paginated of [false, true]) {
+    it(`resolves repeated result objects with paginated=${paginated} (#3476)`, async () => {
+      const record = { message: 'Hello', password: 'secret' }
+      const records = [record, record]
+      const result = paginated ? { total: 2, limit: 10, skip: 0, data: records } : records
+      const localApp = feathers().use('shared', {
+        async find() {
+          return result
+        }
+      })
+      const service = localApp.service('shared')
+
+      service.hooks({
+        around: {
+          all: [resolveExternal(resolve<typeof record, HookContext>({ password: async () => undefined }))]
+        }
+      })
+
+      const context = await service.find({}, createContext(service, 'find'))
+      const dispatch = [{ message: 'Hello' }, { message: 'Hello' }]
+
+      assert.strictEqual(context.result, result)
+      assert.deepStrictEqual(
+        context.dispatch,
+        paginated ? { total: 2, limit: 10, skip: 0, data: dispatch } : dispatch
+      )
+      const dispatchedRecords = Array.isArray(context.dispatch) ? context.dispatch : context.dispatch.data
+      assert.strictEqual(dispatchedRecords[0], dispatchedRecords[1])
+      assert.strictEqual(dispatchedRecords[0], getDispatch(record))
+      assert.strictEqual(record.password, 'secret')
+    })
+
+    it(`resolves concurrent calls sharing paginated=${paginated} results (#3476)`, async () => {
+      const record = { message: 'Hello', password: 'secret' }
+      const records = [record]
+      const result = paginated ? { total: 1, limit: 10, skip: 0, data: records } : records
+      const localApp = feathers().use('shared', {
+        async find() {
+          return result
+        }
+      })
+      const service = localApp.service('shared')
+
+      service.hooks({
+        around: {
+          all: [resolveExternal(resolve<typeof record, HookContext>({ password: async () => undefined }))]
+        }
+      })
+
+      const [first, second] = await Promise.all([
+        service.find({}, createContext(service, 'find')),
+        service.find({}, createContext(service, 'find'))
+      ])
+      const dispatch = [{ message: 'Hello' }]
+
+      assert.deepStrictEqual(
+        first.dispatch,
+        paginated ? { total: 1, limit: 10, skip: 0, data: dispatch } : dispatch
+      )
+      assert.strictEqual(first.dispatch, second.dispatch)
+      assert.strictEqual(first.result, result)
+      assert.strictEqual(second.result, result)
+      assert.strictEqual(record.password, 'secret')
+    })
+  }
+
+  it('keeps dispatch set by a resolver service call (#3476)', async () => {
+    const record = { message: 'Hello', password: 'secret' }
+    const localApp = feathers()
+
+    for (const name of ['inner', 'outer']) {
+      localApp.use(name, {
+        async get() {
+          return record
+        }
+      })
+    }
+
+    localApp.service('inner').hooks({
+      around: {
+        all: [resolveExternal(resolve<typeof record, HookContext>({ password: async () => undefined }))]
+      }
+    })
+    const service = localApp.service('outer')
+    service.hooks({
+      around: {
+        all: [
+          resolveExternal(
+            resolve<typeof record, HookContext>(
+              {},
+              {
+                converter: async (data, context) => {
+                  await context.app.service('inner').get(0)
+                  return data
+                }
+              }
+            )
+          )
+        ]
+      }
+    })
+
+    const context = await service.get(0, {}, createContext(service, 'get'))
+
+    assert.strictEqual(context.result, record)
+    assert.deepStrictEqual(context.dispatch, { message: 'Hello' })
+    assert.strictEqual(context.dispatch, getDispatch(record))
+    assert.strictEqual(record.password, 'secret')
   })
 
   it('resolves data for custom methods', async () => {
