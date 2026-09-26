@@ -32,7 +32,7 @@ export function getHookMethods(service: any, options: ServiceOptions) {
 
   return (defaultServiceMethods as any as string[])
     .filter((m) => typeof service[m] === 'function' && !methods.includes(m))
-    .concat(methods)
+    .concat(methods.filter((m) => typeof service[m] === 'function'))
 }
 
 export function getServiceOptions(service: any): ServiceOptions {
