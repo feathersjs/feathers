@@ -69,9 +69,9 @@
     "@feathersjs/memory": "^5.0.50",
     "@types/lodash": "^4.17.25",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.6.3",
     "@types/uuid": "^10.0.0",
-    "mocha": "^12.0.1",
+    "mocha": "^12.0.2",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
