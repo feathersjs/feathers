@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { errorHandler } from '../src'
+import { errorHandler, ERROR } from '../src'
 
 describe('Knex Error handler', () => {
   it('sqlState', () => {
@@ -61,5 +61,67 @@ describe('Knex Error handler', () => {
     assert.throws(() => errorHandler({ code: 'XYZ', severity: 'ERROR', routine: 'ExecConstraints' }), {
       name: 'GeneralError'
     })
+  })
+
+  it('postgresqlError omits query information from the Feathers error', () => {
+    const pgError = (code: string, message: string) => ({
+      code,
+      message,
+      severity: 'ERROR',
+      routine: 'ExecConstraints'
+    })
+
+    assert.throws(
+      () =>
+        errorHandler(
+          pgError(
+            '22P02',
+            'select "users".* from "users" where "id" = $1 limit $2 - invalid input syntax for type uuid: "1"'
+          )
+        ),
+      {
+        name: 'NotFound',
+        message: 'invalid input syntax for type uuid: "1"'
+      }
+    )
+
+    assert.throws(
+      () =>
+        errorHandler(
+          pgError(
+            '23505',
+            'insert into "users" ("email") values ($1) returning * - duplicate key value violates unique constraint "users_email_unique"'
+          )
+        ),
+      {
+        name: 'BadRequest',
+        message: 'duplicate key value violates unique constraint "users_email_unique"'
+      }
+    )
+
+    // A " - " inside the SQL and a hyphen in the error text are both handled
+    assert.throws(
+      () => errorHandler(pgError('42703', 'select "a" - "b" from "t" - column "non-existent" does not exist')),
+      {
+        name: 'Unprocessable',
+        message: 'column "non-existent" does not exist'
+      }
+    )
+  })
+
+  it('postgresqlError keeps the raw error for server-side handling', () => {
+    try {
+      errorHandler({
+        code: '23505',
+        message: 'insert into "users" ("email") values ($1) - duplicate key value',
+        severity: 'ERROR',
+        routine: 'ExecConstraints',
+        constraint: 'users_email_unique'
+      })
+      assert.fail('should have thrown')
+    } catch (error: any) {
+      assert.strictEqual(error[ERROR].code, '23505')
+      assert.strictEqual(error[ERROR].constraint, 'users_email_unique')
+    }
   })
 })
