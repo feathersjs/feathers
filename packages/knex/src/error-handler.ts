@@ -64,10 +64,11 @@ export function errorHandler(error: any) {
   } else if (typeof error.code === 'string' && error.severity && error.routine) {
     // NOTE: Error codes taken from
     // https://www.postgresql.org/docs/9.6/static/errcodes-appendix.html
-    // Omit query information
-    const messages = (error.message || '').split('-')
-
-    error.message = messages[messages.length - 1]
+    // Omit query information. Knex prefixes the driver message with the SQL
+    // as "<sql> - <pg message>", so keep only the text after the last " - ".
+    const rawMessage: string = error.message || ''
+    const separator = rawMessage.lastIndexOf(' - ')
+    const message = separator === -1 ? rawMessage : rawMessage.slice(separator + 3) // if no separator, use as is, else move pointer to the right of the separator
 
     switch (error.code.slice(0, 2)) {
       case '22':
