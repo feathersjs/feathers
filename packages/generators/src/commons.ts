@@ -304,6 +304,17 @@ export const install =
     const packageManager = await getCallable(packager, ctx)
     const flags = dev ? [packageManager === 'yarn' ? '--dev' : '--save-dev'] : []
 
+    if (packageManager === 'pnpm') {
+      // Approve only the build scripts required by SQLite and the CLI's TypeScript loader.
+      const buildDependencies = { sqlite3: 'sqlite3', '@feathersjs/cli': 'esbuild' }
+
+      for (const [dependency, buildDependency] of Object.entries(buildDependencies)) {
+        if (dependencyList.some((name) => name === dependency || name.startsWith(`${dependency}@`))) {
+          flags.push(`--allow-build=${buildDependency}`)
+        }
+      }
+    }
+
     return exec(packager, [packageManager === 'yarn' ? 'add' : 'install', ...dependencyList, ...flags])(ctx)
   }
 
