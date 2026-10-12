@@ -4,7 +4,7 @@ outline: deep
 
 # Application configuration
 
-A generated application uses the **[configuration module](../../api/configuration.md)** to load configuration information based on the environment. It is based on the battle-tested and widely used [node-config](https://github.com/node-config/node-config) and loads configuration settings so that they are available via [app.get()](../../api/application.md#getname). On application startup, the configuration will be validated against the [configuration schema](./configuration.md).
+A generated application uses the **[configuration module](../../api/configuration.md)** to load configuration information based on the environment. It is based on the battle-tested and widely used [node-config](https://github.com/node-config/node-config) and loads configuration settings so that they are available via [app.get()](../../api/application.md#get-name). On application startup, the configuration will be validated against the [configuration schema](./configuration.md).
 
 <BlockQuote type="warning" label="Important">
 

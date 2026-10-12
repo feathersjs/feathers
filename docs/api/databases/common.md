@@ -35,7 +35,7 @@ The following options are available for all database adapters:
 
 The following legacy options are still available but should be avoided:
 
-- `events {string[]}` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#usepath-service--options) instead.
+- `events {string[]}` (_optional_, **deprecated**) - A list of [custom service events](../events.md#custom-events) sent by this service. Use the `events` option when [registering the service with app.use](../application.md#use-path-service-options) instead.
 - `operators {string[]}` (_optional_, **deprecated**) - A list of additional non-standard query parameters to allow (e.g `[ '$regex' ]`). Prefer a [query schema](../schema/validators.md#validatequery) instead.
 - `filters {Object}` (_optional_, **deprecated**) - An object of additional top level query filters, e.g. `{ $populate: true }`. Can also be a converter function like `{ $ignoreCase: (value) => value === 'true' ? true : false }`. Prefer a [query schema](../schema/validators.md#validatequery) instead.
 

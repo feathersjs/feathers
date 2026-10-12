@@ -12,7 +12,7 @@ The available transports are [Koa](../../api/koa.md) or [Express](../../api/expr
 
 ## Configure functions
 
-The Feathers application does not use a complicated dependency injection mechanism. Instead, the application is wired together using _configure functions_ to split things up into individual files. They are functions that are exported from a file and that take the Feathers [app object](../../api/application.md) and then use it to e.g. register services. Those functions are then passed to [app.configure](../../api/application.md#configurecallback).
+The Feathers application does not use a complicated dependency injection mechanism. Instead, the application is wired together using _configure functions_ to split things up into individual files. They are functions that are exported from a file and that take the Feathers [app object](../../api/application.md) and then use it to e.g. register services. Those functions are then passed to [app.configure](../../api/application.md#configure-callback).
 
 For example, have a look at the following files:
 

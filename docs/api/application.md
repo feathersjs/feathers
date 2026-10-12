@@ -135,7 +135,7 @@ messageService.on('created', (message: Message) => {
 
 <BlockQuote type="info" label="Note">
 
-Note that a server side `app.service(path)` only allows the original service name (e.g. `app.service(':userId/messages')`) and does not parse placeholders. To get a service with route paramters use [.lookup](#lookuppath)
+Note that a server side `app.service(path)` only allows the original service name (e.g. `app.service(':userId/messages')`) and does not parse placeholders. To get a service with route paramters use [.lookup](#lookup-path)
 
 </BlockQuote>
 

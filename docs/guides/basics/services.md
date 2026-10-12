@@ -29,7 +29,7 @@ Service methods are [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_an
 - `setup` - Called when the application is started
 - `teardown` - Called when the application is shut down
 
-Below is an example of Feathers service interface as a class and basic registration on a Feathers application via [app.use(name, service[, options])](../../api/application.md#use-path-service):
+Below is an example of Feathers service interface as a class and basic registration on a Feathers application via [app.use(name, service[, options])](../../api/application.md#use-path-service-options):
 
 ```ts
 import { feathers } from '@feathersjs/feathers'
