@@ -29,7 +29,7 @@ This page describes how to set up a Socket.io server. The [Socket.io client chap
 
 ### socketio()
 
-`app.configure(socketio())` sets up the Socket.io transport with the default configuration using either the server provided by [app.listen](./application.md#listenport) or passed in [app.setup(server)](./application.md#setupserver).
+`app.configure(socketio())` sets up the Socket.io transport with the default configuration using either the server provided by [app.listen](./application.md#listen-port) or passed in [app.setup(server)](./application.md#setup-server).
 
 ```ts
 import { feathers } from '@feathersjs/feathers'

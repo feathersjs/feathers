@@ -59,7 +59,7 @@ Always use the service returned by `app.service(path)` not the service object or
 
 <BlockQuote type="tip">
 
-Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one standard service method must be implemented to be considered a service. If you used `methods` option when registering the service via [app.use](./application.md#usepath-service--options), all methods listed must be available.
+Methods are optional and if a method is not implemented Feathers will automatically emit a `NotImplemented` error. At least one standard service method must be implemented to be considered a service. If you used `methods` option when registering the service via [app.use](./application.md#use-path-service-options), all methods listed must be available.
 
 </BlockQuote>
 
@@ -69,7 +69,7 @@ Service methods must use [async/await](https://developer.mozilla.org/en-US/docs/
 - `data` — The resource data.
 - `params` - Additional parameters for the method call (see [params](#params))
 
-Once registered, the service can be retrieved and used via [app.service()](./application.md#servicepath):
+Once registered, the service can be retrieved and used via [app.service()](./application.md#service-path):
 
 ```js
 const myService = app.service('my-service')
@@ -230,17 +230,17 @@ With [database adapters](./databases/adapters.md) the [`multi` option](./databas
 
 `service.setup(app, path) -> Promise` is a special method that initializes the service, passing an instance of the Feathers application and the path it has been registered on.
 
-When calling [app.listen](application.md#listenport) or [app.setup](application.md#setupserver) all registered services `setup` methods will be called. If a service is registered afterwards, the `setup` method will be called immediately.
+When calling [app.listen](application.md#listen-port) or [app.setup](application.md#setup-server) all registered services `setup` methods will be called. If a service is registered afterwards, the `setup` method will be called immediately.
 
 ### .teardown(app, path)
 
-`service.teardown(app, path) -> Promise` is a special method that shuts down the service, passing an instance of the Feathers application and the path it has been registered on. If a service implements a `teardown` method, it will be called during [app.teardown()](application.md#teardownserver) or when unregistering the service via [app.unuse](./application.md#unusepath).
+`service.teardown(app, path) -> Promise` is a special method that shuts down the service, passing an instance of the Feathers application and the path it has been registered on. If a service implements a `teardown` method, it will be called during [app.teardown()](application.md#teardown-server) or when unregistering the service via [app.unuse](./application.md#unuse-path).
 
 ## Custom Methods
 
 A custom method is any other service method you want to expose publicly. A custom method **must have** the signature of `(data, params)` with the same semantics as standard service methods (`data` is the payload, `params` is the service [params](#params)). They can be used with [hooks](./hooks.md) (including authentication) and must be `async` or return a Promise.
 
-In order to register a public custom method, the names of _all methods_ have to be passed as the `methods` option when registering the service with [app.use()](./application.md#usepath-service--options)
+In order to register a public custom method, the names of _all methods_ have to be passed as the `methods` option when registering the service with [app.use()](./application.md#use-path-service-options)
 
 ```ts
 import type { Id, Params } from '@feathersjs/feathers'

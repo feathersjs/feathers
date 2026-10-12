@@ -49,7 +49,7 @@ If no Feathers application is passed, `koa() -> app` returns a plain Koa applica
 
 ## app.listen(port)
 
-`app.listen(port) -> HttpServer` will first call Koa [app.listen](https://github.com/koajs/koa/blob/master/docs/api/index.md#applisten) and then internally also call the [Feathers app.setup(server)](./application.md#setupserver).
+`app.listen(port) -> HttpServer` will first call Koa [app.listen](https://github.com/koajs/koa/blob/master/docs/api/index.md#applisten) and then internally also call the [Feathers app.setup(server)](./application.md#setup-server).
 
 ```js
 // Listen on port 3030
@@ -181,7 +181,7 @@ app.listen(3030)
 
 ## Service middleware
 
-When registering a service, it is also possible to pass custom Koa middleware that should run `before` the specific service method in the `koa` [service option](./application.md#usepath-service--options):
+When registering a service, it is also possible to pass custom Koa middleware that should run `before` the specific service method in the `koa` [service option](./application.md#use-path-service-options):
 
 ```ts
 app.use('/todos', new TodoService(), {

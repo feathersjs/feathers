@@ -31,7 +31,7 @@ To get the latest types in the [client](./client.md) and any time before `npm st
 
 ## Configuration Types
 
-The `Configuration` interface defines the types for [app.get](../../api/application.md#getname) and [app.set](../../api/application.md#setname-value). It is extended from the type inferred from the [configuration schema](./configuration.md#configuration-schemas). Since you can store anything global to the application in `app.get` and `app.set`, you can add additional types that are not part of the initial application configuration here.
+The `Configuration` interface defines the types for [app.get](../../api/application.md#get-name) and [app.set](../../api/application.md#set-name-value). It is extended from the type inferred from the [configuration schema](./configuration.md#configuration-schemas). Since you can store anything global to the application in `app.get` and `app.set`, you can add additional types that are not part of the initial application configuration here.
 
 ```ts
 // The types for app.get(name) and app.set(name)
@@ -49,7 +49,7 @@ Both `Configuration` and `ServiceTypes` need to be declared as an `interface` (e
 
 ## Service Types
 
-The `ServiceTypes` interface contains a mapping of all service paths to their service type so that [app.use](../../api/application.md#usepath-service--options) and [app.service](../../api/application.md#servicepath) use the correct type.
+The `ServiceTypes` interface contains a mapping of all service paths to their service type so that [app.use](../../api/application.md#use-path-service-options) and [app.service](../../api/application.md#service-path) use the correct type.
 
 ```ts
 // A mapping of service names to types. Will be extended in service files.

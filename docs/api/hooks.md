@@ -312,7 +312,7 @@ app.service('servicename').hooks({
 
 <BlockQuote type="warning">
 
-Hooks will only be available for the standard service methods or methods passed in `options.methods` to [app.use](application.md#usepath-service--options). See the [documentation for @feathersjs/hooks](https://github.com/feathersjs/hooks) how to use hooks on other methods.
+Hooks will only be available for the standard service methods or methods passed in `options.methods` to [app.use](application.md#use-path-service-options). See the [documentation for @feathersjs/hooks](https://github.com/feathersjs/hooks) how to use hooks on other methods.
 
 </BlockQuote>
 
@@ -374,7 +374,7 @@ app.hooks({
 
 ### Setup and teardown
 
-A special kind of application hooks are [app.setup](./application.md#setupserver) and [app.teardown](./application.md#teardownserver) hooks. They are around hooks that can be used to initialize database connections etc. and only run once when the application starts or shuts down. Setup and teardown hooks only have `context.app` and `context.server` available in the hook context.
+A special kind of application hooks are [app.setup](./application.md#setup-server) and [app.teardown](./application.md#teardown-server) hooks. They are around hooks that can be used to initialize database connections etc. and only run once when the application starts or shuts down. Setup and teardown hooks only have `context.app` and `context.server` available in the hook context.
 
 ```ts
 import { MongoClient } from 'mongodb'

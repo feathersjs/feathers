@@ -8,7 +8,7 @@ The main service file registers the service on the [application](./app.md) as we
 
 ## Registration
 
-The service is added to the main application via [app.use](../../api/application.md#usepath-service--options) under the path you chose when creating the service. It usses the following options:
+The service is added to the main application via [app.use](../../api/application.md#use-path-service-options) under the path you chose when creating the service. It usses the following options:
 
 - `methods` - A list of methods available for external clients. You can remove methods that are not used or add your own [custom methods](../../api/services.md#custom-methods). Not that this list also has to be updated in the [client file](./client.md).
 - `events` - A list of additional [custom events](../../api/events.md#custom-events) sent to clients.
