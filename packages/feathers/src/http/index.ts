@@ -160,7 +160,7 @@ export function createHandler(
     }
 
     // Create the hook context.
-    const hookContext = createContext(service, method)
+    const hookContext = createContext(service, method, { http: {} })
     // Run the service method.
     const args = createArguments({ id, data, params: serviceParams })
     const context = await (service as any)[method](...args, hookContext)
