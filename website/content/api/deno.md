@@ -21,6 +21,9 @@ app.use('messages', {
 const handler = createHandler(app)
 
 Deno.serve({ port: 3030 }, handler)
+
+// Call app.setup to initialize all services
+await app.setup()
 ```
 
 The `createHandler` returns a function with the signature `(request: Request) => Promise<Response>` which is the Web Standard used natively by Deno.

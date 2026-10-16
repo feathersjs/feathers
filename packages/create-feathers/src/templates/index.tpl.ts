@@ -24,8 +24,10 @@ import { app } from './app.js'
 const port = Deno.env.get('PORT') || 3030
 
 const handler = createHandler(app)
+const server = Deno.serve({ port }, handler)
 
-Deno.serve({ port }, handler)
+// Call app.setup to initialize all services
+await app.setup(server)
 `
 
 const bunTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
@@ -34,10 +36,13 @@ import { app } from './app.js'
 const port = Bun.env.PORT || 3030
 const handler = createHandler(app)
 
-Bun.serve({
+const server = Bun.serve({
   port,
   fetch: handler
 })
+
+// Call app.setup to initialize all services
+await app.setup(server)
 `
 
 const template = (ctx: AppGeneratorContext) => {
