@@ -45,7 +45,7 @@ export function functionHooks<F>(fn: F, managerOrMiddleware: HookOptions) {
       if (!Object.prototype.hasOwnProperty.call(context, 'result')) {
         const returnValue = original.apply(this, ctx.arguments)
 
-        if (returnValue[Symbol.asyncIterator]) {
+        if (returnValue?.[Symbol.asyncIterator]) {
           throw new Error(
             'Function must return a Promise that resolves to an async iterable, not the iterable directly'
           )
