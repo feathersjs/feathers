@@ -148,6 +148,25 @@ describe('http test', () => {
     expect(error.name).toBe('MethodNotAllowed')
   })
 
+  it('does not allow standard methods via method override header', async () => {
+    for (const method of ['find', 'get', 'create', 'update', 'patch', 'remove']) {
+      const res = await fetch(`http://localhost:${TEST_PORT}/todos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Service-Method': method
+        },
+        body: JSON.stringify({ description: 'Override' })
+      })
+
+      expect(res.status).toBe(405)
+
+      const error = await res.json()
+      expect(error.message).toBe(`Method \`${method}\` is not supported by this endpoint.`)
+      expect(error.name).toBe('MethodNotAllowed')
+    }
+  })
+
   describe('CORS and returning reponses', () => {
     it('returns a custom response', async () => {
       const res = await fetch(`http://localhost:${TEST_PORT}/test`)
