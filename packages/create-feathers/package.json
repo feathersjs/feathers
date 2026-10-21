@@ -30,7 +30,7 @@
     "url": "https://github.com/feathersjs/feathers/issues"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 24"
   },
   "files": [
     "CHANGELOG.md",
