@@ -12,7 +12,7 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint', 'prettier'],
-  ignorePatterns: ['**/lib/', '**/cjs/', '**/dist/', 'website/'],
+  ignorePatterns: ['**/lib/', '**/dist/', 'website/'],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/no-explicit-any': 'off',

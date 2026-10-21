@@ -40,7 +40,6 @@ dist/
 
 # TypeScript compiled files
 packages/**/lib
-packages/**/cjs
 **/build/*.tgz
 *.sqlite
 docs/.vitepress/cache
