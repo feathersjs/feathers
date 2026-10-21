@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { feathers, Application } from '../index.js'
-import { SseService, SsePayload } from './sse.service.js'
+import type { Application } from '../index.js'
+import { feathers } from '../index.js'
+import type { SsePayload } from './sse.service.js'
+import { SseService } from './sse.service.js'
 
 class TestService {
   events = ['foo', 'bar']

@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { PackageJson } from 'type-fest'
-import { Callable, PinionContext, loadJSON, fromFile, getCallable, exec } from '@featherscloud/pinion'
+import type { PackageJson } from 'type-fest'
+import type { Callable, PinionContext } from '@featherscloud/pinion'
+import { loadJSON, fromFile, getCallable, exec } from '@featherscloud/pinion'
 
 // Set __dirname in es module
 const __dirname = dirname(fileURLToPath(import.meta.url))

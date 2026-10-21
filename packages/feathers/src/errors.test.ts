@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 import * as errors from '../src/errors.js'
 
 const { convert } = errors
@@ -359,7 +359,7 @@ describe('@feathersjs/errors', () => {
 
         assert.strictEqual(e.stack.indexOf(text), 0)
 
-        assert.ok(e.stack.indexOf('errors.test.ts') !== -1)
+        assert.ok(e.stack.includes('errors.test.ts'))
 
         const oldCST = Error.captureStackTrace
 

@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 import { EventEmitter } from './event-emitter.js'
 
 import { feathers } from '../src/index.js'

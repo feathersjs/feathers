@@ -1,15 +1,7 @@
 import { it, describe, expect } from 'vitest'
-import assert from 'assert'
-import {
-  BaseHookContext,
-  functionHooks,
-  getManager,
-  HookContext,
-  hooks,
-  middleware,
-  NextFunction,
-  setMiddleware
-} from './index.js'
+import assert from 'node:assert'
+import type { HookContext, NextFunction } from './index.js'
+import { BaseHookContext, functionHooks, getManager, hooks, middleware, setMiddleware } from './index.js'
 
 const hello = (name?: string, _params: any = {}) => {
   return Promise.resolve(`Hello ${name}`)
@@ -27,7 +19,7 @@ describe('feathers/hooks function', () => {
     const fn = hooks(hello)
 
     assert.notEqual(fn, hello)
-    assert(getManager(fn) !== null)
+    assert.ok(getManager(fn) !== null)
   })
 
   it('conserve name and length properties', () => {
@@ -43,7 +35,7 @@ describe('feathers/hooks function', () => {
 
   it('can override arguments, has context', async () => {
     const addYou = async (ctx: HookContext, next: NextFunction) => {
-      assert(ctx instanceof BaseHookContext)
+      assert.ok(ctx instanceof BaseHookContext)
       assert.deepEqual(ctx.arguments, ['There'])
       ctx.arguments[0] += ' You'
 
@@ -219,7 +211,7 @@ describe('feathers/hooks function', () => {
     const mngr = getManager(second)
 
     if (mngr === null) {
-      assert(false, 'There should be a manager')
+      assert.ok(false, 'There should be a manager')
     } else {
       assert.deepEqual(mngr.getMiddleware(), [one, two, three])
     }
@@ -243,7 +235,7 @@ describe('feathers/hooks function', () => {
       first,
       middleware([
         async (ctx, next) => {
-          assert(ctx.defaulting)
+          assert.ok(ctx.defaulting)
           ctx.name += ctx.testing
           await next()
         }
@@ -449,9 +441,9 @@ describe('feathers/hooks function', () => {
 
     // console.log(keys)
     // assert(!keys.includes('self'))
-    assert(keys.includes('message'))
-    assert(keys.includes('arguments'))
-    assert(keys.includes('result'))
+    assert.ok(keys.includes('message'))
+    assert.ok(keys.includes('arguments'))
+    assert.ok(keys.includes('result'))
   })
 
   it('same params and props throw an error', async () => {

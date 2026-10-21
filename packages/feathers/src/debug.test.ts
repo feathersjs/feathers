@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { strict as assert } from 'assert'
+import { strict as assert } from 'node:assert'
 import { createDebug, setDebug, noopDebug } from '../src/debug.js'
 
 const myDebug = createDebug('hello test')

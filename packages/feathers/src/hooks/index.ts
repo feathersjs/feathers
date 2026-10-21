@@ -1,6 +1,8 @@
-import { AsyncMiddleware } from './compose.js'
-import { HookContext, HookContextConstructor, HookContextData, HookManager, HookOptions } from './base.js'
-import { functionHooks, hookDecorator, HookMap, objectHooks } from './hooks.js'
+import type { AsyncMiddleware } from './compose.js'
+import type { HookContext, HookContextConstructor, HookContextData, HookOptions } from './base.js'
+import { HookManager } from './base.js'
+import type { HookMap } from './hooks.js'
+import { functionHooks, hookDecorator, objectHooks } from './hooks.js'
 
 export * from './hooks.js'
 export * from './compose.js'

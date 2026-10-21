@@ -1,8 +1,9 @@
 import { renderTemplate, toFile, when } from '@featherscloud/pinion'
-import { AppGeneratorContext } from '../../commons'
+import type { AppGeneratorContext } from '../../commons'
 
-const template =
-  ({}: AppGeneratorContext) => /* ts */ `import { SseService as FeathersSseService } from 'feathers/http'
+const template = (
+  _ctx: AppGeneratorContext
+) => /* ts */ `import { SseService as FeathersSseService } from 'feathers/http'
 import { hooks } from 'feathers/hooks'
 
 import { authenticate } from '../hooks/authenticate.js'

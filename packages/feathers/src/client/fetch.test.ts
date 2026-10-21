@@ -3,7 +3,8 @@ import { feathers } from '../index.js'
 import { clientTests } from '../../fixtures/client.js'
 import { NotAcceptable, NotFound, MethodNotAllowed, BadRequest } from '../errors.js'
 
-import { getApp, createTestServer, TestServiceTypes, verify } from '../../fixtures/index.js'
+import type { TestServiceTypes } from '../../fixtures/index.js'
+import { getApp, createTestServer, verify } from '../../fixtures/index.js'
 import { fetchClient, FetchClient } from './index.js'
 
 describe('fetch REST connector', function () {

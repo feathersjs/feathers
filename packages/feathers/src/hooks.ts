@@ -1,13 +1,6 @@
-import {
-  getManager,
-  HookContextData,
-  HookManager,
-  HookMap as BaseHookMap,
-  hooks,
-  Middleware,
-  collect
-} from './hooks/index.js'
-import {
+import type { HookContextData, HookMap as BaseHookMap, Middleware } from './hooks/index.js'
+import { getManager, HookManager, hooks, collect } from './hooks/index.js'
+import type {
   Service,
   ServiceOptions,
   HookContext,

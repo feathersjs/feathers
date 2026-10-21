@@ -1,7 +1,9 @@
 import type { Application, Query } from '../declarations.js'
 import { stringify as defaultStringify } from '../qs.js'
-import { FetchClient, ProxiedFetchClient } from './fetch.js'
-import { sseClient, SseClientOptions } from './sse.js'
+import type { FetchClient } from './fetch.js'
+import { ProxiedFetchClient } from './fetch.js'
+import type { SseClientOptions } from './sse.js'
+import { sseClient } from './sse.js'
 import { defaultServiceEvents } from '../service.js'
 
 export * from './fetch.js'

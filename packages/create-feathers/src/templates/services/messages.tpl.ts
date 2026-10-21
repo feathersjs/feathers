@@ -1,7 +1,7 @@
 import { renderTemplate, toFile } from '@featherscloud/pinion'
-import { AppGeneratorContext } from '../../commons'
+import type { AppGeneratorContext } from '../../commons'
 
-const template = ({}: AppGeneratorContext) => /* ts */ `import type { Params } from 'feathers'
+const template = (_ctx: AppGeneratorContext) => /* ts */ `import type { Params } from 'feathers'
 import { hooks } from 'feathers/hooks'
 
 import { authenticate } from '../hooks/authenticate.js'

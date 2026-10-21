@@ -1,7 +1,7 @@
 import { renderTemplate, toFile } from '@featherscloud/pinion'
 import type { AppGeneratorContext } from '../commons.js'
 
-const nodeTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createServer } from 'node:http'
+const nodeTemplate = (_ctx: AppGeneratorContext) => /* ts */ `import { createServer } from 'node:http'
 import { createHandler } from 'feathers/http'
 import { toNodeHandler } from 'feathers/http/node'
 import { app } from './app.js'
@@ -18,7 +18,7 @@ server.listen(PORT, () => {
 await app.setup(server)
 `
 
-const denoTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
+const denoTemplate = (_ctx: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
 import { app } from './app.js'
 
 const port = Deno.env.get('PORT') || 3030
@@ -28,7 +28,7 @@ const handler = createHandler(app)
 Deno.serve({ port }, handler)
 `
 
-const bunTemplate = ({}: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
+const bunTemplate = (_ctx: AppGeneratorContext) => /* ts */ `import { createHandler } from 'feathers/http'
 import { app } from './app.js'
 
 const port = Bun.env.PORT || 3030

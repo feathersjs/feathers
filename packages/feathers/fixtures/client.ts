@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import { strict as assert } from 'assert'
+import { strict as assert } from 'node:assert'
 import { verify } from './fixture'
 
 export interface Todo {

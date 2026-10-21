@@ -1,7 +1,10 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest'
-import { Application, feathers, Params } from '../index.js'
-import { getApp, createTestServer, TestServiceTypes, Todo } from '../../fixtures/index.js'
-import { fetchClient, ReconnectingEvent } from './index.js'
+import type { Application, Params } from '../index.js'
+import { feathers } from '../index.js'
+import type { TestServiceTypes, Todo } from '../../fixtures/index.js'
+import { getApp, createTestServer } from '../../fixtures/index.js'
+import type { ReconnectingEvent } from './index.js'
+import { fetchClient } from './index.js'
 
 describe('SSE client', function () {
   const port = 8890
@@ -71,12 +74,12 @@ describe('SSE client', function () {
       app.service('todos').create({ text: 'server todo', complete: false })
     ])
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+    await new Promise<void>((resolve) => setTimeout(resolve, 50))
 
     controller.abort()
 
     await client2.service('todos').create({ text: 'todo x', complete: true })
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+    await new Promise<void>((resolve) => setTimeout(resolve, 50))
 
     expect(events.length).toBe(4)
   })
@@ -142,7 +145,7 @@ describe('SSE client', function () {
       channel: 'client'
     })
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+    await new Promise<void>((resolve) => setTimeout(resolve, 50))
 
     expect(events.length).toBe(2)
 
@@ -152,7 +155,7 @@ describe('SSE client', function () {
       channel: 'notclient'
     })
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 50))
+    await new Promise<void>((resolve) => setTimeout(resolve, 50))
 
     expect(events.length).toBe(2)
   })

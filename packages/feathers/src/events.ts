@@ -1,6 +1,6 @@
 import { EventEmitter } from './event-emitter.js'
-import { NextFunction } from './hooks/index.js'
-import { HookContext, FeathersService } from './declarations.js'
+import type { NextFunction } from './hooks/index.js'
+import type { HookContext, FeathersService } from './declarations.js'
 import { getServiceOptions, defaultEventMap } from './service.js'
 
 export async function eventHook(context: HookContext, next: NextFunction) {

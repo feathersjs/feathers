@@ -1,6 +1,6 @@
-import { sep, dirname } from 'path'
+import { sep, dirname } from 'node:path'
 import { prompt, runGenerators, when } from '@featherscloud/pinion'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
 import type { AppGeneratorArguments, AppGeneratorContext } from './commons.js'
 import { initializeBaseContext, install } from './commons.js'

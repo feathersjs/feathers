@@ -1,7 +1,8 @@
 // Adapted from koa-compose (https://github.com/koajs/compose)
 import { describe, expect, it } from 'vitest'
-import assert from 'assert'
-import { compose, NextFunction } from './index.js'
+import assert from 'node:assert'
+import type { NextFunction } from './index.js'
+import { compose } from './index.js'
 
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms || 1))
@@ -104,7 +105,7 @@ describe('feathers/hooks compose', () => {
     compose(stack)({})
 
     for (const next of arr) {
-      assert(isPromise(next), 'one of the functions next is not a Promise')
+      assert.ok(isPromise(next), 'one of the functions next is not a Promise')
     }
   })
 
@@ -126,7 +127,7 @@ describe('feathers/hooks compose', () => {
     })
 
     await compose(stack)({})
-    assert(called)
+    assert.ok(called)
   })
 
   it('compose: should reject on errors in middleware', () => {
@@ -141,7 +142,7 @@ describe('feathers/hooks compose', () => {
         throw new Error('promise was not rejected')
       })
       .catch(function (e) {
-        assert(e instanceof Error)
+        assert.ok(e instanceof Error)
       })
   })
 
@@ -178,7 +179,7 @@ describe('feathers/hooks compose', () => {
         arr.push(6)
         await next()
         arr.push(7)
-      } catch (_err) {
+      } catch {
         arr.push(2)
       }
       arr.push(3)
@@ -199,7 +200,7 @@ describe('feathers/hooks compose', () => {
     return compose([])({}, async () => {
       called = true
     }).then(function () {
-      assert(called)
+      assert.ok(called)
     })
   })
 
@@ -215,7 +216,7 @@ describe('feathers/hooks compose', () => {
         throw new Error('promise was not rejected')
       })
       .catch(function (e) {
-        assert(e instanceof Error)
+        assert.ok(e instanceof Error)
       })
   })
 
@@ -252,7 +253,7 @@ describe('feathers/hooks compose', () => {
         throw new Error('boom')
       },
       (err) => {
-        assert(/multiple times/.test(err.message))
+        assert.ok(/multiple times/.test(err.message))
       }
     )
   })

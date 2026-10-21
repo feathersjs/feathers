@@ -31,7 +31,7 @@ export class TestService {
     if (query.runtimeError) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      thingThatDoesNotExist() // eslint-disable-line
+      thingThatDoesNotExist()
     }
 
     if (name === 'nocontent') {
