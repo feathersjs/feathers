@@ -20,3 +20,8 @@ jobs:
       - run: npm test
         env:
           CI: true
+      - name: Run benchmarks (non-blocking)
+        run: npm run bench
+        continue-on-error: true
+        env:
+          CI: true
