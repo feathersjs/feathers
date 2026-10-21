@@ -76,7 +76,9 @@ function handleAsyncIterable(request: Request, context: HookContext) {
     } finally {
       try {
         await writer.close()
-      } catch (_error) {}
+      } catch {
+        // The stream may already be closed
+      }
     }
   }
 

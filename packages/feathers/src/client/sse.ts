@@ -1,4 +1,4 @@
-import { Application, HookContext, NextFunction, Params } from '../declarations.js'
+import type { Application, HookContext, NextFunction, Params } from '../declarations.js'
 
 export interface SseClientOptions {
   path: string

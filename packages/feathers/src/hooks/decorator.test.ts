@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import assert from 'assert'
-import { HookContext, hooks, middleware, NextFunction } from './index.js'
+import assert from 'node:assert'
+import type { HookContext, NextFunction } from './index.js'
+import { hooks, middleware } from './index.js'
 
 describe('feathers/hooks decorator', () => {
   it('hook decorator on method and classes with inheritance', async () => {

@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
-import { feathers, Params, ServiceInterface } from '../../index.js'
+import assert from 'node:assert'
+import type { Params, ServiceInterface } from '../../index.js'
+import { feathers } from '../../index.js'
 
 describe('`before` hooks', () => {
   it('.before hooks can return a promise', async () => {

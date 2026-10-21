@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import { describe, it } from 'vitest'
-import { strict as assert } from 'assert'
+import { strict as assert } from 'node:assert'
 import { _, stripSlashes, isPromise, createSymbol } from '../src/commons.js'
 
 describe('feathers/commons utils', () => {

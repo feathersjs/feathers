@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 
 import { verify } from './fixture'
 

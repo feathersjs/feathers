@@ -1,12 +1,7 @@
-import { AsyncMiddleware, compose } from './compose.js'
-import {
-  convertOptions,
-  HookContext,
-  HookContextData,
-  HookOptions,
-  setManager,
-  setMiddleware
-} from './base.js'
+import type { AsyncMiddleware } from './compose.js'
+import { compose } from './compose.js'
+import type { HookContext, HookContextData, HookOptions } from './base.js'
+import { convertOptions, setManager, setMiddleware } from './base.js'
 import { copyFnProperties, copyProperties } from './utils.js'
 
 export function getOriginal(fn: any): any {

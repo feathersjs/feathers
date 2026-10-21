@@ -1,5 +1,5 @@
 import { EventEmitter } from '../event-emitter.js'
-import { RealTimeConnection } from '../declarations.js'
+import type { RealTimeConnection } from '../declarations.js'
 
 export class Channel extends EventEmitter {
   connections: RealTimeConnection[]
@@ -40,7 +40,7 @@ export class Channel extends EventEmitter {
 
   join(...connections: RealTimeConnection[]) {
     connections.forEach((connection) => {
-      if (connection && this.connections.indexOf(connection) === -1) {
+      if (connection && !this.connections.includes(connection)) {
         this.connections.push(connection)
       }
     })

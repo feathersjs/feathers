@@ -1,6 +1,7 @@
 import { describe, it, beforeAll } from 'vitest'
-import assert from 'assert'
-import { HookContext, hooks, middleware, NextFunction } from './index.js'
+import assert from 'node:assert'
+import type { HookContext, NextFunction } from './index.js'
+import { hooks, middleware } from './index.js'
 
 const CYCLES = 100000
 const getRuntime = async (callback: () => Promise<any>) => {
@@ -29,7 +30,7 @@ describe('feathers/hooks benchmark', () => {
     const hookHello1 = hooks(hello, middleware([]))
     const runtime = await getRuntime(() => hookHello1('Dave'))
 
-    assert(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
+    assert.ok(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
   })
 
   it('single simple hook', async () => {
@@ -43,7 +44,7 @@ describe('feathers/hooks benchmark', () => {
     )
     const runtime = await getRuntime(() => hookHello('Dave'))
 
-    assert(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
+    assert.ok(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
   })
 
   it('single hook, withParams and props', async () => {
@@ -60,6 +61,6 @@ describe('feathers/hooks benchmark', () => {
 
     const runtime = await getRuntime(() => hookHello('Dave'))
 
-    assert(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
+    assert.ok(runtime < threshold, `Runtime is ${runtime}ms, threshold is ${threshold}ms`)
   })
 })

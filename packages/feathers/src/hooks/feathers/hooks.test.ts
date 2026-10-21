@@ -1,7 +1,9 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
-import { hooks, NextFunction } from '../index.js'
-import { HookContext, createContext, feathers, Id, Params, ServiceInterface } from '../../index.js'
+import assert from 'node:assert'
+import type { NextFunction } from '../index.js'
+import { hooks } from '../index.js'
+import type { HookContext, Id, Params, ServiceInterface } from '../../index.js'
+import { createContext, feathers } from '../../index.js'
 
 describe('hooks basics', () => {
   it('mix @feathersjs/hooks and .hooks', async () => {

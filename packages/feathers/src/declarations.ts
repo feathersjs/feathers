@@ -1,6 +1,6 @@
-import { EventEmitter } from './event-emitter.js'
+import type { EventEmitter } from './event-emitter.js'
 import type { Router } from './router.js'
-import { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
+import type { NextFunction, HookContext as BaseHookContext } from './hooks/index.js'
 
 type SelfOrArray<S> = S | S[]
 type OptionalPick<T, K extends PropertyKey> = Pick<T, Extract<keyof T, K>>

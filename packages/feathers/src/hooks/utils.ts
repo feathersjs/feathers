@@ -23,7 +23,7 @@ export function copyFnProperties<F>(target: F, original: any) {
 
       Object.defineProperty(target, prop, { value })
     }
-  } catch (_e) {
+  } catch {
     // Avoid IE error
   }
 

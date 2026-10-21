@@ -1,7 +1,8 @@
 import { createServer } from 'node:http'
 import { TestService } from './fixture.js'
 
-import { feathers, Application, Params } from '../src/index.js'
+import type { Application, Params } from '../src/index.js'
+import { feathers } from '../src/index.js'
 import { createHandler, SseService } from '../src/http/index.js'
 import { toNodeHandler } from '../src/http/node.js'
 

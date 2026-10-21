@@ -1,7 +1,8 @@
 import { describe, it, beforeEach } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 
-import { feathers, Application, ApplicationHookMap, ServiceInterface, Params } from '../../index.js'
+import type { Application, ApplicationHookMap, ServiceInterface, Params } from '../../index.js'
+import { feathers } from '../../index.js'
 
 type Todo = {
   id?: string

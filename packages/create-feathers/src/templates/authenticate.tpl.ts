@@ -1,8 +1,9 @@
 import { renderTemplate, toFile } from '@featherscloud/pinion'
-import { AppGeneratorContext } from '../commons'
+import type { AppGeneratorContext } from '../commons'
 
-const template =
-  ({}: AppGeneratorContext) => /* ts */ `import type { HookContext, NextFunction } from 'feathers'
+const template = (
+  _ctx: AppGeneratorContext
+) => /* ts */ `import type { HookContext, NextFunction } from 'feathers'
 import { NotAuthenticated } from 'feathers/errors'
 
 // A hook for simple API key authentication. Extend with the functionality needed for your application.

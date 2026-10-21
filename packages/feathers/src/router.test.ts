@@ -1,7 +1,7 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import { describe, it, beforeEach } from 'vitest'
 import { Router } from './router.js'
-import { Application } from './declarations.js'
+import type { Application } from './declarations.js'
 import { feathers } from './index.js'
 
 describe('routing', () => {

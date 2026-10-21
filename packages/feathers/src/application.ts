@@ -6,7 +6,7 @@ import { createDebug } from './debug.js'
 
 import version from './version.js'
 import { eventHook, eventMixin } from './events.js'
-import { hookMixin } from './hooks.js'
+import { hookMixin, enableHooks } from './hooks.js'
 import { wrapService, getServiceOptions, protectedMethods, defaultServiceEvents } from './service.js'
 import type {
   FeathersApplication,
@@ -18,11 +18,11 @@ import type {
   FeathersService,
   ApplicationHookOptions
 } from './declarations.js'
-import { enableHooks } from './hooks.js'
 import { Router } from './router.js'
 import { Channel } from './channel/base.js'
 import { CombinedChannel } from './channel/combined.js'
-import { channelServiceMixin, Event, Publisher, PUBLISHERS, ALL_EVENTS, CHANNELS } from './channel/mixin.js'
+import type { Event, Publisher } from './channel/mixin.js'
+import { channelServiceMixin, PUBLISHERS, ALL_EVENTS, CHANNELS } from './channel/mixin.js'
 
 const debug = createDebug('@feathersjs/feathers')
 const channelDebug = createDebug('@feathersjs/transport-commons/channels')
@@ -136,7 +136,9 @@ export class Feathers<Services, Settings>
     location: L
   ): FeathersService<this, keyof any extends keyof Services ? Service : Services[L]> {
     const path = (stripSlashes(location) || '/') as L
-    const current = this.services.hasOwnProperty(path) ? this.services[path] : undefined
+    const current = Object.prototype.hasOwnProperty.call(this.services, path)
+      ? this.services[path]
+      : undefined
 
     if (typeof current === 'undefined') {
       this.use(path, this.defaultService(path) as any)

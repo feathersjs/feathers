@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
-import { HookContext } from '../index.js'
+import assert from 'node:assert'
+import type { HookContext } from '../index.js'
 import * as http from './utils.js'
 
 describe('@feathersjs/transport-commons HTTP helpers', () => {

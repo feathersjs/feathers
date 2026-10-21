@@ -1,5 +1,5 @@
 import { describe, it, afterEach } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'

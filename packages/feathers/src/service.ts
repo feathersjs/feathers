@@ -1,6 +1,6 @@
 import { EventEmitter } from './event-emitter.js'
 import { createSymbol } from './commons.js'
-import { ServiceOptions } from './declarations.js'
+import type { ServiceOptions } from './declarations.js'
 
 export const SERVICE = createSymbol('@feathersjs/service')
 

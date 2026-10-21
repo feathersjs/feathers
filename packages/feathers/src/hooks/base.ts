@@ -1,4 +1,4 @@
-import { AsyncMiddleware } from './compose.js'
+import type { AsyncMiddleware } from './compose.js'
 import { copyProperties } from './utils.js'
 
 export const HOOKS: string = Symbol.for('@feathersjs/hooks') as any

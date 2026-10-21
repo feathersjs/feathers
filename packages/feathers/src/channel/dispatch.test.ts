@@ -1,8 +1,9 @@
 import { describe, it, beforeEach } from 'vitest'
-import assert from 'assert'
-import { feathers, Application, HookContext } from '../index.js'
-import { Channel } from './base.js'
-import { CombinedChannel } from './combined.js'
+import assert from 'node:assert'
+import type { Application, HookContext } from '../index.js'
+import { feathers } from '../index.js'
+import type { Channel } from './base.js'
+import type { CombinedChannel } from './combined.js'
 
 class TestService {
   events = ['foo']
@@ -51,7 +52,7 @@ describe('app.publish', () => {
 
       try {
         await app.service('test').create({ message: 'something' })
-      } catch (_error: any) {
+      } catch {
         assert.fail('Should never get here')
       }
     })
@@ -88,7 +89,7 @@ describe('app.publish', () => {
 
       const publishPromise = new Promise<void>((resolve) => {
         app.once('publish', (_event: string, channel: Channel) => {
-          assert.ok(channel.connections.indexOf(c1) !== -1)
+          assert.ok(channel.connections.includes(c1))
           resolve()
         })
       })

@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-'use strict'
 
 import path from 'node:path'
 import { existsSync } from 'node:fs'

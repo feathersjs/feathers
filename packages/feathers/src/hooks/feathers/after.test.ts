@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
-import { feathers, Id } from '../../index.js'
+import assert from 'node:assert'
+import type { Id } from '../../index.js'
+import { feathers } from '../../index.js'
 
 describe('`after` hooks', () => {
   it('.after hooks can return a promise', async () => {

@@ -1,6 +1,6 @@
 import { createDebug } from '../debug.js'
 import type { ServiceOptions, HookContext, Application } from '../declarations.js'
-import { Channel } from './base.js'
+import type { Channel } from './base.js'
 import { CombinedChannel } from './combined.js'
 
 const debug = createDebug('@feathersjs/transport-commons/channels')

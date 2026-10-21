@@ -1,4 +1,4 @@
-import { Params, Id, Query, NullableId } from '../declarations.js'
+import type { Params, Id, Query, NullableId } from '../declarations.js'
 import { BadRequest, Unavailable, convert, errors } from '../errors.js'
 import { _, stripSlashes } from '../commons.js'
 import { protectedProperties } from '../service.js'
@@ -174,7 +174,9 @@ export class FetchClient<T = any, D = Partial<T>, P extends Params = FetchClient
       const data = await response.json()
 
       error = await toError(data, response.status)
-    } catch (_error) {}
+    } catch {
+      // Response body is not JSON, use the generic error for the status code
+    }
 
     error.response = response
 

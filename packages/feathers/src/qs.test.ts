@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest'
-import assert from 'assert'
+import assert from 'node:assert'
 import { parse, stringify } from './qs.js'
 
 describe('qs', () => {

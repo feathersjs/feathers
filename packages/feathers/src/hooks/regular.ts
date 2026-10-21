@@ -1,5 +1,5 @@
 import { compose } from './compose.js'
-import { HookContext } from './base.js'
+import type { HookContext } from './base.js'
 
 export type RegularMiddleware<T extends HookContext = any> = (context: T) => Promise<any> | any
 export interface RegularHookMap {

@@ -51,7 +51,7 @@ export function bodyParser() {
           // Stream all other content types directly to the service
           context.data = context.request.body as any
         }
-      } catch (_error) {
+      } catch {
         throw new BadRequest('Invalid request body')
       }
     }
