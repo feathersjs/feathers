@@ -1,11 +1,14 @@
 import { Params, Id, Query, NullableId } from '../declarations.js'
 import { BadRequest, Unavailable, convert, errors } from '../errors.js'
-import { _, stripSlashes } from '../commons.js'
+import { pick, stripSlashes } from '../commons/index.js'
 import { protectedProperties } from '../service.js'
 
-function toError(error: Error & { code: string }, status?: number) {
+function toError(
+  error: Error & { code: string; address?: string; port?: number; config?: unknown },
+  status?: number
+) {
   if (error.code === 'ECONNREFUSED') {
-    return new Unavailable(error.message, _.pick(error, 'address', 'port', 'config'))
+    return new Unavailable(error.message, pick(error, 'address', 'port', 'config'))
   }
 
   return convert(error, status)
