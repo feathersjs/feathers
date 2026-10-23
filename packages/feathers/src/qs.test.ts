@@ -374,6 +374,30 @@ describe('qs', () => {
       assert.strictEqual(stringify({ a: { b: 'c' } }), 'a%5Bb%5D=c')
     })
 
+    it('stringifies dates as ISO strings', () => {
+      const date = new Date(0)
+
+      assert.strictEqual(stringify({ a: date }), 'a=1970-01-01T00%3A00%3A00.000Z')
+      assert.strictEqual(
+        stringify({ createdAt: { $gt: date } }),
+        'createdAt%5B%24gt%5D=1970-01-01T00%3A00%3A00.000Z'
+      )
+    })
+
+    it('stringifies dates in arrays as ISO strings', () => {
+      const first = new Date(0)
+      const second = new Date(1000)
+
+      assert.strictEqual(
+        stringify({ createdAt: { $in: [first, second] } }),
+        'createdAt%5B%24in%5D%5B0%5D=1970-01-01T00%3A00%3A00.000Z&createdAt%5B%24in%5D%5B1%5D=1970-01-01T00%3A00%3A01.000Z'
+      )
+      assert.strictEqual(
+        stringify({ $or: [{ createdAt: { $lt: first } }] }),
+        '%24or%5B0%5D%5BcreatedAt%5D%5B%24lt%5D=1970-01-01T00%3A00%3A00.000Z'
+      )
+    })
+
     it('stringifies deeply nested objects', () => {
       assert.strictEqual(stringify({ a: { b: { c: 'd' } } }), 'a%5Bb%5D%5Bc%5D=d')
     })

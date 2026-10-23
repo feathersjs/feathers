@@ -35,6 +35,7 @@ type StringifyValue =
   | boolean
   | null
   | undefined
+  | Date
   | StringifyValue[]
   | { [key: string]: StringifyValue }
 export type StringifyInput = Record<string, StringifyValue> | StringifyValue[]
@@ -44,6 +45,11 @@ function stringifyValue(prefix: string, value: StringifyValue, pairs: string[], 
 
   if (value === null) {
     pairs.push(encodeURIComponent(prefix) + '=')
+    return
+  }
+
+  if (value instanceof Date) {
+    pairs.push(encodeURIComponent(prefix) + '=' + encodeURIComponent(value.toISOString()))
     return
   }
 
