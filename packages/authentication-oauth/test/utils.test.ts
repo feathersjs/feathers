@@ -1,7 +1,7 @@
 import { AuthenticationService } from '@feathersjs/authentication/lib'
 import { feathers } from '@feathersjs/feathers/lib'
 import { strict as assert } from 'assert'
-import { getGrantConfig } from '../src/utils'
+import { filterDynamic, getGrantConfig } from '../src/utils'
 
 describe('@feathersjs/authentication-oauth/utils', () => {
   it('getGrantConfig initialises Grant defaults', () => {
@@ -69,5 +69,36 @@ describe('@feathersjs/authentication-oauth/utils', () => {
       response: ['tokens', 'raw', 'profile']
     })
     assert.strictEqual(github?.redirect_uri, 'https://localhost:3344/auth/github/callback')
+  })
+
+  it('filterDynamic removes protected options only for dynamic: true', () => {
+    const data = {
+      access_url: 'https://evil.example.com/token',
+      profile_url: 'https://evil.example.com/me',
+      subdomain: 'evil.example.com',
+      key: 'attacker-client',
+      state: 'false',
+      scope: 'user'
+    }
+
+    assert.deepEqual(filterDynamic({ dynamic: true }, data), { scope: 'user' })
+    assert.deepEqual(filterDynamic({ dynamic: ['subdomain'] }, data), data)
+    assert.deepEqual(filterDynamic(null, data), data)
+    assert.deepEqual(
+      filterDynamic(
+        { dynamic: true },
+        {
+          custom_params: {
+            redirect_uri: 'https://evil.example.com/cb',
+            client_id: 'attacker',
+            response_type: 'token',
+            state: 'forged',
+            prompt: 'consent',
+            login_hint: 'jon@example.com'
+          }
+        }
+      ),
+      { custom_params: { prompt: 'consent', login_hint: 'jon@example.com' } }
+    )
   })
 })

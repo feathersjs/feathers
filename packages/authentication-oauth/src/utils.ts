@@ -11,6 +11,60 @@ import koaCookieSession from 'koa-session'
 import { AuthenticationService } from '@feathersjs/authentication'
 import { GrantConfig } from 'grant'
 
+/**
+ * Grant options a request must not override for providers with `dynamic: true`, since they
+ * decide where tokens and profiles come from and how the response is checked.
+ */
+const PROTECTED_DYNAMIC_OPTIONS = [
+  'request_url',
+  'authorize_url',
+  'access_url',
+  'profile_url',
+  'oauth',
+  'origin',
+  'prefix',
+  'redirect_uri',
+  'callback',
+  'transport',
+  'response',
+  'key',
+  'secret',
+  'client_id',
+  'client_secret',
+  'consumer_key',
+  'consumer_secret',
+  'public_key',
+  'private_key',
+  'token_endpoint_auth_method',
+  'token_endpoint_auth_signing_alg',
+  'state',
+  'nonce',
+  'pkce',
+  'subdomain',
+  'name',
+  'dynamic',
+  'overrides'
+]
+
+/**
+ * Authorization parameters `custom_params` must not replace, since Grant copies it over them.
+ */
+const PROTECTED_CUSTOM_PARAMS = [
+  'client_id',
+  'app_id',
+  'appid',
+  'client_key',
+  'redirect_uri',
+  'response_type',
+  'state',
+  'nonce',
+  'code_challenge',
+  'code_challenge_method'
+]
+
+const omit = (data: any, keys: string[]) =>
+  Object.fromEntries(Object.entries(data).filter(([key]) => !keys.includes(key)))
+
 export interface OauthSetupSettings {
   linkStrategy: string
   authService?: string
@@ -63,6 +117,24 @@ export const getGrantConfig = (service: AuthenticationService): GrantConfig => {
   }
 
   return grant
+}
+
+/**
+ * Remove protected options from the request data for providers (or overrides) that are
+ * configured with `dynamic: true`. `options` is the provider configuration as resolved by Grant.
+ */
+export const filterDynamic = (options: any, data: any) => {
+  if (options?.dynamic !== true || !data || typeof data !== 'object') {
+    return data
+  }
+
+  const result = omit(data, PROTECTED_DYNAMIC_OPTIONS)
+
+  if (result.custom_params && typeof result.custom_params === 'object') {
+    result.custom_params = omit(result.custom_params, PROTECTED_CUSTOM_PARAMS)
+  }
+
+  return result
 }
 
 export const setExpressParams: RequestHandler = (req, res, next) => {

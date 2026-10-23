@@ -169,8 +169,8 @@ const oauth2 = (port: number) =>
           query.redirect_uri +
           '?' +
           (provider === 'intuit'
-            ? qs.stringify({ code: 'code', realmId: '123' })
-            : qs.stringify({ code: 'code' }))
+            ? qs.stringify({ code: 'code', realmId: '123', state: query.state })
+            : qs.stringify({ code: 'code', state: query.state }))
         res.writeHead(302, { location })
         res.end()
       } else if (/access_url/.test(url)) {

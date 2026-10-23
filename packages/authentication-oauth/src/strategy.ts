@@ -120,8 +120,14 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async getEntityQuery(profile: OAuthProfile, _params: Params) {
+    const id = profile.sub || profile.id
+
+    if (id === undefined || id === null) {
+      throw new NotAuthenticated('oAuth profile has no id')
+    }
+
     return {
-      [`${this.name}Id`]: profile.sub || profile.id
+      [`${this.name}Id`]: id
     }
   }
 
@@ -132,6 +138,10 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   async getProfile(data: AuthenticationRequest, _params: Params) {
+    if (!data.profile || data.profile.error) {
+      throw new NotAuthenticated('Could not get oAuth profile')
+    }
+
     return data.profile
   }
 
@@ -208,6 +218,12 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
 
   async findEntity(profile: OAuthProfile, params: Params) {
     const query = await this.getEntityQuery(profile, params)
+    const values = Object.values(query)
+
+    // Adapters drop undefined values, so an empty or undefined query returns any entity
+    if (!values.length || values.includes(undefined)) {
+      throw new NotAuthenticated('Invalid oAuth entity query')
+    }
 
     debug('findEntity with query', query)
 

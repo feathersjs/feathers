@@ -4,11 +4,45 @@ import { FeathersError, GeneralError, NotAuthenticated } from '@feathersjs/error
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import Grant from 'grant/lib/grant'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import grantConfig from 'grant/lib/config'
 import { AuthenticationService } from '@feathersjs/authentication'
 import { OAuthStrategy } from './strategy'
-import { getGrantConfig, OauthSetupSettings } from './utils'
+import { getAppleProfile } from './apple'
+import { filterDynamic, getGrantConfig, OauthSetupSettings } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth/services')
+
+const isValue = (value: any) => typeof value === 'string' && value !== ''
+
+/**
+ * Grant treats a callback without an authorization code (OAuth2) or token (OAuth1) as a
+ * successful response and exchanges the code with the provider the flow was started with.
+ *
+ * @throws NotAuthenticated if the callback is for a different provider or has no code or token
+ */
+function validateCallback(provider: any, params: OAuthParams) {
+  const { query = {}, session, state, route } = params
+  const input = Object.keys(query).length ? query : state?.oauthCallback || {}
+
+  if (session.grant?.provider && session.grant.provider !== route.provider) {
+    throw new NotAuthenticated('Invalid oAuth callback provider.')
+  }
+
+  if (input.error) {
+    return
+  }
+
+  if (provider.oauth === 2 && !isValue(input.code)) {
+    throw new NotAuthenticated('Missing oAuth authorization code.')
+  }
+
+  // Some OAuth1 providers store the request token code in the session instead
+  if (provider.oauth === 1 && !isValue(input.oauth_token) && !session.grant?.request?.code) {
+    throw new NotAuthenticated('Missing oAuth token.')
+  }
+}
 
 export type GrantResponse = {
   location: string
@@ -80,18 +114,26 @@ export class OAuthService {
       query,
       route: { provider }
     } = params
+    const isCallback = override === 'callback'
+    // Only the request that starts the flow sets dynamic provider options
+    const options = isCallback ? null : grantConfig.provider(this.grant.config, { provider, override })
 
     const result: GrantResponse = await this.grant({
       params: { provider, override },
       state: state.grant,
       session: session.grant,
-      query,
+      query: filterDynamic(options, query),
       method,
-      body
+      body: filterDynamic(options, body)
     })
 
     session.grant = result.session
     state.grant = result.state
+
+    if (isCallback) {
+      // Grant passes a callback without a code through, so authenticate validates its input
+      state.oauthCallback = method === 'POST' ? body : {}
+    }
 
     return result
   }
@@ -128,8 +170,16 @@ export class OAuthService {
     }
 
     try {
+      const provider = grantConfig.provider(this.grant.config, grant || {}, params.state?.grant)
+
+      validateCallback(provider, params)
+
       if (payload.error) {
         throw new GeneralError(payload.error_description || payload.error, payload)
+      }
+
+      if (provider.apple && !provider.profile_url && payload.profile) {
+        authentication.profile = await getAppleProfile(payload, provider.key)
       }
 
       debug(`Calling ${authService}.create authentication with strategy ${name}`)
@@ -149,7 +199,7 @@ export class OAuthService {
         location
       }
     } catch (error: any) {
-      const location = await strategy.getRedirect(error, authParams)
+      const location = strategy ? await strategy.getRedirect(error, authParams) : null
       const e = new OAuthError(error.message, error.data, location)
 
       if (typeof params.session.destroy === 'function') {

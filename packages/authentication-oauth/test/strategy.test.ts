@@ -597,5 +597,87 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
         user: { id: user.id, name: user.name, githubId: 'linkedEntity' }
       })
     })
+
+    it('rejects a missing profile', async () => {
+      await assert.rejects(() => strategy.authenticate({ strategy: 'test' }, {}), {
+        name: 'NotAuthenticated',
+        message: 'Could not get oAuth profile'
+      })
+    })
+
+    it('rejects a profile with an error', async () => {
+      await assert.rejects(
+        () =>
+          strategy.authenticate(
+            {
+              strategy: 'test',
+              profile: { error: { message: 'Bad credentials' } }
+            },
+            {}
+          ),
+        {
+          name: 'NotAuthenticated',
+          message: 'Could not get oAuth profile'
+        }
+      )
+    })
+
+    it('rejects a profile without an id and does not return an existing user', async () => {
+      await app.service('users').create({ name: 'Victim' })
+
+      await assert.rejects(
+        () =>
+          strategy.authenticate(
+            {
+              strategy: 'test',
+              profile: { name: 'No id' }
+            },
+            {}
+          ),
+        {
+          name: 'NotAuthenticated',
+          message: 'oAuth profile has no id'
+        }
+      )
+    })
+
+    it('rejects an entity query with undefined values', async () => {
+      const original = strategy.getEntityQuery
+
+      strategy.getEntityQuery = async (profile) => ({ email: profile.email })
+
+      try {
+        await assert.rejects(() => strategy.findEntity({ id: 'someone' }, {}), {
+          name: 'NotAuthenticated',
+          message: 'Invalid oAuth entity query'
+        })
+      } finally {
+        strategy.getEntityQuery = original
+      }
+    })
+
+    it('rejects an empty entity query but allows null values', async () => {
+      const original = strategy.getEntityQuery
+
+      try {
+        strategy.getEntityQuery = async () => ({})
+        await assert.rejects(() => strategy.findEntity({ id: 'someone' }, {}), {
+          name: 'NotAuthenticated',
+          message: 'Invalid oAuth entity query'
+        })
+
+        strategy.getEntityQuery = async (profile) => ({ githubId: profile.id, deletedAt: null })
+        assert.equal(await strategy.findEntity({ id: 'nobody' }, {}), null)
+      } finally {
+        strategy.getEntityQuery = original
+      }
+    })
+
+    it('rejects a profile with a null id', async () => {
+      await assert.rejects(() => strategy.findEntity({ id: null as any }, {}), {
+        name: 'NotAuthenticated',
+        message: 'oAuth profile has no id'
+      })
+    })
   })
 })
