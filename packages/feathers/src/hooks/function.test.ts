@@ -498,4 +498,12 @@ describe('feathers/hooks function', () => {
       'Function must return a Promise that resolves to an async iterable, not the iterable directly'
     )
   })
+
+  it('works with synchronous functions returning null or undefined', async () => {
+    const returnsUndefined = hooks(() => undefined, [])
+    const returnsNull = hooks(() => null, [])
+
+    assert.strictEqual(await returnsUndefined(), undefined)
+    assert.strictEqual(await returnsNull(), null)
+  })
 })
