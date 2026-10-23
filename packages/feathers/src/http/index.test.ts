@@ -1,6 +1,7 @@
 import { beforeAll, describe, it, expect } from 'vitest'
 import { restTests, verify, getApp, createTestServer } from '../../fixtures/index.js'
-import { CORS_HEADERS } from './index.js'
+import { feathers } from '../index.js'
+import { CORS_HEADERS, createHandler } from './index.js'
 
 const TEST_PORT = 4444
 
@@ -330,6 +331,34 @@ describe('http test', () => {
       expect(result.received).toBe('chunk1chunk2chunk3')
       expect(result.size).toBe(18)
     })
+  })
+
+  it('initializes context.http so hooks can set status and headers', async () => {
+    const app = feathers()
+
+    app.use('hello', {
+      async find() {
+        return { message: 'Hello' }
+      }
+    })
+
+    app.service('hello').hooks({
+      after: {
+        find: [
+          (context) => {
+            context.http.status = 203
+            context.http.headers = { 'x-hello': 'world' }
+          }
+        ]
+      }
+    })
+
+    const handler = createHandler(app)
+    const res = await handler(new Request('http://localhost/hello'))
+
+    expect(res.status).toBe(203)
+    expect(res.headers.get('x-hello')).toBe('world')
+    expect(await res.json()).toEqual({ message: 'Hello' })
   })
 
   restTests('http', 'todos', TEST_PORT)
