@@ -28,8 +28,8 @@
       "require": "./cjs/hooks/index.js"
     },
     "./commons": {
-      "import": "./lib/commons.js",
-      "require": "./cjs/commons.js"
+      "import": "./lib/commons/index.js",
+      "require": "./cjs/commons/index.js"
     },
     "./errors": {
       "import": "./lib/errors.js",
@@ -57,7 +57,7 @@
         "./lib/hooks/index.d.ts"
       ],
       "commons": [
-        "./lib/commons.d.ts"
+        "./lib/commons/index.d.ts"
       ],
       "client": [
         "./lib/client/index.d.ts"
