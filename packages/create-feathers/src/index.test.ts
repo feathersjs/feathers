@@ -1,10 +1,12 @@
 import { describe, it, afterEach } from 'vitest'
 import assert from 'assert'
-import { mkdtemp, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { spawn, type ChildProcess } from 'node:child_process'
 import { generate, getContext } from './index.js'
+import { generate as generateIndex } from './templates/index.tpl.js'
+import type { AppGeneratorContext } from './commons.js'
 
 const PORT = 30301
 
@@ -84,4 +86,16 @@ describe('create-feathers', () => {
 
     assert.ok(response.ok, `Server responded with status ${response.status}`)
   }, 120000)
+
+  for (const platform of ['node', 'deno', 'bun'] as const) {
+    it(`calls app.setup in the ${platform} server entry point`, async () => {
+      tmpDir = await mkdtemp(join(tmpdir(), 'feathers-test-'))
+
+      await generateIndex(getContext({ cwd: tmpDir, platform }) as unknown as AppGeneratorContext)
+
+      const index = await readFile(join(tmpDir, 'src', 'index.ts'), 'utf-8')
+
+      assert.ok(index.includes('await app.setup(server)'), `${platform} entry point calls app.setup`)
+    })
+  }
 })

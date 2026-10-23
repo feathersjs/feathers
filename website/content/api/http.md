@@ -44,6 +44,9 @@ const app = feathers()
 const handler = createHandler(app)
 
 Deno.serve({ port: 3030 }, handler)
+
+// Call app.setup to initialize all services
+await app.setup()
 ```
 
 ### Bun
@@ -61,6 +64,9 @@ Bun.serve({
   port: 3030,
   fetch: handler
 })
+
+// Call app.setup to initialize all services
+await app.setup()
 ```
 
 ### Cloudflare Workers
