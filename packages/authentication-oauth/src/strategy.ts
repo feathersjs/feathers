@@ -191,6 +191,29 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     return redirect
   }
 
+  /**
+   * Account linking with a `feathers_token` must be started from the app, since anyone can send a
+   * link with their own token. Override to allow linking from clients that send no referer.
+   *
+   * @throws NotAuthenticated if the referer is missing or not an allowed origin
+   */
+  async validateLink(params: Params) {
+    const { redirect, origins = this.app.get('origins') } = this.authentication.configuration.oauth
+    const { referer, host } = params.headers || {}
+    const allowed = Array.isArray(origins) ? origins : redirect ? [redirect] : []
+    let url: URL
+
+    try {
+      url = new URL(referer)
+    } catch {
+      throw new NotAuthenticated('Account linking must be started from an allowed origin.')
+    }
+
+    if (url.host !== host && !allowed.some((origin: string) => isOriginAllowed(url.origin, origin))) {
+      throw new NotAuthenticated('Account linking must be started from an allowed origin.')
+    }
+  }
+
   async getRedirect(
     data: AuthenticationResult | Error,
     params?: AuthenticationParams

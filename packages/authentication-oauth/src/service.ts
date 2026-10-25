@@ -220,7 +220,14 @@ export class OAuthService {
     }
 
     if (feathers_token) {
-      debug('Got feathers_token query parameter to link accounts', feathers_token)
+      debug('Got feathers_token query parameter to link accounts')
+      const strategy = this.service.getStrategy(params.route.provider) as OAuthStrategy
+
+      if (typeof strategy?.validateLink !== 'function') {
+        throw new NotAuthenticated('Account linking is not supported for this provider.')
+      }
+
+      await strategy.validateLink(params)
       session.accessToken = feathers_token
     }
 
