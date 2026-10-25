@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.51](https://github.com/feathersjs/feathers/compare/v5.0.50...v5.0.51) (2026-10-25)
+
+### Bug Fixes
+
+- **generators:** use entity camelName for auth params in schema templates ([#3706](https://github.com/feathersjs/feathers/issues/3706)) ([05bb6c8](https://github.com/feathersjs/feathers/commit/05bb6c8d81053516bc31f9db05b0f73313186819))
+
 ## [5.0.50](https://github.com/feathersjs/feathers/compare/v5.0.49...v5.0.50) (2026-09-11)
 
 ### Bug Fixes

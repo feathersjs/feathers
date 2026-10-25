@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.51](https://github.com/feathersjs/feathers/compare/v5.0.50...v5.0.51) (2026-10-25)
+
+### Bug Fixes
+
+- **authentication-oauth:** allow account linking from the configured oAuth origin ([616e885](https://github.com/feathersjs/feathers/commit/616e88504372c18f3948c9f844bd7abfc43459fa))
+- **authentication-oauth:** harden OAuth callback and profile handling ([3673cde](https://github.com/feathersjs/feathers/commit/3673cde95ad82b23b4865d6d0dfa2e8a4230f0f6))
+- **authentication-oauth:** only link accounts from an allowed origin ([1c29862](https://github.com/feathersjs/feathers/commit/1c29862c7cb305c690fc716c584cc16713f98cfe))
+
 ## [5.0.50](https://github.com/feathersjs/feathers/compare/v5.0.49...v5.0.50) (2026-09-11)
 
 ### Bug Fixes

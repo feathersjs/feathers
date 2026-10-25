@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/schema",
   "description": "A common data schema definition format",
-  "version": "5.0.50",
+  "version": "5.0.51",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",

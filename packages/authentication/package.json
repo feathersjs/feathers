@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/authentication",
   "description": "Add Authentication to your FeathersJS app.",
-  "version": "5.0.50",
+  "version": "5.0.51",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -57,7 +57,7 @@
     "@feathersjs/errors": "^5.0.50",
     "@feathersjs/feathers": "^5.0.50",
     "@feathersjs/hooks": "^0.9.0",
-    "@feathersjs/schema": "^5.0.50",
+    "@feathersjs/schema": "^5.0.51",
     "@feathersjs/transport-commons": "^5.0.50",
     "@types/jsonwebtoken": "^9.0.10",
     "jsonwebtoken": "^9.0.3",

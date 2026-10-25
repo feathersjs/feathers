@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/mongodb",
   "description": "Feathers MongoDB service adapter",
-  "version": "5.0.50",
+  "version": "5.0.51",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "keywords": [
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^5.0.50",
-    "@feathersjs/schema": "^5.0.50",
+    "@feathersjs/schema": "^5.0.51",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.0.0",
     "mocha": "^12.0.1",

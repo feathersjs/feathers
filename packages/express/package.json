@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/express",
   "description": "Feathers Express framework bindings and REST provider",
-  "version": "5.0.50",
+  "version": "5.0.51",
   "homepage": "https://feathersjs.com",
   "main": "lib/",
   "types": "lib/",
@@ -52,7 +52,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^5.0.50",
+    "@feathersjs/authentication": "^5.0.51",
     "@feathersjs/commons": "^5.0.50",
     "@feathersjs/errors": "^5.0.50",
     "@feathersjs/feathers": "^5.0.50",
@@ -66,7 +66,7 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
-    "@feathersjs/authentication-local": "^5.0.50",
+    "@feathersjs/authentication-local": "^5.0.51",
     "@feathersjs/tests": "^5.0.50",
     "@types/lodash": "^4.17.25",
     "@types/mocha": "^10.0.10",

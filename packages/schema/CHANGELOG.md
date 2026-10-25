@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.51](https://github.com/feathersjs/feathers/compare/v5.0.50...v5.0.51) (2026-10-25)
+
+### Bug Fixes
+
+- **schema:** recheck external dispatch after resolving ([#3705](https://github.com/feathersjs/feathers/issues/3705)) ([572574e](https://github.com/feathersjs/feathers/commit/572574e389b623f4011e2cb22e67b37eba3f75fa))
+
 ## [5.0.50](https://github.com/feathersjs/feathers/compare/v5.0.49...v5.0.50) (2026-09-11)
 
 ### Bug Fixes
