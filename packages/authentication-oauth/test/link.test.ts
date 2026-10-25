@@ -79,6 +79,18 @@ describe('@feathersjs/authentication-oauth account linking', () => {
     assert.equal(data.user.gitlabId, 'test')
   })
 
+  it('links the account behind a proxy that rewrites the Host header', async () => {
+    const { user, token } = await createUser('user@example.com')
+    const { data } = await linkFlow(token, {
+      host: 'internal.example:3030',
+      referer: `http://127.0.0.1:${port}/settings`
+    })
+
+    assert.ok(data.accessToken)
+    assert.equal(data.user.id, user.id)
+    assert.equal(data.user.gitlabId, 'test')
+  })
+
   it('uses the configured origins', async () => {
     const oauth = app.get('authentication').oauth
     const { token } = await createUser('user@example.com')

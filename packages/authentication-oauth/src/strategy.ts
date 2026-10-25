@@ -8,6 +8,7 @@ import { Params } from '@feathersjs/feathers'
 import { NotAuthenticated } from '@feathersjs/errors'
 import { createDebug, _ } from '@feathersjs/commons'
 import qs from 'qs'
+import { getGrantConfig } from './utils'
 
 const debug = createDebug('@feathersjs/authentication-oauth/strategy')
 
@@ -192,8 +193,9 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
   }
 
   /**
-   * Account linking with a `feathers_token` must be started from the app, since anyone can send a
-   * link with their own token. Override to allow linking from clients that send no referer.
+   * Account linking with a `feathers_token` must be started from the app (the request host, the
+   * configured oAuth origin or an allowed origin), since anyone can send a link with their own token.
+   * Override to allow linking from clients that send no referer.
    *
    * @throws NotAuthenticated if the referer is missing or not an allowed origin
    */
@@ -201,6 +203,7 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     const { redirect, origins = this.app.get('origins') } = this.authentication.configuration.oauth
     const { referer, host } = params.headers || {}
     const allowed = Array.isArray(origins) ? origins : redirect ? [redirect] : []
+    const { origin } = getGrantConfig(this.authentication as any).defaults
     let url: URL
 
     try {
@@ -209,7 +212,11 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated('Account linking must be started from an allowed origin.')
     }
 
-    if (url.host !== host && !allowed.some((origin: string) => isOriginAllowed(url.origin, origin))) {
+    if (
+      url.host !== host &&
+      !isOriginAllowed(url.origin, origin) &&
+      !allowed.some((current: string) => isOriginAllowed(url.origin, current))
+    ) {
       throw new NotAuthenticated('Account linking must be started from an allowed origin.')
     }
   }
