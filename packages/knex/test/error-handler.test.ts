@@ -164,6 +164,65 @@ describe('Knex Error handler', () => {
     )
   })
 
+  it('MySQL errors keep the driver message when values contain " - "', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'ER_DUP_ENTRY',
+          errno: 1062,
+          sqlState: '23000',
+          sqlMessage: "Duplicate entry 'foo - bar' for key 'name'",
+          message:
+            "insert into `t` (`name`) values ('foo - bar') - ER_DUP_ENTRY: Duplicate entry 'foo - bar' for key 'name'"
+        }),
+      { name: 'BadRequest', message: "ER_DUP_ENTRY: Duplicate entry 'foo - bar' for key 'name'" }
+    )
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'ER_DUP_ENTRY',
+          errno: 1062,
+          sqlState: '23000',
+          sqlMessage: "Duplicate entry 'foo - bar' for key 'name'",
+          message:
+            "insert into `t` (`name`) values ('foo - bar') - Duplicate entry 'foo - bar' for key 'name'"
+        }),
+      { name: 'BadRequest', message: "Duplicate entry 'foo - bar' for key 'name'" }
+    )
+  })
+
+  it('SQLite errors keep the driver message when values contain " - "', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'SQLITE_CONSTRAINT',
+          errno: 19,
+          message:
+            "insert into `t` (`name`) values ('a - b') - SQLITE_CONSTRAINT: UNIQUE constraint failed: t.name - x"
+        }),
+      { name: 'GeneralError', message: 'SQLITE_CONSTRAINT: UNIQUE constraint failed: t.name - x' }
+    )
+  })
+
+  it('knex compile errors omit the query', () => {
+    assert.throws(
+      () =>
+        errorHandler(
+          new Error(
+            'Undefined binding(s) detected when compiling SELECT. Undefined column(s): [users.id] query: select "users".* from "users" where "users"."id" = ?'
+          )
+        ),
+      {
+        name: 'GeneralError',
+        message: 'Undefined binding(s) detected when compiling SELECT. Undefined column(s): [users.id]'
+      }
+    )
+  })
+
+  it('errors without a message keep the default message', () => {
+    assert.throws(() => errorHandler({ code: 'ECONNRESET' }), { name: 'GeneralError', message: 'Error' })
+  })
+
   it('does not leak queries or bound values from a real database', async () => {
     const db = knex({ client: 'sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true })
 
@@ -184,6 +243,16 @@ describe('Knex Error handler', () => {
           assert.ok(!error.message.includes('secret-hash-2'))
           assert.ok(!error.toJSON().message.includes('insert into'))
           assert.ok(!error.toJSON().message.includes('secret-hash-2'))
+          return true
+        }
+      )
+      const other = await service.create({ email: 'b@example.com', password: 'hash-3' })
+
+      await assert.rejects(
+        () => service.patch(other.id, { email: 'a@example.com', password: 'secret-hash-4' }),
+        (error: any) => {
+          assert.ok(!error.message.includes('update'))
+          assert.ok(!error.message.includes('secret-hash-4'))
           return true
         }
       )

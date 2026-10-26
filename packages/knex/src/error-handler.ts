@@ -3,17 +3,39 @@ import { errors } from '@feathersjs/errors'
 export const ERROR = Symbol.for('@feathersjs/knex/error')
 
 /**
- * Knex prefixes driver errors with the query and its bound values as "<sql> - <message>",
- * so keep only the text after the last " - " to not send them to the client.
+ * Knex adds the query and its bound values to errors, as "<sql> - <message>" for driver
+ * errors and "<message> query: <sql>" for compile errors. Keep only the message so the
+ * query is not sent to the client.
  */
-const omitQuery = (message: string) => {
-  const index = message.lastIndexOf(' - ')
+const omitQuery = (error: any) => {
+  const { message, code, sqlMessage } = error
+
+  if (typeof message !== 'string') {
+    return message
+  }
+
+  // MySQL drivers keep the original message
+  if (typeof sqlMessage === 'string' && message.endsWith(sqlMessage)) {
+    const withCode = `${code}: ${sqlMessage}`
+
+    return message.endsWith(withCode) ? withCode : sqlMessage
+  }
+
+  if (message.startsWith('Undefined binding(s) detected')) {
+    const index = message.indexOf(' query: ')
+
+    return index === -1 ? message : message.slice(0, index)
+  }
+
+  // SQLite messages start with the error code
+  const codeIndex = typeof code === 'string' ? message.lastIndexOf(` - ${code}: `) : -1
+  const index = codeIndex !== -1 ? codeIndex : message.lastIndexOf(' - ')
 
   return index === -1 ? message : message.slice(index + 3)
 }
 
-export function errorHandler(error: any) {
-  const message = omitQuery(error.message || '')
+export function errorHandler(error: any): never {
+  const message = omitQuery(error)
   let feathersError = error
 
   if (error.sqlState && error.sqlState.length) {

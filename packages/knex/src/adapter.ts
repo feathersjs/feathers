@@ -199,7 +199,9 @@ export class KnexAdapter<
     const data = filters.$limit === 0 ? [] : await builder.catch(errorHandler)
 
     if (paginate && paginate.default) {
-      const total = await countBuilder.then((count) => parseInt(count[0] ? count[0].total : 0))
+      const total = await countBuilder
+        .then((count) => parseInt(count[0] ? count[0].total : 0))
+        .catch(errorHandler)
 
       return {
         total,
@@ -302,7 +304,7 @@ export class KnexAdapter<
     }
     const builder = this.createQuery(updateParams)
 
-    await builder.update(data, [], { includeTriggerModifications: true })
+    await builder.update(data, [], { includeTriggerModifications: true }).catch(errorHandler)
 
     const items = await this._findOrGet(null, updateParams)
 
