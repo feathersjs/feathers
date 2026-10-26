@@ -2,8 +2,18 @@ import { errors } from '@feathersjs/errors'
 
 export const ERROR = Symbol.for('@feathersjs/knex/error')
 
+/**
+ * Knex prefixes driver errors with the query and its bound values as "<sql> - <message>",
+ * so keep only the text after the last " - " to not send them to the client.
+ */
+const omitQuery = (message: string) => {
+  const index = message.lastIndexOf(' - ')
+
+  return index === -1 ? message : message.slice(index + 3)
+}
+
 export function errorHandler(error: any) {
-  const { message } = error
+  const message = omitQuery(error.message || '')
   let feathersError = error
 
   if (error.sqlState && error.sqlState.length) {
@@ -64,12 +74,6 @@ export function errorHandler(error: any) {
   } else if (typeof error.code === 'string' && error.severity && error.routine) {
     // NOTE: Error codes taken from
     // https://www.postgresql.org/docs/9.6/static/errcodes-appendix.html
-    // Omit query information. Knex prefixes the driver message with the SQL
-    // as "<sql> - <pg message>", so keep only the text after the last " - ".
-    const rawMessage: string = error.message || ''
-    const separator = rawMessage.lastIndexOf(' - ')
-    const message = separator === -1 ? rawMessage : rawMessage.slice(separator + 3) // if no separator, use as is, else move pointer to the right of the separator
-
     switch (error.code.slice(0, 2)) {
       case '22':
         feathersError = new errors.NotFound(message)

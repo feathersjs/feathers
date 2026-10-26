@@ -1,5 +1,6 @@
 import assert from 'assert'
-import { errorHandler, ERROR } from '../src'
+import knex from 'knex'
+import { errorHandler, ERROR, KnexService } from '../src'
 
 describe('Knex Error handler', () => {
   it('sqlState', () => {
@@ -101,7 +102,8 @@ describe('Knex Error handler', () => {
 
     // A " - " inside the SQL and a hyphen in the error text are both handled
     assert.throws(
-      () => errorHandler(pgError('42703', 'select "a" - "b" from "t" - column "non-existent" does not exist')),
+      () =>
+        errorHandler(pgError('42703', 'select "a" - "b" from "t" - column "non-existent" does not exist')),
       {
         name: 'Unprocessable',
         message: 'column "non-existent" does not exist'
@@ -122,6 +124,78 @@ describe('Knex Error handler', () => {
     } catch (error: any) {
       assert.strictEqual(error[ERROR].code, '23505')
       assert.strictEqual(error[ERROR].constraint, 'users_email_unique')
+    }
+  })
+
+  it('sqlState errors omit query information', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          sqlState: '#23000',
+          message:
+            "insert into `users` (`email`) values ('a@example.com') - ER_DUP_ENTRY: Duplicate entry 'a@example.com' for key 'email'"
+        }),
+      { name: 'BadRequest', message: "ER_DUP_ENTRY: Duplicate entry 'a@example.com' for key 'email'" }
+    )
+  })
+
+  it('SQLite errors omit query information', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'SQLITE_ERROR',
+          errno: 1,
+          message: "select `users`.* from `users` where `nope` = 'x' - SQLITE_ERROR: no such column: nope"
+        }),
+      { name: 'BadRequest', message: 'SQLITE_ERROR: no such column: nope' }
+    )
+  })
+
+  it('other database errors omit query information', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'SQLITE_CONSTRAINT',
+          errno: 19,
+          message:
+            "insert into `users` (`password`) values ('secret') - SQLITE_CONSTRAINT: UNIQUE constraint failed: users.email"
+        }),
+      { name: 'GeneralError', message: 'SQLITE_CONSTRAINT: UNIQUE constraint failed: users.email' }
+    )
+  })
+
+  it('does not leak queries or bound values from a real database', async () => {
+    const db = knex({ client: 'sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true })
+
+    try {
+      await db.schema.createTable('users', (table) => {
+        table.increments('id')
+        table.string('email').unique()
+        table.string('password')
+      })
+      const service = new KnexService({ Model: db, name: 'users' })
+
+      await service.create({ email: 'a@example.com', password: 'hash-1' })
+
+      await assert.rejects(
+        () => service.create({ email: 'a@example.com', password: 'secret-hash-2' }),
+        (error: any) => {
+          assert.ok(!error.message.includes('insert into'))
+          assert.ok(!error.message.includes('secret-hash-2'))
+          assert.ok(!error.toJSON().message.includes('insert into'))
+          assert.ok(!error.toJSON().message.includes('secret-hash-2'))
+          return true
+        }
+      )
+      await assert.rejects(
+        () => service.find({ query: { nope: 'x' } } as any),
+        (error: any) => {
+          assert.ok(!error.message.includes('select'))
+          return true
+        }
+      )
+    } finally {
+      await db.destroy()
     }
   })
 })
