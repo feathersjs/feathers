@@ -223,6 +223,40 @@ describe('Knex Error handler', () => {
     assert.throws(() => errorHandler({ code: 'ECONNRESET' }), { name: 'GeneralError', message: 'Error' })
   })
 
+  it('errors that are not from the database keep their message', () => {
+    assert.throws(() => errorHandler(new Error('Pool - closed')), {
+      name: 'GeneralError',
+      message: 'Pool - closed'
+    })
+  })
+
+  it('MySQL errors with an empty sqlMessage use the fallback', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'ER_X',
+          errno: 1,
+          sqlState: '42000',
+          sqlMessage: '',
+          message: 'select 1 - ER_X: oops'
+        } as any),
+      { name: 'BadRequest', message: 'ER_X: oops' }
+    )
+  })
+
+  it('MSSQL errors omit query information', () => {
+    assert.throws(
+      () =>
+        errorHandler({
+          code: 'EREQUEST',
+          number: 2627,
+          message:
+            "insert into [users] ([email]) values ('a@example.com') - Violation of UNIQUE KEY constraint 'UQ_users'."
+        } as any),
+      { name: 'GeneralError', message: "Violation of UNIQUE KEY constraint 'UQ_users'." }
+    )
+  })
+
   it('does not leak queries or bound values from a real database', async () => {
     const db = knex({ client: 'sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true })
 

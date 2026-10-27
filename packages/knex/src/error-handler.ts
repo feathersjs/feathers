@@ -15,7 +15,7 @@ const omitQuery = (error: any) => {
   }
 
   // MySQL drivers keep the original message
-  if (typeof sqlMessage === 'string' && message.endsWith(sqlMessage)) {
+  if (typeof sqlMessage === 'string' && sqlMessage !== '' && message.endsWith(sqlMessage)) {
     const withCode = `${code}: ${sqlMessage}`
 
     return message.endsWith(withCode) ? withCode : sqlMessage
@@ -25,6 +25,16 @@ const omitQuery = (error: any) => {
     const index = message.indexOf(' query: ')
 
     return index === -1 ? message : message.slice(0, index)
+  }
+
+  // Only database driver errors have the query in front of the message
+  if (
+    code === undefined &&
+    error.errno === undefined &&
+    error.number === undefined &&
+    error.sqlState === undefined
+  ) {
+    return message
   }
 
   // SQLite messages start with the error code
