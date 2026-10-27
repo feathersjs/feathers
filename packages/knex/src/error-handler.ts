@@ -2,8 +2,50 @@ import { errors } from '@feathersjs/errors'
 
 export const ERROR = Symbol.for('@feathersjs/knex/error')
 
-export function errorHandler(error: any) {
-  const { message } = error
+/**
+ * Knex adds the query and its bound values to errors, as "<sql> - <message>" for driver
+ * errors and "<message> query: <sql>" for compile errors. Keep only the message so the
+ * query is not sent to the client.
+ */
+const omitQuery = (error: any) => {
+  const { message, code, sqlMessage } = error
+
+  if (typeof message !== 'string') {
+    return message
+  }
+
+  // MySQL drivers keep the original message
+  if (typeof sqlMessage === 'string' && sqlMessage !== '' && message.endsWith(sqlMessage)) {
+    const withCode = `${code}: ${sqlMessage}`
+
+    return message.endsWith(withCode) ? withCode : sqlMessage
+  }
+
+  if (message.startsWith('Undefined binding(s) detected')) {
+    const index = message.indexOf(' query: ')
+
+    return index === -1 ? message : message.slice(0, index)
+  }
+
+  // Only database driver errors have the query in front of the message
+  if (
+    code === undefined &&
+    error.errno === undefined &&
+    error.number === undefined &&
+    error.sqlState === undefined
+  ) {
+    return message
+  }
+
+  // SQLite messages start with the error code
+  const codeIndex = typeof code === 'string' ? message.lastIndexOf(` - ${code}: `) : -1
+  const index = codeIndex !== -1 ? codeIndex : message.lastIndexOf(' - ')
+
+  return index === -1 ? message : message.slice(index + 3)
+}
+
+export function errorHandler(error: any): never {
+  const message = omitQuery(error)
   let feathersError = error
 
   if (error.sqlState && error.sqlState.length) {
@@ -64,11 +106,6 @@ export function errorHandler(error: any) {
   } else if (typeof error.code === 'string' && error.severity && error.routine) {
     // NOTE: Error codes taken from
     // https://www.postgresql.org/docs/9.6/static/errcodes-appendix.html
-    // Omit query information
-    const messages = (error.message || '').split('-')
-
-    error.message = messages[messages.length - 1]
-
     switch (error.code.slice(0, 2)) {
       case '22':
         feathersError = new errors.NotFound(message)
