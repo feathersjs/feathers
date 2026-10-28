@@ -66,6 +66,7 @@ The following error types, all of which are instances of `FeathersError`, are av
 - 406: `NotAcceptable`
 - 408: `Timeout`
 - 409: `Conflict`
+- 410: `Gone`
 - 411: `LengthRequired`
 - 422: `Unprocessable`
 - 429: `TooManyRequests`
