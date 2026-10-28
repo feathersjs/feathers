@@ -57,27 +57,26 @@ function originNotAllowedMessage(refererOrigin: string, origins: string[]) {
   )
 }
 
+// Relative redirects are checked against a placeholder origin that can never be a real host
+const RELATIVE_ORIGIN = 'http://feathers.invalid'
+
 /**
  * Validates that appending a user-supplied path to a base URL does not change the origin.
  * Uses both URL resolution and string concatenation checks to catch all open redirect vectors:
  * authority injection (@), protocol-relative (//), backslash, and domain suffix attacks.
+ * A relative base URL (e.g. `/`) is resolved against a placeholder origin and checked the same way.
  *
  * @throws NotAuthenticated if the redirect path would change the URL origin
  */
 function validateRedirectOrigin(baseUrl: string, redirectPath: string) {
-  let allowedOrigin: string
-
   try {
-    allowedOrigin = new URL(baseUrl).origin
-  } catch {
-    // baseUrl is a relative path (e.g. /home) — no open redirect risk
-    return
-  }
+    // A relative baseUrl is checked too, since '/' + '/evil.com' is //evil.com
+    const base = new URL(baseUrl, RELATIVE_ORIGIN)
+    const allowedOrigin = base.origin
 
-  try {
     // URL resolution catches protocol-relative (//) and backslash attacks
     // e.g. new URL('//attacker.com', 'https://target.com') → https://attacker.com
-    const resolvedUrl = new URL(redirectPath, baseUrl)
+    const resolvedUrl = new URL(redirectPath, base)
 
     if (resolvedUrl.origin !== allowedOrigin) {
       throw new NotAuthenticated('Invalid redirect path.')
@@ -85,7 +84,7 @@ function validateRedirectOrigin(baseUrl: string, redirectPath: string) {
 
     // String concatenation check catches domain suffix attacks
     // e.g. 'https://target.com' + '.evil.com' → https://target.com.evil.com
-    const concatenatedUrl = new URL(`${baseUrl}${redirectPath}`)
+    const concatenatedUrl = new URL(`${baseUrl}${redirectPath}`, RELATIVE_ORIGIN)
 
     if (concatenatedUrl.origin !== allowedOrigin) {
       throw new NotAuthenticated('Invalid redirect path.')

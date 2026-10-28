@@ -549,6 +549,27 @@ describe('OAuth callback validation for other providers', () => {
     )
   })
 
+  it('destroys the session when the redirect is invalid', async () => {
+    const authService = app.service('authentication')
+    let destroyed = false
+    const params = callbackParams('github', { code: 'code' }, { response: { profile: { id: 'redirect' } } })
+
+    params.session.redirect = '/evil.example'
+    params.session.destroy = async () => {
+      destroyed = true
+    }
+    authService.configuration.oauth.redirect = '/'
+
+    try {
+      await assert.rejects(() => oauthService.authenticate(params, null as any), {
+        message: 'Invalid redirect path.'
+      })
+      assert.ok(destroyed, 'Session should be destroyed')
+    } finally {
+      delete authService.configuration.oauth.redirect
+    }
+  })
+
   it('takes the Apple identity from the verified id_token, not the callback body', async () => {
     const victim = await app.service('users').create({ appleId: 'victim', email: 'victim@example.com' })
     const result: any = await oauthService.authenticate(

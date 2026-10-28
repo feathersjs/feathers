@@ -86,6 +86,87 @@ describe('@feathersjs/authentication-oauth/strategy security', () => {
     })
   })
 
+  describe('open redirect with a relative oauth.redirect', () => {
+    afterEach(() => {
+      delete app.get('authentication').oauth.redirect
+    })
+
+    it('should reject a redirect parameter that makes a protocol-relative URL', async () => {
+      app.get('authentication').oauth.redirect = '/'
+
+      await assert.rejects(
+        () => strategy.getRedirect({ accessToken: 'testing' }, { redirect: '/evil.example/steal' }),
+        { name: 'NotAuthenticated', message: 'Invalid redirect path.' }
+      )
+    })
+
+    it('should reject a redirect parameter starting with a backslash', async () => {
+      app.get('authentication').oauth.redirect = '/'
+
+      await assert.rejects(
+        () => strategy.getRedirect({ accessToken: 'testing' }, { redirect: '\\evil.example/steal' }),
+        { name: 'NotAuthenticated', message: 'Invalid redirect path.' }
+      )
+    })
+
+    it('should reject a protocol-relative redirect hidden by a tab', async () => {
+      app.get('authentication').oauth.redirect = '/'
+
+      await assert.rejects(
+        () => strategy.getRedirect({ accessToken: 'testing' }, { redirect: '/\t/evil.example' }),
+        { name: 'NotAuthenticated', message: 'Invalid redirect path.' }
+      )
+    })
+
+    it('should reject an error redirect that leaves the origin', async () => {
+      app.get('authentication').oauth.redirect = '/'
+
+      await assert.rejects(() => strategy.getRedirect(new Error('failed'), { redirect: '/evil.example' }), {
+        name: 'NotAuthenticated',
+        message: 'Invalid redirect path.'
+      })
+    })
+
+    it('should allow same origin redirects', async () => {
+      app.get('authentication').oauth.redirect = '/'
+
+      assert.equal(
+        await strategy.getRedirect({ accessToken: 'testing' }, { redirect: 'dashboard' }),
+        '/dashboard#access_token=testing'
+      )
+      assert.equal(await strategy.getRedirect({ accessToken: 'testing' }), '/#access_token=testing')
+
+      app.get('authentication').oauth.redirect = '/home'
+
+      assert.equal(
+        await strategy.getRedirect({ accessToken: 'testing' }, { redirect: '/hi-there' }),
+        '/home/hi-there#access_token=testing'
+      )
+    })
+
+    it('should reject a protocol-relative redirect with a relative path base', async () => {
+      app.get('authentication').oauth.redirect = '/home'
+
+      await assert.rejects(
+        () => strategy.getRedirect({ accessToken: 'testing' }, { redirect: '//evil.example' }),
+        { name: 'NotAuthenticated', message: 'Invalid redirect path.' }
+      )
+    })
+
+    it('should validate redirects against a protocol-relative oauth.redirect', async () => {
+      app.get('authentication').oauth.redirect = '//app.example.com'
+
+      assert.equal(
+        await strategy.getRedirect({ accessToken: 'testing' }, { redirect: '/dashboard' }),
+        '//app.example.com/dashboard#access_token=testing'
+      )
+      await assert.rejects(
+        () => strategy.getRedirect({ accessToken: 'testing' }, { redirect: '.evil.example' }),
+        { name: 'NotAuthenticated', message: 'Invalid redirect path.' }
+      )
+    })
+  })
+
   describe('open redirect via domain suffix attack', () => {
     beforeEach(() => {
       app.get('authentication').oauth.origins = ['https://target.com']

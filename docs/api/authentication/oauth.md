@@ -219,6 +219,8 @@ Dynamic redirects to the same URL are possible by setting the `redirect` query p
 
 With the above configuration will redirect to `https://app.mydomain.com/dashboard` after the OAuth flow.
 
+The `redirect` query parameter has to stay on the same origin as the configured `redirect` or allowed origin, otherwise the OAuth flow fails with an `Invalid redirect path.` error. With a relative `redirect` like `/`, use `?redirect=dashboard` instead of `?redirect=/dashboard`, since `//dashboard` points to a different host.
+
 ## Options
 
 Options are usually set under the registered name via [Feathers configuration](../configuration.md) in `config/default.json` or `config/<environment>.json` under the `authentication.oauth` section. Available options are:

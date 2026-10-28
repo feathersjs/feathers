@@ -199,7 +199,8 @@ export class OAuthService {
         location
       }
     } catch (error: any) {
-      const location = strategy ? await strategy.getRedirect(error, authParams) : null
+      // The redirect itself can be invalid, the session still has to be destroyed
+      const location = strategy ? await strategy.getRedirect(error, authParams).catch((): null => null) : null
       const e = new OAuthError(error.message, error.data, location)
 
       if (typeof params.session.destroy === 'function') {
