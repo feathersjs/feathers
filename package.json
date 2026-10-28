@@ -43,13 +43,14 @@
     "test:deno": "deno test --config deno/tsconfig.json deno/test.ts",
     "test": "npm run lint && npm run compile && vitest run --coverage",
     "vitest": "vitest run --coverage",
+    "bench": "vitest bench --run",
     "dev": "vitest"
   },
   "devDependencies": {
     "@featherscloud/pinion": "^0.5.5",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^5.0.5",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
@@ -57,6 +58,7 @@
     "npm-check-updates": "^18.0.2",
     "prettier": "^3.6.2",
     "typescript": "^5.8.0",
-    "vitest": "^3.2.4"
+    "vite": "^7.3.7",
+    "vitest": "^5.0.5"
   }
 }
