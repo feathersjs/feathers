@@ -77,6 +77,29 @@ Feathers errors contain the following fields:
 To convert a Feathers error back to an object call `error.toJSON()`. A normal `console.log` of a JavaScript Error object will not automatically show those additional properties described above (even though they can be accessed directly).
 ::
 
+## Checking errors
+
+Use `isFeathersError` to check if a value is a Feathers error. It is a type guard and can optionally check for a specific error by name or status code:
+
+```ts
+import { isFeathersError } from 'feathers/errors'
+
+try {
+  await app.service('messages').get(1)
+} catch (error: unknown) {
+  if (isFeathersError(error, 'NotFound')) {
+    // error is NotFound
+  } else if (isFeathersError(error, 403)) {
+    // error is Forbidden
+  } else if (isFeathersError(error)) {
+    // error is FeathersError
+    console.log(error.code)
+  }
+}
+```
+
+`isFeathersError` and `instanceof` (e.g. `error instanceof NotFound`) also recognize errors created by a different copy of `feathers`, for example when multiple versions are installed or CommonJS and ES modules are mixed. Custom errors (see below) are only recognized by `instanceof` within the same copy of the module that defines them.
+
 ## Custom errors
 
 You can create custom errors by extending from the `FeathersError` class and calling its constructor with `(message, name, code, className, data)`:

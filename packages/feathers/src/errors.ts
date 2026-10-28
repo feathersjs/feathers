@@ -14,12 +14,36 @@ interface ErrorProperties extends Omit<FeathersErrorJSON, 'message'> {
   type: string
 }
 
+// Registered globally so that errors are recognized across duplicate package
+// versions, CJS/ESM builds and realms where a plain `instanceof` would fail
+const FEATHERS_ERROR = Symbol.for('feathers.error')
+
+const hasPrototypeInstance = Function.prototype[Symbol.hasInstance]
+const hasOwn = (obj: object, key: PropertyKey) => Object.prototype.hasOwnProperty.call(obj, key)
+
 export class FeathersError extends Error {
   readonly type: string
   readonly code: number
   readonly className: string
   readonly data: any
   readonly errors: any
+
+  static [Symbol.hasInstance]<T>(this: abstract new (...args: any[]) => T, value: unknown): value is T {
+    if (hasPrototypeInstance.call(this, value)) {
+      return true
+    }
+
+    const name: unknown =
+      value !== null && typeof value === 'object' ? (value as any)[FEATHERS_ERROR] : undefined
+
+    if (typeof name !== 'string') {
+      return false
+    }
+
+    const ErrorClass = this as unknown
+
+    return ErrorClass === FeathersError || (hasOwn(errorsByName, name) && errorsByName[name] === ErrorClass)
+  }
 
   constructor(err: ErrorMessage, name: string, code: number, className: string, _data: any) {
     let msg = typeof err === 'string' ? err : 'Error'
@@ -42,6 +66,8 @@ export class FeathersError extends Error {
 
     super(msg)
     Object.assign(this, properties)
+    // Non-enumerable so that it is not copied by spreading or `Object.assign`
+    Object.defineProperty(this, FEATHERS_ERROR, { value: name })
   }
 
   toJSON() {
@@ -193,6 +219,7 @@ export interface Errors {
   NotAcceptable: NotAcceptable
   Timeout: Timeout
   Conflict: Conflict
+  Gone: Gone
   LengthRequired: LengthRequired
   Unprocessable: Unprocessable
   TooManyRequests: TooManyRequests
@@ -209,6 +236,7 @@ export interface Errors {
   406: NotAcceptable
   408: Timeout
   409: Conflict
+  410: Gone
   411: LengthRequired
   422: Unprocessable
   429: TooManyRequests
@@ -216,6 +244,26 @@ export interface Errors {
   501: NotImplemented
   502: BadGateway
   503: Unavailable
+}
+
+const errorsByName: Record<string, abstract new (...args: any[]) => FeathersError> = {
+  BadRequest,
+  NotAuthenticated,
+  PaymentError,
+  Forbidden,
+  NotFound,
+  MethodNotAllowed,
+  NotAcceptable,
+  Timeout,
+  Conflict,
+  Gone,
+  LengthRequired,
+  Unprocessable,
+  TooManyRequests,
+  GeneralError,
+  NotImplemented,
+  BadGateway,
+  Unavailable
 }
 
 export const errors = {
@@ -229,6 +277,7 @@ export const errors = {
   NotAcceptable,
   Timeout,
   Conflict,
+  Gone,
   LengthRequired,
   Unprocessable,
   TooManyRequests,
@@ -253,6 +302,28 @@ export const errors = {
   501: NotImplemented,
   502: BadGateway,
   503: Unavailable
+}
+
+/**
+ * Type guard for Feathers errors that also works across duplicate package versions.
+ * Optionally checks for a specific error by name or status code.
+ *
+ * @example
+ * isFeathersError(error) // error is FeathersError
+ * isFeathersError(error, 'NotFound') // error is NotFound
+ * isFeathersError(error, 404) // error is NotFound
+ */
+export function isFeathersError<K extends keyof Errors = 'FeathersError'>(
+  error: unknown,
+  type?: K
+): error is Errors[K] {
+  if (type === undefined) {
+    return error instanceof FeathersError
+  }
+
+  const ErrorClass = hasOwn(errors, type) ? errors[type as keyof typeof errors] : undefined
+
+  return ErrorClass !== undefined && error instanceof ErrorClass
 }
 
 export function convert(error: any, status?: number) {
