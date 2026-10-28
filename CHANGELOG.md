@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.52](https://github.com/feathersjs/feathers/compare/v5.0.51...v5.0.52) (2026-10-28)
+
+### Bug Fixes
+
+- **authentication-oauth:** keep the OAuth token in the redirect fragment ([4c8650c](https://github.com/feathersjs/feathers/commit/4c8650ce8d9c3f4b300eac12a32250d09a7614ff))
+- **knex:** omit queries from all database error messages ([#3725](https://github.com/feathersjs/feathers/issues/3725)) ([f300461](https://github.com/feathersjs/feathers/commit/f3004612f808c71ad61b16f3907f445bcd960f96)), closes [#3711](https://github.com/feathersjs/feathers/issues/3711) [#3711](https://github.com/feathersjs/feathers/issues/3711)
+
 ## [5.0.51](https://github.com/feathersjs/feathers/compare/v5.0.50...v5.0.51) (2026-10-25)
 
 ### Bug Fixes

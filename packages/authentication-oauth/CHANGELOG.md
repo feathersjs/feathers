@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.52](https://github.com/feathersjs/feathers/compare/v5.0.51...v5.0.52) (2026-10-28)
+
+### Bug Fixes
+
+- **authentication-oauth:** keep the OAuth token in the redirect fragment ([4c8650c](https://github.com/feathersjs/feathers/commit/4c8650ce8d9c3f4b300eac12a32250d09a7614ff))
+
 ## [5.0.51](https://github.com/feathersjs/feathers/compare/v5.0.50...v5.0.51) (2026-10-25)
 
 ### Bug Fixes

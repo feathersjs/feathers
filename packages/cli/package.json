@@ -1,7 +1,7 @@
 {
   "name": "@feathersjs/cli",
   "description": "The command line interface for creating Feathers applications",
-  "version": "5.0.51",
+  "version": "5.0.52",
   "homepage": "https://feathersjs.com",
   "main": "lib/index.js",
   "type": "module",
@@ -53,7 +53,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@feathersjs/generators": "^5.0.51",
+    "@feathersjs/generators": "^5.0.52",
     "chalk": "^6.0.0",
     "commander": "^13.1.0"
   },
@@ -62,12 +62,12 @@
     "@feathersjs/authentication": "^5.0.51",
     "@feathersjs/authentication-client": "^5.0.51",
     "@feathersjs/authentication-local": "^5.0.51",
-    "@feathersjs/authentication-oauth": "^5.0.51",
+    "@feathersjs/authentication-oauth": "^5.0.52",
     "@feathersjs/configuration": "^5.0.51",
     "@feathersjs/errors": "^5.0.50",
     "@feathersjs/express": "^5.0.51",
     "@feathersjs/feathers": "^5.0.50",
-    "@feathersjs/knex": "^5.0.51",
+    "@feathersjs/knex": "^5.0.52",
     "@feathersjs/koa": "^5.0.51",
     "@feathersjs/mongodb": "^5.0.51",
     "@feathersjs/rest-client": "^5.0.51",
