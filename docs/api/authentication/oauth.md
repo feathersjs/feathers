@@ -205,7 +205,7 @@ A successful oAuth flow will redirect to the origin or redirect URL in the form 
 
 <BlockQuote type="info" label="Note">
 
-The redirect is using a hash instead of a query string by default because it is not logged server side and can be easily read on the client. You can force query based redirect by adding a `?` to the end of the `redirect` option.
+The redirect is using a hash instead of a query string by default because it is not logged server side and can be easily read on the client. You can force query based redirect by adding a `?` to the end of the `redirect` option. This only applies to the configured option, a `redirect` query parameter always gets the hash.
 
 </BlockQuote>
 

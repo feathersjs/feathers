@@ -237,7 +237,8 @@ export class OAuthStrategy extends AuthenticationBaseStrategy {
     }
 
     const redirectUrl = `${redirect}${queryRedirect}`
-    const separator = redirectUrl.endsWith('?') ? '' : redirect.indexOf('#') !== -1 ? '?' : '#'
+    // Only the configured redirect can put the token in the query string, a client supplied redirect can not
+    const separator = redirect.endsWith('?') && !queryRedirect ? '' : redirect.indexOf('#') !== -1 ? '?' : '#'
     const authResult: AuthenticationResult = data
     const query = authResult.accessToken
       ? { access_token: authResult.accessToken }

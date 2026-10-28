@@ -446,7 +446,13 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
         redirect: '/hi-there?'
       }
     )
-    assert.equal(redirect, '/home/hi-there?access_token=testing')
+    assert.equal(redirect, '/home/hi-there?#access_token=testing')
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, { redirect: '?' })
+    assert.equal(redirect, '/home?#access_token=testing')
+
+    redirect = await strategy.getRedirect(new Error('something went wrong'), { redirect: '/hi-there?' })
+    assert.equal(redirect, '/home/hi-there?#error=something%20went%20wrong')
 
     redirect = await strategy.getRedirect(new Error('something went wrong'))
     assert.equal(redirect, '/home#error=something%20went%20wrong')
@@ -458,6 +464,9 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
 
     redirect = await strategy.getRedirect({ accessToken: 'testing' })
     assert.equal(redirect, '/home?access_token=testing')
+
+    redirect = await strategy.getRedirect({ accessToken: 'testing' }, { redirect: '/hi-there' })
+    assert.equal(redirect, '/home?/hi-there#access_token=testing')
 
     delete app.get('authentication').oauth.redirect
 
@@ -506,6 +515,17 @@ describe('@feathersjs/authentication-oauth/strategy', () => {
       }
     )
     assert.equal(redirect, 'https://feathersjs.com/home#access_token=testing')
+
+    redirect = await strategy.getRedirect(
+      { accessToken: 'testing' },
+      {
+        redirect: '/home?',
+        headers: {
+          referer: 'https://feathersjs.com/somewhere'
+        }
+      }
+    )
+    assert.equal(redirect, 'https://feathersjs.com/home?#access_token=testing')
 
     await assert.rejects(
       () =>
