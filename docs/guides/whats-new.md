@@ -60,13 +60,13 @@ The best part about the new router is that there's not another API you have to l
 
 For those who want to build a custom framework transport, there's a single `.lookup` method which routes requests through Feathers.
 
-Learn about the `lookup` method, [here](/api/application#lookup).
+Learn about the `lookup` method, [here](/api/application#lookup-path).
 
 ### Service De-Registration
 
 Now that Feathers comes with [its own router](#lightning-fast-routing), it's possible to de-register a service to completely remove it from the application. This allows you to build cleaner, dynamically generated applications. This is a coveted feature for those who want to build, for example, a dynamic CRUD admin application that's driven by some sort of schema.
 
-Learn about service de-registration [here](../api/application.md#unusepath).
+Learn about service de-registration [here](../api/application.md#unuse-path).
 
 ## Custom Methods
 
@@ -242,7 +242,7 @@ export const myHook = async (context: HookContext, next: NextFunction) => {
 
 ### Setup and Teardown Hooks
 
-Feathers v5 Dove adds built-in support for app-level `setup` and `teardown` hooks. They are special hooks that don't run on the service level but instead directly on [app.setup](../api/application.md#setupserver) or `app.listen` and [app.teardown](../api/application.md#teardownserver). They allow you to perform some async logic while starting and stopping the Feathers server.
+Feathers v5 Dove adds built-in support for app-level `setup` and `teardown` hooks. They are special hooks that don't run on the service level but instead directly on [app.setup](../api/application.md#setup-server) or `app.listen` and [app.teardown](../api/application.md#teardown-server). They allow you to perform some async logic while starting and stopping the Feathers server.
 
 ```ts
 app.hooks({
