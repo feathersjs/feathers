@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest'
+import { describe, it, vi } from 'vitest'
 import assert from 'assert'
 import * as errors from '../src/errors.js'
 
@@ -202,6 +202,55 @@ describe('@feathersjs/errors', () => {
       const error = new errors.NotFound()
       assert.ok(error.constructor === errors.NotFound)
       assert.ok(error.constructor.name === 'NotFound')
+    })
+
+    it('does not match custom subclasses by name', () => {
+      class CustomError extends errors.BadRequest {}
+
+      assert.ok(new CustomError() instanceof errors.BadRequest)
+      assert.ok(!(new errors.BadRequest() instanceof CustomError))
+    })
+  })
+
+  describe('isFeathersError', () => {
+    it('checks for any Feathers error', () => {
+      assert.ok(errors.isFeathersError(new errors.NotFound()))
+      assert.ok(!errors.isFeathersError(new Error()))
+      assert.ok(!errors.isFeathersError({ ...new errors.NotFound(), type: 'FeathersError' }))
+      assert.ok(!errors.isFeathersError(null))
+      assert.ok(!errors.isFeathersError('NotFound'))
+    })
+
+    it('checks for a specific error by name or code', () => {
+      const error: unknown = new errors.NotFound()
+
+      assert.ok(errors.isFeathersError(error, 'NotFound'))
+      assert.ok(errors.isFeathersError(error, 404))
+      assert.ok(!errors.isFeathersError(error, 'BadRequest'))
+      assert.ok(!errors.isFeathersError(error, 400))
+      assert.ok(!errors.isFeathersError(error, 'toString' as any))
+
+      if (errors.isFeathersError(error, 404)) {
+        const notFound: errors.NotFound = error
+        assert.strictEqual(notFound.code, 404)
+      }
+    })
+
+    it('recognizes errors from a duplicate module instance', async () => {
+      vi.resetModules()
+      const duplicate: typeof errors = await import('../src/errors.js')
+
+      assert.notStrictEqual(duplicate.FeathersError, errors.FeathersError)
+
+      const error = new duplicate.NotFound('Not here')
+
+      assert.ok(error instanceof errors.FeathersError)
+      assert.ok(error instanceof errors.NotFound)
+      assert.ok(!(error instanceof errors.BadRequest))
+      assert.ok(errors.isFeathersError(error, 'NotFound'))
+      assert.ok(errors.isFeathersError(error, 404))
+      assert.ok(!errors.isFeathersError(error, 'BadRequest'))
+      assert.ok(new errors.BadRequest() instanceof duplicate.BadRequest)
     })
   })
 

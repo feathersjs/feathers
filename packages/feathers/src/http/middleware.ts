@@ -1,6 +1,6 @@
 import type { Params, Service, Query } from '../index.js'
 import type { HookContext, NextFunction } from '../hooks/index.js'
-import { BadRequest, FeathersError } from '../errors.js'
+import { BadRequest, isFeathersError } from '../errors.js'
 import { parse } from '../qs.js'
 
 interface RouteLookup {
@@ -80,7 +80,7 @@ export function errorHandler() {
       await next()
     } catch (error: any) {
       const errorData = error.toJSON ? error.toJSON() : { message: error.message }
-      const status = error instanceof FeathersError ? error.code || 500 : 500
+      const status = isFeathersError(error) ? error.code || 500 : 500
       const origin = context.request.headers.get('origin') || '*'
 
       context.result = Response.json(errorData, {
