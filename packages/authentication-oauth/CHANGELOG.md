@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.53](https://github.com/feathersjs/feathers/compare/v5.0.52...v5.0.53) (2026-10-28)
+
+### Bug Fixes
+
+- **authentication-oauth:** validate redirects for a relative oauth.redirect ([1f1e4b3](https://github.com/feathersjs/feathers/commit/1f1e4b3b32aa19a6226a53ec47f8ebab92462c7f))
+
 ## [5.0.52](https://github.com/feathersjs/feathers/compare/v5.0.51...v5.0.52) (2026-10-28)
 
 ### Bug Fixes
