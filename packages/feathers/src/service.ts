@@ -1,8 +1,7 @@
 import { EventEmitter } from './event-emitter.js'
-import { createSymbol } from './commons.js'
 import { ServiceOptions } from './declarations.js'
 
-export const SERVICE = createSymbol('@feathersjs/service')
+export const SERVICE = Symbol.for('@feathersjs/service')
 
 export const defaultServiceArguments = {
   find: ['params'],

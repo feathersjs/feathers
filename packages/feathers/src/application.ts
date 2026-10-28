@@ -1,7 +1,7 @@
 import { EventEmitter } from './event-emitter.js'
 import { HOOKS, hooks, middleware } from './hooks/index.js'
 
-import { stripSlashes } from './commons.js'
+import { stripSlashes } from './commons/index.js'
 import { createDebug } from './debug.js'
 
 import version from './version.js'
