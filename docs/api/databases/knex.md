@@ -73,6 +73,22 @@ The [common API options](./common.md#options) are:
 
 There are additionally several legacy options in the [common API options](./common.md#options)
 
+### RETURNING clause support
+
+`create` uses the `RETURNING` clause to retrieve the id of a newly created record for PostgreSQL, OracleDB, MSSQL and SQLite. For databases that support it but are not in this list, it can be enabled with the `returning` option of the [Knex configuration](https://knexjs.org/guide/#configuration-options). This is for example required for Firebird via [`knex-firebird-dialect`](https://www.npmjs.com/package/knex-firebird-dialect):
+
+```js
+const db = knex({
+  client: knexFirebirdDialect,
+  connection: {
+    /* ... */
+  },
+  returning: true
+})
+```
+
+Setting the option to a falsy value will fall back to the default list of clients.
+
 ### getModel([params])
 
 `service.getModel([params])` returns the [Knex](https://knexjs.org/guide/query-builder.html) client for this table.
