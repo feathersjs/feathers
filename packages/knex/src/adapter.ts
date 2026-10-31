@@ -177,10 +177,11 @@ export class KnexAdapter<
   async _find(params?: ServiceParams): Promise<Paginated<Result> | Result[]>
   async _find(params: ServiceParams = {} as ServiceParams): Promise<Paginated<Result> | Result[]> {
     const { filters, paginate } = this.filterQuery(params)
-    const { name, id } = this.getOptions(params)
+    const { Model, name, id } = this.getOptions(params)
     const builder = params.knex ? params.knex.clone() : this.createQuery(params)
-    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${name}.${id} as total`)
-
+    const countBuilder = Model.count(`* as total`)
+      .with('subquery', builder.clone().clearOrder())
+      .from('subquery')
     // Handle $limit
     if (filters.$limit) {
       builder.limit(filters.$limit)
