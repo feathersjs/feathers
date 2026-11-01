@@ -57,22 +57,22 @@
     "@feathersjs/errors": "^5.0.50",
     "@feathersjs/feathers": "^5.0.50",
     "@types/superagent": "^8.1.11",
-    "qs": "^6.16.0"
+    "qs": "^6.17.1"
   },
   "devDependencies": {
     "@feathersjs/express": "^5.0.51",
     "@feathersjs/memory": "^5.0.50",
     "@feathersjs/tests": "^5.0.50",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.6.6",
     "@types/node-fetch": "^2.6.13",
     "@types/qs": "^6.15.1",
-    "axios": "^1.20.0",
-    "mocha": "^12.0.1",
+    "axios": "^1.21.0",
+    "mocha": "^12.0.3",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.8.2",
     "shx": "^0.4.0",
-    "superagent": "^10.3.0",
+    "superagent": "^10.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },

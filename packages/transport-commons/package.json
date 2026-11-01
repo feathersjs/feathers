@@ -57,15 +57,15 @@
     "@feathersjs/commons": "^5.0.50",
     "@feathersjs/errors": "^5.0.50",
     "@feathersjs/feathers": "^5.0.50",
-    "encodeurl": "^2.0.0",
+    "encodeurl": "^3.0.0",
     "lodash": "^4.18.1"
   },
   "devDependencies": {
     "@types/encodeurl": "^1.0.3",
-    "@types/lodash": "^4.17.25",
+    "@types/lodash": "^4.17.27",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^26.0.0",
-    "mocha": "^12.0.1",
+    "@types/node": "^26.6.6",
+    "mocha": "^12.0.3",
     "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
