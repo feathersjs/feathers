@@ -26,7 +26,7 @@ export const IS_VIRTUAL = Symbol.for('@feathersjs/schema/virtual')
  * @returns The property resolver function
  */
 export const virtual = <T, V, C>(virtualResolver: VirtualResolver<T, V, C>) => {
-  const propertyResolver: PropertyResolver<T, V, C> = async (_value, obj, context, status) =>
+  const propertyResolver: PropertyResolver<T, V, C> = (_value, obj, context, status) =>
     virtualResolver(obj, context, status)
 
   propertyResolver[IS_VIRTUAL] = true
@@ -90,12 +90,12 @@ export class Resolver<T, C> {
    * @param status The current resolver status
    * @returns The resolver property
    */
-  async resolveProperty<D, K extends keyof T>(
+  resolveProperty<D, K extends keyof T>(
     name: K,
     data: D,
     context: C,
     status: Partial<ResolverStatus<T, C>> = {}
-  ): Promise<T[K]> {
+  ): PromiseOrLiteral<T[K]> {
     const resolver = this.options.properties[name]
     const value = (data as any)[name]
     const { path = [], stack = [] } = status || {}
@@ -169,6 +169,88 @@ export class Resolver<T, C> {
         }
       })
     )
+
+    if (hasErrors) {
+      const propertyName = status?.properties ? ` ${status.properties.join('.')}` : ''
+
+      throw new BadRequest('Error resolving data' + (propertyName ? ` ${propertyName}` : ''), errors)
+    }
+
+    return schema && validate === 'after' ? await schema.validate(result) : result
+  }
+
+  async _resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
+    const { properties: resolvers, schema, validate } = this.options
+    const payload = await this.convert(_data, context, status)
+
+    if (!Array.isArray(status?.properties) && this.propertyNames.length === 0) {
+      return payload as T
+    }
+
+    const data = schema && validate === 'before' ? await schema.validate(payload) : payload
+    const propertyList = (
+      Array.isArray(status?.properties)
+        ? status?.properties
+        : // By default get all data and resolver keys but remove duplicates
+          [...new Set(Object.keys(data).concat(this.propertyNames as string[]))]
+    ) as (keyof T)[]
+
+    const result: any = {}
+    const errors: any = {}
+    let hasErrors = false
+
+    const resolveProperties = () => {
+      return new Promise((resolve) => {
+        for (let index = 0; index < propertyList.length; index++) {
+          const name = propertyList[index]
+          const value = (data as any)[name]
+
+          const handleResolve = (resolvedValue: any) => {
+            if (resolvedValue !== undefined) {
+              result[name] = resolvedValue
+            }
+            if (index === propertyList.length - 1) {
+              resolve(null)
+            }
+          }
+
+          const handleReject = (error: any) => {
+            // TODO add error stacks
+            const convertedError =
+              typeof error.toJSON === 'function' ? error.toJSON() : { message: error.message || error }
+
+            errors[name] = convertedError
+            hasErrors = true
+
+            if (index === propertyList.length - 1) {
+              resolve(null)
+            }
+          }
+
+          if (!resolvers[name]) {
+            handleResolve(value)
+            continue
+          }
+
+          try {
+            const resolved = this.resolveProperty(name, data, context, status)
+            // @ts-ignore
+            if (typeof resolved.then === 'function') {
+              resolved
+                // @ts-ignore
+                .then(handleResolve)
+                .catch(handleReject)
+            } else {
+              handleResolve(resolved)
+            }
+          } catch (error: any) {
+            handleReject(error)
+          }
+        }
+      })
+    }
+
+    await resolveProperties()
 
     if (hasErrors) {
       const propertyName = status?.properties ? ` ${status.properties.join('.')}` : ''

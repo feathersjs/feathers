@@ -217,4 +217,50 @@ describe('@feathersjs/schema/resolver', () => {
 
     assert.deepStrictEqual(resolved, { message: 'Hello' })
   })
+
+  it('optimizes promises', async () => {
+    const count = 10000
+    const asyncResolvers = 1
+    const syncResolvers = 10
+    const runs = 10
+    const properties: { [key: string]: any } = {}
+
+    for (let i = 0; i < asyncResolvers; i++) {
+      properties[`async${i}`] = async (_value: any, data: any) => {
+        return data.id
+      }
+    }
+
+    for (let i = 0; i < syncResolvers; i++) {
+      properties[`sync${i}`] = (_value: any, data: any) => {
+        return data.id
+      }
+    }
+
+    const data = Array.from({ length: count }, (_, i) => {
+      return { id: i }
+    })
+
+    // Treats all resolvers as either a promise or a function.
+    for (let index = 0; index < runs; index++) {
+      const resolver = resolve({ properties })
+      const funcs = data.map((data) => {
+        return resolver._resolve(data, {})
+      })
+      console.time('sync' + index)
+      await Promise.all(funcs)
+      console.timeEnd('sync' + index)
+    }
+
+    // Treats all resolvers as promises.
+    for (let index = 0; index < runs; index++) {
+      const resolver = resolve({ properties })
+      const funcs = data.map((data) => {
+        return resolver.resolve(data, {})
+      })
+      console.time('async' + index)
+      await Promise.all(funcs)
+      console.timeEnd('async' + index)
+    }
+  })
 })
