@@ -110,6 +110,8 @@ app.configure(
 app.listen(3030)
 ```
 
+When the server passed to `app.setup(server)` is itself built on uWS and exposes its app as `server.uwsApp`, Socket.io is attached to it with `io.attachApp` automatically.
+
 ### socketio(options [, callback])
 
 `app.configure(socketio(options [, callback]))` sets up the Socket.io transport with the given [Socket.io options object](https://github.com/socketio/engine.io#methods-1) and optionally calls the callback described above.

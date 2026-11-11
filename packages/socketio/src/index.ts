@@ -65,7 +65,13 @@ function configureSocketio(port?: any, options?: any, config?: any) {
 
         async setup(this: any, server: http.Server, ...rest: any[]) {
           if (!this.io) {
-            const io = (this.io = new Server(port || server, options))
+            // A server built on uWebSockets.js exposes its app as `uwsApp`, socket.io attaches to it natively
+            const uwsApp = !port && server && 'uwsApp' in server ? (server as any).uwsApp : null
+            const io = (this.io = uwsApp ? new Server(options) : new Server(port || server, options))
+
+            if (uwsApp) {
+              io.attachApp(uwsApp)
+            }
 
             io.use(disconnect(app, getParams, socketMap))
             io.use(params(app, socketMap))
