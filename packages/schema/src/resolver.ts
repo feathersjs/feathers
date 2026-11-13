@@ -34,7 +34,7 @@ export const IS_VIRTUAL = Symbol.for('@feathersjs/schema/virtual')
  * @returns The property resolver function
  */
 export const virtual = <T, V, C>(virtualResolver: VirtualResolver<T, V, C>) => {
-  const propertyResolver: PropertyResolver<T, V, C> = async (_value, obj, context, status) =>
+  const propertyResolver: PropertyResolver<T, V, C> = (_value, obj, context, status) =>
     virtualResolver(obj, context, status)
 
   propertyResolver[IS_VIRTUAL] = true
