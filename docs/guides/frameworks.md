@@ -1,10 +1,10 @@
 # Frontend Frameworks
 
-Feathers works the same on the server and on the client and is front-end framework agnostic. You can use it with Vue, React, React Native, Angular, or whatever other front-end tech stack you choose.
+Feathers works the same on the server and on the client and is front-end framework agnostic. You can use it with Angular/React/Vue or whatever other front-end tech stack you choose.
 
 ## Client Side Docs
 
-If you want to learn how to use Feathers as a client in Node.js, React Native, or in the browser with a module loader like Webpack refer to the [client API docs](../api/client.md).
+If you want to learn how to use Feathers as a client in Node.js, Angular/React/Vue, or in the browser with a module loader like Webpack refer to the [client API docs](../api/client.md).
 
 ## The Feathers chat
 
@@ -23,4 +23,4 @@ Beyond the basics, see [this list](https://github.com/feathersjs/awesome-feather
 
 ## Framework Integrations
 
-See [this list](https://github.com/feathersjs/awesome-feathersjs#frontend-frameworks) of Feathers front-end framework integrations if you are looking for something that makes Feathers even easier to use with things like React, Vue or others.
+See [this list](https://github.com/feathersjs/awesome-feathersjs#frontend-frameworks) of Feathers front-end framework integrations if you are looking for something that makes Feathers even easier to use with things like Angular/React/Vue or others.

@@ -121,7 +121,7 @@ export const generate = (ctx: AppGeneratorArguments) =>
           type: 'confirm',
           when: ctx.client === undefined,
           message: (answers) => `Generate ${answers.language === 'ts' ? 'end-to-end typed ' : ''}client?`,
-          suffix: chalk.grey(' Can be used with React, Angular, Vue, React Native, Node.js etc.')
+          suffix: chalk.grey('Can be used anywhere TypeScript is supported, like Angular/React/Vue, etc')
         },
         {
           type: 'list',
