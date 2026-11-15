@@ -114,18 +114,23 @@ export class AuthenticationClient {
   }
 
   /**
-   * Returns the access token from storage or the window location hash.
+   * Returns the access token from the window location or storage.
    *
-   * @returns The access token from storage or location hash
+   * @returns The access token from location or storage
    */
-  getAccessToken(): Promise<string | null> {
-    return this.storage.getItem(this.options.storageKey).then((accessToken: string) => {
-      if (!accessToken && typeof window !== 'undefined' && window.location) {
-        return this.getFromLocation(window.location)
-      }
+  async getAccessToken(): Promise<string | null> {
+    if (typeof window !== 'undefined' && window.location) {
+      const accessToken = await this.getFromLocation(window.location)
 
-      return accessToken || null
-    })
+      if (accessToken) {
+        await this.removeAccessToken()
+        return accessToken
+      }
+    }
+
+    const accessToken = await this.storage.getItem(this.options.storageKey)
+
+    return accessToken || null
   }
 
   /**
