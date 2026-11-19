@@ -40,11 +40,25 @@ export function getServiceMethod(_httpMethod: string, id: unknown, headerOverrid
 
   // HEAD is semantically a GET without a body (RFC 9110). Map it the same
   // way so Express/Koa REST endpoints do not 405/500 on HEAD probes.
-  if (httpMethod === 'get' || httpMethod === 'head') {
+  // QUERY is a safe, idempotent GET that carries the query in the request body.
+  if (httpMethod === 'get' || httpMethod === 'head' || httpMethod === 'query') {
     return id === null ? 'find' : 'get'
   }
 
   throw new MethodNotAllowed(`Method ${_httpMethod} not allowed`)
+}
+
+/**
+ * Returns the query for a request. For the HTTP `QUERY` method the query is
+ * sent in the (parsed) request body and merged over the URL query string so
+ * that value types like numbers and booleans are preserved. For all other
+ * methods the URL query is returned as is.
+ */
+export function getQuery(httpMethod: string, urlQuery: any, body: any) {
+  const isQuery = httpMethod.toLowerCase() === 'query'
+  const hasObjectBody = body !== null && typeof body === 'object' && !Array.isArray(body)
+
+  return isQuery && hasObjectBody ? { ...urlQuery, ...body } : urlQuery
 }
 
 export const argumentsFor = {
