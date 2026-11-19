@@ -17,7 +17,8 @@ const toHandler = (
 
 const serviceMiddleware = (): RequestHandler => {
   return toHandler(async (req, res, next) => {
-    const { query, headers, path, body: data, method: httpMethod } = req
+    const { query: urlQuery, headers, path, body: data, method: httpMethod } = req
+    const query = http.getQuery(httpMethod, urlQuery, data)
     const methodOverride = req.headers[http.METHOD_HEADER] as string | undefined
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

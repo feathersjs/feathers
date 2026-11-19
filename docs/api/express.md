@@ -181,6 +181,19 @@ Registers a Feathers transport mechanism that allows you to expose and consume [
 | .patch()       | PATCH       | /messages/1 |
 | .remove()      | DELETE      | /messages/1 |
 
+### The QUERY method
+
+`.find()` and `.get()` can also be called with the HTTP [`QUERY`](https://www.rfc-editor.org/rfc/rfc10008.html) method, which sends the query as the request body instead of the URL. Since the body is JSON, value types like numbers and booleans are preserved without any conversion. The body (if it is a JSON object) is merged over the URL query parameters and the result is available as `params.query`:
+
+```
+QUERY /messages?read=false
+Content-Type: application/json
+
+{ "read": true, "$limit": 10 }
+```
+
+Will set `params.query` to `{ "read": true, "$limit": 10 }`. This requires a body parser like `express.json()` to be registered before `rest()`. If you are using CORS from a browser, make sure `QUERY` is included in the allowed methods.
+
 ### app.configure(rest())
 
 Configures the transport provider with a standard formatter sending JSON response via [res.json](http://expressjs.com/en/4x/api.html#res.json).
