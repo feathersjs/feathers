@@ -42,8 +42,8 @@ class MyService {
   async update(id: NullableId, data: any, params: Params) {}
   async patch(id: NullableId, data: any, params: Params) {}
   async remove(id: NullableId, params: Params) {}
-  async setup(path: string, app: Application) {}
-  async teardown(path: string, app: Application) {}
+  async setup(app: Application, path: string) {}
+  async teardown(app: Application, path: string) {}
 }
 
 const app = feathers<{ myservice: MyService }>()
@@ -59,8 +59,8 @@ The parameters for service methods are:
 
 For `setup` and `teardown` (which are only called once on application startup and shutdown) we have
 
-- `path` - The path the service is registered on
 - `app` - The [Feathers application](./../../api/application.md)
+- `path` - The path the service is registered on
 
 Usually those methods can be used for most API functionality but it is also possible to add your own [custom service methods](../../api/services.md#custom-methods).
 
