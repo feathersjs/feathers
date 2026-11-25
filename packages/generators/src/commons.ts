@@ -11,7 +11,8 @@ import {
   renderTemplate,
   inject,
   Location,
-  exec
+  exec,
+  getConfig
 } from '@featherscloud/pinion'
 import ts from 'typescript'
 import prettier, { Options as PrettierOptions } from 'prettier'
@@ -20,6 +21,13 @@ import { fileURLToPath } from 'url'
 
 // Set __dirname in es module
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// Newer inquirer versions (post-9.3.x) renamed 'list' to 'select'. Register 'list' as an alias
+// so generators work regardless of which inquirer version is resolved at install time.
+const { prompt: pinionPrompt } = getConfig()
+if (!pinionPrompt.prompts?.list && pinionPrompt.prompts?.select) {
+  pinionPrompt.registerPrompt('list', pinionPrompt.prompts.select)
+}
 
 export const { version } = JSON.parse(fs.readFileSync(join(__dirname, '..', 'package.json')).toString())
 
