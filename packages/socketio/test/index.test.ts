@@ -188,6 +188,27 @@ describe('@feathersjs/socketio', () => {
     })
   })
 
+  it('attaches to a server built on uWebSockets.js', async () => {
+    // a stand-in for a uWebSockets.js app, recording the routes socket.io registers
+    const routes: string[] = []
+    const uwsApp: any = {}
+    for (const method of ['any', 'get', 'ws']) {
+      uwsApp[method] = (path: string) => {
+        routes.push(`${method} ${path}`)
+        return uwsApp
+      }
+    }
+    // such servers are callable request handlers, like an Express app
+    const server: any = Object.assign(() => {}, { uwsApp })
+    const application = feathers().configure(socketio({ path: '/ws/' }))
+
+    await application.setup(server)
+    // attachApp patches the socket.io adapter globally, close() restores it for the other tests
+    await application.io.close()
+
+    assert.ok(routes.includes('ws /ws/'))
+  })
+
   it('passes handshake as service parameters', (done) => {
     socket.emit('create', 'verify', {}, (error: any, data: any) => {
       assert.ok(!error)
