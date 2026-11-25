@@ -145,6 +145,16 @@ koaQs(app, 'extended', {
 })
 ```
 
+### The QUERY method
+
+`.find()` and `.get()` can also be called with the HTTP [`QUERY`](https://www.rfc-editor.org/rfc/rfc10008.html) method, which sends the query as the request body instead of the URL. Since the body is JSON, value types like numbers and booleans are preserved. The body (if it is a JSON object) is merged over the URL query parameters and the result is available as `params.query`.
+
+Note that [koa-body](#bodyparser) currently does not parse the body of `QUERY` requests. A middleware registered before `rest()` has to set `ctx.request.body` to the parsed JSON body. When using CORS from a browser, `QUERY` also has to be added to the `allowMethods` option of the [cors](#cors) middleware:
+
+```ts
+app.use(cors({ allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH', 'QUERY'] }))
+```
+
 ### params.provider
 
 For any [service method call](./services.md) made through REST `params.provider` will be set to `rest`.

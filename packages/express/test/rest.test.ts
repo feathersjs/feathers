@@ -644,6 +644,80 @@ describe('@feathersjs/express/rest provider', () => {
     })
   })
 
+  describe('QUERY method', () => {
+    let server: Server
+    let app: express.Application
+
+    before(async () => {
+      app = expressify(feathers())
+        .use(express.json())
+        .configure(rest())
+        .use('/todo', {
+          async find(params: Params) {
+            return { method: 'find', query: params.query }
+          },
+          async get(id: Id, params: Params) {
+            return { method: 'get', id, query: params.query }
+          }
+        })
+        .use('/nofind', {
+          async create(data: any) {
+            return data
+          }
+        })
+        .use(errorHandler)
+
+      server = await app.listen(4782)
+    })
+
+    after((done) => server.close(done))
+
+    it('calls find with the JSON body as the query', async () => {
+      const res = await axios.request({
+        method: 'QUERY',
+        url: 'http://localhost:4782/todo?name=dishes&done=false',
+        data: { done: true, priority: { $gt: 2 } }
+      })
+
+      assert.deepEqual(res.data, {
+        method: 'find',
+        query: { name: 'dishes', done: true, priority: { $gt: 2 } }
+      })
+    })
+
+    it('calls get with an id', async () => {
+      const res = await axios.request({
+        method: 'QUERY',
+        url: 'http://localhost:4782/todo/dishes',
+        data: { $select: ['name'] }
+      })
+
+      assert.deepEqual(res.data, { method: 'get', id: 'dishes', query: { $select: ['name'] } })
+    })
+
+    it('uses the URL query without a body', async () => {
+      const res = await axios.request({ method: 'QUERY', url: 'http://localhost:4782/todo?a=b' })
+
+      assert.deepEqual(res.data, { method: 'find', query: { a: 'b' } })
+    })
+
+    it('does not read the body as a query for other methods', async () => {
+      const res = await axios.get('http://localhost:4782/todo?a=b')
+
+      assert.deepEqual(res.data, { method: 'find', query: { a: 'b' } })
+    })
+
+    it('throws a 405 if the service has no find method', async () => {
+      await assert.rejects(
+        () => axios.request({ method: 'QUERY', url: 'http://localhost:4782/nofind', data: {} }),
+        (error: any) => {
+          assert.equal(error.response.status, 405)
+          return true
+        }
+      )
+    })
+  })
+
   describe('Custom methods', () => {
     let server: Server
     let app: express.Application

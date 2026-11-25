@@ -76,4 +76,22 @@ describe('@feathersjs/transport-commons HTTP helpers', () => {
     assert.strictEqual(http.getServiceMethod('delete', null), 'remove')
     assert.throws(() => http.getServiceMethod('nonsense', null))
   })
+
+  it('maps the QUERY method to find and get', () => {
+    assert.strictEqual(http.getServiceMethod('QUERY', null), 'find')
+    assert.strictEqual(http.getServiceMethod('QUERY', 1), 'get')
+  })
+
+  it('getQuery only reads the body for QUERY requests', () => {
+    assert.deepStrictEqual(http.getQuery('QUERY', { a: '1', b: 'x' }, { a: 1, c: true }), {
+      a: 1,
+      b: 'x',
+      c: true
+    })
+    assert.deepStrictEqual(http.getQuery('QUERY', { a: '1' }, undefined), { a: '1' })
+    assert.deepStrictEqual(http.getQuery('QUERY', { a: '1' }, 'text'), { a: '1' })
+    assert.deepStrictEqual(http.getQuery('QUERY', { a: '1' }, [1]), { a: '1' })
+    assert.deepStrictEqual(http.getQuery('GET', { a: '1' }, { a: 2 }), { a: '1' })
+    assert.deepStrictEqual(http.getQuery('POST', {}, { a: 2 }), {})
+  })
 })

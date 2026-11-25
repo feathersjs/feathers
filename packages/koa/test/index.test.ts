@@ -217,3 +217,87 @@ describe('@feathersjs/koa', () => {
   restTests('Services', 'todo', 8465)
   restTests('Root service', '/', 8465)
 })
+
+describe('@feathersjs/koa QUERY method', () => {
+  let app: Application
+  const port = 8789
+
+  before(async () => {
+    app = koa(feathers())
+    app.use(errorHandler())
+    app.use(bodyParser())
+    // koa-body does not parse the body of QUERY requests
+    app.use(async (ctx, next) => {
+      if (ctx.method === 'QUERY') {
+        const chunks: Buffer[] = []
+
+        for await (const chunk of ctx.req) {
+          chunks.push(chunk)
+        }
+
+        const raw = Buffer.concat(chunks).toString()
+
+        ;(ctx.request as any).body = raw ? JSON.parse(raw) : undefined
+      }
+
+      return next()
+    })
+    app.configure(rest())
+    app.use('todo', {
+      async find(params: any) {
+        return { method: 'find', query: params.query }
+      },
+      async get(id: Id, params: any) {
+        return { method: 'get', id, query: params.query }
+      }
+    })
+    app.use('nofind', {
+      async create(data: any) {
+        return data
+      }
+    })
+
+    await app.listen(port)
+  })
+
+  after(() => app.teardown())
+
+  it('calls find with the JSON body as the query', async () => {
+    const res = await axios.request({
+      method: 'QUERY',
+      url: `http://localhost:${port}/todo?name=dishes&done=false`,
+      data: { done: true, priority: { $gt: 2 } }
+    })
+
+    assert.deepEqual(res.data, {
+      method: 'find',
+      query: { name: 'dishes', done: true, priority: { $gt: 2 } }
+    })
+  })
+
+  it('calls get with an id', async () => {
+    const res = await axios.request({
+      method: 'QUERY',
+      url: `http://localhost:${port}/todo/dishes`,
+      data: { $select: ['name'] }
+    })
+
+    assert.deepEqual(res.data, { method: 'get', id: 'dishes', query: { $select: ['name'] } })
+  })
+
+  it('uses the URL query without a body', async () => {
+    const res = await axios.request({ method: 'QUERY', url: `http://localhost:${port}/todo?a=b` })
+
+    assert.deepEqual(res.data, { method: 'find', query: { a: 'b' } })
+  })
+
+  it('throws a 405 if the service has no find method', async () => {
+    await assert.rejects(
+      () => axios.request({ method: 'QUERY', url: `http://localhost:${port}/nofind`, data: {} }),
+      (error: any) => {
+        assert.equal(error.response.status, 405)
+        return true
+      }
+    )
+  })
+})
