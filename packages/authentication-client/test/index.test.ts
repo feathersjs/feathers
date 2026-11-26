@@ -96,6 +96,31 @@ describe('@feathersjs/authentication-client', () => {
     }
   })
 
+  it('getAccessToken prefers token from window.location over stored token and clears stored token', async () => {
+    const auth = app.authentication
+    const originalWindow = (globalThis as any).window
+
+    await auth.setAccessToken('old-stored-token')
+    ;(globalThis as any).window = {
+      location: { hash: 'access_token=new-url-token', search: '' }
+    }
+
+    try {
+      const token = await auth.getAccessToken()
+
+      assert.strictEqual(token, 'new-url-token')
+      assert.strictEqual((globalThis as any).window.location.hash, '')
+      assert.strictEqual(await app.get('storage').getItem('feathers-jwt'), undefined)
+    } finally {
+      if (originalWindow === undefined) {
+        delete (globalThis as any).window
+      } else {
+        ;(globalThis as any).window = originalWindow
+      }
+      await auth.removeAccessToken()
+    }
+  })
+
   it('authenticate, authentication hook, login event', async () => {
     const data = {
       strategy: 'testing'
