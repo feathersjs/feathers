@@ -26,6 +26,24 @@ const OPERATORS = {
 
 const RETURNING_CLIENTS = ['postgresql', 'pg', 'oracledb', 'mssql', 'sqlite3']
 
+type ReturningConfig = {
+  returning?: boolean
+}
+
+/**
+ * Returns whether the database client supports the `RETURNING` clause on inserts.
+ *
+ * The `returning` option in the knex configuration can be used to enable it for
+ * clients that support it but are not in the default list (e.g. Firebird via
+ * `knex-firebird-dialect`). If it is not set or falsy, the default list of
+ * clients is used.
+ */
+export const supportsReturning = (client: Knex.Client) => {
+  const { returning } = (client.config || {}) as ReturningConfig
+
+  return Boolean(returning) || RETURNING_CLIENTS.includes(client.driverName)
+}
+
 export class KnexAdapter<
   Result,
   Data = Partial<Result>,
@@ -253,7 +271,7 @@ export class KnexAdapter<
     }
 
     const { client } = this.db(params)
-    const returning = RETURNING_CLIENTS.includes(client.driverName) ? [this.id] : []
+    const returning = supportsReturning(client) ? [this.id] : []
     const rows: any = await this.db(params)
       .insert(data, returning, { includeTriggerModifications: true })
       .catch(errorHandler)

@@ -6,7 +6,14 @@ import { errors } from '@feathersjs/errors'
 import { Ajv, getValidator, querySyntax, hooks } from '@feathersjs/schema'
 
 import connection from './connection'
-import { ERROR, KnexAdapterParams, KnexService, transaction } from '../src/index'
+import {
+  ERROR,
+  KnexAdapter,
+  KnexAdapterParams,
+  KnexService,
+  supportsReturning,
+  transaction
+} from '../src/index'
 import { AdapterQuery } from '@feathersjs/adapter-commons/lib'
 
 const testSuite = adapterTests([
@@ -234,6 +241,62 @@ const peopleExtendedOps = new KnexService({
     $neq: '<>', // Not equal (alternative syntax)
     $startsWith: 'like' // Same as $like but with a different name
   }
+})
+
+describe('returning clause support', () => {
+  const client = (driverName: string, config: any = {}) => ({ driverName, config }) as unknown as Knex.Client
+
+  const createStubAdapter = (config: any) => {
+    const calls: string[][] = []
+    // Minimal stand-in for a knex instance: callable (like `knex('table')`) with
+    // the client information and an `insert` that records the returning argument
+    const Model: any = () => Model
+
+    Model.client = { driverName: 'node-firebird-driver-native', config }
+    Model.insert = (_data: any, returning: string[]) => {
+      calls.push(returning)
+
+      return Promise.resolve(returning.length > 0 ? [{ id: 42 }] : [1])
+    }
+
+    const service = new KnexAdapter<any>({ Model, name: 'people', id: 'id' })
+
+    service._get = async (id: any) => ({ id, name: 'Dave' })
+
+    return { service, calls }
+  }
+
+  it('uses the default list of clients when the returning option is not set', () => {
+    assert.strictEqual(supportsReturning(client('postgresql')), true)
+    assert.strictEqual(supportsReturning(client('oracledb')), true)
+    assert.strictEqual(supportsReturning(client('sqlite3')), true)
+    assert.strictEqual(supportsReturning(client('node-firebird-driver-native')), false)
+  })
+
+  it('can be enabled for a client that is not in the default list', () => {
+    assert.strictEqual(supportsReturning(client('node-firebird-driver-native', { returning: true })), true)
+  })
+
+  it('falls back to the default list when the returning option is falsy', () => {
+    assert.strictEqual(supportsReturning(client('node-firebird-driver-native', { returning: false })), false)
+    assert.strictEqual(supportsReturning(client('postgresql', { returning: false })), true)
+  })
+
+  it('passes the id to insert when the returning option is enabled', async () => {
+    const { service, calls } = createStubAdapter({ returning: true })
+    const created = await service._create({ name: 'Dave' })
+
+    assert.deepStrictEqual(calls, [['id']])
+    assert.strictEqual(created.id, 42)
+  })
+
+  it('does not pass the id to insert when it is not supported or enabled', async () => {
+    const { service, calls } = createStubAdapter({})
+    const created = await service._create({ name: 'Dave' })
+
+    assert.deepStrictEqual(calls, [[]])
+    assert.strictEqual(created.id, 1)
+  })
 })
 
 describe('Feathers Knex Service', () => {
