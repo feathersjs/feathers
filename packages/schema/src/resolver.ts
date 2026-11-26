@@ -3,6 +3,14 @@ import { Schema } from './schema'
 
 type PromiseOrLiteral<V> = Promise<V> | V
 
+function isPromiseLike<T>(value: T | PromiseLike<T>): value is PromiseLike<T> {
+  return (
+    value !== null &&
+    (typeof value === 'object' || typeof value === 'function') &&
+    typeof (value as PromiseLike<T>).then === 'function'
+  )
+}
+
 export type PropertyResolver<T, V, C> = ((
   value: V | undefined,
   obj: T,
@@ -26,7 +34,7 @@ export const IS_VIRTUAL = Symbol.for('@feathersjs/schema/virtual')
  * @returns The property resolver function
  */
 export const virtual = <T, V, C>(virtualResolver: VirtualResolver<T, V, C>) => {
-  const propertyResolver: PropertyResolver<T, V, C> = async (_value, obj, context, status) =>
+  const propertyResolver: PropertyResolver<T, V, C> = (_value, obj, context, status) =>
     virtualResolver(obj, context, status)
 
   propertyResolver[IS_VIRTUAL] = true
@@ -96,6 +104,15 @@ export class Resolver<T, C> {
     context: C,
     status: Partial<ResolverStatus<T, C>> = {}
   ): Promise<T[K]> {
+    return this.resolvePropertyValue(name, data, context, status)
+  }
+
+  private resolvePropertyValue<D, K extends keyof T>(
+    name: K,
+    data: D,
+    context: C,
+    status: Partial<ResolverStatus<T, C>> = {}
+  ): PromiseOrLiteral<T[K]> {
     const resolver = this.options.properties[name]
     const value = (data as any)[name]
     const { path = [], stack = [] } = status || {}
@@ -115,6 +132,10 @@ export class Resolver<T, C> {
   }
 
   async convert<D>(data: D, context: C, status?: Partial<ResolverStatus<T, C>>) {
+    return this.convertValue(data, context, status)
+  }
+
+  private convertValue<D>(data: D, context: C, status?: Partial<ResolverStatus<T, C>>) {
     if (this.options.converter) {
       const { path = [], stack = [] } = status || {}
 
@@ -126,7 +147,11 @@ export class Resolver<T, C> {
 
   async resolve<D>(_data: D, context: C, status?: Partial<ResolverStatus<T, C>>): Promise<T> {
     const { properties: resolvers, schema, validate } = this.options
-    const payload = await this.convert(_data, context, status)
+    const converted =
+      this.convert === Resolver.prototype.convert
+        ? this.convertValue(_data, context, status)
+        : this.convert(_data, context, status)
+    const payload = isPromiseLike(converted) ? await converted : converted
 
     if (!Array.isArray(status?.properties) && this.propertyNames.length === 0) {
       return payload as T
@@ -142,33 +167,51 @@ export class Resolver<T, C> {
 
     const result: any = {}
     const errors: any = {}
+    const pending: Promise<void>[] = []
     let hasErrors = false
 
-    // Not the most elegant but better performance
-    await Promise.all(
-      propertyList.map(async (name) => {
-        const value = (data as any)[name]
+    for (const name of propertyList) {
+      const value = (data as any)[name]
 
-        if (resolvers[name]) {
-          try {
-            const resolved = await this.resolveProperty(name, data, context, status)
-
-            if (resolved !== undefined) {
-              result[name] = resolved
-            }
-          } catch (error: any) {
-            // TODO add error stacks
-            const convertedError =
-              typeof error.toJSON === 'function' ? error.toJSON() : { message: error.message || error }
-
-            errors[name] = convertedError
-            hasErrors = true
-          }
-        } else if (value !== undefined) {
+      if (!resolvers[name]) {
+        if (value !== undefined) {
           result[name] = value
         }
-      })
-    )
+        continue
+      }
+
+      const assign = (resolved: T[typeof name] | undefined) => {
+        if (resolved !== undefined) {
+          result[name] = resolved
+        }
+      }
+
+      const recordError = (error: any) => {
+        // TODO add error stacks
+        errors[name] =
+          typeof error.toJSON === 'function' ? error.toJSON() : { message: error.message || error }
+        hasErrors = true
+      }
+
+      try {
+        const resolved =
+          this.resolveProperty === Resolver.prototype.resolveProperty
+            ? this.resolvePropertyValue(name, data, context, status)
+            : this.resolveProperty(name, data, context, status)
+
+        if (isPromiseLike(resolved)) {
+          pending.push(Promise.resolve(resolved).then(assign).catch(recordError))
+        } else {
+          assign(resolved)
+        }
+      } catch (error) {
+        recordError(error)
+      }
+    }
+
+    if (pending.length > 0) {
+      await Promise.all(pending)
+    }
 
     if (hasErrors) {
       const propertyName = status?.properties ? ` ${status.properties.join('.')}` : ''
